@@ -4,7 +4,7 @@
 #
 # Pode-se redireconar a saída para um arquivo texto.
 #
-# To run this code, first edit config.py with your configuration, then:
+# To run this code, first edit configSampa.py with your configuration, then:
 #
 # consumer_key = 'your-consumer-key'
 # consumer_secret = 'your-consumer-secret'
@@ -19,7 +19,7 @@ class StreamSampa_Listener(tweepy.StreamListener):
 #Inicializa a classe
 	def __init__(self):
 		self.counter = 0
-		self.output  = open(time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+		self.output  = open(time.strftime('Sampa' + '%Y%m%d-%H%M%S') + '.json', 'w')
 
 #retorna todos os dados do Tweet
 	def on_data(self, data):
@@ -34,7 +34,7 @@ class StreamSampa_Listener(tweepy.StreamListener):
 		self.counter += 1
 		if self.counter >= 10000: #Quantidade de tweets por arquivo.
 			self.output.close()
-			self.output = open(time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+			self.output  = open(time.strftime('Sampa' + '%Y%m%d-%H%M%S') + '.json', 'w')
 			self.counter = 0
 		return
 
