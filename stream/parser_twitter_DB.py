@@ -14,11 +14,11 @@
 #Ajustes da versão 02:
 #
 #OK - Manter o contador mas nao usar no dicionário... tá estourando a memória. Deixar apenas para contar linhas...
-#OK - Inserção do r na leitura do arquivo pra evitar erro de delimitador
+#... - Inserção de paraâmetro para leitura do arquivo pra evitar erro de delimitador
 #OK - import time    -		time.strftime('%Y-%m-%d %H:%M:%S') pra armazenar a data de escrita do tweet
+#OK - Só pode inserir dados das tabelas entidades e location depois de inserir o tweet...
 #.... Salvador, Rioverde e Catalão estão mostrando que os tweets são duplicados...
-#.... Só pode inserir dados das tabelas entidades e location depois de inserir o tweet...
-#.... Colocar hora de inserção no banco para facilitar remoção (timestamp)...
+#
 #
 import json, mysql.connector, sys, os.path, time
 from mysql.connector import errorcode
@@ -154,26 +154,24 @@ try:
 				add_tweet = ("INSERT INTO TWEET VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)")
 				cursor.execute(add_tweet, (tweet_idtweet, tweet_contributors, tweet_geo_latitude, tweet_geo_longitude, tweet_created_at, tweet_favorite_count, tweet_favorited, tweet_filter_level, tweet_in_reply_to_status_id, tweet_in_reply_to_user_id, tweet_is_quote_status, tweet_lang, tweet_retweet_count, tweet_retweeted, tweet_source, tweet_text, tweet_timestamp_ms, tweet_truncated, tweet_timestamp_db, tweet_iduser_fk, tweet_idregion_fk))
 				cnx.commit()
+##########Tabela ENTITIES
+				try:
+					cursor = cnx.cursor()
+					add_entities = ("INSERT INTO ENTITIES (entities_idtweet_fk, entities_hashtags, entities_symbols, entities_urls, entities_user_mentions) VALUES (%s, %s, %s, %s,%s)")
+					cursor.execute(add_entities, (entities_idtweet_fk, entities_hashtags_full, entities_symbols_full, entities_urls_full, entities_user_mentions_full))
+					cnx.commit()
+				except Exception as erro:
+					print("Linha " + str(i) + ". Erro MySQL - Table ENTITIES: {}".format(erro))
+##########Tabela PLACE			
+				try:
+					cursor = cnx.cursor()
+					add_place = ("INSERT INTO PLACE (place_idtweet_fk, place_bounding_box, place_country, place_country_code, place_full_name, place_id_place, place_name, place_place_type, place_url) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)")				
+					cursor.execute(add_place, (place_idtweet_fk, place_bounding_box, place_country, place_country_code, place_full_name, place_id_place, place_name, place_place_type, place_url))
+					cnx.commit()
+				except Exception as erro:
+					print("Linha " + str(i) + ". Erro MySQL - Table PLACE: {}".format(erro))		
 			except Exception as erro:
 				print("Linha " + str(i) + ". Erro MySQL - Table TWEET: {}".format(erro))			
-
-##########Tabela ENTITIES
-			try:
-				cursor = cnx.cursor()
-				add_entities = ("INSERT INTO ENTITIES (entities_idtweet_fk, entities_hashtags, entities_symbols, entities_urls, entities_user_mentions) VALUES (%s, %s, %s, %s,%s)")
-				cursor.execute(add_entities, (entities_idtweet_fk, entities_hashtags_full, entities_symbols_full, entities_urls_full, entities_user_mentions_full))
-				cnx.commit()
-			except Exception as erro:
-				print("Linha " + str(i) + ". Erro MySQL - Table ENTITIES: {}".format(erro))
-				
-##########Tabela PLACE			
-			try:
-				cursor = cnx.cursor()
-				add_place = ("INSERT INTO PLACE (place_idtweet_fk, place_bounding_box, place_country, place_country_code, place_full_name, place_id_place, place_name, place_place_type, place_url) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s)")				
-				cursor.execute(add_place, (place_idtweet_fk, place_bounding_box, place_country, place_country_code, place_full_name, place_id_place, place_name, place_place_type, place_url))
-				cnx.commit()
-			except Exception as erro:
-				print("Linha " + str(i) + ". Erro MySQL - Table PLACE: {}".format(erro))		
 			
 			i = i+1
 #############################################################################################################################
