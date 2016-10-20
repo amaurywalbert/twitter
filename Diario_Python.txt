@@ -32,11 +32,23 @@ Inicializado como aplicativo de sessão... Adicionei outros scripts python para 
 
 Instalei o MySQL Workbench pelo "mysql-apt-config" e criei os script para o banco de dados... (pasta mysql) - ainda tem erros no parser e algumas cidades estão mostrando erros de duplicidade dos tweets.
 
+
+
+Catalão e Rio Verde estão com erro de duplicidade
+Salvador e Rio Verde - 
+Catalão e Salvador - estão com erro de duplicidade
+Catalão e GYN - OK
+Rio Verde e GYN - OK
+Salvador e GYN - OK
+
 #################################################################################################### Inserção dos dados no Mysql
-python /home/amaury/twitter/stream/parser_twitter_v2.py /home/amaury/Dados\ Coletados/Stream/Data_Full/Catalao01_full.json
-
-
-
+python /home/amaury/twitter/stream/parser_twitter_v2.py /home/amaury/Dados_Coletados/Stream/Data_Full/Catalao01_full.json
+## testess
+python /home/amaury/twitter/stream/parser_twitter_v2.py /home/amaury/lixo/Catalao_full.json
+####################################################################################################
+#################################################################################################### Concatenar arquivos:
+cat *.json > join.json
+####################################################################################################
 	
 
 

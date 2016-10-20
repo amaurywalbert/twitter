@@ -2,20 +2,16 @@
 ########################################################################
 # Script que captura tweets de determinada região e armazena arquivos JSON com todos os dados dos Tweets
 #
-# Pode-se redireconar a saída para um arquivo texto.
+# Redirecona a saída para um arquivo texto.
 #
-# To run this code, first edit configSalvador.py with your configuration, then:
-#
-# consumer_key = 'your-consumer-key'
-# consumer_secret = 'your-consumer-secret'
-# access_token = 'your-access-token'
-# access_secret = 'your-access-secret'
+# v2 --> atribução de chaves de autenticação no mesmo script
+# Remoção do método "sync" para apenas uma trhead
 
-import configSalvador, tweepy, sys, random, time, json
+
+import tweepy, sys, random, time, json
 from tweepy import OAuthHandler
 
-
-class StreamSalvador_Listener(tweepy.StreamListener):
+class Stream_Listener(tweepy.StreamListener):
 #Inicializa a classe
 	def __init__(self):
 		self.counter = 0
@@ -55,11 +51,18 @@ class StreamSalvador_Listener(tweepy.StreamListener):
 #################################################################################################
 #################################################################################################
 def main():
-	auth = tweepy.OAuthHandler(configSalvador.consumer_key, configSalvador.consumer_secret)
-	auth.set_access_token(configSalvador.access_token, configSalvador.access_secret)
+	consumer_key = 'DSuxIZyCCCEIrkrorv3YmtTfI'
+	consumer_secret = '3tpgOyUBT8V6EVpGqmAtn3d7Jj7ohdlxNGo1rEpiHyx2j9PnPS'
+	access_token = '41112432-XsCvryNYBThvKvop6eYubuqgeZtQ7acCNBWuPKQ3o'
+	access_secret = 'n1aK5YWSkO6y0h0ZHheMKHneHKgvoiRu5u0ca3gIzj3v9'
+	# Salvador - Generated "Find a place with Google: http://boundingbox.klokantech.com/
+	region = [-38.532858,-13.016015,-38.306757,-12.787234]
+	
+	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+	auth.set_access_token(access_token, access_secret)
 	api = tweepy.API(auth)
-	stream = tweepy.streaming.Stream(auth, StreamSalvador_Listener())
-	stream.filter(locations=[-38.532858,-13.016015,-38.306757,-12.787234], async=False) # Salvador / false = apenas uma thread
+	stream = tweepy.streaming.Stream(auth, Stream_Listener())
+	stream.filter(locations=region)
 #################################################################################################
 #################################################################################################
 if __name__ == '__main__':

@@ -1,0 +1,76 @@
+# -*- coding: latin1 -*-
+########################################################################
+# Script que captura tweets de determinada região e armazena arquivos JSON com todos os dados dos Tweets
+#
+# Redirecona a saída para um arquivo texto.
+#
+# v2 --> atribução de chaves de autenticação no mesmo script
+# Remoção do método "sync" para apenas uma trhead
+
+
+import tweepy, sys, random, time, json
+from tweepy import OAuthHandler
+
+class Stream_Listener(tweepy.StreamListener):
+#Inicializa a classe
+	def __init__(self):
+		self.counter = 0
+		self.output  = open(time.strftime('Salvador' + '%Y%m%d-%H%M%S') + '.json', 'w')
+
+#retorna todos os dados do Tweet
+	def on_data(self, data):
+		self.on_status(data)
+		print(data)
+		return True # Não matar o stream 
+
+
+#Grava o status do tweet em arquivos com XX tweets cada.
+	def on_status(self, status):
+		self.output.write(status)
+		self.counter += 1
+		if self.counter >= 10000: #Quantidade de tweets por arquivo.
+			self.output.close()
+			self.output = open('Salvador' + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+			self.counter = 0
+		return
+
+	def on_error(self, status_code):
+		print >> sys.stderr, 'Erro encontrado. Código:', status_code
+		if status_code == 420: #Verifica se aconteceu algum erro na tentativa de conexão...
+			return False #Desconectar o stream
+		else:
+			return True # Não matar o stream
+
+
+	def on_timeout(self):
+		print >> sys.stderr, 'Timeout...'
+		nsecs=random.randint(60,63) # Saída Anormal: espera entre 60 e 63 segundos e tenta novamente
+		time.sleep(nsecs)
+		return 
+
+#################################################################################################
+#################################################################################################
+def main():
+	consumer_key = 'DSuxIZyCCCEIrkrorv3YmtTfI'
+	consumer_secret = '3tpgOyUBT8V6EVpGqmAtn3d7Jj7ohdlxNGo1rEpiHyx2j9PnPS'
+	access_token = '41112432-XsCvryNYBThvKvop6eYubuqgeZtQ7acCNBWuPKQ3o'
+	access_secret = 'n1aK5YWSkO6y0h0ZHheMKHneHKgvoiRu5u0ca3gIzj3v9'
+	# Salvador - Generated "Find a place with Google: http://boundingbox.klokantech.com/
+	region = [-38.532858,-13.016015,-38.306757,-12.787234]
+	
+	try:
+		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+		auth.set_access_token(access_token, access_secret)
+		api = tweepy.API(auth)
+	except Exception as erro:
+			print("Erro na autenticação: {}".format(erro))
+	
+	try:
+		stream = tweepy.streaming.Stream(auth, Stream_Listener())
+		stream.filter(locations=region)
+	except Exception as erro2:
+			print("Erro no stream: {}".format(erro2))
+#################################################################################################
+#################################################################################################
+if __name__ == '__main__':
+    main()

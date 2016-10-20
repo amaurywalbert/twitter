@@ -2,24 +2,20 @@
 ########################################################################
 # Script que captura tweets de determinada região e armazena arquivos JSON com todos os dados dos Tweets
 #
-# Pode-se redireconar a saída para um arquivo texto.
+# Redirecona a saída para um arquivo texto.
 #
-# To run this code, first edit configCatalao.py with your configuration, then:
-#
-# consumer_key = 'your-consumer-key'
-# consumer_secret = 'your-consumer-secret'
-# access_token = 'your-access-token'
-# access_secret = 'your-access-secret'
+# v2 --> atribução de chaves de autenticação no mesmo script
+# Remoção do método "sync" para apenas uma trhead
 
-import configCatalao, tweepy, sys, random, time, json
+
+import tweepy, sys, random, time, json
 from tweepy import OAuthHandler
 
-
-class StreamCatalao_Listener(tweepy.StreamListener):
+class Stream_Listener(tweepy.StreamListener):
 #Inicializa a classe
 	def __init__(self):
 		self.counter = 0
-		self.output  = open(time.strftime('Catalao' + '%Y%m%d-%H%M%S') + '.json', 'w')
+		self.output  = open(time.strftime('Sampa' + '%Y%m%d-%H%M%S') + '.json', 'w')
 
 #retorna todos os dados do Tweet
 	def on_data(self, data):
@@ -34,7 +30,7 @@ class StreamCatalao_Listener(tweepy.StreamListener):
 		self.counter += 1
 		if self.counter >= 10000: #Quantidade de tweets por arquivo.
 			self.output.close()
-			self.output = open('Catalao' + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+			self.output = open('Sampa' + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
 			self.counter = 0
 		return
 
@@ -55,11 +51,25 @@ class StreamCatalao_Listener(tweepy.StreamListener):
 #################################################################################################
 #################################################################################################
 def main():
-	auth = tweepy.OAuthHandler(configCatalao.consumer_key, configCatalao.consumer_secret)
-	auth.set_access_token(configCatalao.access_token, configCatalao.access_secret)
-	api = tweepy.API(auth)
-	stream = tweepy.streaming.Stream(auth, StreamCatalao_Listener())
-	stream.filter(locations=[-47.981729,-18.201498,-47.904562,-18.127961], async=False) # Catalao / false = apenas uma thread
+	consumer_key = '8akQi5gDAevmAFZDyJmqx4TWH'
+	consumer_secret = '4dYWFWKrFDLWm5hrZwuAlU3VmIiBt4PcHz4DooIfihW72yLWxg'
+	access_token = '781627388329398273-vi5rfX2ML86Yp1NCYSED5IgzzGQ0JrD'
+	access_secret = 'kjgZ9eItetjXKd0JNt520bHXZj9NzYdD9TZnLytMm9sEO'
+	# SãoPaulo - Generated "Find a place with Google: http://boundingbox.klokantech.com/
+	region = [-46.8255,-24.0082,-46.3651,-23.3566]
+
+	try:
+		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+		auth.set_access_token(access_token, access_secret)
+		api = tweepy.API(auth)
+	except Exception as erro:
+			print("Erro na autenticação: {}".format(erro))
+	
+	try:
+		stream = tweepy.streaming.Stream(auth, Stream_Listener())
+		stream.filter(locations=region)
+	except Exception as erro2:
+			print("Erro no stream: {}".format(erro2))
 #################################################################################################
 #################################################################################################
 if __name__ == '__main__':

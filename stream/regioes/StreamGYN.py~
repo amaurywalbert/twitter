@@ -1,0 +1,69 @@
+# -*- coding: latin1 -*-
+########################################################################
+# Script que captura tweets de determinada região e armazena arquivos JSON com todos os dados dos Tweets
+#
+# Redirecona a saída para um arquivo texto.
+#
+# v2 --> atribução de chaves de autenticação no mesmo script
+# Remoção do método "sync" para apenas uma trhead
+
+
+import tweepy, sys, random, time, json
+from tweepy import OAuthHandler
+
+class Stream_Listener(tweepy.StreamListener):
+#Inicializa a classe
+	def __init__(self):
+		self.counter = 0
+		self.output  = open(time.strftime('GYN' + '%Y%m%d-%H%M%S') + '.json', 'w')
+
+#retorna todos os dados do Tweet
+	def on_data(self, data):
+		self.on_status(data)
+		print(data)
+		return True # Não matar o stream 
+
+
+#Grava o status do tweet em arquivos com XX tweets cada.
+	def on_status(self, status):
+		self.output.write(status)
+		self.counter += 1
+		if self.counter >= 10000: #Quantidade de tweets por arquivo.
+			self.output.close()
+			self.output = open('GYN' + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+			self.counter = 0
+		return
+
+	def on_error(self, status_code):
+		print >> sys.stderr, 'Erro encontrado. Código:', status_code
+		if status_code == 420: #Verifica se aconteceu algum erro na tentativa de conexão...
+			return False #Desconectar o stream
+		else:
+			return True # Não matar o stream
+
+
+	def on_timeout(self):
+		print >> sys.stderr, 'Timeout...'
+		nsecs=random.randint(60,63) # Saída Anormal: espera entre 60 e 63 segundos e tenta novamente
+		time.sleep(nsecs)
+		return 
+
+#################################################################################################
+#################################################################################################
+def main():
+	consumer_key = 'eY4A7XWD39gVfNzvClYqAFgJc'
+	consumer_secret = 'DDeZSyyljgrzlBSH31cOiad6JiDQ0CIbZzczBM8vsJhoOkH5py'
+	access_token = '41112432-m227onPoykdMR2trVDZMo7YqFWn6wrgReH3FHMHBF'
+	access_secret = 'jIaF7Br79r70a7aGh6GLSV2OQT9CjO4CWPPGRmRc9PrjE'
+	# Goiânia - Generated "Find a place with Google: http://boundingbox.klokantech.com/
+	region = [-49.446836,-16.831964,-49.161699,-16.559788]
+	
+	auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+	auth.set_access_token(access_token, access_secret)
+	api = tweepy.API(auth)
+	stream = tweepy.streaming.Stream(auth, Stream_Listener())
+	stream.filter(locations=region)
+#################################################################################################
+#################################################################################################
+if __name__ == '__main__':
+    main()

@@ -2,24 +2,20 @@
 ########################################################################
 # Script que captura tweets de determinada região e armazena arquivos JSON com todos os dados dos Tweets
 #
-# Pode-se redireconar a saída para um arquivo texto.
+# Redirecona a saída para um arquivo texto.
 #
-# To run this code, first edit config.py with your configuration, then:
-#
-# consumer_key = 'your-consumer-key'
-# consumer_secret = 'your-consumer-secret'
-# access_token = 'your-access-token'
-# access_secret = 'your-access-secret'
+# v2 --> atribução de chaves de autenticação no mesmo script
+# Remoção do método "sync" para apenas uma trhead
 
-import config, tweepy, sys, random, time, json
+
+import tweepy, sys, random, time, json
 from tweepy import OAuthHandler
 
-
-class StreamGYN_Listener(tweepy.StreamListener):
+class Stream_Listener(tweepy.StreamListener):
 #Inicializa a classe
 	def __init__(self):
 		self.counter = 0
-		self.output  = open(time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+		self.output  = open(time.strftime('Sampa' + '%Y%m%d-%H%M%S') + '.json', 'w')
 
 #retorna todos os dados do Tweet
 	def on_data(self, data):
@@ -34,7 +30,7 @@ class StreamGYN_Listener(tweepy.StreamListener):
 		self.counter += 1
 		if self.counter >= 10000: #Quantidade de tweets por arquivo.
 			self.output.close()
-			self.output = open(time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+			self.output = open('Sampa' + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
 			self.counter = 0
 		return
 
@@ -55,11 +51,25 @@ class StreamGYN_Listener(tweepy.StreamListener):
 #################################################################################################
 #################################################################################################
 def main():
-	auth = tweepy.OAuthHandler(config.consumer_key, config.consumer_secret)
-	auth.set_access_token(config.access_token, config.access_secret)
-	api = tweepy.API(auth)
-	stream = tweepy.streaming.Stream(auth, StreamGYN_Listener())
-	stream.filter(locations=[-49.446003,-16.831875,-49.077999,-16.452999], async=False) # Goiânia / false = apenas uma thread
+	consumer_key = '8akQi5gDAevmAFZDyJmqx4TWH'
+	consumer_secret = '4dYWFWKrFDLWm5hrZwuAlU3VmIiBt4PcHz4DooIfihW72yLWxg'
+	access_token = '781627388329398273-vi5rfX2ML86Yp1NCYSED5IgzzGQ0JrD'
+	access_secret = 'kjgZ9eItetjXKd0JNt520bHXZj9NzYdD9TZnLytMm9sEO'
+	# SãoPaulo - Generated "Find a place with Google: http://boundingbox.klokantech.com/
+	region = [-46.8255,-24.0082,-46.3651,-23.3566]
+
+	try:
+		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+		auth.set_access_token(access_token, access_secret)
+		api = tweepy.API(auth)
+	except Exception as erro:
+			print("Erro na autenticação: {}".format(erro))
+	
+	try:
+		stream = tweepy.streaming.Stream(auth, Stream_Listener())
+		stream.filter(locations=region)
+	except Exception as erro2:
+			print("Erro no stream: {}".format(erro2))
 #################################################################################################
 #################################################################################################
 if __name__ == '__main__':

@@ -2,24 +2,20 @@
 ########################################################################
 # Script que captura tweets de determinada região e armazena arquivos JSON com todos os dados dos Tweets
 #
-# Pode-se redireconar a saída para um arquivo texto.
+# Redirecona a saída para um arquivo texto.
 #
-# To run this code, first edit configSalvador.py with your configuration, then:
-#
-# consumer_key = 'your-consumer-key'
-# consumer_secret = 'your-consumer-secret'
-# access_token = 'your-access-token'
-# access_secret = 'your-access-secret'
+# v2 --> atribução de chaves de autenticação no mesmo script
+# Remoção do método "sync" para apenas uma trhead
 
-import configSalvador, tweepy, sys, random, time, json
+
+import tweepy, sys, random, time, json
 from tweepy import OAuthHandler
 
-
-class StreamSalvador_Listener(tweepy.StreamListener):
+class Stream_Listener(tweepy.StreamListener):
 #Inicializa a classe
 	def __init__(self):
 		self.counter = 0
-		self.output  = open(time.strftime('Salvador' + '%Y%m%d-%H%M%S') + '.json', 'w')
+		self.output  = open(time.strftime('GYN' + '%Y%m%d-%H%M%S') + '.json', 'w')
 
 #retorna todos os dados do Tweet
 	def on_data(self, data):
@@ -34,7 +30,7 @@ class StreamSalvador_Listener(tweepy.StreamListener):
 		self.counter += 1
 		if self.counter >= 10000: #Quantidade de tweets por arquivo.
 			self.output.close()
-			self.output = open('Salvador' + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
+			self.output = open('GYN' + time.strftime('%Y%m%d-%H%M%S') + '.json', 'w')
 			self.counter = 0
 		return
 
@@ -55,11 +51,25 @@ class StreamSalvador_Listener(tweepy.StreamListener):
 #################################################################################################
 #################################################################################################
 def main():
-	auth = tweepy.OAuthHandler(configSalvador.consumer_key, configSalvador.consumer_secret)
-	auth.set_access_token(configSalvador.access_token, configSalvador.access_secret)
-	api = tweepy.API(auth)
-	stream = tweepy.streaming.Stream(auth, StreamSalvador_Listener())
-	stream.filter(locations=[-38.532858,-13.016015,-38.306757,-12.787234], async=False) # Salvador / false = apenas uma thread
+	consumer_key = 'eY4A7XWD39gVfNzvClYqAFgJc'
+	consumer_secret = 'DDeZSyyljgrzlBSH31cOiad6JiDQ0CIbZzczBM8vsJhoOkH5py'
+	access_token = '41112432-m227onPoykdMR2trVDZMo7YqFWn6wrgReH3FHMHBF'
+	access_secret = 'jIaF7Br79r70a7aGh6GLSV2OQT9CjO4CWPPGRmRc9PrjE'
+	# Goiânia - Generated "Find a place with Google: http://boundingbox.klokantech.com/
+	region = [-49.446836,-16.831964,-49.161699,-16.559788]
+	
+	try:
+		auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+		auth.set_access_token(access_token, access_secret)
+		api = tweepy.API(auth)
+	except Exception as erro:
+			print("Erro na autenticação: {}".format(erro))
+	
+	try:
+		stream = tweepy.streaming.Stream(auth, Stream_Listener())
+		stream.filter(locations=region)
+	except Exception as erro2:
+			print("Erro no stream: {}".format(erro2))
 #################################################################################################
 #################################################################################################
 if __name__ == '__main__':
