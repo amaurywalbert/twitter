@@ -1,0 +1,42 @@
+instalei o python
+
+Python 2.7.12 (default, Jul  1 2016, 15:12:24) 
+[GCC 5.4.0 20160609] on linux2
+Type "help", "copyright", "credits" or "license" for more information.
+
+
+Utilizando BlueFish para editar os códigos...
+
+#################################################################################################### Instalação
+apt install python-pip
+pip install requests
+pip install oauth2
+pip install tweepy
+pip install simplejson
+pip install geopy
+
+#################################################################################################### Visualização do JSON
+head -n1 data01.json > linha01
+python -m json.tool linha01 # Visualizar estrutura json
+####################################################################################################
+
+Instalar XAMPP --> 5.6.24 / PHP 5.6.24 - Versão 64 bits
+
+Usanto Git para manter repositorio local e remoto sincronizados... amaurywalbert@yahoo.com.br
+
+Criei um script para testar se a coleta está sendo realizada: "StreamGYN.sh"
+Criei outra conta no twitter com e-mail do hotmail para poder adicionar mais apps...
+Inicializado como aplicativo de sessão... Adicionei outros scripts python para coleta de dados de cidades diferentes. Rodando...
+
+
+
+Instalei o MySQL Workbench pelo "mysql-apt-config" e criei os script para o banco de dados... (pasta mysql) - ainda tem erros no parser e algumas cidades estão mostrando erros de duplicidade dos tweets.
+
+#################################################################################################### Inserção dos dados no Mysql
+python /home/amaury/twitter/stream/parser_twitter_v2.py /home/amaury/Dados\ Coletados/Stream/Data_Full/Catalao01_full.json
+
+
+
+	
+
+
