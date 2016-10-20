@@ -1,0 +1,5 @@
+INSERT INTO `twitter`.`REGION` (`region_description`, `region_latitude_in`, `region_longitude_in`, `region_latitude_end`, `region_longitude_end`) VALUES ('Goiânia', '-49.446003', '-16.831875', '-49.077999', '-16.452999');
+INSERT INTO `twitter`.`REGION` (`region_description`, `region_latitude_in`, `region_longitude_in`, `region_latitude_end`, `region_longitude_end`) VALUES ('São Paulo', '-46.8255', '-24.0082', '-46.3651', '-23.3566');
+INSERT INTO `twitter`.`REGION` (`region_description`, `region_latitude_in`, `region_longitude_in`, `region_latitude_end`, `region_longitude_end`) VALUES ('Salvador', '-38.532858', '-13.016015', '-38.306757', '-12.787234');
+INSERT INTO `twitter`.`REGION` (`region_description`, `region_latitude_in`, `region_longitude_in`, `region_latitude_end`, `region_longitude_end`) VALUES ('Rio Verde', '-50.967312', '-17.844777', '-50.886265', '-17.750482');
+INSERT INTO `twitter`.`REGION` (`region_description`, `region_latitude_in`, `region_longitude_in`, `region_latitude_end`, `region_longitude_end`) VALUES ('Catalão', '-47.981729', '-18.201498', '-47.904562', '-18.127961');
