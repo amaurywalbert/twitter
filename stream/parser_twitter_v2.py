@@ -15,9 +15,10 @@
 #
 #OK - Manter o contador mas nao usar no dicionário... tá estourando a memória. Deixar apenas para contar linhas...
 #OK - Uso do bloco TRY para ignorar erro de parser de Tweets "corrompidos" ou incompletos.
-#OK - import time    -		time.strftime('%Y-%m-%d %H:%M:%S') pra armazenar a data de escrita do tweet
+#OK - import time    -		time.strftime('%Y-%m-%d %H:%M:%S') pra armazenar a data de escrita do tweet no BD
 #OK - Só pode inserir dados das tabelas entidades e location depois de inserir o tweet...
 #OK - Filtro que elimina duplicade em tweets com código de local = "country" (id_place = Brasil)
+#OK - Cria arquivos contendo códigos de erros de inserção no BD para possível geração de estatísticas.
 #
 import json, mysql.connector, sys, os.path, time
 from mysql.connector import errorcode
@@ -36,7 +37,7 @@ def valida_parametros(arquivo):
 		print " 3 - Salvador"
 		print " 4 - Rio Verde"
 		print " 5 - Catalão"
-		op = raw_input('Escolha uma região: ')
+		op = raw_input("Escolha uma região: ")
 		for letra in opcoes:
 			if op not in opcoes:
 				print "Região Inválida!"
@@ -48,7 +49,7 @@ def valida_parametros(arquivo):
 #############################################################################################################################
 #############################################################################################################################
 
-opcoes = '12345'
+opcoes = "12345"
 regiao = valida_parametros(sys.argv[1]) 
 
 #############################################################################################################################
@@ -60,7 +61,7 @@ i = 0
 #############################################################################################################################
 
 try:
-	cnx = mysql.connector.connect(user='twitter', password='roma031205', host='127.0.0.1', database='twitter')
+	cnx = mysql.connector.connect(user="twitter", password="roma031205", host="127.0.0.1", database="twitter")
 #Ler arquivo JSON
 	file = open(sys.argv[1])
 #############################################################################################################################
@@ -139,7 +140,15 @@ try:
 #############################################################################################################################
 ##########inserir dados no Banco
 			if place_id_place == '1b107df3ccc0aaa1': #OK - Filtro que elimina duplicade em tweets com código de local = "country" (id_place = Brasil)
-				print("Linha " + str(i) + ". Ignorando tweet... idplace = Brasil")
+				try:
+					err_id_place = open(sys.argv[1] + '.err_id_place', 'a+') # Abre o arquivo para gravação no final do arquivo
+					err_id_place.writelines("Linha " + str(i) + ". Ignorando tweet... idplace = " + place_id_place + " (" + place_full_name +")\n")
+					err_id_place.close()				
+				
+					#print("Linha " + str(i) + ". Ignorando tweet... idplace = " + place_id_place + " (" + place_full_name +")") #Imprime na tela mensagem de erro de id_place na tela...
+				except IOError:
+					print("Erro ao abrir o arquivo!\n")
+
 			else:
 
 #############Tabela USER
@@ -149,6 +158,9 @@ try:
 					cursor.execute(add_user, (user_iduser, user_created_at, user_description, user_favourites_count, user_followers_count, user_following, user_friends_count, user_geo_enabled, user_lang, user_listed_count, user_location, user_name, user_profile_image_url, user_screen_name, user_statuses_count, user_time_zone, user_url))
 					cnx.commit()
 				except Exception as erro:
+					err_id_user = open(sys.argv[1] + ".err_id_user", "a+") # Abre o arquivo para gravação no final do arquivo
+					err_id_user.writelines("Linha " + str(i) + ". Erro MySQL - Table USER: {}\n".format(erro))
+					err_id_user.close()				
 					print("Linha " + str(i) + ". Erro MySQL - Table USER: {}".format(erro))
 
 #############Tabela TWEET							
@@ -164,6 +176,9 @@ try:
 						cursor.execute(add_entities, (entities_idtweet_fk, entities_hashtags_full, entities_symbols_full, entities_urls_full, entities_user_mentions_full))
 						cnx.commit()
 					except Exception as erro:
+						err_id_entities = open(sys.argv[1] + ".err_id_entities", "a+") # Abre o arquivo para gravação no final do arquivo
+						err_id_entities.writelines("Linha " + str(i) + ". Erro MySQL - Table ENTITIES: {}\n".format(erro))
+						err_id_entities.close()										
 						print("Linha " + str(i) + ". Erro MySQL - Table ENTITIES: {}".format(erro))
 #############Tabela PLACE			
 					try:
@@ -172,13 +187,22 @@ try:
 						cursor.execute(add_place, (place_idtweet_fk, place_bounding_box, place_country, place_country_code, place_full_name, place_id_place, place_name, place_place_type, place_url))
 						cnx.commit()
 					except Exception as erro:
+						err_id_place = open(sys.argv[1] + ".err_id_place", "a+") # Abre o arquivo para gravação no final do arquivo
+						err_id_place.writelines("Linha " + str(i) + ". Erro MySQL - Table PLACE: {}\n".format(erro))
+						err_id_place.close()										
 						print("Linha " + str(i) + ". Erro MySQL - Table PLACE: {}".format(erro))		
 				
 				except Exception as erro:
+					err_id_tweet = open(sys.argv[1] + ".err_id_tweet", "a+") # Abre o arquivo para gravação no final do arquivo
+					err_id_tweet.writelines("Linha " + str(i) + ". Erro MySQL - Table TWEET: {}\n".format(erro))
+					err_id_tweet.close()										
 					print("Linha " + str(i) + ". Erro MySQL - Table TWEET: {}".format(erro))
 			#Fim Else
 			
 		except Exception as erro_parser:
+			err_parser = open(sys.argv[1] + ".err_parser", "a+") # Abre o arquivo para gravação no final do arquivo
+			err_parser.writelines("Linha " + str(i) + ". Erro no parser do arquivo JSON: {}\n".format(erro_parser))
+			err_parser.close()										
 			print("Linha " + str(i) + ". Erro no parser do arquivo JSON: {}".format(erro_parser))
 #############################################################################################################################
 #############################################################################################################################
