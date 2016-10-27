@@ -139,7 +139,7 @@ try:
 #############################################################################################################################
 #############################################################################################################################
 ##########inserir dados no Banco
-			if place_id_place == '1b107df3ccc0aaa1': #OK - Filtro que elimina duplicade em tweets com código de local = "country" (id_place = Brasil)
+			if not place_place_type == 'city': #OK - Filtro que elimina duplicade em tweets com código de local = "country" (id_place = Brasil), por exemplo.
 				try:
 					err_id_place = open(sys.argv[1] + '.err_id_place', 'a+') # Abre o arquivo para gravação no final do arquivo
 					err_id_place.writelines("Linha " + str(i) + ". Ignorando tweet... idplace = " + place_id_place + " (" + place_full_name +")\n")
