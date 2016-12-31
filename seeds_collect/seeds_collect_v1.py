@@ -58,7 +58,7 @@ def search_seeds(query):
 				seeds.writelines(str(tweet.user.id)+"\n")
 				seeds.close()
 		
-		users_collect.close()
+		seeds_collected.close()
 		tweets_collected.close()
 			
 	except tweepy.error.TweepError as e: 													#Armazena todos os erros em um único arquivo.
