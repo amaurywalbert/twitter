@@ -46,7 +46,7 @@ def search_seeds(query):
 		tweetsPerQry = 100 																#The twitter Search API allows up to 100 tweets per query
 		tweetCount = 0
 		tweets_collected = open('data/tweets_collected.json', 'a+')					#Open a text file to save the tweets to
-		for tweet in tweepy.Cursor(api.search,q=query, result_type="recent").items(maxTweets):
+		for tweet in tweepy.Cursor(api.search,q=query, result_type="recent",wait_on_rate_limit=True,wait_on_rate_limit_notify=True).items(maxTweets):
 			tweets_collected.write(jsonpickle.encode(tweet._json, unpicklable=False) + '\n')				#Write the JSON format to the text file, and add one to the number of tweets we've collecte
 			tweetCount += 1
 			print("Downloaded {0} tweets".format(tweetCount))				#Display how many tweets we have collected
