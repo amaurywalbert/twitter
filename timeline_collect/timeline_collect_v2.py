@@ -72,7 +72,7 @@ def get_tweets(user, max_id):
 	try:
 		timeline = api.user_timeline(user, max_id=max_id,count=200, include_rts=1)
 	except tweepy.error.TweepError as e:
-		err_id = open("timeline_collect_seeds_err/"+user+'.err_id', 'a+') # Abre o arquivo para gravação no final do arquivo
+		err_id = open("/home/amaury/coleta/timeline_collect/timeline_collect_seeds_err/"+user+'.err_id', 'a+') # Abre o arquivo para gravação no final do arquivo
 		err_id.writelines("[ERRRO] Não foi possível recuperar tweets de",user,"com max_id=",max_id,"Erro:",e,"Vou ignorar e tocar adiante.\n")
 		err_id.close()
 		print("[ERRRO] Nao foi possivel recuperar tweets de",user,"com max_id=",max_id,"Erro:",e,"Vou ignorar e tocar adiante.")
@@ -95,7 +95,7 @@ def collect_user_timeline(user):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')	
 
 	# Vamos salvar os tweets de cada usuario em um arquivo diferente.
-	tweets_file = open("timeline_collect_seeds/"+user+"_tweets_"+agora+".json", 'w')
+	tweets_file = open("/home/amaury/coleta/timeline_collect/timeline_collect_seeds/"+user+"_tweets_"+agora+".json", 'w')
 
 	# Vamos contar a quantidade de tweets obtidos.
 	i = 0
