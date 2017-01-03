@@ -1,0 +1,22 @@
+script pode ser útil para remover linhas do arquivo original e deixar apenas os twets inseridos no banco...
+
+cat seu_arquivo | while read line
+do
+controle=`echo $line | awk '{ print $1 }'` 
+if [ "$controle" == "BSC" ]; then
+arquivo=`echo $line | awk '{ print $NF }'`
+fi
+echo "$line" >> $arquivo
+done
+
+
+ou
+
+cat seu_arquivo | while read line
+do
+controle=`echo $line | cut -c 1-3` 
+if [ "$controle" == "BSC" ]; then
+arquivo=`echo $line | awk '{ print $NF }'`
+fi
+echo "$line" >> $arquivo
+done

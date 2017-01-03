@@ -4,7 +4,7 @@
 # Script para coletar seeds dos trends do Twitter:	
 #
 
-import tweepy, time, sys, ConfigParser, datetime, json, os.path, jsonpickle
+import tweepy, time, sys, ConfigParser, datetime, json, os.path, jsonpickle, shutil
 
 
 reload(sys)
@@ -14,6 +14,7 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 2.0
 ##					OK - Armazenando listas com 10 trend topics
 ##					OK - Armazenando listas com 10.000 tweets coletados
+##					OK - Coletando 1000 usuários seeds.
 ##					OK - Coletando seeds a partir dos tweets coletados
 ##					OK - Script verifica se user já foi adicioando antes de inserí-lo na lista de seeds.
 ##
@@ -47,29 +48,37 @@ def check(search,datafile):
 #
 ##########################################################################################################################################################################
 def search_seeds(query):
+	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+	seeds_collected = open("data/"+agora+"_seeds_collected.txt", 'a+')
+	seeds_collected.close()
 	try: 																					#Tell the Cursor method that we want to use the Search API (api.search) #Also tell Cursor our query, and the maximum number of tweets to return
-		maxTweets = 10000 																#Maximum number of tweets we want to collect
+		maxTweets = 100000 																#Maximum number of tweets we want to collect
 		tweetsPerQry = 100 																#The twitter Search API allows up to 100 tweets per query
 		tweetCount = 0
-		tweets_collected = open('data/tweets_collected.json', 'a+')					#Open a text file to save the tweets to
+		seedCount = 0
+		tweets_collected = open('data/'+agora+'_tweets_collected.json', 'a+')					#Open a text file to save the tweets to
 		for tweet in tweepy.Cursor(api.search,q=query, result_type="recent",wait_on_rate_limit=True,wait_on_rate_limit_notify=True).items(maxTweets):
-			tweets_collected.write(jsonpickle.encode(tweet._json, unpicklable=False) + '\n')				#Write the JSON format to the text file, and add one to the number of tweets we've collecte
-			tweetCount += 1
-			print("Downloaded {0} tweets".format(tweetCount))				#Display how many tweets we have collected
-			seeds_collected = open("data/seeds_collected.txt", 'r')											# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca			
-			if check(tweet.user.id,seeds_collected):												#Adiciona o usuário ao arquivo de seeds
-				print (str(tweet.user.id)+" já adicionado! Continuando...")
+			if (seedCount >= 500):
+				break
 			else:
-				seeds = open("data/seeds_collected.txt", 'a+')		# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca
-				seeds.writelines(str(tweet.user.id)+"\n")
-				seeds.close()
+				tweets_collected.write(jsonpickle.encode(tweet._json, unpicklable=False) + '\n')				#Write the JSON format to the text file, and add one to the number of tweets we've collecte
+				tweetCount += 1
+				print("Downloaded {0} tweets".format(tweetCount))				#Display how many tweets we have collected
+				seeds_collected = open("data/"+agora+"_seeds_collected.txt", 'r')											# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca			
+				if check(tweet.user.id,seeds_collected):												#Adiciona o usuário ao arquivo de seeds
+					print (str(tweet.user.id)+" já adicionado! Continuando...")
+				else:
+					seeds = open("data/"+agora+"_seeds_collected.txt", 'a+')		# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca
+					seeds.writelines(str(tweet.user.id)+"\n")
+					seedCount += 1
+					seeds.close()
+					print ("Collected "+str(seedCount)+" seeds")
 		
 		seeds_collected.close()
 		tweets_collected.close()
 			
 	except tweepy.error.TweepError as e: 													#Armazena todos os erros em um único arquivo.
-		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-		seeds_lists_err = open("error/seeds_list.err", "a+") # Abre o arquivo para gravação no final do arquivo
+		seeds_lists_err = open("error/"+agora+"_seeds_list.err", "a+") # Abre o arquivo para gravação no final do arquivo
 		seeds_lists_err.writelines(str(agora)+". Erro: "+str(e)+"\n")
 		seeds_lists_err.close()
 		print("[ERRRO] Não foi possível recuperar seeds. Erro: ",str(e),". Vou ignorar e tocar adiante.\n")
@@ -110,7 +119,7 @@ def search_trends(search):
 		 
 		print trends_querry
 		
-		trends_querry_file = open("data/trends_querry_"+agora+".txt", 'w') 		# Vamos a querry com a data e hora que foi feita a consulta.
+		trends_querry_file = open("data/"+agora+"_trends_querry.txt", 'a+') 		# Vamos a querry com a data e hora que foi feita a consulta.
 		trends_querry_file.write(str(trends_querry)+"\n")
 		trends_querry_file.close()
 
@@ -120,11 +129,10 @@ def search_trends(search):
 		
 
 	except tweepy.error.TweepError as e:
-		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-		seeds_err = open("error/seeds_collect.lists_err", "a+") # Abre o arquivo para gravação no final do arquivo
+		trends_err = open("error/"+agora+"_trends_collect.err", "a+") # Abre o arquivo para gravação no final do arquivo
 		
-		seeds_err.writelines(str(agora)+"[ERRRO] Não foi possível recuperar os trends. Erro: "+str(e)+".\n")
-		seeds_err.close()
+		trends_err.writelines(str(agora)+"[ERRRO] Não foi possível recuperar os trends. Erro: "+str(e)+".\n")
+		trends_err.close()
 		print("[ERRRO] Não foi possível recuperar os trends. Erro: ",str(e),".\n")	
 
 
@@ -138,8 +146,11 @@ def search_trends(search):
 ##########################################################################################################################################################################
 
 def main():
-	search = api.trends_place(1) 	# Global information is available by using 1 as the WOEID. # from the end of your code trends1 is a list with only one element in it, which is a dict which we'll put in data.
-	search_seeds(search_trends(search))
+	try:
+		search = api.trends_place(1) 	# Global information is available by using 1 as the WOEID. # from the end of your code trends1 is a list with only one element in it, which is a dict which we'll put in data.
+		search_seeds(search_trends(search))
+	except:
+		print ("Erro no script! Impossível realizar a coleta dos seeds.")
 	
 	
 ################################################################################################
@@ -169,7 +180,7 @@ for i in range(j):
 	
 	auths.append(auth)
 	
-print ("Autenticando usando chave número: "+str(1))
+print ("Autenticando usando chave número: "+str(0))
 
 api = tweepy.API(auths[0],wait_on_rate_limit=True)
 print ("Autenticação Realizada!\n")

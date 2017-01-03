@@ -1,0 +1,6 @@
+201701032058 - list_id: 743293898714316800. Erro: Failed to parse JSON payload: Unterminated string starting at: line 1 column 902673 (char 902672)
+201701032059 - list_id: 743290778663813120. Erro: Failed to parse JSON payload: Unterminated string starting at: line 1 column 1421659 (char 1421658)
+201701032059 - list_id: 743288256482009090. Erro: Failed to send request: ('Connection aborted.', BadStatusLine("''",))
+201701032101 - list_id: 742895449342763008. Erro: Failed to parse JSON payload: Unterminated string starting at: line 1 column 516110 (char 516109)
+201701032102 - list_id: 742868327299567616. Erro: Failed to parse JSON payload: Unterminated string starting at: line 1 column 1165165 (char 1165164)
+201701032102 - list_id: 726941298704306176. Erro: Failed to parse JSON payload: Unterminated string starting at: line 1 column 609805 (char 609804)
