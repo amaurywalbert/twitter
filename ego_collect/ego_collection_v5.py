@@ -74,13 +74,13 @@ def members_lists(list_id):
 		members = []																				 	#Inicializando arrays	
 		for page in tweepy.Cursor(api.list_members,list_id=list_id,wait_on_rate_limit=True,wait_on_rate_limit_notify=True,count=5000).pages():
 			for member in page:
-				users_collected = open("data/users_collected.txt", 'r')											# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca
+				users_collected = open("/home/amaury/ego_collection/data/users_collected.txt", 'r')											# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca
 				if check(member.id,users_collected):								#Verifica se o usuário já foi adicionado no arquivo de membros coletados.
 					print (str(member.id)+" já adicionado! Continuando...")
 				else:					
 					members.append(str(member.id)+"\n")
 				users_collected.close()
-		members_file = open("data/users_collected.txt", 'a+')
+		members_file = open("/home/amaury/ego_collection/data/users_collected.txt", 'a+')
 		members_file.writelines(members) 												# Salvando os membros adicionados
 		members_file.close()
 
@@ -123,8 +123,8 @@ def search_lists(user):
 
 		if (len(lists) > 1):
 			
-			lists_collect = open("data/lists_collect.txt", 'a+')						# Arquivo com os ids das listas com o mínimo exigido
-			lists_id = open("data/lists_collect.txt", 'r')						# Arquivo com os ids das listas com o mínimo exigido
+			lists_collect = open("/home/amaury/ego_collection/data/lists_collect.txt", 'a+')						# Arquivo com os ids das listas com o mínimo exigido
+			lists_id = open("/home/amaury/ego_collection/data/lists_collect.txt", 'r')						# Arquivo com os ids das listas com o mínimo exigido
 					
 			for list in lists:
 				if check(list.id,lists_id):													#Verifica se a lista já foi adicionada no arquivo de listas.
@@ -138,12 +138,12 @@ def search_lists(user):
 			lists_collect.close()
 			
 			
-			ego_list = open('data/ego_list.txt','a+') 										#Lista de egos
+			ego_list = open('/home/amaury/ego_collection/data/ego_list.txt','a+') 										#Lista de egos
 			ego_list.writelines(str(user))														# Salva o id do usuário no arquivo de Egos coletados
 			print ("Ego salvo com sucesso: "+str(user))		
 			ego_list.close()
 		
-		users_verified = open('data/users_verified.txt','a+')							#Arquivo para armazenar a lista de usuários já verificados.
+		users_verified = open('/home/amaury/ego_collection/data/users_verified.txt','a+')							#Arquivo para armazenar a lista de usuários já verificados.
 		users_verified.writelines(user)									# Salva o usuário no arquivo de users já verificados.
 		users_verified.close()	
 	
@@ -166,9 +166,9 @@ def search_lists(user):
 ##########################################################################################################################################################################
 
 def main():
-	users_verified = open('data/users_verified.txt','a+')							#Arquivo para armazenar a lista de usuários já verificados.
+	users_verified = open('/home/amaury/ego_collection/data/users_verified.txt','a+')							#Arquivo para armazenar a lista de usuários já verificados.
 	users_verified.close()
-	users_collected = open('data/users_collected.txt','r') 							#Testando com o id do user
+	users_collected = open('/home/amaury/ego_collection/data/users_collected.txt','r') 							#Testando com o id do user
 	eof = False
 	while not eof:																					#Enquanto não for final do arquivo
 		account = users_collected.readline()													#Leia scren_name do usuário corrente		
@@ -176,7 +176,7 @@ def main():
 				eof = True
 				#break
 		else:
-			users_verified = open('data/users_verified.txt','r')							#Arquivo para armazenar a lista de usuários já verificados.
+			users_verified = open('/home/amaury/ego_collection/data/users_verified.txt','r')							#Arquivo para armazenar a lista de usuários já verificados.
 			if check(account,users_verified):													#testa se o usuário já foi verificado, consultando o arquivo correspondente.
 				print ("Usuário: "+str(account)+"Já verificado. Continuando...")
 				print	

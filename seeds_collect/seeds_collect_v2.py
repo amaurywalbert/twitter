@@ -49,14 +49,14 @@ def check(search,datafile):
 ##########################################################################################################################################################################
 def search_seeds(query):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-	seeds_collected = open("data/"+agora+"_seeds_collected.txt", 'a+')
+	seeds_collected = open("/home/amaury/ego_collection/data/"+agora+"_seeds_collected.txt", 'a+')
 	seeds_collected.close()
 	try: 																					#Tell the Cursor method that we want to use the Search API (api.search) #Also tell Cursor our query, and the maximum number of tweets to return
 		maxTweets = 100000 																#Maximum number of tweets we want to collect
 		tweetsPerQry = 100 																#The twitter Search API allows up to 100 tweets per query
 		tweetCount = 0
 		seedCount = 0
-		tweets_collected = open('data/'+agora+'_tweets_collected.json', 'a+')					#Open a text file to save the tweets to
+		tweets_collected = open('/home/amaury/ego_collection/data/'+agora+'_tweets_collected.json', 'a+')					#Open a text file to save the tweets to
 		for tweet in tweepy.Cursor(api.search,q=query, result_type="recent",wait_on_rate_limit=True,wait_on_rate_limit_notify=True).items(maxTweets):
 			if (seedCount >= 500):
 				break
@@ -64,11 +64,11 @@ def search_seeds(query):
 				tweets_collected.write(jsonpickle.encode(tweet._json, unpicklable=False) + '\n')				#Write the JSON format to the text file, and add one to the number of tweets we've collecte
 				tweetCount += 1
 				print("Downloaded {0} tweets".format(tweetCount))				#Display how many tweets we have collected
-				seeds_collected = open("data/"+agora+"_seeds_collected.txt", 'r')											# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca			
+				seeds_collected = open("/home/amaury/ego_collection/data/"+agora+"_seeds_collected.txt", 'r')											# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca			
 				if check(tweet.user.id,seeds_collected):												#Adiciona o usuário ao arquivo de seeds
 					print (str(tweet.user.id)+" já adicionado! Continuando...")
 				else:
-					seeds = open("data/"+agora+"_seeds_collected.txt", 'a+')		# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca
+					seeds = open("/home/amaury/ego_collection/data/"+agora+"_seeds_collected.txt", 'a+')		# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca
 					seeds.writelines(str(tweet.user.id)+"\n")
 					seedCount += 1
 					seeds.close()
@@ -78,7 +78,7 @@ def search_seeds(query):
 		tweets_collected.close()
 			
 	except tweepy.error.TweepError as e: 													#Armazena todos os erros em um único arquivo.
-		seeds_lists_err = open("error/"+agora+"_seeds_list.err", "a+") # Abre o arquivo para gravação no final do arquivo
+		seeds_lists_err = open("/home/amaury/ego_collection/error/"+agora+"_seeds_list.err", "a+") # Abre o arquivo para gravação no final do arquivo
 		seeds_lists_err.writelines(str(agora)+". Erro: "+str(e)+"\n")
 		seeds_lists_err.close()
 		print("[ERRRO] Não foi possível recuperar seeds. Erro: ",str(e),". Vou ignorar e tocar adiante.\n")
@@ -94,7 +94,7 @@ def search_seeds(query):
 
 def search_trends(search):
 	try:
-#		search_file = open("data/search.json", 'w') 		# Salvar a pesquisa realizada... apresenta uma lista com todos os locais disponíveis  (no nosso caso o parametro foi global (1), portanto aprensenta apenas ele)
+#		search_file = open("/home/amaury/ego_collection/data/search.json", 'w') 		# Salvar a pesquisa realizada... apresenta uma lista com todos os locais disponíveis  (no nosso caso o parametro foi global (1), portanto aprensenta apenas ele)
 #		search_file.write(json.dumps(search)+"\n")
 #		search_file.close()
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -111,7 +111,7 @@ def search_trends(search):
 			names.append(trends[i]['name'])	
 		
 		#names = [trend['name'] for trend in trends]								# put all the names together with a ' ' separating them
-		#names_file = open("data/names.json", 'w')
+		#names_file = open("/home/amaury/ego_collection/data/names.json", 'w')
 		#names_file.write(json.dumps(names)+"\n")
 		#names_file.close()
 		
@@ -119,7 +119,7 @@ def search_trends(search):
 		 
 		print trends_querry
 		
-		trends_querry_file = open("data/"+agora+"_trends_querry.txt", 'a+') 		# Vamos a querry com a data e hora que foi feita a consulta.
+		trends_querry_file = open("/home/amaury/ego_collection/data/"+agora+"_trends_querry.txt", 'a+') 		# Vamos a querry com a data e hora que foi feita a consulta.
 		trends_querry_file.write(str(trends_querry)+"\n")
 		trends_querry_file.close()
 
@@ -129,7 +129,7 @@ def search_trends(search):
 		
 
 	except tweepy.error.TweepError as e:
-		trends_err = open("error/"+agora+"_trends_collect.err", "a+") # Abre o arquivo para gravação no final do arquivo
+		trends_err = open("/home/amaury/ego_collection/error/"+agora+"_trends_collect.err", "a+") # Abre o arquivo para gravação no final do arquivo
 		
 		trends_err.writelines(str(agora)+"[ERRRO] Não foi possível recuperar os trends. Erro: "+str(e)+".\n")
 		trends_err.close()
