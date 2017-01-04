@@ -1,6 +1,5 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-# V 1.0
 # Script para coletar seeds dos trends do Twitter:	
 #
 
@@ -12,7 +11,7 @@ sys.setdefaultencoding('utf-8')
 
 ################################################################################################
 ##		Status - Versão 2.0
-##					OK - Armazenando listas com 10 trend topics
+##					OK - Armazenando listas com 15 trend topics
 ##					OK - Armazenando listas com 10.000 tweets coletados
 ##					OK - Coletando 1000 usuários seeds.
 ##					OK - Coletando seeds a partir dos tweets coletados
@@ -48,9 +47,16 @@ def check(search,datafile):
 #
 ##########################################################################################################################################################################
 def search_seeds(query):
+	print
+	print "teste_00"
+	print
+	
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	seeds_collected = open("/home/amaury/coleta/seeds_collection/data/"+agora+"_seeds_collected.txt", 'a+')
 	seeds_collected.close()
+	print
+	print "teste_01"
+	print
 	try: 																					#Tell the Cursor method that we want to use the Search API (api.search) #Also tell Cursor our query, and the maximum number of tweets to return
 		maxTweets = 100000 																#Maximum number of tweets we want to collect
 		tweetsPerQry = 100 																#The twitter Search API allows up to 100 tweets per query
@@ -58,7 +64,7 @@ def search_seeds(query):
 		seedCount = 0
 		tweets_collected = open('/home/amaury/coleta/seeds_collection/data/'+agora+'_tweets_collected.json', 'a+')					#Open a text file to save the tweets to
 		for tweet in tweepy.Cursor(api.search,q=query, result_type="recent",wait_on_rate_limit=True,wait_on_rate_limit_notify=True).items(maxTweets):
-			if (seedCount >= 500):
+			if (seedCount >= 1000):
 				break
 			else:
 				tweets_collected.write(jsonpickle.encode(tweet._json, unpicklable=False) + '\n')				#Write the JSON format to the text file, and add one to the number of tweets we've collecte
@@ -107,7 +113,7 @@ def search_trends(search):
 
 		i = 0
 		names = []
-		for i in range(10):
+		for i in range(15):
 			names.append(trends[i]['name'])	
 		
 		#names = [trend['name'] for trend in trends]								# put all the names together with a ' ' separating them
@@ -122,8 +128,6 @@ def search_trends(search):
 		trends_querry_file = open("/home/amaury/coleta/seeds_collection/data/"+agora+"_trends_querry.txt", 'a+') 		# Vamos a querry com a data e hora que foi feita a consulta.
 		trends_querry_file.write(str(trends_querry)+"\n")
 		trends_querry_file.close()
-
-
 		
 		return (trends_querry)
 		
@@ -149,8 +153,8 @@ def main():
 	try:
 		search = api.trends_place(1) 	# Global information is available by using 1 as the WOEID. # from the end of your code trends1 is a list with only one element in it, which is a dict which we'll put in data.
 		search_seeds(search_trends(search))
-	except:
-		print ("Erro no script! Impossível realizar a coleta dos seeds.")
+	except tweepy.error.TweepError as e:
+		print ("Erro no script! Impossível realizar a coleta dos seeds. Erro: ",str(e),".\n")
 	
 	
 ################################################################################################
