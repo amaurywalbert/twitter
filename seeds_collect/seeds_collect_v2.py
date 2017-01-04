@@ -47,24 +47,18 @@ def check(search,datafile):
 #
 ##########################################################################################################################################################################
 def search_seeds(query):
-	print
-	print "teste_00"
-	print
 	
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	seeds_collected = open("/home/amaury/coleta/seeds_collection/data/"+agora+"_seeds_collected.txt", 'a+')
 	seeds_collected.close()
-	print
-	print "teste_01"
-	print
-	try: 																					#Tell the Cursor method that we want to use the Search API (api.search) #Also tell Cursor our query, and the maximum number of tweets to return
-		maxTweets = 100000 																#Maximum number of tweets we want to collect
-		tweetsPerQry = 100 																#The twitter Search API allows up to 100 tweets per query
+	print query	
+	try:
 		tweetCount = 0
 		seedCount = 0
-		tweets_collected = open('/home/amaury/coleta/seeds_collection/data/'+agora+'_tweets_collected.json', 'a+')					#Open a text file to save the tweets to
-		for tweet in tweepy.Cursor(api.search,q=query, result_type="recent",wait_on_rate_limit=True,wait_on_rate_limit_notify=True).items(maxTweets):
-			if (seedCount >= 1000):
+		tweets_collected = open('/home/amaury/coleta/seeds_collection/data/'+agora+'_tweets_collected.json', 'a+')					#Open a text file to save the tweets to		
+		
+		for tweet in tweepy.Cursor(api.search,q=query,result_type="recent",wait_on_rate_limit=True,wait_on_rate_limit_notify=True).items(10000):
+			if (seedCount >= 100):
 				break
 			else:
 				tweets_collected.write(jsonpickle.encode(tweet._json, unpicklable=False) + '\n')				#Write the JSON format to the text file, and add one to the number of tweets we've collecte
@@ -88,7 +82,6 @@ def search_seeds(query):
 		seeds_lists_err.writelines(str(agora)+". Erro: "+str(e)+"\n")
 		seeds_lists_err.close()
 		print("[ERRRO] Não foi possível recuperar seeds. Erro: ",str(e),". Vou ignorar e tocar adiante.\n")
-		
 
 
 ##########################################################################################################################################################################
@@ -112,24 +105,28 @@ def search_trends(search):
 		trends = data['trends']									#Extrai os objetos TRENDS - api Returns the top 10 trending topics for a specific WOEID, if trending information is available for it.
 
 		i = 0
-		names = []
-		for i in range(15):
-			names.append(trends[i]['name'])	
+		name = []
+		query = []
+		for i in range(10):
+			name.append(trends[i]['name'])
+			query.append(trends[i]['query'])
 		
-		#names = [trend['name'] for trend in trends]								# put all the names together with a ' ' separating them
-		#names_file = open("/home/amaury/coleta/seeds_collection/data/names.json", 'w')
-		#names_file.write(json.dumps(names)+"\n")
-		#names_file.close()
+		#name = [trend['name'] for trend in trends]								# put all the name together with a ' ' separating them
+		#name_file = open("/home/amaury/coleta/seeds_collection/data/name.json", 'w')
+		#name_file.write(json.dumps(name)+"\n")
+		#name_file.close()
 		
-		trends_querry = ' OR '.join(names)
+		trends_name = ' OR '.join(name)
+		trends_query = ' OR '.join(query)
 		 
-		print trends_querry
+		print trends_name
+		print trends_query
 		
-		trends_querry_file = open("/home/amaury/coleta/seeds_collection/data/"+agora+"_trends_querry.txt", 'a+') 		# Vamos a querry com a data e hora que foi feita a consulta.
-		trends_querry_file.write(str(trends_querry)+"\n")
-		trends_querry_file.close()
+		trends_query_file = open("/home/amaury/coleta/seeds_collection/data/"+agora+"_trends_query.txt", 'a+') 		# Vamos a query com a data e hora que foi feita a consulta.
+		trends_query_file.write(str(trends_query)+"\n")
+		trends_query_file.close()
 		
-		return (trends_querry)
+		return (trends_query)
 		
 
 	except tweepy.error.TweepError as e:
