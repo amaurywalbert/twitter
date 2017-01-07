@@ -29,9 +29,6 @@ sys.setdefaultencoding('utf-8')
 ##					OK - verificando pelo id dos users...
 ##
 ##		Status - OK - Gerenciador de chaves usando tweepy
-##
-##		Status - OK - Script Funcionando! 
-##
 ## 
 ################################################################################################
 
