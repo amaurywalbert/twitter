@@ -16,7 +16,7 @@ sys.setdefaultencoding('utf-8')
 ##walbert1810
 
 ################################################################################################
-##		Status - Versão 7.0
+##		Status - Versão 7.0 - Script 02
 ##
 ##					OK	- Coletando todas as litas - adicionado Método API.Cursor
 ##					OK - Verificando por limites usando apenas o Tweepy
@@ -28,7 +28,7 @@ sys.setdefaultencoding('utf-8')
 ##					OK - Armazenamento dos ids das listas...
 ##					OK - verificando pelo id dos users...
 ##
-##		Status - OK - Gerenciador de chaves usando tweepy
+##		Status - OK - Gerenciador de chaves usando tweepy - Usando chaves 0 a 4 - outro script tá usando 5 a 9.
 ##
 ##		Status - OK - Script Funcionando! 
 ##
@@ -260,7 +260,7 @@ for i in range(j):
 	
 	auths.append(auth)
 	
-key = -1
+key = 4
 	
 api = autentication(auths)
 

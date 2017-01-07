@@ -28,7 +28,7 @@ sys.setdefaultencoding('utf-8')
 ##					OK - Armazenamento dos ids das listas...
 ##					OK - verificando pelo id dos users...
 ##
-##		Status - OK - Gerenciador de chaves usando tweepy
+##		Status - OK - Gerenciador de chaves usando tweepy - Usando chaves 0 a 4 - outro script tá usando 5 a 9.
 ##
 ##		Status - OK - Script Funcionando! 
 ##
@@ -46,7 +46,7 @@ def autentication(auths):
 	global key
 
 	key += 1
-	if (key >= 10):
+	if (key >= 5):
 		key = 0
 
 	print ("Autenticando usando chave número: "+str(key))
