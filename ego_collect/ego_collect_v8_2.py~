@@ -155,7 +155,7 @@ def search_lists(user):
 					print ("Lista "+str(list.id)+" já adicionada! Continuando...")
 				else:
 					users_collected = open("/home/amaury/coleta/ego_collection/data/users_collected.txt", 'r') # Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para)
-					if (len(users_collected) < 1500):
+					if (len(users_collected) < seeds_limit):
 						members_lists(list.id)				#Função para recuperar os membros da lista
 					else:
 						print ("Limite de membros atingido!"+str(len(users_collected)))
@@ -253,7 +253,7 @@ auths = oauth_keys['auths_ok']
 #key = -1					###### Essas duas linhas atribuem as chaves para cada script
 #key_init = 0
 #key_limit = len(auths)	###### Usa todas as chaves
-
+#seeds_limit = 3000000
 ###################################################################################################
 ############################ PARA USAR COM VÀRIAS CÓPIAS DO SCRIPTS RODANDO SIMULTANEAMENTE########
 ###################################################################################################
@@ -266,7 +266,7 @@ key_init = 5			######																		------- SCRIPT 2
 #key_limit = 5			###### Usa as primeiras chaves do gerenciador de chaves		------- SCRIPT 1
 key_limit = 10		###### Usa as últimas chaves do gerenciador de chaves    	------- SCRIPT 2
 
-
+seeds_limit = 1500000
 
 try:
 	api = autentication(auths)
