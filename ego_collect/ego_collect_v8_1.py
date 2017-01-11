@@ -242,7 +242,7 @@ oauth_keys = multi_oauth.keys()
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
 ################################################################################################									
-auths = oauth_keys['auths_test']
+auths = oauth_keys['auths_ok']
 #USAGE  -- auths = oauth_keys['auths_ok']
 #USAGE  -- auths = oauth_keys['auths_test']
 ################################################################################################
