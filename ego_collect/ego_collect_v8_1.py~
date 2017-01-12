@@ -155,10 +155,11 @@ def search_lists(user):
 					print ("Lista "+str(list.id)+" já adicionada! Continuando...")
 				else:
 					users_collected = open("/home/amaury/coleta/ego_collection/data/users_collected.txt", 'r') # Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para)
-					if (len(users_collected) < seeds_limit):	#Crescer a lista de seeds até esse limit
+					file = users_collected.readlines()
+					if (len(file) < seeds_limit):	#Crescer a lista de seeds até esse limit
 						members_lists(list.id)				#Função para recuperar os membros da lista
 					else:
-						print ("Limite de membros atingido!"+str(len(users_collected)))
+						print ("Limite de membros atingido!"+str(len(file)))
 					users_collected.close()
 					
 					lists_collect.writelines(str(list.id)+"\n") 									# Salva o id da lista no arquivo de listas

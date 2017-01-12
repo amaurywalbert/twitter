@@ -251,20 +251,20 @@ auths = oauth_keys['auths_ok']
 ###################################################################################################
 ############################ PARA USAR COM VÀRIAS APENAS UM SCRIPT RODANDO ########################
 ###################################################################################################
-#key = -1					###### Essas duas linhas atribuem as chaves para cada script
-#key_init = 0
-#key_limit = len(auths)	###### Usa todas as chaves
+key = -1					###### Essas duas linhas atribuem as chaves para cada script
+key_init = 0
+key_limit = len(auths)	###### Usa todas as chaves
 #seeds_limit = 3000000
 ###################################################################################################
 ############################ PARA USAR COM VÀRIAS CÓPIAS DO SCRIPTS RODANDO SIMULTANEAMENTE########
 ###################################################################################################
-key = -1					###### Essas linhas atribuem as chaves para cada script		------- SCRIPT 1
+#key = -1					###### Essas linhas atribuem as chaves para cada script		------- SCRIPT 1
 #key = 4					###### 																	   ------- SCRIPT 2
 
-key_init = 0			######																		------- SCRIPT 1			
+#key_init = 0			######																		------- SCRIPT 1			
 #key_init = 5			######																		------- SCRIPT 2
 
-key_limit = 5			###### Usa as primeiras chaves do gerenciador de chaves		------- SCRIPT 1
+#key_limit = 5			###### Usa as primeiras chaves do gerenciador de chaves		------- SCRIPT 1
 #key_limit = 10		###### Usa as últimas chaves do gerenciador de chaves    	------- SCRIPT 2
 
 seeds_limit = 1500000
