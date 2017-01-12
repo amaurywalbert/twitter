@@ -59,12 +59,12 @@ access_token_secret.append("9sInZONslZMldFYpV5e0u7B7EyQVBERXgi15pCGir0wXL")
 #
 ##############################################################################################################
 ##############################################################################################################
-#		Conta: amaurywcarvalho - user: amaurywcarvalho - e-mail: amaurywalbert@hotmail.com - senha: padrão
+#		Conta: msc20160012_app05 - user: msc2016002_app5 - e-mail: twitter05msc20160012@yahoo.com - senha: padrão
 #
-consumer_key.append("U7NBO7duqO1aTZ81q63Hy61Er")
-consumer_secret.append("kVKISoiaUrw1gBAZpTLPJ1op8GfONmHULeTMG01Ofj2OsAMkOg")
-access_token.append("781627388329398273-lrXG081wRlkvHpYAPO0iS77p3fGnijs")
-access_token_secret.append("cR71hKrAb4zZIyZqGIwDuH0HMnC1Z7BAwN7MKEfe7Uhg7")
+consumer_key.append("VNxFdDgMvx4Dge4Q2afZt7l45")
+consumer_secret.append("o1mIoWrqmbTDbEhUZaG4VqSBGplSSZo9OlM4rwFn6SwqCFSlRm")
+access_token.append("819401695310528512-JpY8ntd3tBrTNSFOBDill7p7bCHpKSU")
+access_token_secret.append("WpqOpdGjlWpTu7nvrG1Yfsp0jCKah6kQrMDpeZCp7LxBw")
 #
 #
 ##############################################################################################################
@@ -116,6 +116,57 @@ consumer_secret.append("iZprT4mlxrKeKnp1WUAcyGjYfDYkEgC6FAzu7H1H68GYqZfMMX")
 access_token.append("817497484285145093-cpyWNWhMvAUkAWu4opV96hNtxMSRQ4g")
 access_token_secret.append("PEnlovnA9927h7NUVkt0YE5aYHUJqkHtPS3bBZhjYlvvM")
 #
+#
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc20160012_app11 - user: msc2016002_11 - e-mail: twitter11msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("x4qzrPEvZvWnTIu3X7rVFwEVQ")
+consumer_secret.append("PqenEfheKBvGob3KHLNo19yT9wBE8uNrEb3b1zPIY2YLeKN5J8")
+access_token.append("819405209613041664-c0GhzjbnZ0vHRDqcYxDPy4mxYzYjlwX")
+access_token_secret.append("vdGJMLEHYAjbVVu0SArUhdhzJpYv5ItfPh6tpiDuONzeP")
+#
+#
+##############################################################################################################
+##############################################################################################################
+Conta: msc20160012_app12 - user: msc2016002_12 - e-mail: twitter12msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("t7TVuq57clRC046ZmNoJUXhzb")
+consumer_secret.append("GiXWW4zZixDDNE5cnHI6AeO99nEIPBuOUJZhMvk67sbsP1zqdk")
+access_token.append("819407030817607683-1bbPqcbZA4ZlnaPizrrJpM8FETlYB8v")
+access_token_secret.append("a0PKhTisi9oBTKmXsspv46t2lNrYoC9ewaOskZc0cuvRJ")
+#
+#
+##############################################################################################################
+##############################################################################################################
+Conta: msc20160012_app13 - user: msc2016002_13 - e-mail: twitter13msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("4cxE0wJ6x1ZqjsNnjbBjQ1XxK")
+consumer_secret.append("FDD292IWBEpk55sd41RehOxcC5sKAqXw4RXFsUmykTG08FWoPJ")
+access_token.append("819408960520417280-Ia5yrwwWRJjZakhXDT6UkkZon2LpEgc")
+access_token_secret.append("LsWru0bh8fnLXrho8jfJYbjEz0gYddqX4JOpUE57EsPL5")
+#
+#
+##############################################################################################################
+##############################################################################################################
+Conta: msc20160012_app14 - user: msc2016002_14 - e-mail: twitter14msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("zf1f2P4AllifZhtIwVoPeXjHC")
+consumer_secret.append("Y29dMvDHaxOwKYzWMDoItdswI5ksCNmS2gckwel9pCzLGkfIM2")
+access_token.append("819410554259439616-1F87qpjOMkvQSYb6srkxDb9GxhfCPSo")
+access_token_secret.append("HtNBwTixhcB6LcBX1V8vqvBiLvjkzMecv3eW6xSdUXcPB")
+#
+#
+##############################################################################################################
+##############################################################################################################
+Conta: msc20160012_app15 - user: msc2016002_15 - e-mail: twitter15msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("5PDmwijPhMM05F2IbXSmaO7Wu")
+consumer_secret.append("xZXYgKhNE2yTBp1Fdu0AD6eL6vAla9PJWbHWYOPamLo1rKYBzH")
+access_token.append("819411941374431232-lgKyr48Ctu2smXLhpZR4ngO69U6wa4K")
+access_token_secret.append("beF0ifThX0wnrzwSGIFMPES7Ip9BznNs5DEMMEddjBo3R")
+#
+#
 ###############################################################################################################
 ##############################################################################################################
 ##############################################################################################################
@@ -143,7 +194,14 @@ access_token_secret_test.append("in67CMCZSDrVGLiPAP0iri5sfEzqRy3qsNOplPer2C2aQ")
 #
 ##############################################################################################################
 ##############################################################################################################
-        
+#		Conta: amaurywcarvalho - user: amaurywcarvalho - e-mail: amaurywalbert@hotmail.com - senha: padrão
+#
+consumer_key_test.append("U7NBO7duqO1aTZ81q63Hy61Er")
+consumer_secret_test.append("kVKISoiaUrw1gBAZpTLPJ1op8GfONmHULeTMG01Ofj2OsAMkOg")
+access_token_test.append("781627388329398273-lrXG081wRlkvHpYAPO0iS77p3fGnijs")
+access_token_secret_test.append("cR71hKrAb4zZIyZqGIwDuH0HMnC1Z7BAwN7MKEfe7Uhg7")
+#
+#       
 
 def keys():
 # create authentication handlers given pre-existing keys  

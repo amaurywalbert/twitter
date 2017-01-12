@@ -7,8 +7,8 @@ while true; do
 		echo "Executando"
 	else
 		echo "Iniciando..."
-		gnome-terminal -x bash -c "python /home/amaury/twitter/ego_collect/ego_collect_v8_1.py; exec $SHELL";
-#		gnome-terminal -x bash -c "python /home/amaury/twitter/ego_collect/ego_collect_v8_2.py; exec $SHELL";
+		gnome-terminal -x bash -c "python /home/amaury/twitter/ego_collect/ego_collect_v9_1.py; exec $SHELL";
+#		gnome-terminal -x bash -c "python /home/amaury/twitter/ego_collect/ego_collect_v9_2.py; exec $SHELL";
 	fi
 	sleep $INTERVALO
 done
