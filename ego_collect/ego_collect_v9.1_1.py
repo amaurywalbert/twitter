@@ -34,7 +34,8 @@ sys.setdefaultencoding('utf-8')
 ##					8.1.7 - OK - Coletar até 1,5 milhões de seeds para cada script
 ##
 ##					9.1 - OK - Tratar mensagens de erros
-##					9.2 - STATUS - TESTE - Salvar arquivos JSON com informações das listas e dos egos. - Não realizado  
+##					9.2 - STATUS - TESTE - Salvar arquivos JSON com informações das listas e dos egos. - Não realizado
+##					9.1 - Adiciona uma condição ao erro... verificar se vai dar problema no script que está rodando primeiro.  
 ##
 ## 
 ################################################################################################
@@ -113,7 +114,10 @@ def members_lists(list_id):
 	except tweepy.error.TweepError as e: 													#Armazena todos os erros em um único arquivo.
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		members_lists_err = open("/home/amaury/coleta/ego_collection/error/members_list.json", "a+") # Abre o arquivo para gravação no final do arquivo
-		error = {'user':user,'list':listid,'reason': e.message,'date':agora}
+		if e.message:		
+			error = {'user':user,'reason': e.message,'date':agora}
+		else
+			error = {'user':user,'reason': str(e),'date':agora}
 		json.dump(error, lists_err, indent=4, sort_keys=True, separators=(',', ':')) 
 		members_lists_err.close()
 		print error
@@ -198,7 +202,10 @@ def search_lists(user):
 		lists_err = open("/home/amaury/coleta/ego_collection/error/lists_err.json", "a+") # Abre o arquivo para gravação no final do arquivo
  
 #		data = {'key': 'value', 'whatever': [1, 42, 3.141, 1337]}
-		error = {'user':user,'reason': e.message,'date':agora}
+		if e.message:		
+			error = {'user':user,'reason': e.message,'date':agora}
+		else
+			error = {'user':user,'reason': str(e),'date':agora}
 		json.dump(error, lists_err, indent=4, sort_keys=True, separators=(',', ':')) 
 				
 		lists_err.close()

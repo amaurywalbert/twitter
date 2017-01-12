@@ -103,9 +103,9 @@ def members_lists(list_id):
 
 	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print
-		print("Erro: ",str(t),". Aguardando 60 segundos.\n")
+		print("Erro: ",str(t),". Aguardando 40 segundos.\n")
 		print		
-		time.sleep(60)		
+		time.sleep(40)		
 		api = autentication(auths,key)
 		members_lists(list_id)		
 			
@@ -185,9 +185,9 @@ def search_lists(user):
 
 	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print
-		print("Erro: ",str(t),". Aguardando 60 segundos.\n")
+		print("Erro: ",str(t),". Aguardando 40 segundos.\n")
 		print
-		time.sleep(60)		
+		time.sleep(40)		
 		api = autentication(auths)
 		search_lists(user)			
 
