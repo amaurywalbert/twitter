@@ -32,6 +32,7 @@ sys.setdefaultencoding('utf-8')
 ##					8.1.6 - OK - Gerenciador de chaves usando tweepy e gerenciador de chaves multi_oauth.
 ##
 ##					8.1.7 - OK - Coletar até 1,5 milhões de seeds para cada script
+##					8.1.8 - OK - Espera por 40 segundos antes de trocar de chave
 ##
 ##					9.1 - OK - Tratar mensagens de erros
 ##					9.2 - STATUS - TESTE - Salvar arquivos JSON com informações das listas e dos egos. - Não realizado
@@ -104,9 +105,9 @@ def members_lists(list_id):
 
 	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print
-		print("Erro: ",str(t),". Aguardando 60 segundos.\n")
+		print("Erro: ",str(t),". Aguardando 40 segundos.\n")
 		print		
-		time.sleep(60)		
+		time.sleep(40)		
 		api = autentication(auths,key)
 		members_lists(list_id)		
 			
@@ -189,9 +190,9 @@ def search_lists(user):
 
 	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print
-		print("Erro: ",str(t),". Aguardando 60 segundos.\n")
+		print("Erro: ",str(t),". Aguardando 40 segundos.\n")
 		print
-		time.sleep(60)		
+		time.sleep(40)		
 		api = autentication(auths)
 		search_lists(user)			
 

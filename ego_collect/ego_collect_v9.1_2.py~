@@ -1,5 +1,4 @@
 #!/bin/bash
-#EgoCollect.sh
 INTERVALO=300 #5 minutos
 while true; do
 	# Verifica se o python está sendo executado

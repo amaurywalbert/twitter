@@ -4,7 +4,7 @@
 #	Mínimo de 2 listas
 #	Mínimo de 5 membros em cada lista	
 #
-import tweepy, datetime, sys, time, json, os.path, shutil, time, simplejson
+import tweepy, datetime, sys, time, json, os, os.path, shutil, time, simplejson
 import multi_oauth		
 #Script que contém as chaves para autenticação do twitter
 
@@ -34,8 +34,11 @@ sys.setdefaultencoding('utf-8')
 ##					8.1.7 - OK - Coletar até 1,5 milhões de seeds para cada script
 ##					8.1.8 - OK - Espera por 40 segundos antes de trocar de chave
 ##
-##					9.1 - OK - Tratar mensagens de erros
-##					9.2 - STATUS - TESTE - Salvar arquivos JSON com informações das listas e dos egos. - Não realizado  
+##					9.1 - OK - Tratar mensagens de erros - Adiciona uma condição para tratar as exceções.
+##					9.2 - STATUS - TESTE - Modificações para deixar o código legígel:
+##									- Adicionar variával para guardar o local de armazenamento dos arquivos - facilita a alteração em caso de cópias dos scripts rodando simultaneamente
+##
+##						STATUS - TESTE - Salvar arquivos JSON com informações das listas e dos egos. - Não realizado  
 ##
 ## 
 ################################################################################################
@@ -91,13 +94,13 @@ def members_lists(list_id):
 		members = []																				 	#Inicializando arrays	
 		for page in tweepy.Cursor(api.list_members,list_id=list_id,wait_on_rate_limit_notify=True,count=5000).pages():
 			for member in page:
-				users_collected = open("/home/amaury/coleta/ego_collection/data/users_collected.txt", 'r')											# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca
+				users_collected = open(dir_data+"users_collected.txt", 'r')											# Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para continuar o processo de busca
 				if check(member.id,users_collected):								#Verifica se o usuário já foi adicionado no arquivo de membros coletados.
 					print (str(member.id)+" já adicionado! Continuando...")
 				else:					
 					members.append(str(member.id)+"\n")
 				users_collected.close()
-		members_file = open("/home/amaury/coleta/ego_collection/data/users_collected.txt", 'a+')
+		members_file = open(dir_data+"users_collected.txt", 'a+')
 		members_file.writelines(members) 												# Salvando os membros adicionados
 		members_file.close()
 
@@ -113,8 +116,11 @@ def members_lists(list_id):
 
 	except tweepy.error.TweepError as e: 													#Armazena todos os erros em um único arquivo.
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-		members_lists_err = open("/home/amaury/coleta/ego_collection/error/members_list.json", "a+") # Abre o arquivo para gravação no final do arquivo
-		error = {'user':user,'list':listid,'reason': e.message,'date':agora}
+		members_lists_err = open(dir_error+"members_list.json", "a+") # Abre o arquivo para gravação no final do arquivo
+		if e.message:		
+			error = {'user':user,'reason': e.message,'date':agora}
+		else
+			error = {'user':user,'reason': str(e),'date':agora}
 		json.dump(error, lists_err, indent=4, sort_keys=True, separators=(',', ':')) 
 		members_lists_err.close()
 		print error
@@ -150,14 +156,14 @@ def search_lists(user):
 
 		if (len(lists) > 1):
 			
-			lists_collect = open("/home/amaury/coleta/ego_collection/data/lists_collect.txt", 'a+')						# Arquivo com os ids das listas com o mínimo exigido
-			lists_id = open("/home/amaury/coleta/ego_collection/data/lists_collect.txt", 'r')						# Arquivo com os ids das listas com o mínimo exigido
+			lists_collect = open(dir_data+"lists_collect.txt", 'a+')						# Arquivo com os ids das listas com o mínimo exigido
+			lists_id = open(dir_data+"lists_collect.txt", 'r')						# Arquivo com os ids das listas com o mínimo exigido
 					
 			for list in lists:
 				if check(list.id,lists_id):													#Verifica se a lista já foi adicionada no arquivo de listas.
 					print ("Lista "+str(list.id)+" já adicionada! Continuando...")
 				else:
-					users_collected = open("/home/amaury/coleta/ego_collection/data/users_collected.txt", 'r') # Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para)
+					users_collected = open(dir_data+"users_collected.txt", 'r') # Arquivo com os seeds (membros das listas selecionadas serão adicionados ao final do arquivo user collect para)
 					file = users_collected.readlines()
 					if (len(file) < seeds_limit):	#Crescer a lista de seeds até esse limit
 						members_lists(list.id)				#Função para recuperar os membros da lista
@@ -172,12 +178,12 @@ def search_lists(user):
 			lists_collect.close()
 			
 			
-			ego_list = open('/home/amaury/coleta/ego_collection/data/ego_list.txt','a+') 										#Lista de egos
+			ego_list = open(dir_data+"ego_list.txt",'a+') 										#Lista de egos
 			ego_list.writelines(str(user))														# Salva o id do usuário no arquivo de Egos coletados
 			print ("Ego salvo com sucesso: "+str(user))		
 			ego_list.close()
 		
-		users_verified = open('/home/amaury/coleta/ego_collection/data/users_verified.txt','a+')							#Arquivo para armazenar a lista de usuários já verificados.
+		users_verified = open(dir_data+"users_verified.txt",'a+')							#Arquivo para armazenar a lista de usuários já verificados.
 		users_verified.writelines(user)									# Salva o usuário no arquivo de users já verificados.
 		users_verified.close()	
 
@@ -196,16 +202,19 @@ def search_lists(user):
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		
-		lists_err = open("/home/amaury/coleta/ego_collection/error/lists_err.json", "a+") # Abre o arquivo para gravação no final do arquivo
+		lists_err = open(dir_error+"lists_err.json", "a+") # Abre o arquivo para gravação no final do arquivo
  
 #		data = {'key': 'value', 'whatever': [1, 42, 3.141, 1337]}
-		error = {'user':user,'reason': e.message,'date':agora}
+		if e.message:		
+			error = {'user':user,'reason': e.message,'date':agora}
+		else
+			error = {'user':user,'reason': str(e),'date':agora}
 		json.dump(error, lists_err, indent=4, sort_keys=True, separators=(',', ':')) 
 				
 		lists_err.close()
 		print error
 #		print("[ERRRO] Não foi possível recuperar as listas de: "+user+". Erro: ",str(e),". Vou ignorar e tocar adiante.\n")
-		users_verified = open('/home/amaury/coleta/ego_collection/data/users_verified.txt','a+')							#Arquivo para armazenar a lista de usuários já verificados.
+		users_verified = open(dir_data+"users_verified.txt",'a+')							#Arquivo para armazenar a lista de usuários já verificados.
 		users_verified.writelines(user)									# Salva o usuário no arquivo de users já verificados.
 		users_verified.close()	
 
@@ -221,9 +230,9 @@ def search_lists(user):
 
 def main():
 
-	users_verified = open('/home/amaury/coleta/ego_collection/data/users_verified.txt','a+')							#Arquivo para armazenar a lista de usuários já verificados.
+	users_verified = open(dir_data+"users_verified.txt",'a+')							#Arquivo para armazenar a lista de usuários já verificados.
 	users_verified.close()
-	users_collected = open('/home/amaury/coleta/ego_collection/data/users_collected.txt','r') 							#Testando com o id do user
+	users_collected = open(dir_data+"users_collected.txt",'r') 							#Testando com o id do user
 	eof = False
 	while not eof:																					#Enquanto não for final do arquivo
 		account = users_collected.readline()													#Leia scren_name do usuário corrente		
@@ -231,7 +240,7 @@ def main():
 				eof = True
 				#break
 		else:
-			users_verified = open('/home/amaury/coleta/ego_collection/data/users_verified.txt','r')							#Arquivo para armazenar a lista de usuários já verificados.
+			users_verified = open(dir_data+"users_verified.txt",'r')							#Arquivo para armazenar a lista de usuários já verificados.
 			if check(account,users_verified):													#testa se o usuário já foi verificado, consultando o arquivo correspondente.
 				print ("Usuário: "+str(account)+"Já verificado. Continuando...")
 				print	
@@ -250,6 +259,18 @@ def main():
 # INICIO DO PROGRAMA
 #
 ################################################################################################
+
+dir_data = /home/amaury/coleta/ego_collection/data/
+#dir_data = /home/amaury/coleta/ego_collection2/data/				# SCRIPT 2
+
+dir_error = /home/amaury/coleta/ego_collection/error/
+#dir_error = /home/amaury/coleta/ego_collection2/error/			# SCRIPT 2
+
+if not os.path.exists(dir_data):
+	os.makedirs(dir_data)
+
+if not os.path.exists(error):
+	os.makedirs(dir_error)
 
 oauth_keys = multi_oauth.keys()
 

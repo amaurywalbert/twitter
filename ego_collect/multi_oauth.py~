@@ -129,7 +129,7 @@ access_token_secret.append("vdGJMLEHYAjbVVu0SArUhdhzJpYv5ItfPh6tpiDuONzeP")
 #
 ##############################################################################################################
 ##############################################################################################################
-Conta: msc20160012_app12 - user: msc2016002_12 - e-mail: twitter12msc20160012@yahoo.com - senha: padrão
+#		Conta: msc20160012_app12 - user: msc2016002_12 - e-mail: twitter12msc20160012@yahoo.com - senha: padrão
 #
 consumer_key.append("t7TVuq57clRC046ZmNoJUXhzb")
 consumer_secret.append("GiXWW4zZixDDNE5cnHI6AeO99nEIPBuOUJZhMvk67sbsP1zqdk")
@@ -139,7 +139,7 @@ access_token_secret.append("a0PKhTisi9oBTKmXsspv46t2lNrYoC9ewaOskZc0cuvRJ")
 #
 ##############################################################################################################
 ##############################################################################################################
-Conta: msc20160012_app13 - user: msc2016002_13 - e-mail: twitter13msc20160012@yahoo.com - senha: padrão
+#		Conta: msc20160012_app13 - user: msc2016002_13 - e-mail: twitter13msc20160012@yahoo.com - senha: padrão
 #
 consumer_key.append("4cxE0wJ6x1ZqjsNnjbBjQ1XxK")
 consumer_secret.append("FDD292IWBEpk55sd41RehOxcC5sKAqXw4RXFsUmykTG08FWoPJ")
@@ -149,7 +149,7 @@ access_token_secret.append("LsWru0bh8fnLXrho8jfJYbjEz0gYddqX4JOpUE57EsPL5")
 #
 ##############################################################################################################
 ##############################################################################################################
-Conta: msc20160012_app14 - user: msc2016002_14 - e-mail: twitter14msc20160012@yahoo.com - senha: padrão
+#		Conta: msc20160012_app14 - user: msc2016002_14 - e-mail: twitter14msc20160012@yahoo.com - senha: padrão
 #
 consumer_key.append("zf1f2P4AllifZhtIwVoPeXjHC")
 consumer_secret.append("Y29dMvDHaxOwKYzWMDoItdswI5ksCNmS2gckwel9pCzLGkfIM2")
@@ -159,7 +159,7 @@ access_token_secret.append("HtNBwTixhcB6LcBX1V8vqvBiLvjkzMecv3eW6xSdUXcPB")
 #
 ##############################################################################################################
 ##############################################################################################################
-Conta: msc20160012_app15 - user: msc2016002_15 - e-mail: twitter15msc20160012@yahoo.com - senha: padrão
+#		Conta: msc20160012_app15 - user: msc2016002_15 - e-mail: twitter15msc20160012@yahoo.com - senha: padrão
 #
 consumer_key.append("5PDmwijPhMM05F2IbXSmaO7Wu")
 consumer_secret.append("xZXYgKhNE2yTBp1Fdu0AD6eL6vAla9PJWbHWYOPamLo1rKYBzH")
@@ -167,6 +167,62 @@ access_token.append("819411941374431232-lgKyr48Ctu2smXLhpZR4ngO69U6wa4K")
 access_token_secret.append("beF0ifThX0wnrzwSGIFMPES7Ip9BznNs5DEMMEddjBo3R")
 #
 #
+#		Conta: msc20160012_app16 - user: msc2016002_16 - e-mail: twitter16msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append(="6Q9zSQDuB2niWPP1tSqRmNHUq")
+consumer_secret.append(="ZcueGOjB3JX1OcHyfpH2l5md4MAjjZFuPp2yfG15HYCzooAfBq")
+access_token.append(="821791002180616193-CcNmQuwjKj804wq2ikTQbAMoNlrfz0o")
+access_token_secret.append(="D5DQK1XZ5qBKq8EKmeev87NhVb1yrcNcQuuqHyN1fOKiY")
+
+#		Conta: msc20160012_app17 - user: @Msc20160012A - e-mail: twitter18msc20160012@twitter.com - senha: padrão
+#
+consumer_key.append(="3gVxtQ0C2XDANOL4U0iTBgSIm")
+consumer_secret.append(="NkBSL1WTP9Xg3NlySKwf7An2NNdyjqPt31yBwEBqw1QsrgiKCE")
+access_token.append(="821796304296800256-p5eJvMW6abui1eYiuVFYlYWgJTJeyzS")
+access_token_secret.append(="nr17M8tDwK52FtBXV7SnzzoX4KIkd4ue72SBpMfrpP7WA")
+
+#		Conta: msc20160012_app18 - user: msc20160012app1 - e-mail: twitter18msc20160012@twitter.com - senha: padrão
+#
+consumer_key.append(="deNrgSwdbzjPXk32dR5m69P2n")
+consumer_secret.append(="KRHdAHct41S8O2KT9CmXuaLvSQemlZnWpnwGoa2IRVggkek26o")
+access_token.append(="821797690401062913-yxZzVEqT2c2M5x2JyZIY2Clvs1lY9W5")
+access_token_secret.append(="6hssvAyXzO8r8zVdqG7qaYj9iHH9ptXkBEUQ6ZOj3fMkl")
+
+#		Conta: msc2016001219 - user: msc2016001219 - e-mail: twitter19msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append(="EEkdXTiOIkKnQZcImRz0pQB3A")
+consumer_secret.append(="SHNlarOmFV2MOx9RhHC6NW1KVZcKp1QUhRbAqzB4tsNq1xz7lc")
+access_token.append(="822124565660893185-iQ0vqhYsHwQwWKA5Lj4tjILCQouA7GZ")
+access_token_secret.append(="czGKEmZB4U06d9NazwzBrOOXOfF3wsPyUjEzvoOn0kEpU")
+
+#		Conta: msc2016001220 - user: msc2016001220 - e-mail: twitter20msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append(="EGVwGkgohKsP4hsl1ytM0BnCM")
+consumer_secret.append(="rVdWiMV3ZoUMZaIcrXBfCNPEWQxTI8llN9RiNpqArotxshRZv5")
+access_token.append(="822131424312643584-B5aRpo3hCkbvdTmmaPlvPkWyi0bEg8C")
+access_token_secret.append(="93sN2MhETrmymnG8gVVvz8p3KM6lhaHvASOmYESGVgRQq")
+
+#		Conta: msc2016001221 - user: msc2016001221 - e-mail: twitter21msc20160012@gmail.com - senha: padrão
+#
+consumer_key.append(="U2jr4RpNkCCcDmWMGMoz0CI1D"
+consumer_secret.append(="CArDCfDLPGeQZgTyyXXosyoUDEM4DbMUGA9dS7fffLYaSn2BQM")
+access_token.append(="822144740242100225-NnRDm6TH5f3vaBmdJQA0jhvmKHnqUyg")
+access_token_secret.append(="k0Ywd87LuyH5tLXTXzaQDVYTeIX1s57bF5gnp6pF7WZOV")
+
+#		Conta: msc2016001222 - user: msc2016001222 - e-mail: twitter22msc20160012@gmail.com - senha: padrão
+#
+consumer_key.append(="sYfeUClrSiuDMmOwzBQciW7cm")
+consumer_secret.append(="RrHamKKBvqMOLOlIKvEQFdT40qdLu89uKGu2myOs5kcdy3xLHK")
+access_token.append(="822153467997327360-2ESioDKQQRsoKnFRddkhXeen2PEoP0r")
+access_token_secret.append(="R4fQEtYsPbU9ytW6epd2Wc4f9htVTIi3JlVaq29NqDGoK")
+
+#		Conta: msc2016001223 - user: msc2016001223 - e-mail: twitter23msc20160012@gmail.com - senha: padrão
+#
+consumer_key.append(="F6NbD75tmqDCc5QoqhF6qwXNg")
+consumer_secret.append(="Ul0EctBf0pPybE9jlBxn78Tm13jNsTDBxC5yc4r885IXpw2ggT")
+access_token.append(="822158610381803520-eYnMQP9arTNsVNnPGVIWY6nVftDhAb0")
+access_token_secret.append(="iyUFyjRL4QOiIfvcob0ZWzfZqcynHTrEntjjZLxu24sNO")
+
 ###############################################################################################################
 ##############################################################################################################
 ##############################################################################################################
