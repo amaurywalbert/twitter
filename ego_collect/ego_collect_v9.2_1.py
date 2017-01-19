@@ -32,7 +32,7 @@ sys.setdefaultencoding('utf-8')
 ##					8.1.6 - OK - Gerenciador de chaves usando tweepy e gerenciador de chaves multi_oauth.
 ##
 ##					8.1.7 - OK - Coletar até 1,5 milhões de seeds para cada script
-##					8.1.8 - OK - Espera por 40 segundos antes de trocar de chave
+##					8.1.8 - OK - Espera por 2 segundos antes de trocar de chave
 ##
 ##					9.1 - OK - Tratar mensagens de erros - Adiciona uma condição para tratar as exceções.
 ##					9.2 - STATUS - TESTE - Modificações para deixar o código legígel:
@@ -107,9 +107,9 @@ def members_lists(list_id):
 
 	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print
-		print("Erro: ",str(t),". Aguardando 40 segundos.\n")
+		print("Erro: ",str(t),". Aguardando 02 segundos.\n")
 		print		
-		time.sleep(40)		
+		time.sleep(2)		
 		api = autentication(auths,key)
 		members_lists(list_id)		
 			
@@ -118,10 +118,10 @@ def members_lists(list_id):
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		members_lists_err = open(dir_error+"members_list.json", "a+") # Abre o arquivo para gravação no final do arquivo
 		if e.message:		
-			error = {'user':user,'reason': e.message,'date':agora}
-		else
-			error = {'user':user,'reason': str(e),'date':agora}
-		json.dump(error, lists_err, indent=4, sort_keys=True, separators=(',', ':')) 
+			error = {'list':list_id,'reason': e.message,'date':agora}
+		else:
+			error = {'list':list_id,'reason': str(e),'date':agora}
+		json.dump(error, members_lists_err, indent=4, sort_keys=True, separators=(',', ':')) 
 		members_lists_err.close()
 		print error
 		
@@ -192,9 +192,9 @@ def search_lists(user):
 
 	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print
-		print("Erro: ",str(t),". Aguardando 40 segundos.\n")
+		print("Erro: ",str(t),". Aguardando 02 segundos.\n")
 		print
-		time.sleep(40)		
+		time.sleep(2)		
 		api = autentication(auths)
 		search_lists(user)			
 
@@ -207,7 +207,7 @@ def search_lists(user):
 #		data = {'key': 'value', 'whatever': [1, 42, 3.141, 1337]}
 		if e.message:		
 			error = {'user':user,'reason': e.message,'date':agora}
-		else
+		else:
 			error = {'user':user,'reason': str(e),'date':agora}
 		json.dump(error, lists_err, indent=4, sort_keys=True, separators=(',', ':')) 
 				
@@ -260,23 +260,23 @@ def main():
 #
 ################################################################################################
 
-dir_data = /home/amaury/coleta/ego_collection/data/
-#dir_data = /home/amaury/coleta/ego_collection2/data/				# SCRIPT 2
+dir_data = "/home/amaury/coleta/ego_collection/data/"
+#dir_data = "/home/amaury/coleta/ego_collection2/data/"				# SCRIPT 2
 
-dir_error = /home/amaury/coleta/ego_collection/error/
-#dir_error = /home/amaury/coleta/ego_collection2/error/			# SCRIPT 2
+dir_error = "/home/amaury/coleta/ego_collection/error/"
+#dir_error = "/home/amaury/coleta/ego_collection2/error/"			# SCRIPT 2
 
 if not os.path.exists(dir_data):
 	os.makedirs(dir_data)
 
-if not os.path.exists(error):
+if not os.path.exists(dir_error):
 	os.makedirs(dir_error)
 
 oauth_keys = multi_oauth.keys()
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
 ################################################################################################									
-auths = oauth_keys['auths_ok']
+auths = oauth_keys['auths_test']
 #USAGE  -- auths = oauth_keys['auths_ok']
 #USAGE  -- auths = oauth_keys['auths_test']
 ################################################################################################
@@ -300,7 +300,7 @@ key_limit = len(auths)	###### Usa todas as chaves
 #key_limit = 5			###### Usa as primeiras chaves do gerenciador de chaves		------- SCRIPT 1
 #key_limit = 10		###### Usa as últimas chaves do gerenciador de chaves    	------- SCRIPT 2
 
-seeds_limit = 1500000
+seeds_limit = 15
 
 try:
 	api = autentication(auths)

@@ -220,7 +220,7 @@ access_token_secret.append("93sN2MhETrmymnG8gVVvz8p3KM6lhaHvASOmYESGVgRQq")
 ##############################################################################################################
 #		Conta: msc2016001221 - user: msc2016001221 - e-mail: twitter21msc20160012@gmail.com - senha: padrão
 #
-consumer_key.append("U2jr4RpNkCCcDmWMGMoz0CI1D"
+consumer_key.append("U2jr4RpNkCCcDmWMGMoz0CI1D")
 consumer_secret.append("CArDCfDLPGeQZgTyyXXosyoUDEM4DbMUGA9dS7fffLYaSn2BQM")
 access_token.append("822144740242100225-NnRDm6TH5f3vaBmdJQA0jhvmKHnqUyg")
 access_token_secret.append("k0Ywd87LuyH5tLXTXzaQDVYTeIX1s57bF5gnp6pF7WZOV")
@@ -286,6 +286,38 @@ access_token.append("822174289742925824-FzJqDAWIgRkJ8xR15BLQR9E8oJ7L3a3")
 access_token_secret.append("bwD0p1lREYF9kSSiYp1vWXdKBM4jzAjW8ONJgCDXuT66n")
 #
 #
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc2016001228 - user: msc2016001228 - e-mail: twitter28msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("1tvls7W6QObrPrSjGsqehSMgd")
+consumer_secret.append("YILtV6oYSayKZtsdJhDIr7QKvtPSQdLxRlOn1vGyL2nudIBece")
+access_token.append("822215581831151616-k9pPtsIYTvmqU9F3vyIzVn2qm2vgH6v")
+access_token_secret.append("h0ATS5hOrXrIGwdML8jZkBGuh2hOYMBYmknMAFlAq9tpC")
+#
+#
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc2016001229 - user: msc2016001229 - e-mail: twitter29msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("a9QadNejWTtmI1FQeMGads8bW")
+consumer_secret.append("1tfJGTXeXnaMdJaQtjwvRxtGe1WLGCV8BbrvIs6V3hqUukEUeb")
+access_token.append("822217293006508033-Jj6Guy7R3v7TeghxadPWmEouRAn8YiW")
+access_token_secret.append("jRhxUlWs57V1HF3Wdwp4cgGHg13nUGilsK3TxGbbpD3ee")
+#
+#
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc2016001230 - user: msc2016001230 - e-mail: twitter30msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("78FsYx3VnphiSmMeGYNbuk3CW")
+consumer_secret.append("m0no952gbsWt5ZwoNjAHGZ5uF30pyIdbQuYK978IYZ2eC9esME")
+access_token.append("822219154245779456-K9hBIl3xDDzclfiYKiop6dcKhrbOopF")
+access_token_secret.append("eXoCbIOsKylGjoIq95G6HYfE6AndfbxWLS9mB7jNppsRJ")
+#
+#
+##############################################################################################################
+##############################################################################################################
 ###############################################################################################################
 ##############################################################################################################
 ##############################################################################################################
