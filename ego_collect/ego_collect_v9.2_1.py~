@@ -276,7 +276,7 @@ oauth_keys = multi_oauth.keys()
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
 ################################################################################################									
-auths = oauth_keys['auths_test']
+auths = oauth_keys['auths_ok']
 #USAGE  -- auths = oauth_keys['auths_ok']
 #USAGE  -- auths = oauth_keys['auths_test']
 ################################################################################################
@@ -300,7 +300,7 @@ key_limit = len(auths)	###### Usa todas as chaves
 #key_limit = 5			###### Usa as primeiras chaves do gerenciador de chaves		------- SCRIPT 1
 #key_limit = 10		###### Usa as últimas chaves do gerenciador de chaves    	------- SCRIPT 2
 
-seeds_limit = 15
+seeds_limit = 1500000
 
 try:
 	api = autentication(auths)
