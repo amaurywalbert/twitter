@@ -1,9 +1,8 @@
 #!/bin/bash
-#EgoCollect.sh
 INTERVALO=300 #5 minutos
 while true; do
 	# Verifica se o python está sendo executado
-	if pgrep -x "python" > /dev/null
+	if pgrep -x "ego_collect" > /dev/null
 	then
 		echo "Executando"
 	else
