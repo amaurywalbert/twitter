@@ -1,0 +1,167 @@
+# -*- coding: latin1 -*-
+################################################################################################
+# Script para coletar egos do Twitter:
+#	Mínimo de 2 listas
+#	Mínimo de 5 membros em cada lista	
+#
+import tweepy, datetime, sys, time, json, os, os.path, shutil, time, simplejson
+import multi_oauth		
+#Script que contém as chaves para autenticação do twitter
+
+
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+
+##Timeline_collect - APP (por enquanto...)
+
+################################################################################################
+##		Status - Versão 1.0 - SCRIPT 01
+##					1.1 - Coletar informações das listas dos egos.
+##
+##					STATUS - TESTE - Salvar arquivos JSON com informações das listas e dos egos.  
+##
+## 
+################################################################################################
+
+################################################################################################
+#
+# Realiza autenticação da aplicação.
+#
+################################################################################################
+
+def autentication(auths):
+	global key
+	key += 1
+	if (key >= key_limit):
+		key = key_init
+	print ("Autenticando usando chave número: "+str(key))
+	api_key = tweepy.API(auths[key])
+	return (api_key)
+
+
+################################################################################################
+#
+# Testa se lista ou usuário já foi adicionada(o) ao arquivo correspondente.
+#
+################################################################################################
+		
+def check(search,datafile):
+	file = datafile.readlines()
+	found = False
+	for line in file:
+		if str(search) in line.id:
+			found = True
+			break
+		else:
+			found = False
+	return (found)
+		
+
+################################################################################################
+#
+# Obtem as listas de um usuário específico (owner+subscription)
+#
+################################################################################################
+
+def download_lists(list):
+	global api
+	
+	print("Coletando dados da lista: "+str(list))
+	
+	try:
+		list_downloaded =  api.get_list(id=list)
+		print list_downloaded
+		print ("Lista "+str(list.id)+" coletada com sucesso.")
+			
+	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
+		print
+		print("Erro: ",str(t),". Aguardando 02 segundos.\n")
+		print
+		time.sleep(2)		
+		api = autentication(auths)
+		download_lists(list)			
+
+	except tweepy.error.TweepError as e:
+		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto		
+		lists_down.err = open(dir_error+"lists_down.err", "a+") # Abre o arquivo para gravação no final do arquivo
+
+#		data = {'key': 'value', 'whatever': [1, 42, 3.141, 1337]}
+		if e.message:		
+			error = {'list_id':list,'reason': e.message,'date':agora}
+		else:
+			error = {'list_id':list,'reason': str(e),'date':agora}
+		
+		json.dump(error, lists_down.err, indent=4, sort_keys=True, separators=(',', ':')) 
+		lists_down.err.close()
+		print error
+
+
+##########################################################################################################################################################################
+##########################################################################################################################################################################
+#
+# Método principal do programa.
+# Realiza teste e coleta dos dados de cada user especificado no arquivo. 
+#
+##########################################################################################################################################################################
+##########################################################################################################################################################################
+
+def main():
+
+	lists_collected = open(dir_data+"lists_collected.txt",'r') 							#Arquivo com as listas coletadas
+	eof = False
+	while not eof:																					#Enquanto não for final do arquivo
+		list = lists_collected.readline()													#Leia o id da lista		
+		if (list == ''):																		#Se id for igual a vazio é porque chegou ao final do arquivo.
+				eof = True
+		else:
+			lists_data = open(dir_data+"lists_data.json",'r')							#Arquivo para armazenar os dados das listas
+			if check(list,lists_data):													#testa se a lista já foi verificada, consultando o arquivo correspondente.
+				print ("Lista: "+str(list)+" já verificada. Continuando...")
+				print	
+			else:
+				print
+				print("####################################################################################################")			
+				download_lists(list)																#Inicia função de busca das listas e coleta dos membros
+				print("####################################################################################################")
+	lists_collected.close()
+	print	
+	print("Coleta finalizada!")
+	
+################################################################################################
+#
+# INICIO DO PROGRAMA
+#
+################################################################################################
+
+dir_data = "/home/amaury/coleta/ego_collection/data/"
+dir_error = "/home/amaury/coleta/ego_collection/error/"
+
+
+oauth_keys = multi_oauth.keys()
+
+################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
+################################################################################################									
+auths = oauth_keys['auths_ok']
+#USAGE  -- auths = oauth_keys['auths_ok']
+#USAGE  -- auths = oauth_keys['auths_test']
+################################################################################################
+
+###################################################################################################
+############################ PARA USAR COM VÀRIAS APENAS UM SCRIPT RODANDO ########################
+###################################################################################################
+key = -1					###### Essas duas linhas atribuem as chaves para cada script
+key_init = 0
+key_limit = len(auths)	###### Usa todas as chaves
+
+try:
+	api = autentication(auths)
+	print
+	print("####################################################################################################")
+	print
+except tweepy.error.TweepError as e:
+	print("[ERRRO] Não foi possível realizar autenticação. Erro: ",str(e),".\n")
+	
+# Verifica se eh para executar o metodo main()
+if __name__ == "__main__": main()	
