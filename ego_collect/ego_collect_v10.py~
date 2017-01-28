@@ -159,7 +159,7 @@ def save_list(list,ego):
 		count_list +=1
 		print count_list
 		try:
-			if count_list > 49999:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
+			if count_list > count_limit:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
 				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 				shutil.move(dir_data+"lists_data.json", dir_data+agora+"_lists_data.json")
 				count_list = 0

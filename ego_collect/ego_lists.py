@@ -77,6 +77,7 @@ class DateTimeEncoder(json.JSONEncoder):
 #
 ################################################################################################
 def save_list(list):
+	global count_list
 	try:
 		list_dict = {'subscriber_count': list.subscriber_count, 'member_count': list.member_count, 'name': list.name, 
 			'created_at': list.created_at, 'uri': list.uri, 'mode': list.mode, 'id_str': list.id_str,
@@ -86,6 +87,17 @@ def save_list(list):
 		lists_data = open(dir_data+"lists_data.json",'a+')							#Arquivo para armazenar os dados das listas
 		lists_data.write(json.dumps(list_dict, cls=DateTimeEncoder)+"\n")
 		lists_data.close()
+		
+		count_list +=1
+		print count_list
+		try:
+			if count_list > count_limit:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
+				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+				shutil.move(dir_data+"lists_data.json", dir_data+agora+"_lists_data.json")
+				count_list = 0
+		except Exception as e:
+			print e			
+			
 		print ("Lista "+str(list.id)+" salva com sucesso.")
 		print
 		
@@ -198,7 +210,8 @@ dir_error = "/home/amaury/coleta/ego_collection/error/"
 
 oauth_keys = multi_oauth.keys()
 
-j=0	#Número de listas salvas
+count_list = 0	#Número de listas salvas
+count_limit = 49999
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
 ################################################################################################									
 auths = oauth_keys['auths_ok']

@@ -159,7 +159,7 @@ def save_list(list,ego):
 		count_list +=1
 		print count_list
 		try:
-			if count_list > 49999:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
+			if count_list > count_limit:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
 				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 				shutil.move(dir_data+"lists_data.json", dir_data+agora+"_lists_data.json")
 				count_list = 0
@@ -348,6 +348,8 @@ if not os.path.exists(dir_error):
 
 oauth_keys = multi_oauth.keys()
 
+count_list = 0
+count_limit = 49999
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
 ################################################################################################									
 auths = oauth_keys['auths_test']
@@ -363,7 +365,7 @@ key_init = 0
 key_limit = len(auths)	###### Usa todas as chaves
 
 seeds_limit = 500000 #Limite de expansão da lista de seeds
-count_list = 0
+
 
 try:
 	api = autentication(auths)

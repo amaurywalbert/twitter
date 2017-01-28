@@ -75,12 +75,24 @@ class DateTimeEncoder(json.JSONEncoder):
 #
 ################################################################################################
 def save_subscribers(obj,list_id):		#armazena uma lista com todos os inscritos de cada lista do twitter
+	global count_subscribers
 	try:
 		subscribers_dict = {'list_id': list_id, 'users': obj, 'collected_at':datetime.datetime.now()}
 		 
 		subscribers_data = open(dir_data+"subscribers_data.json",'a+')							#Arquivo para armazenar os dados
 		subscribers_data.write(json.dumps(subscribers_dict, cls=DateTimeEncoder)+"\n")
 		subscribers_data.close()
+		
+		count_subscribers +=1
+		print count_subscribers
+		try:
+			if count_subscribers > count_limit:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
+				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+				shutil.move(dir_data+"subscribers_data.json", dir_data+agora+"_subscribers_data.json")
+				count_subscribers = 0
+		except Exception as e:
+			print e
+			
 	
 		print ("Subscribers da lista "+str(list_id)+" salvos com sucesso.")
 		print
@@ -180,6 +192,10 @@ def main():
 				print("####################################################################################################")
 			subscribers_downloaded.close()
 	lists_collected.close()
+
+	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+	shutil.move(dir_data+"subscribers_data.json", dir_data+agora+"_subscribers_data.json")
+	
 	print	
 	print("Coleta finalizada!")
 	
@@ -195,6 +211,8 @@ dir_error = "/home/amaury/coleta/ego_collection/error/"
 
 oauth_keys = multi_oauth.keys()
 
+count_subscribers = 0
+count_limit = 49999
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
 ################################################################################################									
 auths = oauth_keys['auths_ok']
