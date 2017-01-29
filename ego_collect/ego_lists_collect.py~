@@ -243,7 +243,6 @@ def main():
 		if (account == ''):																		#Se id for igual a vazio é porque chegou ao final do arquivo.
 			eof = True
 		else:
-			account = long(account)		
 			egos_verified = open(dir_data+"egos_verified.txt",'r')					#Arquivo para armazenar a lista de usuários já verificados.
 			if check(account,egos_verified):												#testa se o usuário já foi verificado, consultando o arquivo correspondente.
 				print ("Usuário: "+str(account)+" Já verificado. Continuando...")

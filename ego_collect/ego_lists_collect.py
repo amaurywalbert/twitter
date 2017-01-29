@@ -183,6 +183,7 @@ def search_lists(user):
 			
 		else:
 			outfile = open(dir_error+"ego_lists.err", "a+") # Abre o arquivo para gravação no final do arquivo
+			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 			error = {'user':user,'reason': 'Ego não atende requisito mínimo','verified':agora}
 			json.dump(error, outfile, sort_keys=True, separators=(',', ':'))
 			outfile.write('\n') 		
