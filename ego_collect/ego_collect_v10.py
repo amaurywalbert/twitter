@@ -32,10 +32,11 @@ sys.setdefaultencoding('utf-8')
 ##					8.1.8 - OK - Espera por 2 segundos antes de trocar de chave
 ##
 ##					9.1 - OK - Tratar mensagens de erros - Adiciona uma condição para tratar as exceções.
-##					9.2 - STATUS - TESTE - Modificações para deixar o código legígel:
+##					9.2 - OK - Modificações para deixar o código legígel:
 ##									- Adicionar variával para guardar o local de armazenamento dos arquivos - facilita a alteração em caso de cópias dos scripts rodando simultaneamente
+##									- Variáveis para controlar tempo e tamanho dos aquivos.
 ##
-##					10.0 - STATUS - TESTE - Salvar arquivos JSON com informações das listas e dos egos.  
+##					10.0.1 - TESTE - Salvar arquivos JSON com informações das listas e dos egos.
 ##
 ## 
 ################################################################################################
@@ -118,10 +119,10 @@ def members_lists(list_id):
 
 	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print
-		print("Erro: ",str(t),". Aguardando 20 segundos.\n")
+		print("Erro: ",str(t),". Aguardando "+str(sleep)+" segundos.\n")
 		print		
-		time.sleep(20)		
-		api = autentication(auths,key)
+		time.sleep(sleep)		
+		api = autentication(auths)
 		members_lists(list_id)		
 			
 
@@ -176,11 +177,18 @@ def save_list(list,ego):
 			error = {'list':list.id,'reason': e.message,'date':agora}
 		else:
 			error = {'list':list.id,'reason': str(e),'date':agora}
-		outfile = open(dir_error+"get_lists_data.err", "a+") # Abre o arquivo para gravação no final do arquivo
-		json.dump(error, outfile, sort_keys=True, separators=(',', ':'))
+
+		list_dictionary = {'ego_id':ego,'error': erro}
+		
+		outfile = open(dir_error+"lists_data.err", "a+") # Abre o arquivo para gravação no final do arquivo
+		json.dump(list_dictionary, outfile, sort_keys=True, separators=(',', ':'))
 		outfile.write('\n')  
 		outfile.close()
-		print error 					
+		print error 		
+	
+	return list_dictionary
+					
+				
 ################################################################################################
 #
 # Obtem as listas de um usuário específico (owner+subscription)
@@ -189,6 +197,7 @@ def save_list(list,ego):
 
 def search_lists(user):
 	global api
+	global count_overview
 	
 	print("Coletando listas do usuário: "+str(user))	
 	lists_own = []
@@ -217,12 +226,28 @@ def search_lists(user):
 					print ("Lista: "+str(list.id)+" - "+unicode(list.name)+" - número de membros: "+str(list.member_count)+". Não atende requisito mínimo. Continuando...")
 					lists_subs.append(list)
 
-		if (len(lists) > 1):			
-
-			for line in lists_own:
-				save_list(line,user)
-			for line in lists_subs:
-				save_list(line,user)
+			if (len(lists) > 1):			
+				egos_statistics_own = []
+				egos_statistics_subs = []
+				for line in lists_own:
+					egos_statistics_own.append(save_list(line,user))
+				for line in lists_subs:
+					egos_statistics_subs.append(save_list(line,user))
+			
+				ego_lists_overview = open(dir_data+"ego_lists_overview.json", "a+") # Abre o arquivo para gravação no final do arquivo
+				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+				dictionary = {'user':user,'owner':egos_statistics_own,'subscriptions':egos_statistics_subs,'verified':agora}
+				ego_lists_overview.write(json.dumps(dictionary, cls=DateTimeEncoder,sort_keys=True, separators=(',', ':'))+"\n") 		
+				ego_lists_overview.close()
+			
+				count_overview +=1
+				try:
+					if count_overview > count_limit:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
+						agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+						shutil.move(dir_data+"ego_lists_overview.json", dir_data+agora+"_ego_lists_overview.json")
+						count_overview = 0
+				except Exception as e:
+					print e
 							
 			lists_collect = open(dir_data+"lists_collect.txt", 'a+')				# Arquivo com os ids das listas com o mínimo exigido
 			lists_id = open(dir_data+"lists_collect.txt", 'r')						# Arquivo com os ids das listas com o mínimo exigido
@@ -261,9 +286,9 @@ def search_lists(user):
 
 	except tweepy.RateLimitError as t:						# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print
-		print("Erro: ",str(t),". Aguardando 20 segundos.\n")
+		print("Erro: ",str(t),". Aguardando "+str(sleep)+" segundos.\n")
 		print
-		time.sleep(20)		
+		time.sleep(sleep)		
 		api = autentication(auths)
 		search_lists(user)			
 
@@ -322,7 +347,10 @@ def main():
 	users_collected.close()
 	
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-	shutil.move(dir_data+"lists_data.json", dir_data+agora+"_lists_data.json")
+	if os.path.exists(dir_data+"lists_data.json"):
+		shutil.move(dir_data+"lists_data.json", dir_data+agora+"_lists_data.json")
+	if os.path.exists(dir_data+"ego_lists_overview.json"):
+		shutil.move(dir_data+"ego_lists_overview.json", dir_data+agora+"_ego_lists_overview.json")
 	print
 	print("Coleta finalizada!")
 	
@@ -330,6 +358,16 @@ def main():
 #
 # INICIO DO PROGRAMA
 #
+################################################################################################
+
+
+oauth_keys = multi_oauth.keys()
+
+################################### DEFINIR SE É TESTE OU NÃO!!! ###############################									
+auths = oauth_keys['auths_test']
+sleep = 20
+#USAGE  -- auths = oauth_keys['auths_ok'] - sleep = 1
+#USAGE  -- auths = oauth_keys['auths_test'] - sleep = 20
 ################################################################################################
 
 #dir_data = "/home/amaury/coleta/ego_collection/data/"
@@ -340,31 +378,26 @@ dir_data = "/home/amaury/coleta/ego_collection3/data/"				# Coleta exclusiva da 
 #dir_error = "/home/amaury/coleta/ego_collection2/error/"			# SCRIPT 2
 dir_error = "/home/amaury/coleta/ego_collection3/error/"				# Coleta exclusiva da Versão 10
 
+
+count_list = 0				#Controle do tamanho de cada arquivo 
+count_overview = 0				#Controle do tamanho de cada arquivo
+count_limit = 19999
+seeds_limit = 50000 #Limite de expansão da lista de seeds
+
 if not os.path.exists(dir_data):
 	os.makedirs(dir_data)
 
 if not os.path.exists(dir_error):
 	os.makedirs(dir_error)
 
-oauth_keys = multi_oauth.keys()
 
-count_list = 0
-count_limit = 49999
-################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
-################################################################################################									
-auths = oauth_keys['auths_test']
-#USAGE  -- auths = oauth_keys['auths_ok']
-#USAGE  -- auths = oauth_keys['auths_test']
-################################################################################################
-
-###################################################################################################
-############################ PARA USAR COM VÀRIAS APENAS UM SCRIPT RODANDO ########################
 ###################################################################################################
 key = -1					###### Essas duas linhas atribuem as chaves para cada script
 key_init = 0
 key_limit = len(auths)	###### Usa todas as chaves
 
-seeds_limit = 500000 #Limite de expansão da lista de seeds
+###################################################################################################
+###################################################################################################
 
 
 try:

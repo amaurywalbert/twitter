@@ -110,7 +110,7 @@ def members_lists(list_id):
 		print("Erro: ",str(t),". Aguardando 02 segundos.\n")
 		print		
 		time.sleep(2)		
-		api = autentication(auths,key)
+		api = autentication(auths)
 		members_lists(list_id)		
 			
 

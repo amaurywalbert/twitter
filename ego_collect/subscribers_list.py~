@@ -137,7 +137,7 @@ def get_subscribers(list):
 		print("Erro: ",str(t),". Aguardando 02 segundos.\n")
 		print		
 		time.sleep(2)		
-		api = autentication(auths,key)
+		api = autentication(auths)
 		get_subscribers(list)		
 			
 

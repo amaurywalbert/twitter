@@ -91,7 +91,7 @@ def save_list(list):
 		count_list +=1
 		print count_list
 		try:
-			if count_list > 49999:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
+			if count_list > count_limit:						#Salva as listas em blocos de 50.000 - evitar arquivos muito grandes.	
 				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 				shutil.move(dir_data+"lists_data.json", dir_data+agora+"_lists_data.json")
 				count_list = 0
@@ -211,6 +211,7 @@ dir_error = "/home/amaury/coleta/ego_collection/error/"
 oauth_keys = multi_oauth.keys()
 
 count_list = 0	#Número de listas salvas
+count_limit = 49999
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################
 ################################################################################################									
 auths = oauth_keys['auths_ok']

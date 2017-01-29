@@ -90,7 +90,9 @@ def save_members(obj,list_id):		#armazena uma lista com todos os membros de cada
 				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 				shutil.move(dir_data+"members_data.json", dir_data+agora+"_members_data.json")
 				count_members = 0
-	
+		except Exception as e:
+			print e
+			
 		print ("Membros da lista "+str(list_id)+" salvos com sucesso.")
 		print
 
@@ -134,7 +136,7 @@ def get_members(list):
 		print("Erro: ",str(t),". Aguardando 02 segundos.\n")
 		print		
 		time.sleep(2)		
-		api = autentication(auths,key)
+		api = autentication(auths)
 		get_members(list)		
 			
 
@@ -145,9 +147,9 @@ def get_members(list):
 			error = {'list':list,'reason': e.message,'date':agora}
 		else:
 			error = {'list':list,'reason': str(e),'date':agora}
-		json.dump(error, outline, sort_keys=True, separators=(',', ':'))
+		json.dump(error, outfile, sort_keys=True, separators=(',', ':'))
 		outfile.write('\n') 
-		outline.close()
+		outfile.close()
 
 		members_downloaded = open(dir_data+"members_downloaded.txt",'a+')							#Arquivo para armazenar as listas já verificadass.
 		members_downloaded.writelines(list)									# Salva o usuário no arquivo as listas já verificados.
