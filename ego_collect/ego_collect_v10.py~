@@ -249,33 +249,31 @@ def search_lists(user):
 				except Exception as e:
 					print e
 							
-			lists_collect = open(dir_data+"lists_collect.txt", 'a+')				# Arquivo com os ids das listas com o mínimo exigido
-			lists_id = open(dir_data+"lists_collect.txt", 'r')						# Arquivo com os ids das listas com o mínimo exigido
+				lists_collect = open(dir_data+"lists_collect.txt", 'a+')				# Arquivo com os ids das listas com o mínimo exigido
+				lists_id = open(dir_data+"lists_collect.txt", 'r')						# Arquivo com os ids das listas com o mínimo exigido
 								
-			for list in lists:
-				if check(list.id,lists_id):													#Verifica se a lista já foi adicionada no arquivo de listas.
-					print ("Lista "+str(list.id)+" já adicionada! Continuando...")
-				else:
-					users_collected = open(dir_data+"users_collected.txt", 'r') # Expansão dos seeds
-					file = users_collected.readlines()
-					if (len(file) < seeds_limit):	#Crescer a lista de seeds até esse limite
-						members_lists(list.id)				#Função para recuperar os membros da lista
+				for list in lists:
+					if check(list.id,lists_id):													#Verifica se a lista já foi adicionada no arquivo de listas.
+						print ("Lista "+str(list.id)+" já adicionada! Continuando...")
 					else:
-						print ("Limite de membros atingido!"+str(len(file)))
-					users_collected.close()
-					
-					lists_collect.writelines(str(list.id)+"\n") 									# Salva o id da lista no arquivo de listas
-					print ("Lista "+str(list.id)+" salva com sucesso.")
+						users_collected = open(dir_data+"users_collected.txt", 'r') # Expansão dos seeds
+						file = users_collected.readlines()
+						if (len(file) < seeds_limit):	#Crescer a lista de seeds até esse limite
+							members_lists(list.id)				#Função para recuperar os membros da lista
+						else:
+							print ("Limite de membros atingido!"+str(len(file)))
+						users_collected.close()
+						
+						lists_collect.writelines(str(list.id)+"\n") 									# Salva o id da lista no arquivo de listas
+						print ("Lista "+str(list.id)+" salva com sucesso.")
+				
+				lists_id.close()
+				lists_collect.close()
 			
-			lists_id.close()
-			lists_collect.close()
-
-			
-			ego_list = open(dir_data+"ego_list.txt",'a+') 									#Lista de egos
-			ego_list.writelines(str(user))														# Salva o id do usuário no arquivo de Egos coletados
-			print ("Ego salvo com sucesso: "+str(user))		
-			
-			ego_list.close()
+				ego_list = open(dir_data+"ego_list.txt",'a+') 									#Lista de egos
+				ego_list.writelines(str(user))														# Salva o id do usuário no arquivo de Egos coletados
+				print ("Ego salvo com sucesso: "+str(user))		
+				ego_list.close()
 		
 		users_verified = open(dir_data+"users_verified.txt",'a+')							#Arquivo para armazenar a lista de usuários já verificados.
 		users_verified.writelines(user)									# Salva o usuário no arquivo de users já verificados.
@@ -364,8 +362,8 @@ def main():
 oauth_keys = multi_oauth.keys()
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################									
-auths = oauth_keys['auths_test']
-sleep = 20
+auths = oauth_keys['auths_ok']
+sleep = 1
 #USAGE  -- auths = oauth_keys['auths_ok'] - sleep = 1
 #USAGE  -- auths = oauth_keys['auths_test'] - sleep = 20
 ################################################################################################
