@@ -364,8 +364,8 @@ def main():
 oauth_keys = multi_oauth.keys()
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ###############################									
-auths = oauth_keys['auths_test']
-sleep = 20
+auths = oauth_keys['auths_ok']
+sleep = 1
 #USAGE  -- auths = oauth_keys['auths_ok'] - sleep = 1
 #USAGE  -- auths = oauth_keys['auths_test'] - sleep = 20
 ################################################################################################
