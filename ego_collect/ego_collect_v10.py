@@ -371,18 +371,15 @@ sleep = 20
 ################################################################################################
 
 #dir_data = "/home/amaury/coleta/ego_collection/data/"
-#dir_data = "/home/amaury/coleta/ego_collection2/data/"				# SCRIPT 2
-dir_data = "/home/amaury/coleta/ego_collection3/data/"				# Coleta exclusiva da Versão 10
+dir_data = "/home/amaury/coleta/ego_collection2/data/"				# SCRIPT 2
 
 #dir_error = "/home/amaury/coleta/ego_collection/error/"
-#dir_error = "/home/amaury/coleta/ego_collection2/error/"			# SCRIPT 2
-dir_error = "/home/amaury/coleta/ego_collection3/error/"				# Coleta exclusiva da Versão 10
-
+dir_error = "/home/amaury/coleta/ego_collection2/error/"			# SCRIPT 2
 
 count_list = 0				#Controle do tamanho de cada arquivo 
 count_overview = 0				#Controle do tamanho de cada arquivo
 count_limit = 19999
-seeds_limit = 50000 #Limite de expansão da lista de seeds
+seeds_limit = 1000000 #Limite de expansão da lista de seeds
 
 if not os.path.exists(dir_data):
 	os.makedirs(dir_data)
