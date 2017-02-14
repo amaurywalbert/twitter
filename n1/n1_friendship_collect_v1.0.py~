@@ -1,44 +1,21 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-# Script para coletar egos do Twitter:
-#	Mínimo de 2 listas
-#	Mínimo de 5 membros em cada lista	
+# Script para coletar amigos a partir de um conjunto de egos do twitter
+#	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, simplejson
-import multi_oauth, BSTNode	
-#Script que contém as chaves para autenticação do twitter e o outro é uma implementação de árvore para facilitar a busca
-
+import multi_oauth		
+#Script que contém as chaves para autenticação do twitter
 
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 
-##Timeline_collect - APP (por enquanto...)
-
 ################################################################################################
-##		Status - Versão 9.0 - SCRIPT 01
+##		Status - Versão 1.0 - Coletar amigos do Twitter
 ##
-##					8.1.1 - OK	- Coletando todas as litas - adicionado Método API.Cursor
-##					8.1.2 - OK - Verificando por limites usando apenas o Tweepy
-##					8.1.3 - OK - Adicionar apenas o necessário para a coleta dos egos:
-##						8.1.3.1 - - Listas com pelo menos 5 membros;
-##						8.1.3.2 - - Users com no mínimo 02 lista (inscrito ou dono);
-##						8.1.3.3 - - Coleta snowball de egos a partir de seeds iniciais e crescendo com a análise dos membros das listas selecionadas.
-##
-##					8.1.4 - OK - Armazenamento dos ids das listas...
-##					8.1.5 - OK - verificando pelo id dos users...
-##
-##					8.1.6 - OK - Gerenciador de chaves usando tweepy e gerenciador de chaves multi_oauth.
-##
-##					8.1.7 - OK - Coletar até 1,5 milhões de seeds para cada script
-##					8.1.8 - OK - Espera por 2 segundos antes de trocar de chave
-##
-##					9.1 - OK - Tratar mensagens de erros - Adiciona uma condição para tratar as exceções.
-##					9.2 - STATUS - TESTE - Modificações para deixar o código legígel:
-##									- Adicionar variával para guardar o local de armazenamento dos arquivos - facilita a alteração em caso de cópias dos scripts rodando simultaneamente
-##
-##						STATUS - TESTE - Salvar arquivos JSON com informações das listas e dos egos. - Não realizado  
+##						STATUS - TESTE - Salvar arquivos JSON com informações dos amigos dos egos e dos amigos dos amigos.  
 ##
 ## 
 ################################################################################################
@@ -50,16 +27,12 @@ sys.setdefaultencoding('utf-8')
 ################################################################################################
 
 def autentication(auths):
-# Usando as primeiras chaves de cada conta do conjunto disponível no EverNote. Total de 10 contas:
 	global key
 	key += 1
 	if (key >= key_limit):
 		key = key_init
-
 	print ("Autenticando usando chave número: "+str(key))
-
 	api_key = tweepy.API(auths[key])
-	
 	return (api_key)
 
 
@@ -204,7 +177,6 @@ def search_lists(user):
 		
 		lists_err = open(dir_error+"lists_err.json", "a+") # Abre o arquivo para gravação no final do arquivo
  
-#		data = {'key': 'value', 'whatever': [1, 42, 3.141, 1337]}
 		if e.message:		
 			error = {'user':user,'reason': e.message,'date':agora}
 		else:
@@ -213,7 +185,6 @@ def search_lists(user):
 				
 		lists_err.close()
 		print error
-#		print("[ERRRO] Não foi possível recuperar as listas de: "+user+". Erro: ",str(e),". Vou ignorar e tocar adiante.\n")
 		users_verified = open(dir_data+"users_verified.txt",'a+')							#Arquivo para armazenar a lista de usuários já verificados.
 		users_verified.writelines(user)									# Salva o usuário no arquivo de users já verificados.
 		users_verified.close()	
@@ -230,27 +201,23 @@ def search_lists(user):
 
 def main():
 
-	users_verified = open(dir_data+"users_verified.txt",'a+')							#Arquivo para armazenar a lista de usuários já verificados.
-	users_verified.close()
-	users_collected = open(dir_data+"users_collected.txt",'r') 							#Testando com o id do user
-	eof = False
-	while not eof:																					#Enquanto não for final do arquivo
-		account = users_collected.readline()													#Leia scren_name do usuário corrente		
-		if (account == ''):																		#Se id for igual a vazio é porque chegou ao final do arquivo.
-				eof = True
-				#break
+	egos_verified = open(dir_data+"egos_verified.txt",'a+')						#Arquivo para armazenar a lista de usuários já verificados.
+	egos_verified.close()
+	egos_list = open(egos_list_file,'r')
+	
+	for i in range(0,ego_limit):
+		account = egos_list.readline()													#Leia id do usuário corrente
+		egos_verified = open(dir_data+"egos_verified.txt",'r')					#Arquivo para armazenar a lista de usuários já verificados.
+		if check(account,egos_verified):													#testa se o usuário já foi verificado, consultando o arquivo correspondente.
+			print ("Usuário: "+str(account)+"Já verificado. Continuando...")
+			print	
 		else:
-			users_verified = open(dir_data+"users_verified.txt",'r')							#Arquivo para armazenar a lista de usuários já verificados.
-			if check(account,users_verified):													#testa se o usuário já foi verificado, consultando o arquivo correspondente.
-				print ("Usuário: "+str(account)+"Já verificado. Continuando...")
-				print	
-			else:
-				print
-				print("####################################################################################################")			
-				search_lists(account)																#Inicia função de busca das listas e coleta dos membros
-				print("####################################################################################################")
-			users_verified.close()
-	users_collected.close()
+			print
+			print("####################################################################################################")			
+			get_friends(account)																#Inicia função de busca
+			print("####################################################################################################")
+		egos_verified.close()
+	egos_list.close()
 	print	
 	print("Coleta finalizada!")
 	
@@ -260,11 +227,11 @@ def main():
 #
 ################################################################################################
 
-dir_data = "/home/amaury/coleta/ego_collection/data/"
-#dir_data = "/home/amaury/coleta/ego_collection2/data/"				# SCRIPT 2
+dir_data = "/home/amaury/coleta/n1/data/"
+dir_error = "/home/amaury/coleta/n1/data/error/"
 
-dir_error = "/home/amaury/coleta/ego_collection/error/"
-#dir_error = "/home/amaury/coleta/ego_collection2/error/"			# SCRIPT 2
+#arquivo contendo a lista de egos a serem buscados
+egos_list_file = "/home/amaury/coleta/n1/egos_list.txt"
 
 if not os.path.exists(dir_data):
 	os.makedirs(dir_data)
@@ -281,26 +248,14 @@ auths = oauth_keys['auths_ok']
 #USAGE  -- auths = oauth_keys['auths_test']
 ################################################################################################
 
-###################################################################################################
-############################ PARA USAR COM VÀRIAS APENAS UM SCRIPT RODANDO ########################
+
 ###################################################################################################
 key = -1					###### Essas duas linhas atribuem as chaves para cada script
 key_init = 0
 key_limit = len(auths)	###### Usa todas as chaves
-#seeds_limit = 3000000
-###################################################################################################
-############################ PARA USAR COM VÀRIAS CÓPIAS DO SCRIPTS RODANDO SIMULTANEAMENTE########
-###################################################################################################
-#key = -1					###### Essas linhas atribuem as chaves para cada script		------- SCRIPT 1
-#key = 4					###### 																	   ------- SCRIPT 2
 
-#key_init = 0			######																		------- SCRIPT 1			
-#key_init = 5			######																		------- SCRIPT 2
+ego_limit = 10
 
-#key_limit = 5			###### Usa as primeiras chaves do gerenciador de chaves		------- SCRIPT 1
-#key_limit = 10		###### Usa as últimas chaves do gerenciador de chaves    	------- SCRIPT 2
-
-seeds_limit = 1500000
 
 try:
 	api = autentication(auths)

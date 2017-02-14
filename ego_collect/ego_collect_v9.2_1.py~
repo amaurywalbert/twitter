@@ -5,8 +5,8 @@
 #	Mínimo de 5 membros em cada lista	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, simplejson
-import multi_oauth		
-#Script que contém as chaves para autenticação do twitter
+import multi_oauth, BSTNode	
+#Script que contém as chaves para autenticação do twitter e o outro é uma implementação de árvore para facilitar a busca
 
 
 

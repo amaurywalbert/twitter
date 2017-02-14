@@ -36,7 +36,7 @@ sys.setdefaultencoding('utf-8')
 ##									- Adicionar variával para guardar o local de armazenamento dos arquivos - facilita a alteração em caso de cópias dos scripts rodando simultaneamente
 ##									- Variáveis para controlar tempo e tamanho dos aquivos.
 ##
-##					10.0.1 - TESTE - Salvar arquivos JSON com informações das listas e dos egos.
+##					10.0.1 - OK - Salvar arquivos JSON com informações das listas e dos egos.
 ##
 ## 
 ################################################################################################
@@ -133,8 +133,7 @@ def members_lists(list_id):
 			error = {'list':list_id,'reason': e.message,'date':agora}
 		else:
 			error = {'list':list_id,'reason': str(e),'date':agora}
-		json.dump(error, outfile, sort_keys=True, separators=(',', ':'))
-		outfile.write('\n')  
+		outfile.write(json.dumps(error, cls=DateTimeEncoder,sort_keys=True, separators=(',', ':'))+"\n") 		
 		outfile.close()
 		print error
 		
@@ -154,7 +153,7 @@ def save_list(list,ego):
 		
 		lists_data = open(dir_data+"lists_data.json",'a+')							#Arquivo para armazenar os dados das listas
 
-		lists_data.write(json.dumps(list_dictionary, cls=DateTimeEncoder)+"\n")
+		lists_data.write(json.dumps(list_dictionary, cls=DateTimeEncoder,sort_keys=True, separators=(',', ':'))+"\n") 		
 		lists_data.close()		
 		
 		count_list +=1
@@ -181,8 +180,7 @@ def save_list(list,ego):
 		list_dictionary = {'ego_id':ego,'error': erro}
 		
 		outfile = open(dir_error+"lists_data.err", "a+") # Abre o arquivo para gravação no final do arquivo
-		json.dump(list_dictionary, outfile, sort_keys=True, separators=(',', ':'))
-		outfile.write('\n')  
+		outfile.write(json.dumps(list_dictionary, cls=DateTimeEncoder, sort_keys=True, separators=(',', ':'))+"\n") 		
 		outfile.close()
 		print error 		
 	
