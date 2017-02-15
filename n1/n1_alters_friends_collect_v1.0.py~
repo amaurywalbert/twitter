@@ -125,7 +125,7 @@ def main():
 	users_verified = open(dir_data+"users_verified.txt",'a+')						#Arquivo para armazenar a lista de usuários já verificados.	
 	tree = BSTNode(0)
 	for line in users_verified:
-		node = users_verified.readline()
+		node = line
 		tree.add(long(node))
 	users_verified.close()
 

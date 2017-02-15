@@ -140,12 +140,13 @@ def main():
 		else:
 			i += 1
 			ego = json.loads(account)
+			qtde_total = len(ego['ego_friends'])			
 			qtde = len(ego['ego_friends'])			
 			for user in ego['ego_friends']:
 				if tree.get(long(user)):														#Consulta na árvore binária se o user já foi verificado.
 					print ("Usuário: "+str(user)+" Já verificado. Continuando...")
 					qtde -=1
-					print ("Faltam "+str(qtde)+" amigos do ego nº: "+str(i))
+					print ("Faltam "+str(qtde)+"/"+str(qtde)+" amigos do ego nº: "+str(i))
 					print	
 				else:
 					print
