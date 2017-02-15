@@ -124,16 +124,11 @@ def get_friends(user):
 def main():
 	users_verified = open(dir_data+"users_verified.txt",'a+')						#Arquivo para armazenar a lista de usuários já verificados.	
 	tree = BSTNode(0)
-	eof = False
-	while not eof:																					#Enquanto não for final do arquivo
-		node = users_verified.readline()
-		if (node == ''):																			#Se id for igual a vazio é porque chegou ao final do arquivo.
-			eof = True
-		else:
-			tree.add(long(node))																	#Adiciona nó à arvore
+	for line in users_verified:
+		node = line
+		tree.add(long(node))
 	users_verified.close()
-
-	
+		
 	users_list = open(users_list_file,'r')
 	for i in range(0,ego_limit):
 		user = users_list.readline()														#Leia id do usuário corrente

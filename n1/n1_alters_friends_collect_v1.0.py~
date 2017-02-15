@@ -124,15 +124,12 @@ def get_friends(user):
 def main():
 	users_verified = open(dir_data+"users_verified.txt",'a+')						#Arquivo para armazenar a lista de usuários já verificados.	
 	tree = BSTNode(0)
-	eof = False
-	while not eof:																					#Enquanto não for final do arquivo
+	for line in users_verified:
 		node = users_verified.readline()
-		if (node == ''):																			#Se id for igual a vazio é porque chegou ao final do arquivo.
-			eof = True
-		else:
-			tree.add(long(node))																	#Adiciona nó à arvore
+		tree.add(long(node))
 	users_verified.close()
 
+	i = 0
 	
 	users_list = open(users_list_file,'r')
 	eof = False
@@ -141,20 +138,21 @@ def main():
 		if (account == ''):																		#Se id for igual a vazio é porque chegou ao final do arquivo.
 			eof = True		
 		else:
+			i += 1
 			ego = json.loads(account)
 			qtde = len(ego['ego_friends'])			
 			for user in ego['ego_friends']:
 				if tree.get(long(user)):														#Consulta na árvore binária se o user já foi verificado.
 					print ("Usuário: "+str(user)+" Já verificado. Continuando...")
 					qtde -=1
-					print ("Faltam "+str(qtde)+" amigos")
+					print ("Faltam "+str(qtde)+" amigos do ego nº: "+str(i))
 					print	
 				else:
 					print
 					print("####################################################################################################")			
 					get_friends(user)																#Inicia função de busca
 					qtde -=1
-					print ("Faltam "+str(qtde)+" amigos")
+					print ("Faltam "+str(qtde)+" amigos do ego nº: "+str(i))
 					print("####################################################################################################")
 	users_list.close()	
 	

@@ -124,16 +124,11 @@ def get_friends(user):
 def main():
 	users_verified = open(dir_data+"users_verified.txt",'a+')						#Arquivo para armazenar a lista de usuários já verificados.	
 	tree = BSTNode(0)
-	eof = False
-	while not eof:																					#Enquanto não for final do arquivo
+	for line in users_verified:
 		node = users_verified.readline()
-		if (node == ''):																			#Se id for igual a vazio é porque chegou ao final do arquivo.
-			eof = True
-		else:
-			tree.add(long(node))																	#Adiciona nó à arvore
+		tree.add(long(node))
 	users_verified.close()
-
-	
+		
 	users_list = open(users_list_file,'r')
 	for i in range(0,ego_limit):
 		user = users_list.readline()														#Leia id do usuário corrente
@@ -184,8 +179,8 @@ count_limit = 19999
 dir_data = "/home/amaury/coleta/n1/egos/data/" ################################################# Diretório para armazenamento dos arquivos
 dir_error = "/home/amaury/coleta/n1/egos/data/error/"
 
-user_id = 'egos_id'				################################################################## Chaves para os registros: 'ego' ou 'alter'
-user_friends = 'egos_friends'
+user_id = 'ego_id'				################################################################## Chaves para os registros: 'ego' ou 'alter'
+user_friends = 'ego_friends'
 
 users_list_file = "/home/amaury/coleta/n1/egos/egos_list.txt" ################################## Arquivo contendo a lista dos usuários a serem buscados
 
