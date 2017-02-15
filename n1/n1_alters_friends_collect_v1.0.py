@@ -146,7 +146,7 @@ def main():
 				if tree.get(long(user)):														#Consulta na árvore binária se o user já foi verificado.
 					print ("Usuário: "+str(user)+" Já verificado. Continuando...")
 					qtde -=1
-					print ("Faltam "+str(qtde)+"/"+str(qtde)+" amigos do ego nº: "+str(i))
+					print ("Faltam "+str(qtde)+"/"+str(qtde_total)+" amigos do ego nº: "+str(i))
 					print	
 				else:
 					print
