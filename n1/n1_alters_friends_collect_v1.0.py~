@@ -143,18 +143,14 @@ def main():
 			qtde_total = len(ego['ego_friends'])			
 			qtde = len(ego['ego_friends'])			
 			for user in ego['ego_friends']:
+				print("#####################################################")
 				if tree.get(long(user)):														#Consulta na árvore binária se o user já foi verificado.
-					print ("Usuário: "+str(user)+" Já verificado. Continuando...")
-					qtde -=1
-					print ("Faltam "+str(qtde)+"/"+str(qtde)+" amigos do ego nº: "+str(i))
-					print	
-				else:
-					print
-					print("####################################################################################################")			
+					print ("Usuário: "+str(user)+" Já verificado. Continuando...")	
+				else:		
 					get_friends(user)																#Inicia função de busca
-					qtde -=1
-					print ("Faltam "+str(qtde)+" amigos do ego nº: "+str(i))
-					print("####################################################################################################")
+				qtde -=1
+				print ("Faltam "+str(qtde)+"/"+str(qtde_total)+" amigos do ego nº: "+str(i))
+				print("#####################################################")
 	users_list.close()	
 	
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
