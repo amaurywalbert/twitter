@@ -180,7 +180,7 @@ key_init = 0
 key_limit = len(auths)		##################################################################### Usa todas as chaves
 
 count_overview = 0			##################################################################### Controla o tamanho de cada arquivo
-count_limit = 19999
+count_limit = 9999
 
 dir_data = "/home/amaury/coleta/n1/alters/data/" ############################################### Diretório para armazenamento dos arquivos
 dir_error = "/home/amaury/coleta/n1/alters/data/error/"

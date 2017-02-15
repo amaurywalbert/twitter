@@ -4,7 +4,7 @@
 # Função iniciar gerenciador de chaves com múltiplas contas:
 # Lista com todas as chaves está disponível na conta no Evernote.
 #
-# IMPORTANTE -- criar um link (hardlink)) para a pasta /usr/lib/python2.7	
+# IMPORTANTE -- criar um link (hardlink) para a pasta /usr/lib/python2.7	
 #
 
 import tweepy
@@ -311,6 +311,36 @@ access_token_secret.append("jRhxUlWs57V1HF3Wdwp4cgGHg13nUGilsK3TxGbbpD3ee")
 ##############################################################################################################
 ##############################################################################################################
 #		Conta: msc2016001230 - user: msc2016001230 - e-mail: twitter30msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("78FsYx3VnphiSmMeGYNbuk3CW")
+consumer_secret.append("m0no952gbsWt5ZwoNjAHGZ5uF30pyIdbQuYK978IYZ2eC9esME")
+access_token.append("822219154245779456-K9hBIl3xDDzclfiYKiop6dcKhrbOopF")
+access_token_secret.append("eXoCbIOsKylGjoIq95G6HYfE6AndfbxWLS9mB7jNppsRJ")
+#
+#
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc2016001231 - user: msc2016001231 - e-mail: twitter31msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("1tvls7W6QObrPrSjGsqehSMgd")
+consumer_secret.append("YILtV6oYSayKZtsdJhDIr7QKvtPSQdLxRlOn1vGyL2nudIBece")
+access_token.append("822215581831151616-k9pPtsIYTvmqU9F3vyIzVn2qm2vgH6v")
+access_token_secret.append("h0ATS5hOrXrIGwdML8jZkBGuh2hOYMBYmknMAFlAq9tpC")
+#
+#
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc2016001232 - user: msc2016001232 - e-mail: twitter32msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("a9QadNejWTtmI1FQeMGads8bW")
+consumer_secret.append("1tfJGTXeXnaMdJaQtjwvRxtGe1WLGCV8BbrvIs6V3hqUukEUeb")
+access_token.append("822217293006508033-Jj6Guy7R3v7TeghxadPWmEouRAn8YiW")
+access_token_secret.append("jRhxUlWs57V1HF3Wdwp4cgGHg13nUGilsK3TxGbbpD3ee")
+#
+#
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc2016001233 - user: msc2016001233 - e-mail: twitter33msc20160012@yahoo.com - senha: padrão
 #
 consumer_key.append("78FsYx3VnphiSmMeGYNbuk3CW")
 consumer_secret.append("m0no952gbsWt5ZwoNjAHGZ5uF30pyIdbQuYK978IYZ2eC9esME")

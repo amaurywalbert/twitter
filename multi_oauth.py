@@ -320,6 +320,36 @@ access_token_secret.append("eXoCbIOsKylGjoIq95G6HYfE6AndfbxWLS9mB7jNppsRJ")
 #
 ##############################################################################################################
 ##############################################################################################################
+#		Conta: msc2016001231 - user: msc2016001231 - e-mail: twitter31msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("xqRDNkgLW9akJTbjB1F01yOaK")
+consumer_secret.append("v44MFstC4IpjtSo3xPRw7zk5Vo4Kvj07fhgQOjIMRbTA2pLls3")
+access_token.append("831843480565645314-tNEdOhZlV4ODJ468ENAHJeccupfofbW")
+access_token_secret.append("RjCllDWZOHstKLgiCLMrXxXSfo1jRgl0XJiWPcNgwUFL1")
+#
+#
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc2016001232 - user: msc2016001232 - e-mail: twitter32msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("9HwvjhRzlNWS16vZcNBg1VRI2")
+consumer_secret.append("88xa1rZsxCH88PHNFYEOaGVyRKtEFRzGitCtKktafMZ1kO8U38")
+access_token.append("831846189331005440-4G7Igh8nQ0Jaf8rBNG4nJCIODE69p7Q")
+access_token_secret.append("yIYSFtIcP1TLCzDepD4JKx0CCUuinYMn1MP0EBNUDipq9")
+#
+#
+##############################################################################################################
+##############################################################################################################
+#		Conta: msc2016001233 - user: msc2016001233 - e-mail: twitter33msc20160012@yahoo.com - senha: padrão
+#
+consumer_key.append("3gdXCHZ8T43pOmZcBVt86ttBf")
+consumer_secret.append("vnoo0P17s7iJ0Qh4jh08FRUzP3FF3cEr1fgcSQNndsFdYpxTTs")
+access_token.append("831849920944553984-els3pI9zCLz1c8D3FIrfpHqo6i58b44")
+access_token_secret.append("sRs5nE5F07k7Pw4LlWycPcIiNRgMYE94ti3zbVoNUerlW")
+#
+#
+##############################################################################################################
+##############################################################################################################
 ###############################################################################################################
 ##############################################################################################################
 ##############################################################################################################
