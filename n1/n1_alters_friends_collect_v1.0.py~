@@ -72,6 +72,7 @@ def get_friends(user):
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')		# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		friends_data = {user_id:long(user),user_friends:friends,'verified':agora}		# Usa informações inseridas no inicio do script (ego/alter) 
 		friends_file.write(json.dumps(friends_data, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
+		frineds_file.close()
 		print ("Amigos coletados com sucesso.")
 		
 		count_overview +=1
