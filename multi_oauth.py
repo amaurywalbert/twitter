@@ -23,30 +23,119 @@ access_token_secret_test=[]
 ##############################################################################################################
 #     Conta: msc20160012_app01 - user: msc2016002_app1 - e-mail: twitter01msc20160012@gmail.com - senha: padrão
 #
+# msc20160012_01
 consumer_key.append("ffap5ENG3yu0u7phgdhQzIvJx")
 consumer_secret.append("bFXgZjBUGMRoSfxbKLNZG8Y0IqjUPoc9O4vgKOtUCs0WSlkT6s")
 access_token.append("813458922967302144-f3aEkz6OsueSD6eCkaN1yYXVcYXPGuZ")
 access_token_secret.append("OG08x1kx6rgMHwwEcmQKeeEAot88UALSQAY96XlGnpRba")
 #
 #
+# msc20160012_02
+consumer_key.append("L8LX4gmyLYpfaUDHPRTmAnO5E")
+consumer_secret.append("pCte0UiHaPIBbReSTTFm3pGV8mlS9L7b28azjIZ8vr7Sv320m4")
+access_token.append("813458922967302144-wgByKpL2mDieJRbLrMbKxDySesoSHSS")
+access_token_secret.append("g6dZ0iDxLRb1gGTjnrBKMjhB8FB7nnOBpu9XMkCNGBSAb")
+#
+#
+# msc20160012_03
+consumer_key.append("io8o8D4rdUtPiJ2J5mhkkXFSb")
+consumer_secret.append("hauZhqzQvh8uI7p66fy5ztn6IINJP3PecaqkoTob1EGOV23LB4")
+access_token.append("813458922967302144-dk9pCS7wozrKR6kAUzqjayX3KkcB6Hv")
+access_token_secret.append("OG08x1kx6rgMHwwEcmQKeeEAot88UALSQAY96XlGnpRba")
+#
+#
+# msc20160012_04
+consumer_key.append("cFEDQtQtsib0TVq0EtvbBddl0")
+consumer_secret.append("gCUAkk3VmplqhzTAtepo5kjFlVcr7LXz2vNsYLApMSh1ogF9O0")
+access_token.append("813458922967302144-3MK8AazCmrtN7IMRnPxxZC56ax5R4Rk")
+access_token_secret.append("L4Y8IdrHi44rRbcei5gFNoYbdU8C0TBADLFGFXZNu5IXB")
+#
+#
+# msc20160012_05
+consumer_key.append("low1J0YxOY1k2WRYOIt8z34T8")
+consumer_secret.append("asMb1Gtp4xnQrMDDq2r2PPfxQKJV5iCN5zlU2giXn20JNhiHt4")
+access_token.append("813458922967302144-FdwjetAGA5JRuGf8dKhTVpzlRFdsZYq")
+access_token_secret.append("wF8txP7Fnd6ZTKT35EllN8Ei67PxSDkeHunE7UPRBcjRi")
+#
+#
 ##############################################################################################################
 ##############################################################################################################
 #     Conta: msc20160012_app02 - user: msc2016002_app2 - e-mail: twitter02msc20160012@gmail.com - senha: padrão
 #
+#
+# msc20160012_11
 consumer_key.append("O4t25YPnHGNm7B1i5qaN7Gu3s")
 consumer_secret.append("v298502i9HF2vpFbpOwrvEnYIucp2CVwLU8MPfy2lLGh6AoFXR")
 access_token.append("813460676475842560-gX5XA6C8kWOk412pFQOMy4HZgJ9fSMi")
 access_token_secret.append("VLO9eKX8TQhKjH3VPoR2asgxZ9qudY3NW5XFUhXg7iJQB")
 #
 #
+# msc20160012_12
+consumer_key.append("R5iaxJ4FpLL6pcDOrr2osLNKr")
+consumer_secret.append("PRNJxduOZgGsmjDlIeZIMuPF8qaauSxzYDlggdLWb1S3A5AOXO")
+access_token.append("813460676475842560-2aJSRKgnhugK16w1T4AERo0pkoNtjxO")
+access_token_secret.append("pSUfiFZmyb68U4YihPMFKWSQYKk2Js4cqGEgKNVbeS5xk")
+#
+#
+# msc20160012_13
+consumer_key.append("w9GvsiaQy9jcBDTKIaXomBjQT")
+consumer_secret.append("H53rMVNGlrUvYFnN5f5ud1JzrGkhVpz2e335KBK413KrEK8Mwc")
+access_token.append("813460676475842560-moOTo31XN8tbUbrKM3QOitihXsPD1Z9")
+access_token_secret.append("aGuidWdVzC24kkUSJ6BNDxKRwUPchCz0LWtEnVINJShY3")
+#
+#
+# msc20160012_14
+consumer_key.append("cqRzqBL0fV3URMEvxnXl2sIxV")
+consumer_secret.append("8mX8egarv1Wyw6EuPbF6vfegOXFtF3gj395fKKkX19OitcxCAo")
+access_token.append("813460676475842560-A7YnIIk13B0ezrqtEXdaEMOIF08qxdi")
+access_token_secret.append("Qb2YgSaJFFypqPjRxaBFe7hQvM8GyMKUAArcCvyfLpbNE")
+#
+#
+# msc20160012_15
+consumer_key.append("Bg18Yht35FNbKH153Xgh3awfQ")
+consumer_secret.append("EA7s3UhtsbLBdo3srXwqciOOQtywUindvOXYoNQ0e3zOJk55JB")
+access_token.append("813460676475842560-faCiUVzZ0k7lOVxEEiQLxAR9Te2jEdt")
+access_token_secret.append("KBWpx4v2qYbpZcCOShDpFJCAzuHQHJtWlQtpyppjyDcx7")
+#
+#
+# msc20160012_16
+consumer_key.append("Qys38SRmmVBz90iioGWTSscJK")
+consumer_secret.append("uhjDfaWQKkwHgwP4EiCx9XQD3egAkcAFF1dkIFQub6BFy2c2Nv")
+access_token.append("813460676475842560-56PWNQlHVUYOlFw4tBBr5THeRD8ADlY")
+access_token_secret.append("lrorUYCvBydihVI1gJytodrV3vYWuExjfQhALIAvzvWh5")
+#
+#
 ##############################################################################################################
 ##############################################################################################################
 #		Conta: msc20160012_app01 - user: msc2016002_app3 - e-mail: twitter03msc20160012@gmail.com - senha: padrão
 #
+#
+#  msc20160012_311
 consumer_key.append("ykRNgT6LkUosDfvNRKPTzKdyC")
 consumer_secret.append("NaY2Zet7YH1tWPHE13sl0JuW5rPfEg6hzZQFPCKiGmMNVbfvI2")
 access_token.append("818810967400284160-jRZ7pSAkhOLohRr3ZMNN9QPWzfLDu8L")
 access_token_secret.append("mxw9n10lJdQ0qEhsFaChkkj0rxm4zk3FDRyxx3IcU81jB")
+#
+#
+#  msc20160012_312
+consumer_key.append("7yN6pZvLxi7iTDq8pvD0bMiV1")
+consumer_secret.append("7ITYoYSv2eWTDQxPIAZJk7jBD5Gm1iZ5gDl9QUMa3xk7b4QMMZ")
+access_token.append("818810967400284160-PN3yDpaAXgnp46qECGG7nQslpkzMWVM")
+access_token_secret.append("b0KmzeZVVu0aZLrSNVQqJlRz2FvMDmiU3ufwbifEKipQw")
+#
+#
+#  msc20160012_313
+consumer_key.append("pkCQIsm7ovuK9vsnc3AZ41WA4")
+consumer_secret.append("yWM5M6CRq3zSCmwkmTrGPrVOfg09LKFwJX5EapAFwYtzpbT6Bz")
+access_token.append("818810967400284160-dBOiPcMaMIuiFjAxCreWt2sBvorKEhx")
+access_token_secret.append("XBA8HDkSamQJwIIiuQnaVlky74r5GozlfZgoETLxFaT7r")
+#
+#
+#  msc20160012_314
+consumer_key.append("3b5PGUUkR1kX90tbcZy4z3SWT")
+consumer_secret.append("CaUGVUoFyUt22TzwuBD172CPZgxoe2xPcCIK6CACl8W8qy7g3C")
+access_token.append("818810967400284160-CixkeUEz5Fe8dA9kdrj7dQlTUMSgZ5x")
+access_token_secret.append("ptKyELguI7dlIpPMCSO5Y4338Cdt0QMfhQz0wafReQiug")
 #
 #
 ##############################################################################################################

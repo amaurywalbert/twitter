@@ -33,7 +33,7 @@ def autentication(auths):
 	key += 1
 	if (key >= key_limit):
 		key = key_init
-	print ("Autenticando usando chave número: "+str(key))
+	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
 	api_key = tweepy.API(auths[key])
 	return (api_key)
 
