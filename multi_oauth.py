@@ -34,14 +34,14 @@ access_token_secret.append("OG08x1kx6rgMHwwEcmQKeeEAot88UALSQAY96XlGnpRba")
 consumer_key.append("L8LX4gmyLYpfaUDHPRTmAnO5E")
 consumer_secret.append("pCte0UiHaPIBbReSTTFm3pGV8mlS9L7b28azjIZ8vr7Sv320m4")
 access_token.append("813458922967302144-wgByKpL2mDieJRbLrMbKxDySesoSHSS")
-access_token_secret.append("g6dZ0iDxLRb1gGTjnrBKMjhB8FB7nnOBpu9XMkCNGBSAb")
+access_token_secret.append("i81wWiwi6MWNUgg8CHz5Z0S9zTUWSq3cSvmy44nBCKPE6")
 #
 #
 # msc20160012_03
 consumer_key.append("io8o8D4rdUtPiJ2J5mhkkXFSb")
 consumer_secret.append("hauZhqzQvh8uI7p66fy5ztn6IINJP3PecaqkoTob1EGOV23LB4")
 access_token.append("813458922967302144-dk9pCS7wozrKR6kAUzqjayX3KkcB6Hv")
-access_token_secret.append("OG08x1kx6rgMHwwEcmQKeeEAot88UALSQAY96XlGnpRba")
+access_token_secret.append("g6dZ0iDxLRb1gGTjnrBKMjhB8FB7nnOBpu9XMkCNGBSAb")
 #
 #
 # msc20160012_04

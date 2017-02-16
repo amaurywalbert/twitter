@@ -34,6 +34,7 @@ def autentication(auths):
 	if (key >= key_limit):
 		key = key_init
 	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
+	print
 	api_key = tweepy.API(auths[key])
 	return (api_key)
 
@@ -150,7 +151,7 @@ def main():
 				else:		
 					get_friends(user)																#Inicia função de busca
 				qtde -=1
-				print ("Faltam "+str(qtde)+"/"+str(qtde_total)+" amigos do ego nº: "+str(i))
+				print ("Faltam "+str(qtde)+"/"+str(qtde_total)+" amigos do ego nº: "+str(i)+" - chave número: "+str(key)+"/"+str(key_limit))
 				print("#####################################################")
 	users_list.close()	
 	
