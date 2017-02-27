@@ -1,0 +1,52 @@
+# -*- coding: latin1 -*-
+################################################################################################
+# Script para preparar um arquivo coletado do twitter para ser salvo no orientdb
+#	
+#
+import tweepy, datetime, sys, time, json, os, os.path, shutil, time, simplejson
+import pyorient
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+################################################################################################
+##		Status - Versão 1.0 - Preparar arquivo JSON e inserir no OrientDB
+## 
+################################################################################################
+
+##########################################################################################################################################################################
+##########################################################################################################################################################################
+#
+# Método principal do programa. 
+#
+##########################################################################################################################################################################
+##########################################################################################################################################################################
+
+def main():
+	client = pyorient.OrientDB("localhost", 2424)
+	session_id = client.connect("admin", "admin")
+
+	if not client.db_exists(db_name, pyorient.STORAGE_TYPE_PLOCAL):
+		print ("Database [" + db_name + "] does not exist! session ending...")
+		sys.exit()
+	else:
+		client.db_open( db_name, db_username, db_password )
+		print (db_name + " opened successfully")
+	
+	
+	client.db_close()
+################################################################################################
+#
+# INICIO DO PROGRAMA
+#
+#######################################################################################################################################################
+
+egos_friends = "/home/amaury/coleta/n1/egos/friends_data_full.json"
+alters_friends = "/home/amaury/coleta/n1/alters/friends_data_full.json"
+
+db_name = "twitter_teste"
+db_username = "amaury"
+db_password = "amaury"
+
+
+# Verifica se eh para executar o metodo main()
+if __name__ == "__main__": main()

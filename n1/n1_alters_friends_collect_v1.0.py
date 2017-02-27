@@ -184,13 +184,13 @@ key_limit = len(auths)		########################################################
 count_overview = 0			##################################################################### Controla o tamanho de cada arquivo
 count_limit = 9999
 
-dir_data = "/home/amaury/coleta/n1/alters/data/" ############################################### Diretório para armazenamento dos arquivos
-dir_error = "/home/amaury/coleta/n1/alters/data/error/"
+dir_data = "/home/amaury/coleta/n1/alters/" ############################################### Diretório para armazenamento dos arquivos
+dir_error = "/home/amaury/coleta/n1/alters/error/"
 
 user_id = 'alter_id'				################################################################## Chaves para os registros: 'ego' ou 'alter'
 user_friends = 'alter_friends'
 
-users_list_file = "/home/amaury/coleta/n1/egos/data/friends_data_full.json" #################### Arquivo contendo a lista dos usuários a serem buscados
+users_list_file = "/home/amaury/coleta/n1/egos/friends_data_full.json" #################### Arquivo contendo a lista dos usuários a serem buscados
 
 
 #######################################################################################################################################################

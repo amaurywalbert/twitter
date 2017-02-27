@@ -1,0 +1,48 @@
+# -*- coding: latin1 -*-
+################################################################################################
+# Script para preparar um arquivo coletado do twitter para ser salvo no orientdb
+#	
+#
+import tweepy, datetime, sys, time, json, os, os.path, shutil, time, simplejson
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+################################################################################################
+##		Status - Versão 1.0 - Preparar arquivo JSON para OrientDB
+##						  
+##
+## 
+################################################################################################
+
+##########################################################################################################################################################################
+##########################################################################################################################################################################
+#
+# Método principal do programa. 
+#
+##########################################################################################################################################################################
+##########################################################################################################################################################################
+
+def main():
+	lista = []
+	arquivo = open(file,'r')	
+	for line in arquivo:
+		lista.append(line)
+	arquivo.close()
+	arquivo_json = open(file_json, 'a+') 
+	arquivo_json.write(json.dumps(lista))
+	arquivo_json.close()
+	
+	print ("Arquivo preparado!")
+	print
+	
+################################################################################################
+#
+# INICIO DO PROGRAMA
+#
+#######################################################################################################################################################
+
+file_json = "/home/amaury/coleta/n1/alters/friends_data_full_test_import_orientdb.json"	################### Diretório para armazenamento dos arquivos
+file = "/home/amaury/coleta/n1/alters/friends_data.json" 											################### Arquivo a ser preparado
+	
+# Verifica se eh para executar o metodo main()
+if __name__ == "__main__": main()	
