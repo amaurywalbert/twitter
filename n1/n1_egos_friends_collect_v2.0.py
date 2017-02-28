@@ -213,7 +213,7 @@ dir_error = "/home/amaury/coleta/n1/egos/bin/error/"
 
 users_list_file = "/home/amaury/coleta/n1/egos/egos_list.txt" ####################################### Arquivo contendo a lista dos usuários a serem buscados
 
-ego_limit = 2				######################################################################## Controla a quantidade de egos a serem pesquisados
+ego_limit = 10				######################################################################## Controla a quantidade de egos a serem pesquisados
 
 #Long para o código ('l') e depois o array de chars de X posições:
 formato = 'l150s'
