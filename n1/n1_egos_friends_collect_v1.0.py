@@ -177,13 +177,13 @@ key_limit = len(auths)		########################################################
 count_overview = 0			##################################################################### Controla o tamanho de cada arquivo
 count_limit = 19999
 
-dir_data = "/home/amaury/coleta/n1/egos/" ################################################# Diretório para armazenamento dos arquivos
-dir_error = "/home/amaury/coleta/n1/egos/error/"
+dir_data = "/home/amaury/coleta/n1/egos/json/" ################################################# Diretório para armazenamento dos arquivos
+dir_error = "/home/amaury/coleta/n1/egos/json/error/"
 
 user_id = 'ego_id'				################################################################## Chaves para os registros: 'ego' ou 'alter'
 user_friends = 'ego_friends'
 
-users_list_file = "/home/amaury/coleta/n1/egos_list.txt" ################################## Arquivo contendo a lista dos usuários a serem buscados
+users_list_file = "/home/amaury/coleta/n1/egos/egos_list.txt" ################################## Arquivo contendo a lista dos usuários a serem buscados
 
 ego_limit = 10				######################################################################## Controla a quantidade de egos a serem pesquisados
 

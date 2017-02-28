@@ -58,6 +58,25 @@ access_token.append("813458922967302144-FdwjetAGA5JRuGf8dKhTVpzlRFdsZYq")
 access_token_secret.append("wF8txP7Fnd6ZTKT35EllN8Ei67PxSDkeHunE7UPRBcjRi")
 #
 #
+# msc20160012_06
+consumer_key.append("Tc60Yaylx3IxLHlYJCyeHSP7C")
+consumer_secret.append("6WhSsg5uyZUx6HnNJqpsZqi44tkSKqWO5VQeDoC20cdKsk49za")
+access_token.append("813458922967302144-hPrwvRvzIp9WtN8CoKMLWO5t42GSJrd")
+access_token_secret.append("evzncdyFsUdRKbuyOd2W9peqw5AxQVlYg3k51goVzKbaZ")
+#
+#
+# msc20160012_07
+consumer_key.append("5iUqKfKFhZ1hzhUI4BD9mMzbb")
+consumer_secret.append("XZhPHgSpyjJwkc33K9Co9myAQutq3ZAk4D9c9IwWiOsb4PoMqG")
+access_token.append("813458922967302144-zL8yhYTF5EpVZ1RkjoOnuuMd1dXOPyZ")
+access_token_secret.append("lussrypwzCzCbUGhmtOmSAAQdD3ZlQ0Y66wgH6OhivC2n")
+#
+#
+# msc20160012_08
+consumer_key.append("az5P7VWwgZ8QjrKgJXRkgvx3G")
+consumer_secret.append("aFC4PirBD8sSCivUdAigin2NadWe72WSAzf54Sh9Ycn0mcj8Ty")
+access_token.append("813458922967302144-ZDFxI0vTspgEJJAF5LSjWXc4mDZDYKm")
+access_token_secret.append("HL3O2iMRyoPiz1kjlH20Bhl9j2npRY2XMrcarcHn5QTUR")
 ##############################################################################################################
 ##############################################################################################################
 #     Conta: msc20160012_app02 - user: msc2016002_app2 - e-mail: twitter02msc20160012@gmail.com - senha: padrão
@@ -105,6 +124,25 @@ access_token.append("813460676475842560-56PWNQlHVUYOlFw4tBBr5THeRD8ADlY")
 access_token_secret.append("lrorUYCvBydihVI1gJytodrV3vYWuExjfQhALIAvzvWh5")
 #
 #
+# msc20160012_17
+consumer_key.append("HbJwp3WUsVjvBxHuDuKIQdc7q")
+consumer_secret.append("uPflQdUndr8r95KPXpb9L3OmfFQ8HFJaB1XlsEEqka6L5Ytbqj")
+access_token.append("813460676475842560-GQM6Bo4IHfmUUiRYln9VfqRQecOtBja")
+access_token_secret.append("Je4QsyutTUTPhWkC9oA0ylviBKRywNKuu6IHO8B5CcB1W")
+#
+#
+# msc20160012_18
+consumer_key.append("mYw48LrblLQrVF6Y6rStxttas")
+consumer_secret.append("66X76dJ7wUvTiHZSJq36ex7kLdaFzpfx1nJ6v7KwYe1HUtLuKu")
+access_token.append("813460676475842560-m61gryMuRrvrk5mZS78pw8fwlVuev9L")
+access_token_secret.append("Q9SDIHvf484Wq3KudGtnh9YsQHIOPnAKmbaYgQfXMJvbs")
+#
+#
+# msc20160012_19
+consumer_key.append("AbBex8ClaE7vEWOWG8C1WUtaq")
+consumer_secret.append("X91do3pnXVp2UvaV183Ei04XDVS8CC3GNHwcHbDmJhQjgvKNzv")
+access_token.append("813460676475842560-5Xj9GuFOcIGkiUL33wPs1eMcd90h5Oj")
+access_token_secret.append("ICWDbDdnteGxxMP1OOAdtrPcfUYP4GXslPjR07eBGxKSx")
 ##############################################################################################################
 ##############################################################################################################
 #		Conta: msc20160012_app01 - user: msc2016002_app3 - e-mail: twitter03msc20160012@gmail.com - senha: padrão
@@ -136,6 +174,27 @@ consumer_key.append("3b5PGUUkR1kX90tbcZy4z3SWT")
 consumer_secret.append("CaUGVUoFyUt22TzwuBD172CPZgxoe2xPcCIK6CACl8W8qy7g3C")
 access_token.append("818810967400284160-CixkeUEz5Fe8dA9kdrj7dQlTUMSgZ5x")
 access_token_secret.append("ptKyELguI7dlIpPMCSO5Y4338Cdt0QMfhQz0wafReQiug")
+#
+#
+#  msc20160012_315
+consumer_key.append("yLXjacffe6uLuonka5AXiEaAu")
+consumer_secret.append("JP3h8Z1Zc3iRw1IibYE2aOv2x0BRMgAYuMdZnYY0nNz0aRAtS7")
+access_token.append("818810967400284160-y8ertdAuwQsZJg01cN5b7sVmj1xGvd6")
+access_token_secret.append("Vquwf49GKKaemroGSJZvbuYDHSRD1v2HCq4x3Zjr22AGI")
+#
+#
+#  msc20160012_316
+consumer_key.append("r1LoOuMAFXWPSnfoIUAksuOTi")
+consumer_secret.append("jErxt6PyxtQ3ghej1OecwlpAWYJ1MB3LWQWfoxazQ8teBPfNQo")
+access_token.append("818810967400284160-jQJaIZZraAiQHbzJPP1VAh1RtuBQnbx")
+access_token_secret.append("712AEu6ZzFgjMhu91SMEjC9cVP3E7alByLtz0H9gAM8XH")
+#
+#
+#  msc20160012_317
+consumer_key.append("vNp26p6PA6cgrbPZg0gNtRnEW")
+consumer_secret.append("0jbl3HVWQReVF3gCF2VEVDZOIDDIcGYx7b8vtAbUBXV9YF17cW")
+access_token.append("818810967400284160-iGHMdbAON9ebEK1Hax4zhOi9EVcd8cm")
+access_token_secret.append("xgyRO5k6No4ipLmOqliJmVMwkHjxH8CtxFKYV2rmCiEpY")
 #
 #
 ##############################################################################################################

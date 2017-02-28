@@ -1,8 +1,7 @@
 # *-* coding:utf-8 *-*
 import struct, sys, time
-from collections import namedtuple
 
-#Inteiro para o código ('i') e depois o array de chars de 100 posições ('100s')
+#Long para o código ('l') e depois o array de chars de X posições:
 formato = 'l150s'
 user = struct.Struct(formato)
 
