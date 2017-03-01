@@ -113,7 +113,6 @@ def save_alter(ego, alter):
 		print ("Usuário "+str(alter)+" já coletado! Continuando...")
 	
 	else:																			#Faz a coleta dos amigos do alter e armazena em um arquivo nomeado pelo ID do Alter	
-		print("Coletando amigos do alter: "+str(alter))
 		boundarie = "boundarie"														#String indicando que não há mais lista de amigos a partir daqui (fronteira da rede de amizade)
 		alter_friends_file = dir_data+str(alter)+".dat"
 		alter_friends_list = get_friends(alter)								#Chama a função de coleta e Recebe a lista de amigos do alter
@@ -136,18 +135,20 @@ def save_alter(ego, alter):
 # Obtém as amigos do ego
 #
 ######################################################################################################################################################################
-def save_ego(user):
+def save_ego(i,user):
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
-
-	print("Coletando amigos do ego: "+str(user))
 	
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	ego_friends_list = get_friends(user)
 	
+	j = 1
+
 	# Busca amigos de cada alter
 	for friend in ego_friends_list:
-		save_alter(user, friend)	
+		print("Ego "+str(i)+": "+str(user)+" - Coletando amigos do alter "+str(j)+"/"+str(len(ego_friends_list))+": "+str(friend))
+		save_alter(user, friend)
+		j+=1
 
 	friends_file = dir_data+str(user)+".dat"			# Armazena no arquivo da lista de egos o ID do ego a localização do arquivo que contém a lista dos seus amigos (alters)			
 	with open(dir_data+"egos_file.dat", "a+b") as egos_file:
@@ -172,7 +173,8 @@ def save_ego(user):
 
 def main():
 	with open(users_list_file,'r') as users_list:						#Percorre o arquivo de usuários já verificados
-		for i in range(0,ego_limit):
+		i = 1
+		for k in range(0,ego_limit):
 			user = users_list.readline()										#Leia id do usuário corrente
 			if (user == ''):														#Se id for igual a vazio é porque chegou ao final do arquivo.
 				eof = True		
@@ -184,7 +186,8 @@ def main():
 				else:
 					print
 					print("######################################################################")			
-					save_ego(long(user))								#Inicia função de busca
+					save_ego(i, long(user))								#Inicia função de busca
+					i+=1
 					print("######################################################################")
 	print("Coleta finalizada!")
 	
