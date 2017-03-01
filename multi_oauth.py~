@@ -575,10 +575,10 @@ access_token_secret.append("xKmuG7iJaMvAkZNHIGMoBfw0pNzE6Cf0Oiz47YSBFFNAd")
 #
 #
 #msc20160012_154
-consumer_key.append("5PDmwijPhMM05F2IbXSmaO7Wu")
-consumer_secret.append("xZXYgKhNE2yTBp1Fdu0AD6eL6vAla9PJWbHWYOPamLo1rKYBzH")
-access_token.append("819411941374431232-lgKyr48Ctu2smXLhpZR4ngO69U6wa4K")
-access_token_secret.append("beF0ifThX0wnrzwSGIFMPES7Ip9BznNs5DEMMEddjBo3R")
+consumer_key.append("WmuzkHYqYGfvWPqlEgbxk2MU5")
+consumer_secret.append("g8HI2vvHPUsBWJQbrtRSf4Q77l9cH03iVwPdgVvkGA7jXTbijA")
+access_token.append("819411941374431232-QlWJFI6398qgorIdWip5XgbZ9AtGpbT")
+access_token_secret.append("XG0D6J5LKQTUuYz8YpzqFiVIG2daHHCHByt3n3Oq1QXnL")
 #
 #
 ###############################################################################################################

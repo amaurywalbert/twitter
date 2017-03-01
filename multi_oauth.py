@@ -467,7 +467,7 @@ access_token_secret.append("a0PKhTisi9oBTKmXsspv46t2lNrYoC9ewaOskZc0cuvRJ")
 #msc20160012_122
 consumer_key.append("0YJxep6ewkNHPWuuPPlN88MGK")
 consumer_secret.append("LOoMXd9amxCUqlRJqW7PhtgzdcTHboXuHUHKQg8bJsaMJ08U3i")
-access_token.append("819407030817607683-lAX5dMEpwkJf0FSZcB3KvohntnUk0A2	")
+access_token.append("819407030817607683-lAX5dMEpwkJf0FSZcB3KvohntnUk0A2")
 access_token_secret.append("FOxe1Srk1TrqKF4vVPY9lsGQZLUTB2Tcm5f2QjMqZVTxZ")
 #
 #

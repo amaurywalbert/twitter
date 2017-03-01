@@ -74,74 +74,82 @@ def imprime(f):
 # Grava os alters e busca seus amigos 
 #
 ################################################################################################
-def get_alters(f_ego,user):
+def get_alters(f_ego,alter):
+	# API - Tweepy - chave de autenticação usada
 	global api
+	# Dicionário - Tabela Hash contendo os usuários já verificados
 	global dictionary
-	dir = dictionary.get(long(user))
-	if dir:
-		grava(f_ego,long(user),dir)
-		print ("Usuário "+str(user)+" já verificado! Continuando...")
-		
-	else:
-		print("Coletando amigos do alter: "+str(user))				
-		with open(dir_data+str(user)+".dat", "a+b") as f:
-			alter_friends_file = dir_data+str(user)+".dat"
-			try:
-				for page in tweepy.Cursor(api.friends_ids,id=user,wait_on_rate_limit_notify=True,count=5000).pages():
-					for friend in page:
-						grava(f,friend,alter_friends_file)
-					
-				grava(f_ego,long(user),alter_friends_file)
-				dictionary = {long(user):alter_friends_file}
 
-				with open(dir_data+"users_verified.txt",'a+') as users_verified:
-					users_verified.writelines(str(user)+"\n")	
+	#Verifica se o alter já foi verificado e, em caso positivo, armazena no arquivo do ego a localização do arquivo que contém os amigos do Alter	
+	dir = dictionary.get(long(alter))
+	if dir:
+		grava(f_ego,long(alter),dir)
+		print ("Usuário "+str(alter)+" já verificado! Continuando...")
+	
+	
+	#Caso contrário, faz a coleta dos amigos do alter e armazena em um arquivo nomeado pelo ID do Alter	
+	else:
+		print("Coletando amigos do alter: "+str(alter))				
+		with open(dir_data+str(alter)+".dat", "a+b") as f:
+			alter_friends_file = dir_data+str(alter)+".dat"
+			boundarie = "boundarie"
+			try:
+				for page in tweepy.Cursor(api.friends_ids,id=alter,wait_on_rate_limit_notify=True,count=5000).pages():
+					for friend in page:
+						grava(f,friend,boundarie)
 
 			except tweepy.RateLimitError as t:											# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
-				print("Erro: ",str(t),". Aguardando 02 segundos.\n")
+				print("Erro: ",str(t),". Aguardando "+str(espera)+" segundos.\n")
 				print
-				time.sleep(2)		
+				time.sleep(espera)		
 				api = autentication(auths)
-				get_alters(f_ego,user)
+				get_alters(f_ego,alter)
 
 			except tweepy.error.TweepError as e:
-				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-				with open(dir_error+"friends_err.json", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+				agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')	# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+				with open(dir_error+"friends_err.json", "a+") as outfile:						# Abre o arquivo para gravação no final do arquivo
  					if e.message:		
-						error = {'user':user,'reason': e.message,'date':agora}
+						error = {'user':alter,'reason': e.message,'date':agora}
 					else:
 						error = {'user':user,'reason': str(e),'date':agora}
 					outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
-			
-				with open(dir_data+"users_verified.txt",'a+') as users_verified:						#Arquivo para armazenar a lista de usuários já verificados.
-					users_verified.writelines(str(user)+"\n")														# Salva o usuário no arquivo de users já verificados.		
+		grava(f_ego,long(alter),alter_friends_file)
+		dictionary = {long(alter):alter_friends_file}
+	#Fim Else
+	
+	#Salva o alter no arquivo de usuários verificados 					
+	with open(dir_data+"users_verified.txt",'a+') as users_verified:						#Arquivo para armazenar a lista de usuários já verificados.
+		users_verified.writelines(str(user)+"\n")													# Salva o usuário no arquivo de users já verificados.		
+
 ################################################################################################
 #
 # Obtem as amigos do ego
 #
 ################################################################################################
 def get_ego_friends(user):
+# API - Tweepy - chave de autenticação usada
 	global api
+# Dicionário - Tabela Hash contendo os usuários já verificados
+	global dictionary
+
+#Verifica se o alter já foi verificado e, em caso positivo, armazena no arquivo do ego a localização do arquivo que contém os amigos do Alter	
+	dir = dictionary.get(long(alter))
+	if dir:
+		grava(f_ego,long(alter),dir)
+		print ("Usuário "+str(alter)+" já verificado! Continuando...")
 	
-	print("Coletando amigos do ego: "+str(user))	
 	
-	with open(dir_data+str(user)+".dat", "a+b") as f:
+#Caso contrário, faz a coleta dos amigos do alter e armazena em um arquivo nomeado pelo ID do Alter	
+	else:
+		print("Coletando amigos do ego: "+str(user))	
+		friends_list = []																
+
+#Realiza coleta da lista de amigos do ego
 		try:
 			for page in tweepy.Cursor(api.friends_ids,id=user,wait_on_rate_limit_notify=True,count=5000).pages():
 				for friend in page:
-					get_alters(f,friend)
-					
-
-			friends_file = dir_data+str(user)+".dat"			
-			with open(dir_data+"egos_file.dat", "a+b") as egos_file:
-				grava(egos_file,user,friends_file)
-			
-			print ("Amigos do ego "+str(user)+" coletados com sucesso.")
-			print
-			
-			with open(dir_data+"users_verified.txt",'a+') as users_verified:		#Arquivo para armazenar a lista de usuários já verificados.
-				users_verified.writelines(str(user)+"\n")										# Salva o usuário no arquivo de users já verificados.
+					friends_list.append(friend)
 
 		except tweepy.RateLimitError as t:											# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 			print("Erro: ",str(t),". Aguardando 02 segundos.\n")
@@ -153,17 +161,32 @@ def get_ego_friends(user):
 		except tweepy.error.TweepError as e:
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 			with open(dir_error+"friends_err.json", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
- 				if e.message:		
+				if e.message:		
 					error = {'user':user,'reason': e.message,'date':agora}
 				else:
 					error = {'user':user,'reason': str(e),'date':agora}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 			print error
-		
-			with open(dir_data+"users_verified.txt",'a+') as users_verified:						#Arquivo para armazenar a lista de usuários já verificados.
-				users_verified.writelines(str(user)+"\n")														# Salva o usuário no arquivo de users já verificados.	
 	
-	
+# Para cada alter, inicia busca pelos seus amigos
+		with open(dir_data+str(user)+".dat", "a+b") as f:
+			for item in friends_list:
+				get_alters(f,item)
+
+# Armazena no arquivo da lista de egos o ID do ego a localização do arquivo que contém a lista dos seus amigos (alters)
+		friends_file = dir_data+str(user)+".dat"			
+		with open(dir_data+"egos_file.dat", "a+b") as egos_file:
+			grava(egos_file,user,friends_file)
+		dictionary = {long(user):friends_file}
+
+	#Fim Else
+
+#Salva o ego na lista de usuários já verificados e na tabela em memória 			
+	with open(dir_data+"users_verified.txt",'a+') as users_verified:
+		users_verified.writelines(str(user)+"\n")	
+
+	print ("Amigos do ego "+str(user)+" coletados com sucesso.")
+	print	
 ##########################################################################################################################################################################
 ##########################################################################################################################################################################
 #
@@ -174,76 +197,70 @@ def get_ego_friends(user):
 ##########################################################################################################################################################################
 
 def main():
-	with open(users_list_file,'r') as users_list:	
+	with open(users_list_file,'r') as users_list:										#Percorre o arquivo de usuários já verificados
 		for i in range(0,ego_limit):
 			user = users_list.readline()														#Leia id do usuário corrente
 			if (user == ''):																		#Se id for igual a vazio é porque chegou ao final do arquivo.
 				eof = True		
 			else:
 				
-				dir = dictionary.get(long(user))
+				dir = dictionary.get(long(user))												#Consulta na tabela se o usuário já foi verificado
 				if dir:
 					print ("Usuário "+str(user)+" já verificado! Continuando...")
 					print	
 				else:
 					print
-					print("####################################################################################################")			
+					print("######################################################################")			
 					get_ego_friends(long(user))												#Inicia função de busca
-					print("####################################################################################################")
+					print("######################################################################")
 	print("Coleta finalizada!")
 	
 ################################################################################################
 #
-# INICIO DO PROGRAMA
+# INÍCIO DO PROGRAMA
 #
 #######################################################################################################################################################
 
-################################### DEFINIR SE É TESTE OU NÃO!!! ###############################									
+################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_teste'] #################################################									
 oauth_keys = multi_oauth.keys()
 auths = oauth_keys['auths_ok']
 
-################################### CONFIGURAR AS LINHAS A SEGUIR #####################################################################################
-################################################################################################
-key = -1							##################################################################### Essas duas linhas atribuem as chaves para cada script
-key_init = 0
-key_limit = len(auths)		##################################################################### Usa todas as chaves
-
-dir_data = "/home/amaury/coleta/n1/egos/bin/" ###################################################### Diretório para armazenamento dos arquivos
-dir_error = "/home/amaury/coleta/n1/egos/bin/error/"
-
-users_list_file = "/home/amaury/coleta/n1/egos/egos_list.txt" ####################################### Arquivo contendo a lista dos usuários a serem buscados
-
-ego_limit = 10				######################################################################## Controla a quantidade de egos a serem pesquisados
-
-#Long para o código ('l') e depois o array de chars de X posições:
-formato = 'l150s'
-user_data = struct.Struct(formato)
-
-dictionary = {}
+################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################################################
+######################################################################################################################################################
+key = -1							####################################### Essas duas linhas atribuem as chaves para cada script
+key_init = 0					####################################### Essas duas linhas atribuem as chaves para cada script
+key_limit = len(auths)		####################################### Usa todas as chaves (tamanho da lista de chaves)
+dir_data = "/home/amaury/coleta/n1/egos/bin/" #################### Diretório para armazenamento dos arquivos
+dir_error = "/home/amaury/coleta/n1/egos/bin/error/" ############# Diretório para armazenamento dos arquivos de erro
+users_list_file = "/home/amaury/coleta/n1/egos/egos_list.txt" #### Arquivo contendo a lista dos usuários a serem buscados
+ego_limit = 10					####################################### Controla a quantidade de egos a serem pesquisados
+espera = 2						####################################### Tempo de espera antes de iniciar nova autenticação (segundos)
+formato = 'l150s'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
+user_data = struct.Struct(formato) ############################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+dictionary = {}				####################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 #######################################################################################################################################################
 #######################################################################################################################################################
-
+#Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(dir_data):
 	os.makedirs(dir_data)
-
 if not os.path.exists(dir_error):
 	os.makedirs(dir_error)
-
+#Autenticação
 try:
 	api = autentication(auths)
 	print
-	print("####################################################################################################")
+	print("######################################################################")
 	print
 except tweepy.error.TweepError as e:
 	print("[ERRRO] Não foi possível realizar autenticação. Erro: ",str(e),".\n")
 	
 	
-###### Iniciando tabela
+###### Iniciando dicionário - tabela hash
 with open(dir_data+"users_verified.txt",'a+') as users_verified:	
 	for line in users_verified:
 		line = long(line)
 		data = dir_data+str(line)+".dat"
 		dictionary[line] = data
 
-# Verifica se eh para executar o metodo main()
+#Executa o método main
 if __name__ == "__main__": main()	
