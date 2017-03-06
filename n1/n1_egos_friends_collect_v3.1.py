@@ -17,7 +17,8 @@ sys.setdefaultencoding('utf-8')
 ##						3.1.1 - Usa tabela hash para consultar usuários já coletados
 ##						3.1.2 - Redução no tamanho da struct para melhorar armazenamento							
 ##
-##						STATUS - TESTE - Salvar arquivos binários com strings indicando arquivos com os amigos de cada alter.  
+##						STATUS - TESTE - Salvar arquivos binários com strings indicando arquivos com os amigos de cada alter.
+##					Separar as coletas de ego e alter para não ficar uma dentro da outra...  
 ##
 ## 
 ######################################################################################################################################################################
@@ -125,21 +126,19 @@ def save_alter(ego, alter):
 
 ######################################################################################################################################################################
 #
-# Obtém as amigos do ego
+# Obtem as amigos do ego
 #
 ######################################################################################################################################################################
 def save_ego(i,user):
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
-	
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	ego_friends_list = get_friends(user)
 	
 	j = 1
-
 	# Busca amigos de cada alter
 	for friend in ego_friends_list:
-		print("Ego "+str(i)+": "+str(user)+" - Coletando amigos do alter "+str(j)+"/"+str(len(ego_friends_list))+": "+str(friend))
+		print("Ego "+str(i)+": "+str(user)+" - Coletando amigos do alter ("+str(j)+"/"+str(len(ego_friends_list))+"): "+str(friend))
 		save_alter(user, friend)
 		j+=1
 
@@ -196,12 +195,12 @@ auths = oauth_keys['auths_ok']
 key = -1							####################################### Essas duas linhas atribuem as chaves para cada script
 key_init = 0					####################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		####################################### Usa todas as chaves (tamanho da lista de chaves)
-dir_data = "n1/bin/" #################### Diretório para armazenamento dos arquivos
+dir_data = "/home/amaury/n1/bin/" #################### Diretório para armazenamento dos arquivos
 dir_error = "n1/bin/error/" ############# Diretório para armazenamento dos arquivos de erro
 users_list_file = "/home/amaury/coleta/n1/egos/egos_list.txt" #### Arquivo contendo a lista dos usuários a serem buscados
-ego_limit = 10					####################################### Controla a quantidade de egos a serem pesquisados
+ego_limit = 100					####################################### Controla a quantidade de egos a serem pesquisados
 espera = 2						####################################### Tempo de espera antes de iniciar nova autenticação (segundos)
-formato = 'l30s'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
+formato = 'l50s'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_data = struct.Struct(formato) ############################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 dictionary = {}				####################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
@@ -224,8 +223,9 @@ except tweepy.error.TweepError as e:
 ###### Iniciando dicionário - tabela hash a partir dos usuários já coletados
 with open(dir_data+"users_verified.txt",'a+') as users_verified:	
 	for line in users_verified:
-		data = dir_data+str(line.split('\n'))+".dat"
+		line = long(line)
+		data = dir_data+str(line)+".dat"
 		dictionary[line] = data
 
 #Executa o método main
-if __name__ == "__main__": main()	
+if __name__ == "__main__": main()
