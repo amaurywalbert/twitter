@@ -14,7 +14,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1.0 - Coletar amigos do Twitter
 ##						
-##						1.0.1 - Usa tabela hasch para consultar usuários já coletados
+##						1.0.1 - Usa tabela hash para consultar usuários já coletados
 ##
 ##						STATUS - TESTE - Salvar arquivos binários com strings indicando arquivos com os amigos de cada alter.  
 ##
@@ -176,19 +176,16 @@ def main():
 		i = 1
 		for k in range(0,ego_limit):
 			user = users_list.readline()										#Leia id do usuário corrente
-			if (user == ''):														#Se id for igual a vazio é porque chegou ao final do arquivo.
-				eof = True		
+			dir = dictionary.get(long(user))								#Consulta na tabela se o usuário já foi verificado
+			if dir:
+				print ("Usuário "+str(user)+" já coletado! Continuando...")
+				print	
 			else:
-				dir = dictionary.get(long(user))								#Consulta na tabela se o usuário já foi verificado
-				if dir:
-					print ("Usuário "+str(user)+" já coletado! Continuando...")
-					print	
-				else:
-					print
-					print("######################################################################")			
-					save_ego(i, long(user))								#Inicia função de busca
-					i+=1
-					print("######################################################################")
+				print
+				print("######################################################################")			
+				save_ego(i, long(user))								#Inicia função de busca
+				i+=1
+				print("######################################################################")
 	print("Coleta finalizada!")
 	
 ######################################################################################################################################################################
@@ -197,7 +194,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_teste'] ################				
+################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
 oauth_keys = multi_oauth.keys()
 auths = oauth_keys['auths_ok']
 

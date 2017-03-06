@@ -12,9 +12,10 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1.0 - Coletar amigos do Twitter
+##		Status - Versão 3.1 - Coletar amigos do Twitter
 ##						
-##						1.0.1 - Usa tabela hash para consultar usuários já coletados
+##						3.1.1 - Usa tabela hash para consultar usuários já coletados
+##						3.1.2 - Redução no tamanho da struct para melhorar armazenamento							
 ##
 ##						STATUS - TESTE - Salvar arquivos binários com strings indicando arquivos com os amigos de cada alter.  
 ##
@@ -58,16 +59,7 @@ class DateTimeEncoder(json.JSONEncoder):
 #Gravando os dados
 def grava(f,user,friends_file):
 	f.write(user_data.pack(user,friends_file))
-	#imprime(f)
 
-def imprime(f):
-	f.seek(0,2)
-	tamanho = f.tell()
-	f.seek(0)
-	while f.tell() < tamanho:
-		buffer = f.read(user_data.size)
-		user, friends_file = user_data.unpack(buffer)
-		print user, friends_file
 
 ######################################################################################################################################################################
 #
@@ -81,6 +73,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		for page in tweepy.Cursor(api.friends_ids,id=user,wait_on_rate_limit_notify=True,count=5000).pages():
 			for friend in page:
 				friends_list.append(friend)
+
 	except tweepy.RateLimitError as t:											# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
 		print("Erro: ",str(t),". Aguardando "+str(espera)+" segundos.\n")
 		print
@@ -231,7 +224,6 @@ except tweepy.error.TweepError as e:
 ###### Iniciando dicionário - tabela hash a partir dos usuários já coletados
 with open(dir_data+"users_verified.txt",'a+') as users_verified:	
 	for line in users_verified:
-		line = long(line)
 		data = dir_data+str(line.split('\n'))+".dat"
 		dictionary[line] = data
 

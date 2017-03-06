@@ -12,9 +12,10 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1.0 - Coletar amigos do Twitter
+##		Status - Versão 3.1 - Coletar amigos do Twitter
 ##						
-##						1.0.1 - Usa tabela hash para consultar usuários já coletados
+##						3.1.1 - Usa tabela hash para consultar usuários já coletados
+##						3.1.2 - Redução no tamanho da struct para melhorar armazenamento							
 ##
 ##						STATUS - TESTE - Salvar arquivos binários com strings indicando arquivos com os amigos de cada alter.  
 ##
@@ -231,7 +232,6 @@ except tweepy.error.TweepError as e:
 ###### Iniciando dicionário - tabela hash a partir dos usuários já coletados
 with open(dir_data+"users_verified.txt",'a+') as users_verified:	
 	for line in users_verified:
-		line = long(line)
 		data = dir_data+str(line.split('\n'))+".dat"
 		dictionary[line] = data
 
