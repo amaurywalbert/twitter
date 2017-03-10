@@ -24,66 +24,66 @@ access_token_secret_test=[]
 #     Conta: msc20160012_app01 - user: msc2016002_app1 - e-mail: twitter01msc20160012@gmail.com - senha: padrão
 #
 # msc20160012_01
-consumer_key.append("ffap5ENG3yu0u7phgdhQzIvJx")
-consumer_secret.append("bFXgZjBUGMRoSfxbKLNZG8Y0IqjUPoc9O4vgKOtUCs0WSlkT6s")
-access_token.append("813458922967302144-f3aEkz6OsueSD6eCkaN1yYXVcYXPGuZ")
-access_token_secret.append("OG08x1kx6rgMHwwEcmQKeeEAot88UALSQAY96XlGnpRba")
+#consumer_key.append("ffap5ENG3yu0u7phgdhQzIvJx")
+#consumer_secret.append("bFXgZjBUGMRoSfxbKLNZG8Y0IqjUPoc9O4vgKOtUCs0WSlkT6s")
+#access_token.append("813458922967302144-f3aEkz6OsueSD6eCkaN1yYXVcYXPGuZ")
+#access_token_secret.append("OG08x1kx6rgMHwwEcmQKeeEAot88UALSQAY96XlGnpRba")
 #
 #
 # msc20160012_02
-consumer_key.append("L8LX4gmyLYpfaUDHPRTmAnO5E")
-consumer_secret.append("pCte0UiHaPIBbReSTTFm3pGV8mlS9L7b28azjIZ8vr7Sv320m4")
-access_token.append("813458922967302144-wgByKpL2mDieJRbLrMbKxDySesoSHSS")
-access_token_secret.append("i81wWiwi6MWNUgg8CHz5Z0S9zTUWSq3cSvmy44nBCKPE6")
+#consumer_key.append("L8LX4gmyLYpfaUDHPRTmAnO5E")
+#consumer_secret.append("pCte0UiHaPIBbReSTTFm3pGV8mlS9L7b28azjIZ8vr7Sv320m4")
+#access_token.append("813458922967302144-wgByKpL2mDieJRbLrMbKxDySesoSHSS")
+#access_token_secret.append("i81wWiwi6MWNUgg8CHz5Z0S9zTUWSq3cSvmy44nBCKPE6")
 #
 #
 # msc20160012_03
-consumer_key.append("io8o8D4rdUtPiJ2J5mhkkXFSb")
-consumer_secret.append("hauZhqzQvh8uI7p66fy5ztn6IINJP3PecaqkoTob1EGOV23LB4")
-access_token.append("813458922967302144-dk9pCS7wozrKR6kAUzqjayX3KkcB6Hv")
-access_token_secret.append("g6dZ0iDxLRb1gGTjnrBKMjhB8FB7nnOBpu9XMkCNGBSAb")
+#consumer_key.append("io8o8D4rdUtPiJ2J5mhkkXFSb")
+#consumer_secret.append("hauZhqzQvh8uI7p66fy5ztn6IINJP3PecaqkoTob1EGOV23LB4")
+#access_token.append("813458922967302144-dk9pCS7wozrKR6kAUzqjayX3KkcB6Hv")
+#access_token_secret.append("g6dZ0iDxLRb1gGTjnrBKMjhB8FB7nnOBpu9XMkCNGBSAb")
 #
 #
 # msc20160012_04
-consumer_key.append("cFEDQtQtsib0TVq0EtvbBddl0")
-consumer_secret.append("gCUAkk3VmplqhzTAtepo5kjFlVcr7LXz2vNsYLApMSh1ogF9O0")
-access_token.append("813458922967302144-3MK8AazCmrtN7IMRnPxxZC56ax5R4Rk")
-access_token_secret.append("L4Y8IdrHi44rRbcei5gFNoYbdU8C0TBADLFGFXZNu5IXB")
+#consumer_key.append("cFEDQtQtsib0TVq0EtvbBddl0")
+#consumer_secret.append("gCUAkk3VmplqhzTAtepo5kjFlVcr7LXz2vNsYLApMSh1ogF9O0")
+#access_token.append("813458922967302144-3MK8AazCmrtN7IMRnPxxZC56ax5R4Rk")
+#access_token_secret.append("L4Y8IdrHi44rRbcei5gFNoYbdU8C0TBADLFGFXZNu5IXB")
 #
 #
 # msc20160012_05
-consumer_key.append("low1J0YxOY1k2WRYOIt8z34T8")
-consumer_secret.append("asMb1Gtp4xnQrMDDq2r2PPfxQKJV5iCN5zlU2giXn20JNhiHt4")
-access_token.append("813458922967302144-FdwjetAGA5JRuGf8dKhTVpzlRFdsZYq")
-access_token_secret.append("wF8txP7Fnd6ZTKT35EllN8Ei67PxSDkeHunE7UPRBcjRi")
+#consumer_key.append("low1J0YxOY1k2WRYOIt8z34T8")
+#consumer_secret.append("asMb1Gtp4xnQrMDDq2r2PPfxQKJV5iCN5zlU2giXn20JNhiHt4")
+#access_token.append("813458922967302144-FdwjetAGA5JRuGf8dKhTVpzlRFdsZYq")
+#access_token_secret.append("wF8txP7Fnd6ZTKT35EllN8Ei67PxSDkeHunE7UPRBcjRi")
 #
 #
 # msc20160012_06
-consumer_key.append("Tc60Yaylx3IxLHlYJCyeHSP7C")
-consumer_secret.append("6WhSsg5uyZUx6HnNJqpsZqi44tkSKqWO5VQeDoC20cdKsk49za")
-access_token.append("813458922967302144-hPrwvRvzIp9WtN8CoKMLWO5t42GSJrd")
-access_token_secret.append("evzncdyFsUdRKbuyOd2W9peqw5AxQVlYg3k51goVzKbaZ")
+#consumer_key.append("Tc60Yaylx3IxLHlYJCyeHSP7C")
+#consumer_secret.append("6WhSsg5uyZUx6HnNJqpsZqi44tkSKqWO5VQeDoC20cdKsk49za")
+#access_token.append("813458922967302144-hPrwvRvzIp9WtN8CoKMLWO5t42GSJrd")
+#access_token_secret.append("evzncdyFsUdRKbuyOd2W9peqw5AxQVlYg3k51goVzKbaZ")
 #
 #
 # msc20160012_07
-consumer_key.append("5iUqKfKFhZ1hzhUI4BD9mMzbb")
-consumer_secret.append("XZhPHgSpyjJwkc33K9Co9myAQutq3ZAk4D9c9IwWiOsb4PoMqG")
-access_token.append("813458922967302144-zL8yhYTF5EpVZ1RkjoOnuuMd1dXOPyZ")
-access_token_secret.append("lussrypwzCzCbUGhmtOmSAAQdD3ZlQ0Y66wgH6OhivC2n")
+#consumer_key.append("5iUqKfKFhZ1hzhUI4BD9mMzbb")
+#consumer_secret.append("XZhPHgSpyjJwkc33K9Co9myAQutq3ZAk4D9c9IwWiOsb4PoMqG")
+#access_token.append("813458922967302144-zL8yhYTF5EpVZ1RkjoOnuuMd1dXOPyZ")
+#access_token_secret.append("lussrypwzCzCbUGhmtOmSAAQdD3ZlQ0Y66wgH6OhivC2n")
 #
 #
 # msc20160012_08
-consumer_key.append("az5P7VWwgZ8QjrKgJXRkgvx3G")
-consumer_secret.append("aFC4PirBD8sSCivUdAigin2NadWe72WSAzf54Sh9Ycn0mcj8Ty")
-access_token.append("813458922967302144-ZDFxI0vTspgEJJAF5LSjWXc4mDZDYKm")
-access_token_secret.append("HL3O2iMRyoPiz1kjlH20Bhl9j2npRY2XMrcarcHn5QTUR")
+#consumer_key.append("az5P7VWwgZ8QjrKgJXRkgvx3G")
+#consumer_secret.append("aFC4PirBD8sSCivUdAigin2NadWe72WSAzf54Sh9Ycn0mcj8Ty")
+#access_token.append("813458922967302144-ZDFxI0vTspgEJJAF5LSjWXc4mDZDYKm")
+#access_token_secret.append("HL3O2iMRyoPiz1kjlH20Bhl9j2npRY2XMrcarcHn5QTUR")
 #
 #
 # msc20160012_09
-consumer_key.append("NQu4j4sNFUm2YqDnzwXNDTkoA")
-consumer_secret.append("VmPEAUZJR5IWkhv0v2Y1P6x8tcoTGvWx6o86rvPdCkyhOSTiqi")
-access_token.append("813458922967302144-SS2idVYfpnsJJpxCp0Zg840ldm1Ocxp")
-access_token_secret.append("0TRFzGQYG3K4rSuPGVMpwpwbaAxBS78n55ZiBaiv0kMsX")
+#consumer_key.append("NQu4j4sNFUm2YqDnzwXNDTkoA")
+#consumer_secret.append("VmPEAUZJR5IWkhv0v2Y1P6x8tcoTGvWx6o86rvPdCkyhOSTiqi")
+#access_token.append("813458922967302144-SS2idVYfpnsJJpxCp0Zg840ldm1Ocxp")
+#access_token_secret.append("0TRFzGQYG3K4rSuPGVMpwpwbaAxBS78n55ZiBaiv0kMsX")
 #
 #
 # msc20160012_10
