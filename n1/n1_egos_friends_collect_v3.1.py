@@ -15,10 +15,11 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 3.1 - Coletar amigos do Twitter
 ##						
 ##						3.1.1 - Usa tabela hash para consultar usuários já coletados
-##						3.1.2 - Redução no tamanho da struct para melhorar armazenamento							
+##						3.1.2 - Redução no tamanho da struct para melhorar armazenamento - Uso apenas de um valor Long para armazenar o id do amigo dentro do aquivo
+##										Proposta visa eliminar problemas de reaproveitamento dos arquivos de usuários já coletados.
+##										 Não há necessidade de um ponteiro indicando o arquivo. Dá pra fazer isso pelo próprio algoritmo. 					
 ##
-##						STATUS - TESTE - Salvar arquivos binários com strings indicando arquivos com os amigos de cada alter.
-##					Separar as coletas de ego e alter para não ficar uma dentro da outra...  
+##						STATUS - TESTE - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
 ##
 ## 
 ######################################################################################################################################################################
@@ -59,7 +60,7 @@ class DateTimeEncoder(json.JSONEncoder):
 
 #Gravando os dados
 def grava(f,user,friends_file):
-	f.write(user_data.pack(user,friends_file))
+	f.write(user_struct.pack(user,friends_file))
 
 
 ######################################################################################################################################################################
@@ -95,64 +96,33 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	
 ######################################################################################################################################################################
 #
-# Grava os alters e busca seus amigos 
-#
-######################################################################################################################################################################
-def save_alter(ego, alter):
-	global dictionary							# Dicionário - Tabela Hash contendo os usuários já coletados	
-	dir = dictionary.get(long(alter))	# Verifica se o alter já foi coletado e armazena no arquivo do ego a localização do arquivo que contém os amigos do Alter.
-	if dir:										
-		with open(dir_data+str(ego)+".dat", "a+b") as f_ego:	
-			grava(f_ego,long(alter),dir)
-		print ("Usuário "+str(alter)+" já coletado! Continuando...")
-	
-	else:																			#Faz a coleta dos amigos do alter e armazena em um arquivo nomeado pelo ID do Alter	
-		boundarie = "boundarie"														#String indicando que não há mais lista de amigos a partir daqui (fronteira da rede de amizade)
-		alter_friends_file = dir_data+str(alter)+".dat"
-		alter_friends_list = get_friends(alter)								#Chama a função de coleta e Recebe a lista de amigos do alter
-		 		
-		with open(dir_data+str(alter)+".dat", "a+b") as f:					#Salva os amigos do alter no arquivo nomeado pelo ID do alter.
-			for friend in alter_friends_list:
-				grava(f,friend,boundarie)
-			
-		with open(dir_data+str(ego)+".dat", "a+b") as f_ego:				#Salva o alter e seu endereço no arquivo do ego
-			grava(f_ego,long(alter),alter_friends_file)
-		dictionary = {long(alter):alter_friends_file}						#Salva o alter numa entrada da tabela em memória
-	#Fim Else
-	
-	#Salva o alter no arquivo de usuários coletados 					
-	with open(dir_data+"users_verified.txt",'a+') as users_verified:	#Arquivo para armazenar a lista de usuários já coletados.
-		users_verified.writelines(str(alter)+"\n")								# Salva o usuário no arquivo de users já coletados.		
-
-######################################################################################################################################################################
-#
 # Obtem as amigos do ego
 #
 ######################################################################################################################################################################
 def save_ego(i,user):
+
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
+
 	#Chama a função e recebe como retorno a lista de amigos do usuário
-	ego_friends_list = get_friends(user)
+	friends_list = get_friends(user)
 	
 	j = 1
-	# Busca amigos de cada alter
-	for friend in ego_friends_list:
-		print("Ego "+str(i)+": "+str(user)+" - Coletando amigos do alter ("+str(j)+"/"+str(len(ego_friends_list))+"): "+str(friend))
-		save_alter(user, friend)
-		j+=1
+	for friend in friends_list:
+		friends_file = data_dir+str(friend)+".dat"
+		
+		with open(data_dir+str(user)+".dat", "a+b") as f_user:			#Salva o alter e seu endereço no arquivo do ego
+			grava(f_user,long(friend),friends_file)
+		dictionary = {long(alter):alter_friends_file}						#Salva o alter numa entrada da tabela em memória
+		
 
 	friends_file = dir_data+str(user)+".dat"			# Armazena no arquivo da lista de egos o ID do ego a localização do arquivo que contém a lista dos seus amigos (alters)			
-	with open(dir_data+"egos_file.dat", "a+b") as egos_file:
+	with open(data_dir_ego+"egos_file.dat", "a+b") as egos_file:
 		grava(egos_file,user,friends_file)
-		
+	
 	dictionary = {long(user):friends_file}										#Insere o usuário coletado na tabela em memória
- 			
-	with open(dir_data+"users_verified.txt",'a+') as users_verified:	#Salva o ego na lista de usuários já coletados e na tabela em memória
-		users_verified.writelines(str(user)+"\n")	
-
 	print ("Amigos do ego "+str(user)+" coletados com sucesso.")
-	print	
+	print
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -173,7 +143,6 @@ def main():
 				print ("Usuário "+str(user)+" já coletado! Continuando...")
 				print	
 			else:
-				print
 				print("######################################################################")			
 				save_ego(i, long(user))								#Inicia função de busca
 				i+=1
@@ -195,21 +164,22 @@ auths = oauth_keys['auths_ok']
 key = -1							####################################### Essas duas linhas atribuem as chaves para cada script
 key_init = 0					####################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		####################################### Usa todas as chaves (tamanho da lista de chaves)
-dir_data = "/home/amaury/n1/bin/" #################### Diretório para armazenamento dos arquivos
-dir_error = "n1/bin/error/" ############# Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/n1/bin/" ################################ Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/n1/error/" ############################### Diretório para armazenamento dos arquivos de erro
 users_list_file = "/home/amaury/coleta/n1/egos/egos_list.txt" #### Arquivo contendo a lista dos usuários a serem buscados
-ego_limit = 100					####################################### Controla a quantidade de egos a serem pesquisados
+ego_limit = 10						#################################### Controla a quantidade de egos a serem pesquisados
 espera = 2						####################################### Tempo de espera antes de iniciar nova autenticação (segundos)
-formato = 'l50s'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
-user_data = struct.Struct(formato) ############################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
+user_struct = struct.Struct(formato) ############################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 dictionary = {}				####################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
 #Cria os diretórios para armazenamento dos arquivos
-if not os.path.exists(dir_data):
-	os.makedirs(dir_data)
-if not os.path.exists(dir_error):
-	os.makedirs(dir_error)
+if not os.path.exists(data_dir):
+	os.makedirs(data_dir)
+if not os.path.exists(error_dir):
+	os.makedirs(error_dir)
+
 #Autenticação
 try:
 	api = autentication(auths)
@@ -220,12 +190,14 @@ except tweepy.error.TweepError as e:
 	print("[ERRRO] Não foi possível realizar autenticação. Erro: ",str(e),".\n")
 	
 	
-###### Iniciando dicionário - tabela hash a partir dos usuários já coletados
-with open(dir_data+"users_verified.txt",'a+') as users_verified:	
-	for line in users_verified:
-		line = long(line)
-		data = dir_data+str(line)+".dat"
-		dictionary[line] = data
+###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
+
+for file in os.listdir(data_dir):
+	data = data_dir+file
+	user_id = file.split(".dat")
+	user_id = long(user_id[0])
+	
+	dictionary[user_id] = data
 
 #Executa o método main
 if __name__ == "__main__": main()
