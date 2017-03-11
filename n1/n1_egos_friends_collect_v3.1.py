@@ -91,20 +91,20 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		api = autentication(auths)
 		get_friends(user)
 
-	except tweepy.error.TweepError as e:
-		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-			if e.message:
-				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
-				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
-				print error
-			else:
-				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
-				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
-				print error
-		key = random.randint(key_init,key_limit)
-		api = autentication(auths)
-		get_friends(user)
+#	except tweepy.error.TweepError as e:
+#		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+#		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+#			if e.message:
+#				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
+#				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
+#				print error
+#			else:
+#				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
+#				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
+#				print error
+#		key = random.randint(key_init,key_limit)
+#		api = autentication(auths)
+#		get_friends(user)
 
 	
 ######################################################################################################################################################################
@@ -188,8 +188,8 @@ auths = oauth_keys['auths_ok']
 key_init = 0					############################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		############################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ################################# Inicia o script a partir de uma chave aleatória do conjunto de chaves
-data_dir = "/home/amaury/coleta/n1/egos_friends/bin/" ########################### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n1/egos_friends/error/" ######################## Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/n1/egos_friends/bin/" #################### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n1/egos_friends/error/" ################# Diretório para armazenamento dos arquivos de erro
 users_list_file = "/home/amaury/coleta/n1/egos_friends/egos_list.txt" #### Arquivo contendo a lista dos usuários a serem buscados
 ego_limit = 10000						######################################### Controla a quantidade de egos a serem pesquisados
 espera = 2						############################################### Tempo de espera antes de iniciar nova autenticação (segundos)
