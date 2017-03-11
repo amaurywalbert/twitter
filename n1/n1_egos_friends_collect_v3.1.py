@@ -187,17 +187,17 @@ auths = oauth_keys['auths_ok']
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-key_init = 0					####################################### Essas duas linhas atribuem as chaves para cada script
-key_limit = len(auths)		####################################### Usa todas as chaves (tamanho da lista de chaves)
-key = random.randint(key_init,key_limit) ######################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-data_dir = "/home/amaury/n1/bin/" ################################ Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/n1/error/" ############################# Diretório para armazenamento dos arquivos de erro
-users_list_file = "/home/amaury/coleta/n1/egos/egos_list.txt" #### Arquivo contendo a lista dos usuários a serem buscados
-ego_limit = 10000						################################# Controla a quantidade de egos a serem pesquisados
-espera = 2						####################################### Tempo de espera antes de iniciar nova autenticação (segundos)
-formato = 'l'				########################################## Long para o código ('l') e depois o array de chars de X posições:	
-user_struct = struct.Struct(formato) ############################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-dictionary = {}				####################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
+key_init = 0					############################################### Essas duas linhas atribuem as chaves para cada script
+key_limit = len(auths)		############################################### Usa todas as chaves (tamanho da lista de chaves)
+key = random.randint(key_init,key_limit) ################################# Inicia o script a partir de uma chave aleatória do conjunto de chaves
+data_dir = "/home/amaury/n1/egos_friends/bin/" ########################### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/n1/egos_friends/error/" ######################## Diretório para armazenamento dos arquivos de erro
+users_list_file = "/home/amaury/coleta/n1/egos_friends/egos_list.txt" #### Arquivo contendo a lista dos usuários a serem buscados
+ego_limit = 10000						######################################### Controla a quantidade de egos a serem pesquisados
+espera = 2						############################################### Tempo de espera antes de iniciar nova autenticação (segundos)
+formato = 'l'				################################################## Long para o código ('l') e depois o array de chars de X posições:	
+user_struct = struct.Struct(formato) ##################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+dictionary = {}				############################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
 #Cria os diretórios para armazenamento dos arquivos
