@@ -94,7 +94,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
 				if e.message[0]['code']:
-					if e.message[0]['code'] == 32 | e.message[0]['code'] == 215:
+					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
 						print("Erro: ",str(e))
 						print
 						key = random.randint(key_init,key_limit)
