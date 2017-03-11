@@ -27,6 +27,37 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 #
+# Verifica status da autenticação - Limites disponíveis
+#
+######################################################################################################################################################################
+def get_api_limits():
+
+	# Pode ser que o programa ja inicie com o limite de requisicoes estourado.
+	rate_limit_available = False
+	
+	while not rate_limit_available:
+		try:
+			rate_limit = api.rate_limit_status()
+			rate_limit_available = True
+		except tweepy.error.RateLimitError as e:
+			print("Limite para verificar os limites da API atingido. Vamos aguardar 60 seg...")
+			sys.stdout.flush()
+			time.sleep(60)
+		except tweepy.error.TweepError as e:
+			print(e," Erro de conexão. Aguardando 60 seg...")
+			sys.stdout.flush()
+			time.sleep(60)
+
+	friends_remaining = int(rate_limit['resources']['friends']['/friends/ids']['remaining'])
+	rate_limit_remaining = int(rate_limit['resources']['application']['/application/rate_limit_status']['remaining'])
+	
+	print("lists_ownerships_remaining = ",lists_ownerships_remaining)
+	print("rate_limit_remaining = ",rate_limit_remaining)
+	return {'friends_remaining': friends_remaining,'rate_limit_remaining': rate_limit_remaining}
+
+
+######################################################################################################################################################################
+#
 # Realiza autenticação da aplicação.
 #
 ######################################################################################################################################################################
@@ -86,6 +117,10 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		return (friends_list)
 
 	except tweepy.RateLimitError as t:											# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e chama a função novamente.
+		print
+		rate_limit = api.rate_limit_status()
+		print rate_limit
+		print
 		print("Erro: ",str(t))
 		print		
 		api = autentication(auths)
