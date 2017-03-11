@@ -95,18 +95,16 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
-
-				key = random.randint(key_init,key_limit)
-				api = autentication(auths)
-				get_friends(user)
 			else:
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
+		key = random.randint(key_init,key_limit)
+		api = autentication(auths)
+		get_friends(user)
 
 	
 ######################################################################################################################################################################
