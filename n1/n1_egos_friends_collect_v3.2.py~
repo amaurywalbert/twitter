@@ -17,7 +17,8 @@ sys.setdefaultencoding('utf-8')
 ##						3.1.2 - Redução no tamanho da struct para melhorar armazenamento - Uso apenas de um valor Long para armazenar o id do amigo dentro do aquivo
 ##										Proposta visa eliminar problemas de reaproveitamento dos arquivos de usuários já coletados.
 ##										 Não há necessidade de um ponteiro indicando o arquivo. Dá pra fazer isso pelo próprio algoritmo.
-##								
+##						3.1.3 - Evita o retorno de lista de amigos vazias
+##						3.1.4 - Seleciona chave randomicamente para nova autenticação em caso de erro do Tweepy						
 ##
 ##						STATUS - TESTE - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
 ##
@@ -94,17 +95,19 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-				key = random.randint(key_init,key_limit)
-				api = autentication(auths)
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
-				get_friends(user)
+				
+				if e.message[0].has_key('code'):
+					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+						key = random.randint(key_init,key_limit)
+						api = autentication(auths)
+						get_friends(user)
 			else:
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
-
 	
 ######################################################################################################################################################################
 #
@@ -118,26 +121,26 @@ def save_user(i,user):
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	
-#	try:
-	friends_list = get_friends(user)
-	if friends_list:
-		with open(data_dir+str(user)+".dat", "a+b") as f:	
-			for friend in friends_list:
-				f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
-		dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
-		print ("Amigos do ego nº "+str(i)+": "+str(user)+" coletados com sucesso.")
+	try:
+		friends_list = get_friends(user)
+		if friends_list:
+			with open(data_dir+str(user)+".dat", "a+b") as f:	
+				for friend in friends_list:
+					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
+			dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
+			print ("Amigos do ego nº "+str(i)+": "+str(user)+" coletados com sucesso.")
 	
-#	except Exception as e:	
-#		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-#		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-#			if e.message:		
-#				error = {'user':user,'reason': e.message,'date':agora}
-#			else:
-#				error = {'user':user,'reason': str(e),'date':agora}
-#			outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
-#			print error
-#		if os.path.exists(data_dir+str(user)+".dat"):
-#			os.remove(data_dir+str(user)+".dat")
+	except Exception as e:	
+		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+			if e.message:		
+				error = {'user':user,'reason': e.message,'date':agora}
+			else:
+				error = {'user':user,'reason': str(e),'date':agora}
+			outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
+			print error
+		if os.path.exists(data_dir+str(user)+".dat"):
+			os.remove(data_dir+str(user)+".dat")
 
 
 ######################################################################################################################################################################
@@ -150,8 +153,8 @@ def save_user(i,user):
 ######################################################################################################################################################################
 
 def main():
+	global i
 	with open(users_list_file,'r') as users_list:						#Percorre o arquivo de usuários já verificados
-		i = 1
 		for k in range(0,ego_limit):
 			user = users_list.readline()										#Leia id do usuário corrente
 			user = long(user)
@@ -187,8 +190,8 @@ auths = oauth_keys['auths_ok']
 key_init = 0					############################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		############################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ################################# Inicia o script a partir de uma chave aleatória do conjunto de chaves
-data_dir = "/home/amaury/n1/egos_friends/bin/" ########################### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/n1/egos_friends/error/" ######################## Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/n1/egos_friends/bin/" #################### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n1/egos_friends/error/" ################# Diretório para armazenamento dos arquivos de erro
 users_list_file = "/home/amaury/coleta/n1/egos_friends/egos_list.txt" #### Arquivo contendo a lista dos usuários a serem buscados
 ego_limit = 10000						######################################### Controla a quantidade de egos a serem pesquisados
 espera = 2						############################################### Tempo de espera antes de iniciar nova autenticação (segundos)
@@ -213,12 +216,15 @@ except tweepy.error.TweepError as e:
 	print("[ERRRO] Não foi possível realizar autenticação. Erro: ",str(e),".\n")
 	
 	
+	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
+i = 0
 
 for file in os.listdir(data_dir):
 	user_id = file.split(".dat")
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
+	i+=1
 
 #Executa o método main
 if __name__ == "__main__": main()
