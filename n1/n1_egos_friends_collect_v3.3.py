@@ -137,7 +137,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
-		if error['reason'] == 'Not authorized.':
+		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34:
 			dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
 	
 ######################################################################################################################################################################
@@ -158,8 +158,8 @@ def save_user(i,user):
 			with open(data_dir+str(user)+".dat", "a+b") as f:	
 				for friend in friends_list:
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
-			dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
-			print ("Amigos do ego nº "+str(i)+": "+str(user)+" coletados com sucesso.")
+				dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
+				print ("Amigos do ego nº "+str(i)+": "+str(user)+" coletados com sucesso.")
 	
 	except Exception as e:	
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
