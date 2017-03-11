@@ -110,7 +110,8 @@ def get_api_limits(user):
 ######################################################################################################################################################################
 def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global api
-
+	global dictionary
+	
 	limits = get_api_limits(user)
 	while(limits['friends_remaining'] == 0 or limits['rate_limit_remaining'] == 0):
 		print("Limite de acesso à API excedido.")
@@ -126,6 +127,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+		error = {}
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
@@ -135,6 +137,8 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
+		if error['reason'] == 'Not authorized.':
+			dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
 	
 ######################################################################################################################################################################
 #
