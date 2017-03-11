@@ -123,12 +123,13 @@ def save_user(i,user):
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	
 #	try:
-	friends_list = get_friends(user)	
-	with open(data_dir+str(user)+".dat", "a+b") as f:	
-		for friend in friends_list:
-			f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
-	dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
-	print ("Amigos do ego nº "+str(i)+": "+str(user)+" coletados com sucesso.")
+	friends_list = get_friends(user)
+	if friends_list:
+		with open(data_dir+str(user)+".dat", "a+b") as f:	
+			for friend in friends_list:
+				f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
+		dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
+		print ("Amigos do ego nº "+str(i)+": "+str(user)+" coletados com sucesso.")
 	
 #	except Exception as e:	
 #		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto

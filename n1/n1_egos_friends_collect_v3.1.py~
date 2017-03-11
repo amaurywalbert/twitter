@@ -122,25 +122,26 @@ def save_user(i,user):
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	
-	try:
-		friends_list = get_friends(user)	
+#	try:
+	friends_list = get_friends(user)
+	if friends_list:
 		with open(data_dir+str(user)+".dat", "a+b") as f:	
 			for friend in friends_list:
 				f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 		dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
 		print ("Amigos do ego nº "+str(i)+": "+str(user)+" coletados com sucesso.")
 	
-	except Exception as e:	
-		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-			if e.message:		
-				error = {'user':user,'reason': e.message,'date':agora}
-			else:
-				error = {'user':user,'reason': str(e),'date':agora}
-			outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
-			print error
-		if os.path.exists(data_dir+str(user)+".dat"):
-			os.remove(data_dir+str(user)+".dat")
+#	except Exception as e:	
+#		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')			# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+#		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+#			if e.message:		
+#				error = {'user':user,'reason': e.message,'date':agora}
+#			else:
+#				error = {'user':user,'reason': str(e),'date':agora}
+#			outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
+#			print error
+#		if os.path.exists(data_dir+str(user)+".dat"):
+#			os.remove(data_dir+str(user)+".dat")
 
 
 ######################################################################################################################################################################
