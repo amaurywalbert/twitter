@@ -155,7 +155,7 @@ def save_user(i,user):
 	try:
 		friends_list = get_friends(user)
 		if friends_list:
-			with open(data_dir+str(user)+".dat", "a+b") as f:	
+			with open(data_dir+str(user)+".dat", "w+b") as f:	
 				for friend in friends_list:
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 				dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
