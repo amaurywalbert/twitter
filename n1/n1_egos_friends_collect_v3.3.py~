@@ -96,7 +96,7 @@ def get_api_limits(user):
 			api = autentication(auths)
 
 		except tweepy.error.TweepError as e:
-			print e
+			print("Limite para verificar os limites da API atingido. Erro: "+str(e)+" . Autenticando novamente...")
 			if e.message:			
 				if e.message[0].has_key('code'):
 					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
@@ -109,8 +109,8 @@ def get_api_limits(user):
 #
 ######################################################################################################################################################################
 def get_friends(user):												#Coleta dos amigos de um usuário específico
-	global api
 	global dictionary
+	global api
 	
 	limits = get_api_limits(user)
 	while(limits['friends_remaining'] == 0 or limits['rate_limit_remaining'] == 0):
@@ -138,15 +138,15 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34:
-			dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
+			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 	
 ######################################################################################################################################################################
 #
 # Obtem as amigos do ego
 #
 ######################################################################################################################################################################
-def save_user(i,user):
-
+def save_user(k,user): # k = numero de usuários verificados - u = usuario 
+	global i	# numero de usuários com arquivos já coletados 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
 
@@ -155,11 +155,12 @@ def save_user(i,user):
 	try:
 		friends_list = get_friends(user)
 		if friends_list:
-			with open(data_dir+str(user)+".dat", "a+b") as f:	
+			with open(data_dir+str(user)+".dat", "w+b") as f:	
 				for friend in friends_list:
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
-				dictionary = {user:user}											# Insere o usuário coletado na tabela em memória
-				print ("Amigos do ego nº "+str(i)+": "+str(user)+" coletados com sucesso.")
+				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+				i +=1
+				print ("Amigos do ego nº "+str(k)+": "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
 	except Exception as e:	
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -189,15 +190,16 @@ def main():
 			user = users_list.readline()										#Leia id do usuário corrente
 			user = long(user)
 			if dictionary.has_key(user):
-				print ("Usuário "+str(user)+" já coletado! Continuando...")
+				print ("Usuário nº "+str(k)+": "+str(user)+" já coletado! Continuando...")
 			else:
 				save_user(k, user)							#Inicia função de busca
 				
-#	for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
-#		user_id = file.split(".dat")
-#		user_id = long(user_id[0])
-#		friends_file = read_arq_bin(data_dir+file)
-#		print ("User: "+str(user_id)+" - Friends: "+str(friends_file))
+	with open("/home/amaury/coleta/n1/egos_friends/users_collected.txt", 'w') as f:	
+		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
+			user_id = file.split(".dat")
+			user_id = long(user_id[0])
+			friends_file = read_arq_bin(data_dir+file)
+			f.writelines("User: "+str(user_id)+" - Friends: "+str(len(friends_file))+"\n")
 	
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -223,7 +225,7 @@ key = random.randint(key_init,key_limit) ################################# Inici
 data_dir = "/home/amaury/coleta/n1/egos_friends/bin/" #################### Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n1/egos_friends/error/" ################# Diretório para armazenamento dos arquivos de erro
 users_list_file = "/home/amaury/coleta/n1/egos_friends/egos_list.txt" #### Arquivo contendo a lista dos usuários a serem buscados
-ego_limit = 10000						######################################### Controla a quantidade de egos a serem pesquisados
+ego_limit = 1000						######################################### Controla a quantidade de egos a serem pesquisados
 espera = 2						############################################### Tempo de espera antes de iniciar nova autenticação (segundos)
 formato = 'l'				################################################## Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ##################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
@@ -248,11 +250,12 @@ except tweepy.error.TweepError as e:
 	
 	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
-
+i = 0
 for file in os.listdir(data_dir):
 	user_id = file.split(".dat")
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
+	i+=1
 	
 #Executa o método main
 if __name__ == "__main__": main()
