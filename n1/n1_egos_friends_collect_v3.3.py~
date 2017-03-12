@@ -184,7 +184,6 @@ def save_user(i,user):
 ######################################################################################################################################################################
 
 def main():
-	global i
 	with open(users_list_file,'r') as users_list:						#Percorre o arquivo de usuários já verificados
 		for k in range(0,ego_limit):
 			user = users_list.readline()										#Leia id do usuário corrente
@@ -192,8 +191,8 @@ def main():
 			if dictionary.has_key(user):
 				print ("Usuário "+str(user)+" já coletado! Continuando...")
 			else:
-				save_user(i, user)							#Inicia função de busca
-			i+=1
+				save_user(k, user)							#Inicia função de busca
+				
 #	for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
 #		user_id = file.split(".dat")
 #		user_id = long(user_id[0])
@@ -249,7 +248,6 @@ except tweepy.error.TweepError as e:
 	
 	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
-i = 0
 
 for file in os.listdir(data_dir):
 	user_id = file.split(".dat")
