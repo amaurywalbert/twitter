@@ -193,7 +193,7 @@ def main():
 				print ("Usuário "+str(user)+" já coletado! Continuando...")
 			else:
 				save_user(i, user)							#Inicia função de busca
-				i+=1
+			i+=1
 #	for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
 #		user_id = file.split(".dat")
 #		user_id = long(user_id[0])
@@ -255,7 +255,6 @@ for file in os.listdir(data_dir):
 	user_id = file.split(".dat")
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
-	i+=1
-
+	
 #Executa o método main
 if __name__ == "__main__": main()
