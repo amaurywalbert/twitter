@@ -194,7 +194,7 @@ def main():
 			if dictionary.has_key(friend):
 				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(friend)+" já coletado! Continuando...")
 			else:
-				save_user(j,k,friend)							#Inicia função de busca
+				save_user(j,k,l,friend)							#Inicia função de busca
 				
 	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:	
 		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
