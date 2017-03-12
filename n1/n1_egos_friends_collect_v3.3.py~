@@ -87,7 +87,7 @@ def get_api_limits(user):
 			friends_remaining = int(rate_limit['resources']['friends']['/friends/ids']['remaining'])
 			rate_limit_remaining = int(rate_limit['resources']['application']['/application/rate_limit_status']['remaining'])
 	
-			print("friends_remaining = " +str(friends_remaining) + " - rate_limit_remaining = " + str(rate_limit_remaining))
+			#print("friends_remaining = " +str(friends_remaining) + " - rate_limit_remaining = " + str(rate_limit_remaining))
 			return {'friends_remaining': friends_remaining,'rate_limit_remaining': rate_limit_remaining}
 		
 		except tweepy.error.RateLimitError as e:
