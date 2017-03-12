@@ -11,14 +11,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 3.1 - Coletar amigos do Twitter
-##						
-##						3.1.1 - Usa tabela hash para consultar usuários já coletados
-##						3.1.2 - Redução no tamanho da struct para melhorar armazenamento - Uso apenas de um valor Long para armazenar o id do amigo dentro do aquivo
-##										Proposta visa eliminar problemas de reaproveitamento dos arquivos de usuários já coletados.
-##										 Não há necessidade de um ponteiro indicando o arquivo. Dá pra fazer isso pelo próprio algoritmo.
-##						3.1.3 - Evita o retorno de lista de amigos vazias
-##						3.1.4 - Seleciona chave randomicamente para nova autenticação em caso de erro do Tweepy						
+##		Status - Versão 1.0 - # Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+##												
 ##
 ##						STATUS - TESTE - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
 ##
@@ -160,7 +154,7 @@ def save_user(k,user): # k = numero de usuários verificados - u = usuario
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				i +=1
-				print ("Amigos do ego nº "+str(k)+": "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
+				print ("Amigos do alter nº "+str(k)+": "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
 	except Exception as e:	
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -185,25 +179,25 @@ def save_user(k,user): # k = numero de usuários verificados - u = usuario
 ######################################################################################################################################################################
 
 def main():
-	global i
 	k = 0
-	with open(users_list_file,'r') as users_list:						#Percorre o arquivo de usuários já verificados
-		while i < ego_limit:
-			k+=1
-			user = users_list.readline()										#Leia id do usuário corrente
-			user = long(user)
-			if dictionary.has_key(user):
-				print ("Usuário nº "+str(k)+": "+str(user)+" já coletado! Continuando...")
+	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+		k+=1
+		alter = file.split(".dat")
+		alter = long(alter[0])
+		friends_list = read_arq_bin(egos_friends_dir+file)
+		for friend in friends_list:
+			if dictionary.has_key(friend):
+				print ("Alter nº "+str(k)+": "+str(friend)+" já coletado! Continuando...")
 			else:
-				save_user(k, user)							#Inicia função de busca
+				save_user(k, friend)							#Inicia função de busca
 				
-	with open("/home/amaury/coleta/n1/egos_friends/users_collected.json", 'w') as f:	
+	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:	
 		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
 			user_id = file.split(".dat")
 			user_id = long(user_id[0])
 			friends_file = read_arq_bin(data_dir+file)
 			qtde_friends = len(friends_file)
-			friendship = {'ego':user_id,'friends': qtde_friends}
+			friendship = {'alter':user_id,'friends': qtde_friends}
 			f.write(json.dumps(friendship, separators=(',', ':'))+"\n")
 	
 	print("######################################################################")
@@ -223,16 +217,16 @@ auths = oauth_keys['auths_ok']
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-key_init = 0					################################################## Essas duas linhas atribuem as chaves para cada script
-key_limit = len(auths)		################################################## Usa todas as chaves (tamanho da lista de chaves)
-key = random.randint(key_init,key_limit) #################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-data_dir = "/home/amaury/coleta/n1/egos_friends/bin/" ####################### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n1/egos_friends/error/" #################### Diretório para armazenamento dos arquivos de erro
-users_list_file = "/home/amaury/coleta/n1/egos_friends/egos_list.txt" ####### Arquivo contendo a lista dos usuários a serem buscados
-ego_limit = 10000						############################################ Controla a quantidade de egos a serem pesquisados
-formato = 'l'				##################################################### Long para o código ('l') e depois o array de chars de X posições:	
-user_struct = struct.Struct(formato) ######################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-dictionary = {}				################################################## Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
+
+key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
+key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
+key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
+egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/bin/"# Arquivo contendo a lista dos usuários já coletados
+data_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/bin/" ############## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/error/" ########### Diretório para armazenamento dos arquivos de erro
+formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
+user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
 #Cria os diretórios para armazenamento dos arquivos
