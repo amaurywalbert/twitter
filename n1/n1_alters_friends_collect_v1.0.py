@@ -69,7 +69,7 @@ def read_arq_bin(file):
 # Verifica status da autenticação - Limites disponíveis
 #
 ######################################################################################################################################################################
-def get_api_limits(user):
+def get_api_limits():
 	global api
 	global key
 	global auths
@@ -111,12 +111,12 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global api
 	global auths
 	
-	limits = get_api_limits(user)
+	limits = get_api_limits()
 	while(limits['friends_remaining'] == 0 or limits['rate_limit_remaining'] == 0):
 		print("Limite de acesso à API excedido.")
 		auths = oauth_keys['auths_ok']
 		api = autentication(auths)
-		limits = get_api_limits(user)
+		limits = get_api_limits()
 		
 	try:
 		friends_list = []
@@ -131,7 +131,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
-				if error['reason'][0]['code'] == 88:
+				if error['reason'][0]['code'] == 88:														# Se o erro for limite excedido, chama a função de coleta novamente.
 					get_friends(user)
 				else:
 					outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
