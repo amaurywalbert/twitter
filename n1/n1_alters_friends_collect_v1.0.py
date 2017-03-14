@@ -224,16 +224,6 @@ def main():
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
 oauth_keys = multi_oauth.keys()
 auths = oauth_keys['auths_ok']
-
-#Autenticação
-try:
-	api = autentication(auths)
-	print
-	print("######################################################################")
-	print
-except tweepy.error.TweepError as e:
-	print("[ERRRO] Não foi possível realizar autenticação. Erro: ",str(e),".\n")
-	
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
@@ -255,6 +245,15 @@ if not os.path.exists(data_dir):
 if not os.path.exists(error_dir):
 	os.makedirs(error_dir)
 
+#Autenticação
+try:
+	api = autentication(auths)
+	print
+	print("######################################################################")
+	print
+except tweepy.error.TweepError as e:
+	print("[ERRRO] Não foi possível realizar autenticação. Erro: ",str(e),".\n")
+	
 	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
 i = 0
