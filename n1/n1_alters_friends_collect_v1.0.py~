@@ -112,7 +112,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global auths
 	
 	limits = get_api_limits()
-	while(limits['friends_remaining'] == 0 or limits['rate_limit_remaining'] == 0):
+	while(limits['friends_remaining'] <= 1 or limits['rate_limit_remaining'] <= 1):
 		print("Limite de acesso à API excedido.")
 		auths = oauth_keys['auths_ok']
 		api = autentication(auths)
@@ -131,11 +131,8 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
-				if error['reason'][0]['code'] == 88:														# Se o erro for limite excedido, chama a função de coleta novamente.
-					get_friends(user)
-				else:
-					outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
-					print error
+				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
+				print error
 			else:
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
