@@ -65,7 +65,41 @@ def read_arq_bin(file):
 			friend = user_struct.unpack(buffer)
 			friends_file.append(friend[0])
 	return friends_file
+######################################################################################################################################################################
+#
+# Verifica status da autenticação - Limites disponíveis
+#
+######################################################################################################################################################################
+def get_api_limits():
+	global api
+	global key
+	# Pode ser que o programa ja inicie com o limite de requisicoes estourado.
+	rate_limit_available = False
+	
+	while not rate_limit_available:
+		try:
+			rate_limit = api.rate_limit_status()
+			rate_limit_available = True
+			friends_remaining = int(rate_limit['resources']['friends']['/friends/ids']['remaining'])
+			rate_limit_remaining = int(rate_limit['resources']['application']['/application/rate_limit_status']['remaining'])
+	
+			print("friends_remaining = " +str(friends_remaining) + " - rate_limit_remaining = " + str(rate_limit_remaining))
+			return {'friends_remaining': friends_remaining,'rate_limit_remaining': rate_limit_remaining}
+		
+		except tweepy.error.RateLimitError as e:
+			print("Limite para verificar os limites da API atingido. Autenticando novamente... "+str(e))
+			key = random.randint(key_init,key_limit)
+			api = autentication(auths)
 
+		except tweepy.error.TweepError as e:
+			print("Erro oa verificar os limites da API. Erro: "+str(e)+" . Autenticando novamente...")
+			if e.message:			
+				if e.message[0]:
+					if e.message[0]['code']:
+						if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+							key = random.randint(key_init,key_limit)
+			api = autentication(auths)
+	
 ######################################################################################################################################################################
 #
 # Tweepy - Realiza a busca e devolve a lista de amigos de um usuário específico 
@@ -76,6 +110,12 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global dictionary
 	global api
 
+	limits = get_api_limits()
+
+	while(limits['friends_remaining'] = 0 or limits['rate_limit_remaining'] = 0):
+		print("Limite de acesso à API excedido.")
+		limits = get_api_limits()
+		
 	try:
 		friends_list = []
 		for page in tweepy.Cursor(api.friends_ids,id=user,wait_on_rate_limit_notify=True,count=5000).pages():
@@ -83,20 +123,11 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				friends_list.append(friend)
 		return (friends_list)
 
-	except tweepy.RateLimitError as e:		# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e ignora o usuário...
-		print("Limite para verificar os limites da API atingido. Erro: "+str(e)+" Chave: "+str(key)+". Autenticando novamente...")
-		api = autentication(auths)
-
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		error = {}
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-				if e.message[0]:
-					if e.message[0]['code'] :
-						if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-							key = random.randint(key_init,key_limit)
-							api = autentication(auths)
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
