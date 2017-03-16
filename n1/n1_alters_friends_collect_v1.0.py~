@@ -88,12 +88,14 @@ def get_api_limits():
 		
 		except tweepy.error.RateLimitError as e:
 			print("Limite para verificar os limites da API atingido. Autenticando novamente...")
+			time.sleep(espera)
 			key = random.randint(key_init,key_limit)
 			auths = oauth_keys['auths_ok']
 			api = autentication(auths)
 
 		except tweepy.error.TweepError as e:
 			print("Limite para verificar os limites da API atingido. Erro: "+str(e)+" . Autenticando novamente...")
+			time.sleep(espera)
 			if e.message:			
 				if e.message[0].has_key('code'):
 					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
@@ -114,6 +116,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	limits = get_api_limits()
 	while(limits['friends_remaining'] <= 1 or limits['rate_limit_remaining'] <= 1):
 		print("Limite de acesso à API excedido.")
+		time.sleep(espera)
 		auths = oauth_keys['auths_ok']
 		api = autentication(auths)
 		limits = get_api_limits()
@@ -236,6 +239,7 @@ data_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/bin/" ############## 
 error_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/error/" ########### Diretório para armazenamento dos arquivos de erro
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+espera = 15
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
