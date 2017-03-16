@@ -28,6 +28,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 
 def autentication(auths):
+	time.sleep(espera)
 	global key
 	key += 1
 	if (key >= key_limit):
@@ -84,7 +85,6 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 
 	except tweepy.RateLimitError as e:		# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e ignora o usuário...
 		print("Limite para verificar os limites da API atingido. Erro: "+str(e)+"Chave: "+str(key)+". Autenticando novamente...")
-		time.sleep(espera)
 		api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
@@ -94,7 +94,6 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 			if e.message:
 				if e.message[0].has_key('code'):
 					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-						time.sleep(espera)
 						key = random.randint(key_init,key_limit)
 						api = autentication(auths)
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
