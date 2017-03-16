@@ -112,7 +112,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 
 	limits = get_api_limits()
 
-	while(limits['friends_remaining'] = 0 or limits['rate_limit_remaining'] = 0):
+	while(limits['friends_remaining'] == 0 or limits['rate_limit_remaining'] == 0):
 		print("Limite de acesso à API excedido.")
 		limits = get_api_limits()
 		
