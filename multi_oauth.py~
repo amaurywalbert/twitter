@@ -308,27 +308,6 @@ access_token.append("822173167502446592-2KTVF2AAWtRKWhgTKITvQn55y9AGPDF")
 access_token_secret.append("sgDoNqfv3WJix4M5YDg0YoWzrMXaaRChxlxVSA654E2el")
 #
 #
-#msc20160012_265
-consumer_key.append("")
-consumer_secret.append("")
-access_token.append("")
-access_token_secret.append("")
-#
-#
-#msc20160012_266
-consumer_key.append("")
-consumer_secret.append("")
-access_token.append("")
-access_token_secret.append("")
-#
-#
-#msc20160012_267
-consumer_key.append("")
-consumer_secret.append("")
-access_token.append("")
-access_token_secret.append("")
-#
-#
 ##############################################################################################################
 ##############################################################################################################
 #		Conta: msc2016001227 - user: msc2016001227 - e-mail: twitter27msc20160012@yahoo.com - senha: padrão

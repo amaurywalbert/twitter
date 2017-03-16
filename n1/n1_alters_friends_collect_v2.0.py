@@ -11,7 +11,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1.0 - # Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+##		Status - Versão 2.0 - # Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+##							2.1 - Autenticação volta a ser pelo Tweepy
 ##							
 ##						OBS - Copiar todos os arquivos dos egos para a pasta "data_dir", o script verifica se já existe o arquivo neste diretório evitando assim que haja recoleta de dados...						
 ##
@@ -63,43 +64,7 @@ def read_arq_bin(file):
 			friend = user_struct.unpack(buffer)
 			friends_file.append(friend[0])
 	return friends_file
-	
-######################################################################################################################################################################
-#
-# Verifica status da autenticação - Limites disponíveis
-#
-######################################################################################################################################################################
-def get_api_limits():
-	global api
-	global key
-	# Pode ser que o programa ja inicie com o limite de requisicoes estourado.
-	rate_limit_available = False
-	
-	while not rate_limit_available:
-		try:
-			rate_limit = api.rate_limit_status()
-			rate_limit_available = True
-			friends_remaining = int(rate_limit['resources']['friends']['/friends/ids']['remaining'])
-			rate_limit_remaining = int(rate_limit['resources']['application']['/application/rate_limit_status']['remaining'])
-	
-			#print("friends_remaining = " +str(friends_remaining) + " - rate_limit_remaining = " + str(rate_limit_remaining))
-			return {'friends_remaining': friends_remaining,'rate_limit_remaining': rate_limit_remaining}
-		
-		except tweepy.error.RateLimitError as e:
-			print("Limite para verificar os limites da API atingido. Autenticando novamente...")
-			time.sleep(espera)
-			key = random.randint(key_init,key_limit)
-			api = autentication(auths)
 
-		except tweepy.error.TweepError as e:
-			print("Limite para verificar os limites da API atingido. Erro: "+str(e)+" . Autenticando novamente...")
-			time.sleep(espera)
-			if e.message:			
-				if e.message[0].has_key('code'):
-					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-						key = random.randint(key_init,key_limit)
-						api = autentication(auths)
-	
 ######################################################################################################################################################################
 #
 # Tweepy - Realiza a busca e devolve a lista de amigos de um usuário específico 
@@ -108,20 +73,22 @@ def get_api_limits():
 def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global dictionary
 	global api
-	
-	limits = get_api_limits()
-	while(limits['friends_remaining'] <= 1 or limits['rate_limit_remaining'] <= 1):
-		print("Limite de acesso à API excedido.")
-		time.sleep(espera)
-		api = autentication(auths)
-		limits = get_api_limits()
-		
+
 	try:
 		friends_list = []
 		for page in tweepy.Cursor(api.friends_ids,id=user,wait_on_rate_limit_notify=True,count=5000).pages():
 			for friend in page:
 				friends_list.append(friend)
 		return (friends_list)
+
+	except tweepy.RateLimitError as e:		# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e ignora o usuário...
+		print("Limite para verificar os limites da API atingido. Erro: "+str(e)+" . Autenticando novamente...")
+		time.sleep(espera)
+		if e.message:			
+			if e.message[0].has_key('code'):
+				if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+					key = random.randint(key_init,key_limit)
+		api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -135,8 +102,11 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
-		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34:
+		
+		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34: # Usuários não autorizados ou não existentes
 			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+			with open(data_dir+str(user)+".dat", "w+b") as f:		#Cria arquivo vazio	
+				print
 	
 ######################################################################################################################################################################
 #
