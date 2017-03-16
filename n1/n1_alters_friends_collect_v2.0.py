@@ -84,7 +84,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		return (friends_list)
 
 	except tweepy.RateLimitError as e:		# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e ignora o usuário...
-		print("Limite para verificar os limites da API atingido. Erro: "+str(e)+"Chave: "+str(key)+". Autenticando novamente...")
+		print("Limite para verificar os limites da API atingido. Erro: "+str(e)+" Chave: "+str(key)+". Autenticando novamente...")
 		api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
@@ -92,10 +92,11 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		error = {}
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-				if e.message[0].has_key('code'):
-					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-						key = random.randint(key_init,key_limit)
-						api = autentication(auths)
+				if e.message[0]:
+					if e.message[0].has_key('code'):
+						if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+							key = random.randint(key_init,key_limit)
+							api = autentication(auths)
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
