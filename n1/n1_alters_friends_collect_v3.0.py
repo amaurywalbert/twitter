@@ -92,7 +92,7 @@ def get_api_limits():
 			api = autentication(auths)
 
 		except tweepy.error.TweepError as e:
-			print("Erro oa verificar os limites da API. Erro: "+str(e)+" . Autenticando novamente...")
+			print("Erro ao verificar os limites da API. Erro: "+str(e)+" . Autenticando novamente...")
 			if e.message:			
 				if e.message[0]:
 					if e.message[0]['code']:
@@ -114,6 +114,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 
 	while(limits['friends_remaining'] == 0 or limits['rate_limit_remaining'] == 0):
 		print("Limite de acesso à API excedido.")
+		api = autentication(auths)
 		limits = get_api_limits()
 		
 	try:
