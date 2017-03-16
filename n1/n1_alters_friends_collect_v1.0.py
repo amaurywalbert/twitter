@@ -72,7 +72,6 @@ def read_arq_bin(file):
 def get_api_limits():
 	global api
 	global key
-	global auths
 	# Pode ser que o programa ja inicie com o limite de requisicoes estourado.
 	rate_limit_available = False
 	
@@ -90,7 +89,6 @@ def get_api_limits():
 			print("Limite para verificar os limites da API atingido. Autenticando novamente...")
 			time.sleep(espera)
 			key = random.randint(key_init,key_limit)
-			auths = oauth_keys['auths_ok']
 			api = autentication(auths)
 
 		except tweepy.error.TweepError as e:
@@ -100,7 +98,6 @@ def get_api_limits():
 				if e.message[0].has_key('code'):
 					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
 						key = random.randint(key_init,key_limit)
-						auths = oauth_keys['auths_ok']
 						api = autentication(auths)
 	
 ######################################################################################################################################################################
@@ -111,13 +108,11 @@ def get_api_limits():
 def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global dictionary
 	global api
-	global auths
 	
 	limits = get_api_limits()
 	while(limits['friends_remaining'] <= 1 or limits['rate_limit_remaining'] <= 1):
 		print("Limite de acesso à API excedido.")
 		time.sleep(espera)
-		auths = oauth_keys['auths_ok']
 		api = autentication(auths)
 		limits = get_api_limits()
 		
