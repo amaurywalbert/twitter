@@ -1,5 +1,5 @@
 !/bin/bash
-INTERVALO=300	#5 minutos
+INTERVALO=600	#10 minutos
 while true; do
 	# Verifica se o python está sendo executado
 	if pgrep -x "python" > /dev/null

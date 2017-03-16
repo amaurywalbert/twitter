@@ -71,6 +71,7 @@ def read_arq_bin(file):
 #
 ######################################################################################################################################################################
 def get_friends(user):												#Coleta dos amigos de um usuário específico
+	global key
 	global dictionary
 	global api
 
