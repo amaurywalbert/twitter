@@ -92,17 +92,18 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		error = {}
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
+				if e.message[0].has_key('code'):
+					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+						time.sleep(espera)
+						key = random.randint(key_init,key_limit)
+						api = autentication(auths)
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
 			else:
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
-				print error
-
-		if	error['reason'][0]['code'] == 34 or error['reason'][0]['code'] == 215:
-			key = random.randint(key_init,key_limit)
-			api = autentication(auths)
+				print error			
 
 		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34: # Usuários não autorizados ou não existentes
 			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
