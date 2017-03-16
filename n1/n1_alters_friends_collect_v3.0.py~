@@ -28,13 +28,13 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 
 def autentication(auths):
-	time.sleep(espera)
 	global key
 	key += 1
 	if (key >= key_limit):
 		key = key_init
 	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
 	api_key = tweepy.API(auths[key])
+	time.sleep(espera)
 	return (api_key)
 
 ######################################################################################################################################################################
@@ -92,7 +92,7 @@ def get_api_limits():
 			api = autentication(auths)
 
 		except tweepy.error.TweepError as e:
-			print("Erro oa verificar os limites da API. Erro: "+str(e)+" . Autenticando novamente...")
+			print("Erro ao verificar os limites da API. Erro: "+str(e)+" . Autenticando novamente...")
 			if e.message:			
 				if e.message[0]:
 					if e.message[0]['code']:
