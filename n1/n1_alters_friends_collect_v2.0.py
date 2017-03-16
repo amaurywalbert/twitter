@@ -85,10 +85,6 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	except tweepy.RateLimitError as e:		# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e ignora o usuário...
 		print("Limite para verificar os limites da API atingido. Erro: "+str(e)+" . Autenticando novamente...")
 		time.sleep(espera)
-		if e.message:			
-			if e.message[0].has_key('code'):
-				if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-					key = random.randint(key_init,key_limit)
 		api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
@@ -103,7 +99,11 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
-		
+
+		if	error['reason'][0]['code'] == 34 or error['reason'][0]['code'] == 215:
+			key = random.randint(key_init,key_limit)
+			api = autentication(auths)
+
 		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34: # Usuários não autorizados ou não existentes
 			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 			with open(data_dir+str(user)+".dat", "w+b") as f:		#Cria arquivo vazio	
