@@ -33,6 +33,7 @@ sys.setdefaultencoding('utf-8')
 
 def autentication(auths):
 	global key
+	time.sleep(wait)
 	key += 1
 	if (key >= key_limit):
 		key = key_init
@@ -197,10 +198,13 @@ def main():
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
 		for friend in friends_list:
 			k+=1
-			if dictionary.has_key(friend):
-				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(friend)+" já coletado! Continuando...")
-			else:
+			if not dictionary.has_key(friend):
 				save_user(j,k,l,friend)							#Inicia função de busca
+
+#			if dictionary.has_key(friend):
+#				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(friend)+" já coletado! Continuando...")
+#			else:
+#				save_user(j,k,l,friend)							#Inicia função de busca
 				
 	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:	
 		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
@@ -236,7 +240,7 @@ data_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/bin/" ############## 
 error_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/error/" ########### Diretório para armazenamento dos arquivos de erro
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-espera = 15
+wait = 15
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
