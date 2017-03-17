@@ -146,8 +146,9 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 # Obtem as amigos do ego
 #
 ######################################################################################################################################################################
-def save_user(k,user): # k = numero de usuários verificados - u = usuario 
-	global i	# numero de usuários com arquivos já coletados 
+def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = numero do alter que esta sendo verificado - l = tamanho da lista de amigos do ego
+	global i	# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
+	 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
 
@@ -161,7 +162,7 @@ def save_user(k,user): # k = numero de usuários verificados - u = usuario
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				i +=1
-				print ("Amigos do ego nº "+str(k)+": "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
+				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
 	except Exception as e:	
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
