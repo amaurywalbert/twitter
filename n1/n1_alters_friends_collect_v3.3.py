@@ -33,12 +33,12 @@ sys.setdefaultencoding('utf-8')
 
 def autentication(auths):
 	global key
-	time.sleep(wait)
 	key += 1
 	if (key >= key_limit):
 		key = key_init
 	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
 	api_key = tweepy.API(auths[key])
+	time.sleep(wait)
 	return (api_key)
 
 ######################################################################################################################################################################
@@ -139,9 +139,10 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
-		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34:
+		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34: # Usuários não autorizados ou não existentes
 			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-	
+			with open(data_dir+str(user)+".dat", "w+b") as f:		#Cria arquivo vazio	
+				print
 ######################################################################################################################################################################
 #
 # Obtem as amigos do ego
@@ -155,9 +156,9 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	
-	try:
-		friends_list = get_friends(user)
-		if friends_list:
+	friends_list = get_friends(user)
+	if friends_list:	
+		try:
 			with open(data_dir+str(user)+".dat", "w+b") as f:	
 				for friend in friends_list:
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
@@ -165,17 +166,17 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 				i +=1
 				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
-	except Exception as e:	
-		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-			if e.message:		
-				error = {'user':user,'reason': e.message,'date':agora}
-			else:
-				error = {'user':user,'reason': str(e),'date':agora}
-			outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
-			print error
-		if os.path.exists(data_dir+str(user)+".dat"):
-			os.remove(data_dir+str(user)+".dat")
+		except Exception as e:	
+			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+			with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+				if e.message:		
+					error = {'user':user,'reason': e.message,'date':agora}
+				else:
+					error = {'user':user,'reason': str(e),'date':agora}
+				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
+				print error
+			if os.path.exists(data_dir+str(user)+".dat"):
+				os.remove(data_dir+str(user)+".dat")
 
 
 ######################################################################################################################################################################
