@@ -234,7 +234,7 @@ for file in os.listdir(data_dir):
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
 	i+=1
-print ("Tabela hash criada com sucesso..." 
+print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
 #Autenticação
 api = autentication(auths)
