@@ -105,12 +105,9 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:
-			if e.message:			
-				if e.message[0]:
-					if e.message[0]['code']:
-						if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-							key = random.randint(key_init,key_limit)
-							api = autentication(auths)
+			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+				key = random.randint(key_init,key_limit)
+				api = autentication(auths)
 		except Exception as e:
 			print e
 		
