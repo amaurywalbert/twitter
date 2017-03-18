@@ -75,7 +75,7 @@ def read_arq_bin(file):
 # Verifica status da autenticação - Limites disponíveis
 #
 ######################################################################################################################################################################
-def get_api_limits(user):
+def get_api_limits():
 	global api
 	global key
 	# Pode ser que o programa ja inicie com o limite de requisicoes estourado.
@@ -88,7 +88,7 @@ def get_api_limits(user):
 			friends_remaining = int(rate_limit['resources']['friends']['/friends/ids']['remaining'])
 			rate_limit_remaining = int(rate_limit['resources']['application']['/application/rate_limit_status']['remaining'])
 	
-			#print("friends_remaining = " +str(friends_remaining) + " - rate_limit_remaining = " + str(rate_limit_remaining))
+			print("friends_remaining = " +str(friends_remaining) + " - rate_limit_remaining = " + str(rate_limit_remaining))
 			return {'friends_remaining': friends_remaining,'rate_limit_remaining': rate_limit_remaining}
 		
 		except tweepy.error.RateLimitError as e:
@@ -97,7 +97,7 @@ def get_api_limits(user):
 			api = autentication(auths)
 
 		except tweepy.error.TweepError as e:
-			print("Erro ao verificar os limites da API. Erro: "+str(e)+" . Autenticando novamente...")
+			print("Erro ao verificar os limites da API. Erro: "+str(e))
 			if e.message:			
 				if e.message[0]:
 					if e.message[0]['code']:
@@ -114,11 +114,11 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global dictionary
 	global api
 	
-	limits = get_api_limits(user)
+	limits = get_api_limits()
 	while(limits['friends_remaining'] == 0 or limits['rate_limit_remaining'] == 0):
 		print("Limite de acesso à API excedido.")
 		api = autentication(auths)
-		limits = get_api_limits(user)
+		limits = get_api_limits()
 		
 	try:
 		friends_list = []
@@ -202,11 +202,6 @@ def main():
 			if not dictionary.has_key(friend):
 				save_user(j,k,l,friend)							#Inicia função de busca
 
-#			if dictionary.has_key(friend):
-#				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(friend)+" já coletado! Continuando...")
-#			else:
-#				save_user(j,k,l,friend)							#Inicia função de busca
-				
 	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:	
 		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
 			user_id = file.split(".dat")
@@ -252,14 +247,9 @@ if not os.path.exists(error_dir):
 	os.makedirs(error_dir)
 
 #Autenticação
-try:
-	api = autentication(auths)
-	print
-	print("######################################################################")
-	print
-except tweepy.error.TweepError as e:
-	print("[ERRRO] Não foi possível realizar autenticação. Erro: ",str(e),".\n")
-	
+api = autentication(auths)
+print
+print("######################################################################")
 	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
 i = 0

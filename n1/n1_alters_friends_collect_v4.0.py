@@ -1,6 +1,6 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-# Script para coletar amigos a partir de um conjunto de egos do twitter
+# Script para coletar amigos a partir de um conjunto de alters do twitter
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
@@ -11,10 +11,11 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 2.0 - # Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
-##							2.1 - Autenticação volta a ser pelo Tweepy
-##							
-##						OBS - Copiar todos os arquivos dos egos para a pasta "data_dir", o script verifica se já existe o arquivo neste diretório evitando assim que haja recoleta de dados...						
+##		Status - Versão 4 - Coletar amigos do Twitter
+##						
+##						4.1 - Uso do Tweepy para controlar as autenticações...
+##
+##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
 ##						STATUS - TESTE - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
 ##
@@ -28,13 +29,16 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 
 def autentication(auths):
-	time.sleep(espera)
 	global key
 	key += 1
 	if (key >= key_limit):
 		key = key_init
+	print
+	print("######################################################################")
 	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
+	print("######################################################################\n")
 	api_key = tweepy.API(auths[key])
+	time.sleep(wait)
 	return (api_key)
 
 ######################################################################################################################################################################
@@ -75,41 +79,43 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global key
 	global dictionary
 	global api
-
+	
 	try:
 		friends_list = []
 		for page in tweepy.Cursor(api.friends_ids,id=user,wait_on_rate_limit_notify=True,count=5000).pages():
 			for friend in page:
 				friends_list.append(friend)
 		return (friends_list)
-
-	except tweepy.RateLimitError as e:		# Verifica se o erro ocorreu por limite excedido, faz nova autenticação e ignora o usuário...
-		print("Limite para verificar os limites da API atingido. Erro: "+str(e)+" Chave: "+str(key)+". Autenticando novamente...")
-		api = autentication(auths)
+	
+	except tweepy.error.RateLimitError as e:
+			print("Limite de acesso à API excedido. Autenticando novamente... "+str(e))
+			api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		error = {}
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-				if e.message[0]:
-					if e.message[0]['code'] :
-						if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-							key = random.randint(key_init,key_limit)
-							api = autentication(auths)
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
 			else:
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
-				print error			
-
-		if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34: # Usuários não autorizados ou não existentes
-			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-			with open(data_dir+str(user)+".dat", "w+b") as f:		#Cria arquivo vazio	
-				print
-	
+				print error
+		if e.message:			
+			if e.message[0]:
+				if e.message[0]['code']:
+					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+						key = random.randint(key_init,key_limit)
+						api = autentication(auths)
+		try:
+			if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34: # Usuários não autorizados ou não existentes
+				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+				with open(data_dir+str(user)+".dat", "w+b") as f:		#Cria arquivo vazio	
+					print
+		except Exception as e:
+			print e
 ######################################################################################################################################################################
 #
 # Obtem as amigos do ego
@@ -123,27 +129,27 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	
-#	try:
 	friends_list = get_friends(user)
-	if friends_list:
-		with open(data_dir+str(user)+".dat", "w+b") as f:	
-			for friend in friends_list:
-				f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
-			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-			i +=1
-			print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
+	if friends_list:	
+		try:
+			with open(data_dir+str(user)+".dat", "w+b") as f:	
+				for friend in friends_list:
+					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
+				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+				i +=1
+				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
-#	except Exception as e:	
-#		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-#		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-#			if e.message:		
-#				error = {'user':user,'reason': e.message,'date':agora}
-#			else:
-#				error = {'user':user,'reason': str(e),'date':agora}
-#			outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
-#			print error
-#		if os.path.exists(data_dir+str(user)+".dat"):
-#			os.remove(data_dir+str(user)+".dat")
+		except Exception as e:	
+			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+			with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+				if e.message:		
+					error = {'user':user,'reason': e.message,'date':agora}
+				else:
+					error = {'user':user,'reason': str(e),'date':agora}
+				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
+				print error
+			if os.path.exists(data_dir+str(user)+".dat"):
+				os.remove(data_dir+str(user)+".dat")
 
 
 ######################################################################################################################################################################
@@ -166,25 +172,27 @@ def main():
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
 		for friend in friends_list:
 			k+=1
-			if dictionary.has_key(friend):
-				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(friend)+" já coletado! Continuando...")
-			else:
+			if not dictionary.has_key(friend):
 				save_user(j,k,l,friend)							#Inicia função de busca
-				
-	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:	
+
+	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:
+		print
+		print("######################################################################")		
+		print ("Criando arquivo com resumo da coleta...")	
 		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
 			user_id = file.split(".dat")
 			user_id = long(user_id[0])
 			friends_file = read_arq_bin(data_dir+file)
 			qtde_friends = len(friends_file)
-			friendship = {'alter':user_id,'friends': qtde_friends}
+			friendship = {'user':user_id,'friends': qtde_friends}
 			f.write(json.dumps(friendship, separators=(',', ':'))+"\n")
-	
+		print ("Arquivo criado com sucesso: /home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt" )
+		print("######################################################################\n")
+	print
 	print("######################################################################")
 	print("Coleta finalizada!")
-	print("######################################################################")
+	print("######################################################################\n")
 
-	
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
@@ -201,12 +209,12 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/bin/"# Arquivo contendo a lista dos usuários já coletados
+egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/bin/"################## Arquivo contendo a lista dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/bin/" ############## Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/error/" ########### Diretório para armazenamento dos arquivos de erro
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-espera = 15
+wait = 15
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
@@ -216,23 +224,21 @@ if not os.path.exists(data_dir):
 if not os.path.exists(error_dir):
 	os.makedirs(error_dir)
 
-#Autenticação
-try:
-	api = autentication(auths)
-	print
-	print("######################################################################")
-	print
-except tweepy.error.TweepError as e:
-	print("[ERRRO] Não foi possível realizar autenticação. Erro: ",str(e),".\n")
-	
-	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
-i = 0
+print
+print("######################################################################")
+print ("Criando tabela hash...")
+i = 0	#Conta quantos usuários já foram coletados (todos arquivos no diretório)
 for file in os.listdir(data_dir):
 	user_id = file.split(".dat")
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
 	i+=1
+print ("Tabela hash criada com sucesso..." 
+print("######################################################################\n")
+#Autenticação
+api = autentication(auths)
+
 	
 #Executa o método main
 if __name__ == "__main__": main()
