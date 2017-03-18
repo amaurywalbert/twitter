@@ -104,12 +104,16 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
-		if e.message:			
-			if e.message[0]:
-				if e.message[0]['code']:
-					if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-						key = random.randint(key_init,key_limit)
-						api = autentication(auths)
+		try:
+			if e.message:			
+				if e.message[0]:
+					if e.message[0]['code']:
+						if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+							key = random.randint(key_init,key_limit)
+							api = autentication(auths)
+		except Exception as e:
+			print e
+		
 		try:
 			if error['reason'] == 'Not authorized.' or error['reason'][0]['code'] == 34: # Usuários não autorizados ou não existentes
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
