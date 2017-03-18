@@ -89,7 +89,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		return (friends_list)
 	
 	except tweepy.error.RateLimitError as e:
-			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e)+)
+			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
 			api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
