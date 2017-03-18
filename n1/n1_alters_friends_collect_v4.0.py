@@ -18,6 +18,7 @@ sys.setdefaultencoding('utf-8')
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
 ##						STATUS - TESTE - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
+##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletado
 ##
 ## 
 ######################################################################################################################################################################
