@@ -102,11 +102,11 @@ key_init = 0					#################################################### Essas duas
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 lists_collected = "/home/amaury/coleta/ego_collection/data/lists_collect.txt"## Arquivo contendo as listas coletadas
-data_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/" ############## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/lists_info/members_lists_collected/error/" ########### Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/" ###### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/lists_info/members_lists_collected/error/" ### Diretório para armazenamento dos arquivos de erro
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-wait = 15
+wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################

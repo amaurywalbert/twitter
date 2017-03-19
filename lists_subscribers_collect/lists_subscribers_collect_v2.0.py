@@ -1,6 +1,6 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-# Script para coletar amigos a partir de um conjunto de alters do twitter
+# Script para coletar inscritos em listas dos egos
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
@@ -11,14 +11,14 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 4 - Coletar amigos do Twitter
+##		Status - Versão 2.0 - Coletar Inscritos das listas dos Egos
 ##						
-##						4.1 - Uso do Tweepy para controlar as autenticações...
+##						2.1 - Uso do Tweepy para controlar as autenticações...
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
-##						STATUS - Coletando - OK - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
-##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletado
+##						STATUS - Coletando - OK - Salvar arquivos binários contendo os ids dos inscritos de cada lista.
+##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há uma lista que ficou sem ser coletada
 ##
 ## 
 ######################################################################################################################################################################
@@ -64,135 +64,135 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		friends_file = []
+		subscribers_file = []
 		while f.tell() < tamanho:
-			buffer = f.read(user_struct.size)
-			friend = user_struct.unpack(buffer)
-			friends_file.append(friend[0])
-	return friends_file
+			buffer = f.read(list_struct.size)
+			subs = list_struct.unpack(buffer)
+			subscribers_file.append(subs[0])
+	return subscribers_file
 
 ######################################################################################################################################################################
 #
 # Tweepy - Realiza a busca e devolve a lista de amigos de um usuário específico 
 #
 ######################################################################################################################################################################
-def get_friends(user):												#Coleta dos amigos de um usuário específico
+def get_subscribers(list):												#Coleta dos inscritos de uma lista específica
 	global key
 	global dictionary
 	global api
 	
 	try:
-		friends_list = []
-		for page in tweepy.Cursor(api.friends_ids,id=user,wait_on_rate_limit_notify=True,count=5000).pages():
-			for friend in page:
-				friends_list.append(friend)
-		return (friends_list)
+		subscribers_list = []
+		for page in tweepy.Cursor(api.list_subscribers,list_id=list,include_entities=False,skip_status=True,wait_on_rate_limit_notify=True,count=5000).pages():
+			for subs in page:
+				subscribers_list.append(subs.id)
+		return (subscribers_list)
 	
 	except tweepy.error.RateLimitError as e:
-			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
+			print("Limite de acesso à API excedido. Lista: "+str(list)+" - Autenticando novamente... "+str(e))
 			api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		error = {}
-		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+		with open(error_dir+"subscribers_lists_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
+				error = {'list':list,'reason': e.message,'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
 			else:
-				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
+				error = {'list':list,'reason': str(e),'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:
 			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
 				key = random.randint(key_init,key_limit)
 				api = autentication(auths)
-			if e.message[0]['code'] == 34:									# Usuários não existentes
-				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-				with open(data_dir+str(user)+".dat", "w+b") as f:		# Cria arquivo vazio	
-					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
+			if e.message[0]['code'] == 34:									# Listas não existentes
+				dictionary[list] = list											# Insere a lista coletada na tabela em memória
+				with open(data_dir+str(list)+".dat", "w+b") as f:		# Cria arquivo vazio	
+					print ("Lista inexistente. List: "+str(list)+" - Arquivo criado com sucesso!")
 		except Exception as e2:
 			print ("E2: "+str(e2))
 		
 		try:
 			if e.message == 'Not authorized.': # Usuários não autorizados
-				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-				with open(data_dir+str(user)+".dat", "w+b") as f:		# Cria arquivo vazio
-					print ("Usuário não autorizado. User: "+str(user)+" - Arquivo criado com sucesso!")	
+				dictionary[list] = list											# Insere o usuário coletado na tabela em memória
+				with open(data_dir+str(list)+".dat", "w+b") as f:		# Cria arquivo vazio
+					print ("Lista não autorizada. List: "+str(list)+" - Arquivo criado com sucesso!")	
 		except Exception as e3:
 			print ("E3: "+str(e3))
 ######################################################################################################################################################################
 #
-# Obtem as amigos do ego
+# Obtem inscritos nas listas dos egos
 #
 ######################################################################################################################################################################
-def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = numero do alter que esta sendo verificado - l = tamanho da lista de amigos do ego
-	global i	# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
+def save_subscribers(j,list): # j = número da que esta sendo coletada
+	global i	# numero de listas com arquivos já coletados / Numero de arquivos no diretório
 	 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	
-	friends_list = get_friends(user)
-	if friends_list:	
+	subscribers_list = get_subscribers(list)
+	if subscribers_list:	
 		try:
-			with open(data_dir+str(user)+".dat", "w+b") as f:	
-				for friend in friends_list:
-					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
-				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+			with open(data_dir+str(list)+".dat", "w+b") as f:	
+				for subs in subscribers_list:
+					f.write(list_struct.pack(subs))						# Grava os ids dos amigos no arquivo binário do usuário
+				dictionary[list] = list											# Insere o usuário coletado na tabela em memória
 				i +=1
-				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
+				print ("Lista nº "+str(j)+": "+str(list)+" coletada com sucesso. Total coletadas: "+str(i))
 	
 		except Exception as e:	
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-			with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+			with open(error_dir+"subscribers_list_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 				if e.message:		
-					error = {'user':user,'reason': e.message,'date':agora}
+					error = {'list':list,'reason': e.message,'date':agora}
 				else:
-					error = {'user':user,'reason': str(e),'date':agora}
+					error = {'list':list,'reason': str(e),'date':agora}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
-			if os.path.exists(data_dir+str(user)+".dat"):
-				os.remove(data_dir+str(user)+".dat")
+			if os.path.exists(data_dir+str(list)+".dat"):
+				os.remove(data_dir+str(list)+".dat")
 
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
 # Método principal do programa.
-# Realiza teste e coleta dos dados de cada user especificado no arquivo. 
+# Realiza teste e coleta dos inscritos de cada lista especificado no arquivo. 
 #
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 
 def main():
-	j = 0																	#Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
-	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
-		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
-		j+=1 
-		alter = file.split(".dat")
-		alter = long(alter[0])
-		friends_list = read_arq_bin(egos_friends_dir+file)
-		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
-		for friend in friends_list:
-			k+=1
-			if not dictionary.has_key(friend):
-				save_user(j,k,l,friend)							#Inicia função de busca
+	j = 0																	#Exibe o número ordinal da lista que está sendo usada para a coleta dos inscritos
+	eof = False
+	with open(lists_collected, 'r') as lists_file:
+		while not eof:																			#Enquanto não for final do arquivo
+			j+=1
+			list = lists_file.readline()													#Leia o id da lista
+			if (list == ''):																	#Se id for igual a vazio é porque chegou ao final do arquivo.
+					eof = True
+			else:
+				list = long(list)
+				if not dictionary.has_key(list):
+					save_subscribers(j, list)																#Inicia função de busca das listas e coleta dos inscritos
 
-	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:
+	with open("/home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.txt", 'w') as f:
 		print
 		print("######################################################################")		
 		print ("Criando arquivo com resumo da coleta...")	
 		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
-			user_id = file.split(".dat")
-			user_id = long(user_id[0])
-			friends_file = read_arq_bin(data_dir+file)
-			qtde_friends = len(friends_file)
-			friendship = {'user':user_id,'friends': qtde_friends}
-			f.write(json.dumps(friendship, separators=(',', ':'))+"\n")
-		print ("Arquivo criado com sucesso: /home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt" )
+			list_id = file.split(".dat")
+			list_id = long(list_id[0])
+			list_file = read_arq_bin(data_dir+file)
+			qtde_subscribers = len(lists_file)
+			subscribers = {'list':list_id,'subscribers': qtde_subscribers}
+			f.write(json.dumps(subscribers, separators=(',', ':'))+"\n")
+		print ("Arquivo criado com sucesso: /home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.txt" )
 		print("######################################################################\n")
 	print
 	print("######################################################################")
@@ -215,13 +215,14 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/bin/"################## Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/bin/" ############## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/error/" ########### Diretório para armazenamento dos arquivos de erro
+lists_collected = "/home/amaury/coleta/ego_collection/data/lists_collect.txt"## Arquivo contendo as listas coletadas
+data_dir = "/home/amaury/coleta/lists_info/subscribers_lists_collected/bin/" ## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/lists_info/subscribers_lists_collected/error/" # Diretório para armazenamento dos arquivos de erro
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
-user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+list_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
+######################################################################################################################
 ######################################################################################################################
 ######################################################################################################################
 #Cria os diretórios para armazenamento dos arquivos
@@ -236,9 +237,9 @@ print("######################################################################")
 print ("Criando tabela hash...")
 i = 0	#Conta quantos usuários já foram coletados (todos arquivos no diretório)
 for file in os.listdir(data_dir):
-	user_id = file.split(".dat")
-	user_id = long(user_id[0])
-	dictionary[user_id] = user_id
+	list_id = file.split(".dat")
+	list_id = long(list_id[0])
+	dictionary[list_id] = list_id
 	i+=1
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
