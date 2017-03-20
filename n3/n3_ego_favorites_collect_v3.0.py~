@@ -110,7 +110,7 @@ def get_favorites(user):												#Coleta dos favoritos
 			print ("E3: "+str(e3))
 		
 		try:
-			if e.message == 'Twitter error response: status code = 429': #muitas requisições simultâneas
+			if e.message == 'Twitter error response: status code = 429' or e.message == 'Twitter error response: status code = 401': #muitas requisições simultâneas
 				key = random.randint(key_init,key_limit)
 				api = autentication(auths)
 				i +=1
