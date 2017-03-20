@@ -80,6 +80,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 	global key
 	global dictionary
 	global api
+	global i
 	
 	try:
 		friends_list = []
@@ -112,6 +113,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w+b") as f:		# Cria arquivo vazio	
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
+				i +=1
 		except Exception as e2:
 			print ("E2: "+str(e2))
 		
@@ -119,7 +121,8 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 			if e.message == 'Not authorized.': # Usuários não autorizados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w+b") as f:		# Cria arquivo vazio
-					print ("Usuário não autorizado. User: "+str(user)+" - Arquivo criado com sucesso!")	
+					print ("Usuário não autorizado. User: "+str(user)+" - Arquivo criado com sucesso!")
+				i +=1	
 		except Exception as e3:
 			print ("E3: "+str(e3))
 ######################################################################################################################################################################

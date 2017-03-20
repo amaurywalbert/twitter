@@ -80,6 +80,7 @@ def get_members(list):												#Coleta dos membros de uma lista específica
 	global key
 	global dictionary
 	global api
+	global i
 	
 	try:
 		members_list = []
@@ -112,6 +113,7 @@ def get_members(list):												#Coleta dos membros de uma lista específica
 				dictionary[list] = list											# Insere a lista coletada na tabela em memória
 				with open(data_dir+str(list)+".dat", "w+b") as f:		# Cria arquivo vazio	
 					print ("Lista inexistente. List: "+str(list)+" - Arquivo criado com sucesso!")
+				i +=1
 		except Exception as e2:
 			print ("E2: "+str(e2))
 		
@@ -119,7 +121,8 @@ def get_members(list):												#Coleta dos membros de uma lista específica
 			if e.message == 'Not authorized.': # Usuários não autorizados
 				dictionary[list] = list											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(list)+".dat", "w+b") as f:		# Cria arquivo vazio
-					print ("Lista não autorizada. List: "+str(list)+" - Arquivo criado com sucesso!")	
+					print ("Lista não autorizada. List: "+str(list)+" - Arquivo criado com sucesso!")
+				i +=1	
 		except Exception as e3:
 			print ("E3: "+str(e3))
 ######################################################################################################################################################################

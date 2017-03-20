@@ -80,10 +80,11 @@ def get_members(list):												#Coleta dos membros de uma lista específica
 	global key
 	global dictionary
 	global api
+	global i
 	
 	try:
 		members_list = []
-		for page in tweepy.Cursor(api.list_members,list_id=list,include_entities=false,skip_status=true,wait_on_rate_limit_notify=True,count=5000).pages():
+		for page in tweepy.Cursor(api.list_members,list_id=list,include_entities=False,skip_status=True,wait_on_rate_limit_notify=True,count=5000).pages():
 			for member in page:
 				members_list.append(member.id)
 		return (members_list)
@@ -119,7 +120,8 @@ def get_members(list):												#Coleta dos membros de uma lista específica
 			if e.message == 'Not authorized.': # Usuários não autorizados
 				dictionary[list] = list											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(list)+".dat", "w+b") as f:		# Cria arquivo vazio
-					print ("Lista não autorizada. List: "+str(list)+" - Arquivo criado com sucesso!")	
+					print ("Lista não autorizada. List: "+str(list)+" - Arquivo criado com sucesso!")
+				i +=1	
 		except Exception as e3:
 			print ("E3: "+str(e3))
 ######################################################################################################################################################################
