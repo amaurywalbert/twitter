@@ -156,15 +156,15 @@ def save_timeline(j,user): # j = número do usuário que esta sendo coletado
 ######################################################################################################################################################################
 
 def main():
-	global i # numero de usuários com arquivos já coletados / Numero de arquivos no diretório
-	j = 0
-	with open(egos_collected, 'r') as egos_file:				#Lista de user coletados...
-		while i < ego_limit:
-			j+=1
-			ego = egos_file.readline()								#Leia o id do user
-			ego = long(ego)
-			if not dictionary.has_key(ego):
-				save_timeline(j, ego)							#Inicia função de busca da timeline
+	global i 													# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
+	j = 0															#Exibe o número ordinal do ego que está sendo usado para a coleta da timeline
+	for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+		j+=1
+		ego = file.split(".dat")
+		ego = long(ego[0])
+		if not dictionary.has_key(ego):
+				#save_timeline(j, ego)							#Inicia função de busca da timeline
+				print j,ego
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -186,9 +186,8 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_collected = "/home/amaury/coleta/ego_collection/data/ego_list.txt"######## Arquivo contendo os egos coletados
-data_dir = "/home/amaury/coleta/timeline_collect/ego/json/" ####################### Diretório para armazenamento dos arquivos
-ego_limit = 10000						########################################### Controla a quantidade de egos a serem pesquisados
+egos_dir = "/home/amaury/coleta/n1/egos_friends/bin/"#################### Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/timeline_collect/ego/json/" ################### Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/timeline_collect/ego/error/" ##################### Diretório para armazenamento dos arquivos de erro
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
