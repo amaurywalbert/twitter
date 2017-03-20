@@ -187,9 +187,9 @@ key_init = 0					#################################################### Essas duas
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 egos_collected = "/home/amaury/coleta/ego_collection/data/ego_list.txt"######## Arquivo contendo os egos coletados
-data_dir = "/home/amaury/coleta/timeline_collect/json/" ####################### Diretório para armazenamento dos arquivos
+data_dir = "/home/amaury/coleta/timeline_collect/ego/json/" ####################### Diretório para armazenamento dos arquivos
 ego_limit = 10000						########################################### Controla a quantidade de egos a serem pesquisados
-error_dir = "/home/amaury/coleta/timeline_collect/error/" ##################### Diretório para armazenamento dos arquivos de erro
+error_dir = "/home/amaury/coleta/timeline_collect/ego/error/" ##################### Diretório para armazenamento dos arquivos de erro
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
