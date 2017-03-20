@@ -163,8 +163,7 @@ def main():
 		ego = file.split(".dat")
 		ego = long(ego[0])
 		if not dictionary.has_key(ego):
-				#save_timeline(j, ego)							#Inicia função de busca da timeline
-				print j,ego
+				save_timeline(j, ego)							#Inicia função de busca da timeline
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")

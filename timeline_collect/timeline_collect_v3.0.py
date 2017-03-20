@@ -185,9 +185,9 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_dir = "/home/amaury/coleta/n1/egos_friends/bin/"#################### Arquivo contendo a lista dos usuários ego já coletados
+egos_dir = "/home/amaury/coleta/n1/egos_friends/bin/"########################## Arquivo contendo a lista dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/timeline_collect/ego/json/" ################### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/timeline_collect/ego/error/" ##################### Diretório para armazenamento dos arquivos de erro
+error_dir = "/home/amaury/coleta/timeline_collect/ego/error/" ################# Diretório para armazenamento dos arquivos de erro
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
