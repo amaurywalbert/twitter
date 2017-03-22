@@ -27,4 +27,4 @@ Coleta dos seeds iniciais, definidos como os 100 tweets retornados pela requisi�
 # testes
 Script de testes usados durante a construção dos scripts de coleta.
 # timeline_collect
-Scripts para coleta dos últimos 3200 tweets postados pelos usuários. Retweets estão incluidos nesse conjunto. Inicialmente coletamos a timeline dos egos e depois faremos a coleta de acordo com o necessário.
+Scripts para coleta dos últimos 3200 tweets postados pelos usuários. Retweets estão incluidos nesse conjunto. Inicialmente coletamos a timeline dos egos e depois faremos a coleta de acordo com o necessário. Esta tarefa passou a ser feita pelo servidor na nuvem Amazon a partir do dia 23-03-2017.
