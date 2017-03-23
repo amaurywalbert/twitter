@@ -113,6 +113,7 @@ def get_members(list):												#Coleta dos membros de uma lista específica
 				dictionary[list] = list											# Insere a lista coletada na tabela em memória
 				with open(data_dir+str(list)+".dat", "w+b") as f:		# Cria arquivo vazio	
 					print ("Lista inexistente. List: "+str(list)+" - Arquivo criado com sucesso!")
+				i +=1
 		except Exception as e2:
 			print ("E2: "+str(e2))
 		

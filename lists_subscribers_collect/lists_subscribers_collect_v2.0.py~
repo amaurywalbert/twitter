@@ -80,6 +80,7 @@ def get_subscribers(list):												#Coleta dos inscritos de uma lista especí
 	global key
 	global dictionary
 	global api
+	global i
 	
 	try:
 		subscribers_list = []
@@ -112,6 +113,7 @@ def get_subscribers(list):												#Coleta dos inscritos de uma lista especí
 				dictionary[list] = list											# Insere a lista coletada na tabela em memória
 				with open(data_dir+str(list)+".dat", "w+b") as f:		# Cria arquivo vazio	
 					print ("Lista inexistente. List: "+str(list)+" - Arquivo criado com sucesso!")
+				i +=1
 		except Exception as e2:
 			print ("E2: "+str(e2))
 		
@@ -119,7 +121,8 @@ def get_subscribers(list):												#Coleta dos inscritos de uma lista especí
 			if e.message == 'Not authorized.': # Usuários não autorizados
 				dictionary[list] = list											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(list)+".dat", "w+b") as f:		# Cria arquivo vazio
-					print ("Lista não autorizada. List: "+str(list)+" - Arquivo criado com sucesso!")	
+					print ("Lista não autorizada. List: "+str(list)+" - Arquivo criado com sucesso!")
+				i +=1	
 		except Exception as e3:
 			print ("E3: "+str(e3))
 ######################################################################################################################################################################
@@ -180,19 +183,20 @@ def main():
 				list = long(list)
 				if not dictionary.has_key(list):
 					save_subscribers(j, list)																#Inicia função de busca das listas e coleta dos inscritos
-
-	with open("/home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.txt", 'w') as f:
+	
+	#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
+	with open("/home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.json", 'w') as f:
 		print
 		print("######################################################################")		
 		print ("Criando arquivo com resumo da coleta...")	
-		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
-			list_id = file.split(".dat")
+		for arq in os.listdir(data_dir):
+			list_id = arq.split(".dat")
 			list_id = long(list_id[0])
-			list_file = read_arq_bin(data_dir+file)
-			qtde_subscribers = len(lists_file)
+			list_file = read_arq_bin(data_dir+arq)
+			qtde_subscribers = len(list_file)
 			subscribers = {'list':list_id,'subscribers': qtde_subscribers}
 			f.write(json.dumps(subscribers, separators=(',', ':'))+"\n")
-		print ("Arquivo criado com sucesso: /home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.txt" )
+		print ("Arquivo criado com sucesso: /home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.json" )
 		print("######################################################################\n")
 	print
 	print("######################################################################")

@@ -183,19 +183,20 @@ def main():
 				list = long(list)
 				if not dictionary.has_key(list):
 					save_subscribers(j, list)																#Inicia função de busca das listas e coleta dos inscritos
-
-	with open("/home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.txt", 'w') as f:
+	
+	#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
+	with open("/home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.json", 'w') as f:
 		print
 		print("######################################################################")		
 		print ("Criando arquivo com resumo da coleta...")	
-		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
+		for file in os.listdir(data_dir):
 			list_id = file.split(".dat")
 			list_id = long(list_id[0])
 			list_file = read_arq_bin(data_dir+file)
-			qtde_subscribers = len(lists_file)
+			qtde_subscribers = len(list_file)
 			subscribers = {'list':list_id,'subscribers': qtde_subscribers}
 			f.write(json.dumps(subscribers, separators=(',', ':'))+"\n")
-		print ("Arquivo criado com sucesso: /home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.txt" )
+		print ("Arquivo criado com sucesso: /home/amaury/coleta/lists_info/subscribers_lists_collected/lists_subscribers.json" )
 		print("######################################################################\n")
 	print
 	print("######################################################################")
