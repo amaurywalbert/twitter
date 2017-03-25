@@ -632,6 +632,19 @@ access_token_secret_test.append("H6XtF0PCIQ5SzkKbaVueG6fI7jAVFs0AzNHcKFiR9Iz0u")
 #
 ##############################################################################################################
 ##############################################################################################################
+#
+#		Conta: msc2016001245 - user: msc2016001245 - e-mail: twitter46msc20160012@gmail.com - senha: padrão cel Almir 64 9 9292-8619
+#
+#
+#msc20160012_31_test
+consumer_key_test.append("")
+consumer_secret_test.append("")
+access_token_test.append("")
+access_token_secret_test.append("")
+#
+#
+##############################################################################################################
+##############################################################################################################
 def keys():
 # create authentication handlers given pre-existing keys  
 
