@@ -637,10 +637,10 @@ access_token_secret_test.append("H6XtF0PCIQ5SzkKbaVueG6fI7jAVFs0AzNHcKFiR9Iz0u")
 #
 #
 #msc20160012_31_test
-consumer_key_test.append("")
-consumer_secret_test.append("")
-access_token_test.append("")
-access_token_secret_test.append("")
+#consumer_key_test.append("")
+#consumer_secret_test.append("")
+#access_token_test.append("")
+#access_token_secret_test.append("")
 #
 #
 ##############################################################################################################
