@@ -27,21 +27,16 @@ sys.setdefaultencoding('utf-8')
 
 def main():
 	i = 0
-	with open(egos_lists, 'r') as file:
-		while i < ego_limit:
-			user = file.readline()
-			user_id = user.split("\n")
-			user_id = str(user_id[0])
-			try:
-				origem = str(egos_friends_dir+user_id+".dat")
-				destino = str(data_dir+user_id+".dat")
-				print origem
-				print destino
-				print i
-				shutil.copy2(origem, destino)
-				i +=1
-			except Exception as e:
-				print e
+	for file in os.listdir(egos_friends_dir):
+			origem = egos_friends_dir+file
+			destino = data_dir
+			print origem
+			print destino
+			print i
+			shutil.copy2(origem, destino)
+			i +=1
+			if i >= ego_limit:
+				break
 
 ######################################################################################################################################################################
 #
@@ -52,7 +47,6 @@ def main():
 ######################################################################################################################
 ######################################################################################################################
 ego_limit = 50
-egos_lists = "/home/amaury/coleta/n1/egos_friends/egos_list.txt"####### Arquivo contendo a lista de egos da primeira coleta
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/bin/"########## Diretório dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/" ############## Diretório para armazenamento dos arquivos
 ######################################################################################################################

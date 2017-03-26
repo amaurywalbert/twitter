@@ -1,5 +1,7 @@
 # twitter
 Coleta e manipulação de dados no Twitter
+# 50egos
+Script para copiar 50 egos para fazer parte do conjunto de testes de criação das redes.
 # ego_collect
 Scripts para coleta de egos a partir de uma lista de seeds (coletados a partir dos trend topics). Uma lista (txt) é gerada com os ids dos egos - usuários que atendem aos requisitos mínimos para o projeto. Foram feitas duas coletas de trend topics. Além do arquivo com os ids dos egos, os scripts também geram arquivos com as listas desses usuários. Os arquivos estão no BOX. ego_collection.tar.bz2 e ego_list_collected.tar.bz2
 # lists_members_collect
