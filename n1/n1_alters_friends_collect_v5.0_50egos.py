@@ -184,19 +184,19 @@ def main():
 			if not dictionary.has_key(friend):
 				save_user(j,k,l,friend)							#Inicia função de busca
 
-	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:
-		print
-		print("######################################################################")		
-		print ("Criando arquivo com resumo da coleta...")	
-		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
-			user_id = file.split(".dat")
-			user_id = long(user_id[0])
-			friends_file = read_arq_bin(data_dir+file)
-			qtde_friends = len(friends_file)
-			friendship = {'user':user_id,'friends': qtde_friends}
-			f.write(json.dumps(friendship, separators=(',', ':'))+"\n")
-		print ("Arquivo criado com sucesso: /home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt" )
-		print("######################################################################\n")
+#	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:
+#		print
+#		print("######################################################################")		
+#		print ("Criando arquivo com resumo da coleta...")	
+#		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
+#			user_id = file.split(".dat")
+#			user_id = long(user_id[0])
+#			friends_file = read_arq_bin(data_dir+file)
+#			qtde_friends = len(friends_file)
+#			friendship = {'user':user_id,'friends': qtde_friends}
+#			f.write(json.dumps(friendship, separators=(',', ':'))+"\n")
+#		print ("Arquivo criado com sucesso: /home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt" )
+#		print("######################################################################\n")
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")

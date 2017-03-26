@@ -189,10 +189,10 @@ def main():
 		print
 		print("######################################################################")		
 		print ("Criando arquivo com resumo da coleta...")	
-		for arq in os.listdir(data_dir):
-			list_id = arq.split(".dat")
+		for file in os.listdir(data_dir):
+			list_id = file.split(".dat")
 			list_id = long(list_id[0])
-			list_file = read_arq_bin(data_dir+arq)
+			list_file = read_arq_bin(data_dir+file)
 			qtde_subscribers = len(list_file)
 			subscribers = {'list':list_id,'subscribers': qtde_subscribers}
 			f.write(json.dumps(subscribers, separators=(',', ':'))+"\n")

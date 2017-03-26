@@ -113,6 +113,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w+b") as f:		# Cria arquivo vazio	
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
+				i +=1
 		except Exception as e2:
 			print ("E2: "+str(e2))
 		

@@ -208,19 +208,19 @@ def main():
 				if not dictionary.has_key(list):
 					save_members(j, k, list)																#Inicia função de busca das listas e coleta dos membros
 
-	with open("/home/amaury/coleta/lists_info/members_lists_collected/lists_members.txt", 'w') as f:
-		print
-		print("######################################################################")		
-		print ("Criando arquivo com resumo da coleta...")	
-		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
-			list_id = file.split(".dat")
-			list_id = long(list_id[0])
-			list_file = read_arq_bin(data_dir+file)
-			qtde_members = len(list_file)
-			members = {'list':list_id,'members': qtde_members}
-			f.write(json.dumps(members, separators=(',', ':'))+"\n")
-		print ("Arquivo criado com sucesso: /home/amaury/coleta/lists_info/members_lists_collected/lists_members.txt" )
-		print("######################################################################\n")
+#	with open("/home/amaury/coleta/lists_info/members_lists_collected/lists_members.txt", 'w') as f:
+#		print
+#		print("######################################################################")		
+#		print ("Criando arquivo com resumo da coleta...")	
+#		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
+#			list_id = file.split(".dat")
+#			list_id = long(list_id[0])
+#			list_file = read_arq_bin(data_dir+file)
+#			qtde_members = len(list_file)
+#			members = {'list':list_id,'members': qtde_members}
+#			f.write(json.dumps(members, separators=(',', ':'))+"\n")
+#		print ("Arquivo criado com sucesso: /home/amaury/coleta/lists_info/members_lists_collected/lists_members.txt" )
+#		print("######################################################################\n")
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")

@@ -192,7 +192,7 @@ def main():
 			list_id = file.split(".dat")
 			list_id = long(list_id[0])
 			list_file = read_arq_bin(data_dir+file)
-			qtde_members = len(lists_file)
+			qtde_members = len(list_file)
 			members = {'list':list_id,'members': qtde_members}
 			f.write(json.dumps(members, separators=(',', ':'))+"\n")
 		print ("Arquivo criado com sucesso: /home/amaury/coleta/lists_info/members_lists_collected/lists_members.txt" )
