@@ -130,7 +130,7 @@ def get_subscribers(list):												#Coleta dos inscritos de uma lista especí
 # Obtem inscritos nas listas dos egos
 #
 ######################################################################################################################################################################
-def save_subscribers(j,k,list): # j = número da que esta sendo coletada
+def save_subscribers(j,k,list): # j = número do ego que está sendo coletado - k = número da lista que esta sendo coletada
 	global i	# numero de listas com arquivos já coletados / Numero de arquivos no diretório
 	 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
@@ -243,6 +243,12 @@ auths = oauth_keys['auths_test']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
+
+lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists_overview.json"
+
+egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"################## Arquivo contendo a lista dos usuários ego já coletados
+
+
 lists_collected = "/home/amaury/coleta/ego_collection/data/lists_collect.txt"## Arquivo contendo as listas coletadas
 data_dir = "/home/amaury/coleta/lists_info/subscribers_lists_collected/bin/" ## Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/lists_info/subscribers_lists_collected/error/" # Diretório para armazenamento dos arquivos de erro

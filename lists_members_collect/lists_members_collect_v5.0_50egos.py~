@@ -234,7 +234,7 @@ def main():
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
 oauth_keys = multi_oauth.keys()
-auths = oauth_keys['auths_test']
+auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
@@ -248,6 +248,7 @@ lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"################## Arquivo contendo a lista dos usuários ego já coletados
 
 
+lists_collected = "/home/amaury/coleta/ego_collection/data/lists_collect.txt"## Arquivo contendo as listas coletadas
 data_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/" ###### Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/lists_info/members_lists_collected/error/" ### Diretório para armazenamento dos arquivos de erro
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	

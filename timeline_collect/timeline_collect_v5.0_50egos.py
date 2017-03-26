@@ -10,9 +10,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 3.0 - Coletar timeline dos usuários especificados
+##		Status - Versão 5.0 - Coletar timeline dos usuários especificados
 ##						
-##						3.1 - Uso do Tweepy para controlar as autenticações...
+##						5.1 - Uso do Tweepy para controlar as autenticações...
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -179,7 +179,7 @@ def main():
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
 oauth_keys = multi_oauth.keys()
-auths = oauth_keys['auths_test']
+auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################

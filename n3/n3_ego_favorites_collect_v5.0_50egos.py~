@@ -165,18 +165,13 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 
 def main():
 	global i 													# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
-	j = 0															# Exibe o número ordinal do ego que está sendo usado para a coleta dos favoritos
-	with open(egos_file,'r') as file:					# Percorre o arquivo de usuários já verificados
-		while j < ego_limit:
-			j+=1
-			ego = file.readline()							#Leia id do usuário corrente
-			ego = long(ego)
-			print j
-			if not dictionary.has_key(ego):
-				print ("Coletar: "+str(ego))
-				
-#				save_favorites(j, ego)						#Inicia função de busca dos favoritos				
-				
+	j = 0															#Exibe o número ordinal do ego que está sendo usado para a coleta dos favoritos
+	for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+		j+=1
+		ego = file.split(".dat")
+		ego = long(ego[0])
+		if not dictionary.has_key(ego):
+				save_favorites(j, ego)						#Inicia função de busca dos favoritos
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -198,9 +193,7 @@ auths = oauth_keys['auths_test']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_file = "/home/amaury/coleta/ego_collection/data/ego_list.txt"##### Arquivo contendo a lista dos usuários ego já coletados
-ego_limit = 50
-egos_dir = "/home/amaury/coleta/n1/egos_friends/bin/"########################## Arquivo contendo a lista dos usuários ego já coletados
+egos_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"########################## Arquivo contendo a lista dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/favorites_collect/ego/json/" ################## Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/favorites_collect/ego/error/" ################ Diretório para armazenamento dos arquivos de erro
 wait = 5
