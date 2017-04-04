@@ -10,13 +10,17 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 5.0 - Coletar favorites dos autores dos tweets marcados como favoritos pelos usuários egos (lista de favoritos dos egos))
+##		Status - Versão 5.0 - Coletar favorites dos autores dos tweets marcados como favoritos pelos usuários egos (lista de favoritos dos egos)) - Favoritos dos Alters
+##
 ##						
 ##						5.1 - Uso do Tweepy para controlar as autenticações...
 ##
+##				
+##						SALVAR APENAS O NECESSÁRIO PARA ECONOMIZAR ESPAÇO EM DISCO. Coletar tweets completos ocupa muito espaço.
+##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
-##						STATUS - Coletando - OK - Salvar arquivos JSON contendo os a tweets favoritados dos usuários.
+##						STATUS - Coletando - OK - Salvar arquivos JSON contendo os a tweets favoritados a partir da lista de favoritos dos egos.
 ##
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletada
 ##
@@ -121,7 +125,7 @@ def get_favorites(user):												#Coleta dos favoritos
 # Obtem favoritos dos usuários
 #
 ######################################################################################################################################################################
-def save_favorites(j,user): # j = número do usuário que esta sendo coletado
+def save_favorites(j,l,user): # j = número do usuário ego que esta sendo coletado, l = numero do alter de cada ego que está sendo coletado.
 	global i	# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
 	 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
@@ -132,14 +136,14 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 	favorites = get_favorites(user)
 	if favorites:	
 		try:
-			with open(data_dir+str(user)+".json", "w") as f:	
-				for tweet in favorites:
+			with open(data_dir+str(user)+".json", "w") as f:
+				for status in favorites:
+					tweet = {'tweet':status.id, 'user':status.user.id}
 					k+=1
-					f.write(json.dumps(tweet._json)+"\n")		# ... no arquivo, imprime o tweet (status) inteiro.
-			
+					f.write(json.dumps(tweet, separators=(',', ':'))+"\n")	# ... no arquivo, imprime o apenas o id do tweet e o id do author.
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
-			print ("Usuário nº "+str(j)+": "+str(user)+" coletado com sucesso. "+str(k)+" tweets. Total de usuários coletados: "+str(i))
+			print ("Ego nº: "+str(j)+" - Alter("+str(l)+"): "+str(user)+" coletado com sucesso. "+str(k)+" tweets. Total de usuários coletados: "+str(i))
 	
 		except Exception as e:	
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -166,12 +170,18 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 def main():
 	global i 													# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
 	j = 0															# Exibe o número ordinal do ego que está sendo usado para a coleta dos favoritos
-	for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+	l = 0															# Exibe o número ordinal do alter que está sendo usado para a coleta dos favoritos
+	
+	for file in os.listdir(favorites_collected_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		j+=1
-		ego = file.split(".dat")
-		ego = long(ego[0])
-		if not dictionary.has_key(ego):
-				save_favorites(j, ego)						#Inicia função de busca dos favoritos
+		with open(favorites_collected_dir+file,'r') as favorites:
+			for line in favorites:
+				l+=1
+				tweet = json.loads(line)
+				user =  tweet['user']['id']
+				user = long(user)
+				if not dictionary.has_key(user):
+					save_favorites(j,l,user)						#Inicia função de busca dos favoritos
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -193,9 +203,11 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"########################## Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/favorites_collect/ego/json/" ################## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/favorites_collect/ego/error/" ################ Diretório para armazenamento dos arquivos de erro
+
+favorites_collected_dir = "/home/amaury/coleta/favorites_collect/50/json/"#### Arquivo contendo a lista dos usuários ego já coletados
+
+data_dir = "/home/amaury/coleta/favorites_collect/alters/json/" ################## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/favorites_collect/alters/error/" ################ Diretório para armazenamento dos arquivos de erro
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
