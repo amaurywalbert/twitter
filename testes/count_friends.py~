@@ -69,8 +69,8 @@ def main():
 	print ("Total de amigos dos amigos coletados: "+str(friends_total))
 	print ("Ainda faltam ser coletados: "+str(alters_count-friends_total)+" amigos")
 
-#	print ("Total de seguidores dos amigos coletados: "+str(followers_total))
-#	print ("Ainda faltam ser coletados: "+str(alters_count-followers_total)+" seguidores")
+	print ("Total de seguidores dos amigos coletados: "+str(followers_total))
+	print ("Ainda faltam ser coletados: "+str(alters_count-followers_total)+" seguidores")
 
 
 ######################################################################################################################################################################

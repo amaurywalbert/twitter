@@ -84,7 +84,7 @@ def main():
 
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"############### Arquivo contendo a lista dos usuários ego já coletados
 egos_friends_collected = "/home/amaury/coleta/n1/egos_and_alters_friends/bin/"############### Arquivo contendo a lista dos usuários ego já coletados
-egos_followers_collected = "/home/amaury/coleta/n5/alters_followers/bin"		############### Arquivo contendo a lista dos usuários ego já coletados
+egos_followers_collected = "/home/amaury/coleta/n5/alters_followers/bin/"		############### Arquivo contendo a lista dos usuários ego já coletados
 formato = 'l'									###################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato)					 ######################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
