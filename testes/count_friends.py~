@@ -49,7 +49,7 @@ def main():
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
 		for friend in friends_list:
 			friends_count += l
-			if os.path.isfile(egos_friends_collected+str(friend)+".dat")
+			if os.path.isfile(egos_friends_collected+str(friend)+".dat"):
 			count += 1
 		i +=1
 		print ("Ego nº: "+str(i)+" - Qtde amigos: "+str(l))

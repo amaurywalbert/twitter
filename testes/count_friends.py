@@ -50,7 +50,7 @@ def main():
 		for friend in friends_list:
 			friends_count += l
 			if os.path.isfile(egos_friends_collected+str(friend)+".dat"):
-			count += 1
+				count += 1
 		i +=1
 		print ("Ego nº: "+str(i)+" - Qtde amigos: "+str(l))
 	print ("Total de amigos coletados: "+str(count))
