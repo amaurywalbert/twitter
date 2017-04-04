@@ -47,12 +47,14 @@ def main():
 		alter = long(alter[0])
 		friends_list = read_arq_bin(egos_friends_dir+file)
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
+		friends_count += l
+		
 		for friend in friends_list:
-			friends_count += l
 			if os.path.isfile(egos_friends_collected+str(friend)+".dat"):
 				count += 1
 		i +=1
 		print ("Ego nº: "+str(i)+" - Qtde amigos: "+str(l))
+
 	print ("Total de amigos coletados: "+str(count))
 	print ("Total de amigos dos "+str(i)+" egos: "+str(friends_count))
 	print ("Média de amigos por ego: "+str(friends_count/i))
