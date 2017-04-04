@@ -27,7 +27,7 @@ def main():
 		user = long(user[0])
 		try:
 			if os.path.isfile(favorites_collected+str(user)+".json"):
-				shutil.copyfile(favorites_collected+str(user)+".json",egos_50_favorites)
+				shutil.copy(favorites_collected+str(user)+".json",egos_50_favorites)
 				print ("Arquivo copiado com sucesso!")
 		except Exception as e:
 			print (e)
