@@ -139,12 +139,9 @@ def save_favorites(j,l,user): # j = número do usuário ego que esta sendo colet
 			with open(data_dir+str(user)+".json", "w") as f:
 				for status in favorites:
 					tweet = {'tweet':status.id, 'user':status.user.id}
-					print status
-					print
-					print tweet
-					time.sleep(20)
 					k+=1
 					f.write(json.dumps(tweet, separators=(',', ':'))+"\n")	# ... no arquivo, imprime o apenas o id do tweet e o id do author.
+#					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
 			print ("Ego nº: "+str(j)+" - Alter("+str(l)+"): "+str(user)+" coletado com sucesso. "+str(k)+" tweets. Total de usuários coletados: "+str(i))
@@ -212,6 +209,10 @@ favorites_collected_dir = "/home/amaury/coleta/favorites_collect/50/json/"#### A
 
 data_dir = "/home/amaury/coleta/favorites_collect/alters/json/" ################## Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/favorites_collect/alters/error/" ################ Diretório para armazenamento dos arquivos de erro
+
+formato = 'll'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
+user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
