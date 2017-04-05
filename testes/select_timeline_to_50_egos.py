@@ -43,7 +43,7 @@ def main():
 
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"
 
-timeline_collected = "/home/amaury/coleta/timeline_collect/10mil_ego/json/"
+timeline_collected = "/home/amaury/coleta/timeline_collect/10mil_egos/json/"
 egos_50_timeline = "/home/amaury/coleta/timeline_collect/50/json/"	
 
 
