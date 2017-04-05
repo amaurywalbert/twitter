@@ -20,7 +20,7 @@ sys.setdefaultencoding('utf-8')
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
-##						STATUS - Coletando - OK - Salvar arquivos JSON contendo os a tweets favoritados a partir da lista de favoritos dos egos.
+##						STATUS - Coletando - OK - Salvar arquivos BINÀRIOS!! contendo os a tweets favoritados a partir da lista de favoritos dos egos.
 ##
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletada
 ##
@@ -58,6 +58,22 @@ class DateTimeEncoder(json.JSONEncoder):
         else:
             encoded_object =json.JSONEncoder.default(self, obj)
         return encoded_object
+
+################################################################################################
+# Imprime os arquivos binários com os ids dos amigos
+################################################################################################
+def read_arq_bin(file):
+	with open(file, 'r') as f:	 
+		f.seek(0,2)
+		tamanho = f.tell()
+		f.seek(0)
+		tweets_list = []
+		while f.tell() < tamanho:
+			buffer = f.read(favorites_struct.size)
+			tweet, user = favorites_struct.unpack(buffer)
+			status = {'tweet':tweet, 'user':user}
+			tweets_list.append(status)
+	return tweets_list
 
 ######################################################################################################################################################################
 #
@@ -136,17 +152,19 @@ def save_favorites(j,l,user): # j = número do usuário ego que esta sendo colet
 	favorites = get_favorites(user)
 	if favorites:	
 		try:
-			with open(data_dir+str(user)+".json", "w") as f:
+			with open(data_dir+str(user)+".dat", "w+b") as f:
 				for status in favorites:
-					tweet = {'tweet':status.id, 'user':status.user.id}
 					k+=1
-					f.write(json.dumps(tweet, separators=(',', ':'))+"\n")	# ... no arquivo, imprime o apenas o id do tweet e o id do author.
-#					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
+					f.write(favorites_struct.pack(status.id,status.user.id))						# Grava os ids dos amigos no arquivo binário do usuário
+###
+#			tweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
+#			print tweets_list
+####				
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
 			print ("Ego nº: "+str(j)+" - Alter("+str(l)+"): "+str(user)+" coletado com sucesso. "+str(k)+" tweets. Total de usuários coletados: "+str(i))
 	
-		except Exception as e:	
+		except EOFError as e:	
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 			with open(error_dir+"favorite_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 				if e.message:		
@@ -155,8 +173,8 @@ def save_favorites(j,l,user): # j = número do usuário ego que esta sendo colet
 					error = {'user':user,'reason': str(e),'date':agora}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
-			if os.path.exists(data_dir+str(user)+".json"):
-				os.remove(data_dir+str(user)+".json")
+			if os.path.exists(data_dir+str(user)+".dat"):
+				os.remove(data_dir+str(user)+".dat")
 
 
 ######################################################################################################################################################################
@@ -207,11 +225,11 @@ key = random.randint(key_init,key_limit) ###################################### 
 
 favorites_collected_dir = "/home/amaury/coleta/favorites_collect/50/json/"#### Arquivo contendo a lista dos usuários ego já coletados
 
-data_dir = "/home/amaury/coleta/favorites_collect/alters/json/" ################## Diretório para armazenamento dos arquivos
+data_dir = "/home/amaury/coleta/favorites_collect/alters/bin/" ################## Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/favorites_collect/alters/error/" ################ Diretório para armazenamento dos arquivos de erro
 
 formato = 'll'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
-user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+favorites_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
@@ -230,7 +248,7 @@ print("######################################################################")
 print ("Criando tabela hash...")
 i = 0	#Conta quantos usuários já foram coletados (todos arquivos no diretório)
 for file in os.listdir(data_dir):
-	user_id = file.split(".json")
+	user_id = file.split(".dat")
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
 	i+=1
