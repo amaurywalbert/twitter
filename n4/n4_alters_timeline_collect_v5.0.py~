@@ -3,14 +3,14 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n2
+import multi_oauth_n4
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 5.0 - Coletar timeline dos autores dos retweets feitos pelos usuários egos (lista de retweets dos egos)) - Timeline dos Alters
+##		Status - Versão 5.0 - Coletar timeline dos user mencionados pelos usuários egos (lista de mentions dos egos)) - Timeline dos Alters
 ##
 ##						
 ##						5.1 - Uso do Tweepy para controlar as autenticações...
@@ -18,9 +18,9 @@ sys.setdefaultencoding('utf-8')
 ##				
 ##						SALVAR APENAS O NECESSÁRIO PARA ECONOMIZAR ESPAÇO EM DISCO. Coletar tweets completos ocupa muito espaço.
 ##
-##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
+##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar a atenção com os scripts criados.				
 ##
-##						STATUS - Coletando - OK - Salvar arquivos BINÀRIOS!! contendo o id do retweet e id do autor a partir da lista de autores dos retweets do egos.
+##						STATUS - Coletando - OK - Salvar arquivos BINÀRIOS!! contendo o id do tweet e id do usuário mencionado.
 ##
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletada
 ##
@@ -67,13 +67,13 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		retweets_list = []
+		mentions_list = []
 		while f.tell() < tamanho:
 			buffer = f.read(timeline_struct.size)
-			retweet, user = timeline_struct.unpack(buffer)
-			status = {'retweet':retweet, 'user':user}
-			retweets_list.append(status)
-	return retweets_list
+			tweet, user, is_retweet = timeline_struct.unpack(buffer)
+			status = {'tweet':tweet, 'user':user, 'is_retweet':is_retweet}
+			mentions_list.append(status)
+	return mentions_list
 
 ######################################################################################################################################################################
 #
@@ -140,22 +140,27 @@ def save_timeline(j,l,user):
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de tweets do usuário
-	t = 0 																# Número de Tweets por usuário
 	timeline = get_timeline(user)
 	if timeline:	
 		try:
 			with open(data_dir+str(user)+".dat", "w+b") as f:
 				for status in timeline:
+					is_retweet = 0
 					if hasattr(status, 'retweeted_status'):
-						t+=1
-						f.write(timeline_struct.pack(status.retweeted_status.id, status.retweeted_status.user.id))						# Grava os ids dos retweet  e o id do autor no arquivo binário do usuário
+						is_retweet = 1
+					mentions = status.entities['user_mentions']
+					for mention in mentions:
+						user_mentioned = long(mention['id'])
+						print status.id, user_mentioned, is_retweet
+						f.write(timeline_struct.pack(status.id, user_mentioned, is_retweet))		# Grava os ids dos tweet, o id do user mencionado e se foi um retweet ou não no arquivo binário do usuário
+
 ###
-#			retweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
-#			print retweets_list
+#			mentions_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
+#			print mentions_list
 ####				
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
-			print ("Ego nº: "+str(j)+" - Alter("+str(l)+"): "+str(user)+" coletado com sucesso. "+str(t)+" retweets. Total de usuários coletados: "+str(i))
+			print ("Ego nº: "+str(j)+" - Alter("+str(l)+"): "+str(user)+" coletado com sucesso. Total de usuários coletados: "+str(i))
 	
 		except Exception as e:	
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -191,13 +196,14 @@ def main():
 				l+=1
 				tweet = json.loads(line)
 				try:
-					user =  tweet['retweeted_status']['user']['id']
-					user = long(user)
-					if not dictionary.has_key(user):
-						save_timeline(j,l,user)						#Inicia função de busca dos favoritos
+					for item in tweet['entities']['user_mentions']:						 					
+						user =  item['id']
+						user = long(user)
+						if not dictionary.has_key(user):
+							save_timeline(j,l,user)						#Inicia função de busca dos favoritos
 				except KeyError:
 					m+=1
-					print "Não é retweet!"
+					print "Não há menções!"
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -210,7 +216,7 @@ def main():
 ######################################################################################################################################################################
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
-oauth_keys = multi_oauth_n2.keys()
+oauth_keys = multi_oauth_n4.keys()
 auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
@@ -220,13 +226,13 @@ key_init = 0					#################################################### Essas duas
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
-timeline_collected_dir = "/home/amaury/coleta/timeline_collect/50/json/"#### Arquivo contendo a lista dos usuários ego já coletados
+timeline_collected_dir = "/home/amaury/coleta/timeline_collect/50/json/"####### Arquivo contendo a lista dos usuários ego já coletados
 
-data_dir = "/home/amaury/coleta/n2/timeline_collect/alters/bin/" ################## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n2/timeline_collect/alters/error/" ################ Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/n4/timeline_collect/alters/bin/" ############## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n4/timeline_collect/alters/error/" ########### Diretório para armazenamento dos arquivos de erro
 
-formato = 'll'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
-timeline_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+formato = 'lli'				#################################################### Long para o código ('l') e depois o array de chars de X posições:	
+timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
