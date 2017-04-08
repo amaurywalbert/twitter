@@ -39,6 +39,7 @@ def read_arq_bin(file):
 def main():
 	for file in os.listdir(egos_friends_dir):
 		friends_list = read_arq_bin(egos_friends_dir+file)	# Lista de friends de um determinado ego
+		print friends_list
 		for user in friends_list:
 			try:
 				if os.path.isfile(followers_collected_dir+str(user)+".bin"):
