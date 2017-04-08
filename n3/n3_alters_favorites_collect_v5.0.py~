@@ -20,7 +20,7 @@ sys.setdefaultencoding('utf-8')
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
-##						STATUS - Coletando - OK - Salvar arquivos BINÀRIOS!! contendo os a tweets favoritados a partir da lista de favoritos dos egos.
+##						STATUS - Coletando - OK - Salvar arquivos BINÀRIOS!! contendo os a tweets favoritados a partir dos autores do tweets favoritados pelo egos.
 ##
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletada
 ##

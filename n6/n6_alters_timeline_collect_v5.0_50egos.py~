@@ -205,7 +205,7 @@ def main():
 		for follower in followers_list:
 			k+=1
 			if not dictionary.has_key(follower):
-				save_user(j,k,l,friend)							#Inicia função de busca
+				save_timeline(j,k,l,follower)							#Inicia função de busca
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")

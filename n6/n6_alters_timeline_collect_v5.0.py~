@@ -204,7 +204,7 @@ def main():
 		for follower in followers_list:
 			k+=1
 			if not dictionary.has_key(follower):
-				save_user(j,k,l,friend)							#Inicia função de busca
+				save_timeline(j,k,l,follower)							#Inicia função de busca
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -236,8 +236,8 @@ formato = 'll'				####################################################### Long p
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 
-formato_followers = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
-followers_struct = struct.Struct(formato_followers) #################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+formato_followers = 'l'				############################################## Long para o código ('l') e depois o array de chars de X posições:	
+followers_struct = struct.Struct(formato_followers) ########################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 
 wait = 60

@@ -165,8 +165,8 @@ def save_timeline(j,k,l,user):
 						t+=1
 						f.write(timeline_struct.pack(status.retweeted_status.id, status.retweeted_status.user.id))						# Grava os ids dos retweet  e o id do autor no arquivo binário do usuário
 ###
-#			retweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
-#			print retweets_list
+			retweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
+			print retweets_list
 ####				
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
@@ -204,7 +204,7 @@ def main():
 		for follower in followers_list:
 			k+=1
 			if not dictionary.has_key(follower):
-				save_user(j,k,l,friend)							#Inicia função de busca
+				save_timeline(j,k,l,follower)							#Inicia função de busca
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")

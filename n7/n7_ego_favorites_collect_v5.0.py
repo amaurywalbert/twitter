@@ -3,20 +3,20 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n3
+import multi_oauth_n7
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 3.0 - Coletar favorites dos usuários especificados
+##		Status - Versão 5.0 - Coletar favorites dos usuários especificados a partir dos seguidores dos amigos dos egos
 ##						
-##						3.1 - Uso do Tweepy para controlar as autenticações...
+##						5.1 - Uso do Tweepy para controlar as autenticações...
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
-##						STATUS - Coletando - OK - Salvar arquivos JSON contendo os a tweets favoritados dos usuários.
+##						STATUS - Coletando - OK - Salvar arquivos BINÀRIOS contendo os ids do autor e dos tweets favoritados dos usuários.
 ##
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletada
 ##
@@ -41,6 +41,37 @@ def autentication(auths):
 	time.sleep(wait)
 	api_key = tweepy.API(auths[key])
 	return (api_key)
+
+################################################################################################
+# Imprime os arquivos binários com os ids dos amigos
+################################################################################################
+def read_arq_bin(file):
+	with open(file, 'r') as f:	 
+		f.seek(0,2)
+		tamanho = f.tell()
+		f.seek(0)
+		tweets_list = []
+		while f.tell() < tamanho:
+			buffer = f.read(timeline_struct.size)
+			tweet, user = timeline_struct.unpack(buffer)
+			status = {'tweet_favorited':tweet, 'user':user}
+			tweets_list.append(status)
+	return tweets_list
+
+################################################################################################
+# Imprime os arquivos binários com os ids dos amigos
+################################################################################################
+def read_arq_followers_bin(file):
+	with open(file, 'r') as f:	 
+		f.seek(0,2)
+		tamanho = f.tell()
+		f.seek(0)
+		followers_file = []
+		while f.tell() < tamanho:
+			buffer = f.read(followers_struct.size)
+			follower = followers_struct.unpack(buffer)
+			followers_file.append(follower[0])
+	return followers_file
 
 ######################################################################################################################################################################
 #
@@ -121,26 +152,29 @@ def get_favorites(user):												#Coleta dos favoritos
 # Obtem favoritos dos usuários
 #
 ######################################################################################################################################################################
-def save_favorites(j,user): # j = número do usuário que esta sendo coletado
+def save_favorites(j,k,l,user):
 	global i	# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
 	 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de tweets do usuário
-	k = 0 																# Número de Tweets por usuário
+	t = 0 																# Número de Tweets por usuário
 	favorites = get_favorites(user)
 	if favorites:	
 		try:
-			with open(data_dir+str(user)+".json", "w") as f:	
-				for tweet in favorites:
-					k+=1
-					f.write(json.dumps(tweet._json)+"\n")		# ... no arquivo, imprime o tweet (status) inteiro.
-			
+			with open(data_dir+str(user)+".dat", "w+b") as f:
+				for status in favorites:
+					t+=1
+					f.write(timeline_struct.pack(status.id, status.user.id))						# Grava os ids dos favorites e o id do autor no arquivo binário do usuário
+###
+			retweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
+			print retweets_list
+####							
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
-			print ("Usuário nº "+str(j)+": "+str(user)+" coletado com sucesso. "+str(k)+" tweets. Total de usuários coletados: "+str(i))
-	
+			print ("Egos_Friend nº: "+str(j)+" - Alter("+str(k)+"/"+str(l)+"): "+str(user)+" coletado com sucesso. "+str(t)+" favorites. Total de usuários coletados: "+str(i))
+
 		except Exception as e:	
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 			with open(error_dir+"favorite_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
@@ -165,13 +199,17 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 
 def main():
 	global i 													# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
-	j = 0															#Exibe o número ordinal do ego que está sendo usado para a coleta dos favoritos
-	for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+	j = 0															# Exibe o número ordinal do friend que está sendo usado para a coleta da timeline
+	k = 0															# Exibe o número ordinal do alter(follower) que está sendo usado para a coleta da timeline	
+	for file in os.listdir(followers_collected_dir):	# Verifica no diretorio.
 		j+=1
-		ego = file.split(".dat")
-		ego = long(ego[0])
-		if not dictionary.has_key(ego):
-				save_favorites(j, ego)						#Inicia função de busca dos favoritos
+		followers_list = read_arq_followers_bin(followers_collected_dir+file)	# Lista de alters (friends) de um determinado ego
+		l = len(followers_list)									# Exibe o tamanho/quantidade de seguidores do amigo do ego
+		for follower in followers_list:
+			k+=1
+			if not dictionary.has_key(follower):
+				save_favorites(j,k,l,follower)							#Inicia função de busca	
+				
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -184,7 +222,7 @@ def main():
 ######################################################################################################################################################################
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
-oauth_keys = multi_oauth.keys()
+oauth_keys = multi_oauth_n7.keys()
 auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
@@ -193,10 +231,21 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"########################## Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/favorites_collect/ego/json/" ################## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/favorites_collect/ego/error/" ################ Diretório para armazenamento dos arquivos de erro
-wait = 5
+
+followers_collected_dir = "/home/amaury/coleta/n5/alters_followers/bin/"#### Diretório contendo o conjunto de amigos dos ego já coletados. Cada arquivo contém o conjunto de seguidores dos amigos.
+
+data_dir = "/home/amaury/coleta/n7/favorites_collect/alters/bin/" ############## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n7/favorites_collect/alters/error/" ########### Diretório para armazenamento dos arquivos de erro
+
+formato = 'll'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
+timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+
+
+formato_followers = 'l'				############################################## Long para o código ('l') e depois o array de chars de X posições:	
+followers_struct = struct.Struct(formato_followers) ########################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+
+
+wait = 30
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
@@ -213,7 +262,7 @@ print("######################################################################")
 print ("Criando tabela hash...")
 i = 0	#Conta quantos usuários já foram coletados (todos arquivos no diretório)
 for file in os.listdir(data_dir):
-	user_id = file.split(".json")
+	user_id = file.split(".dat")
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
 	i+=1
