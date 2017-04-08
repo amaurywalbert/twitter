@@ -151,7 +151,6 @@ def save_timeline(j,l,user):
 					mentions = status.entities['user_mentions']
 					for mention in mentions:
 						user_mentioned = long(mention['id'])
-						print status.id, user_mentioned, is_retweet
 						f.write(timeline_struct.pack(status.id, user_mentioned, is_retweet))		# Grava os ids dos tweet, o id do user mencionado e se foi um retweet ou não no arquivo binário do usuário
 
 ###
@@ -234,7 +233,7 @@ error_dir = "/home/amaury/coleta/n4/timeline_collect/alters/error/" ########### 
 formato = 'lli'				#################################################### Long para o código ('l') e depois o array de chars de X posições:	
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
-wait = 5
+wait = 60
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
