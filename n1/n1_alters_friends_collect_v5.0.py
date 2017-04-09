@@ -223,7 +223,7 @@ data_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/bin/" ############## 
 error_dir = "/home/amaury/coleta/n1/egos_and_alters_friends/error/" ########### Diretório para armazenamento dos arquivos de erro
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-wait = 60
+wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
