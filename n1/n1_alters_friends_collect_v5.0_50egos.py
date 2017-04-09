@@ -11,9 +11,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 4 - Coletar amigos do Twitter
+##		Status - Versão 5 - Coletar amigos do Twitter
 ##						
-##						4.1 - Uso do Tweepy para controlar as autenticações...
+##						5.1 - Uso do Tweepy para controlar as autenticações...  	USANDO CONTROLE DE LIMITES DA API PELO TWEEPY
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##

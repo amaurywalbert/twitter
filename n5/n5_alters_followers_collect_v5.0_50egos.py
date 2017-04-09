@@ -11,9 +11,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 4 - Coletar seguidores dos alters do Twitter
+##		Status - Versão 5 - Coletar seguidores dos alters do Twitter
 ##						
-##						4.1 - Uso do Tweepy para controlar as autenticações...
+##						5.1 - Uso do Tweepy para controlar as autenticações... 	USANDO CONTROLE DE LIMITES DA API PELO TWEEPY
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -23,24 +23,6 @@ sys.setdefaultencoding('utf-8')
 ## 
 ######################################################################################################################################################################
 
-######################################################################################################################################################################
-#
-# Realiza autenticação da aplicação.
-#
-######################################################################################################################################################################
-
-def autentication(auths):
-	global key
-	key += 1
-	if (key >= key_limit):
-		key = key_init
-	print
-	print("######################################################################")
-	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
-	print("######################################################################\n")
-	time.sleep(wait)
-	api_key = tweepy.API(auths[key])
-	return (api_key)
 
 ######################################################################################################################################################################
 #
@@ -79,7 +61,6 @@ def read_arq_bin(file):
 def get_followers(user):												#Coleta dos seguidores de um usuário específico
 	global key
 	global dictionary
-	global api
 	global i
 	
 	try:
@@ -91,7 +72,6 @@ def get_followers(user):												#Coleta dos seguidores de um usuário espec�
 	
 	except tweepy.error.RateLimitError as e:
 			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
-			api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -107,8 +87,7 @@ def get_followers(user):												#Coleta dos seguidores de um usuário espec�
 				print error
 		try:
 			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
-				key = random.randint(key_init,key_limit)
-				api = autentication(auths)
+				print e.message[0]['code']
 			if e.message[0]['code'] == 34:									# Usuários não existentes
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w+b") as f:		# Cria arquivo vazio	
@@ -245,9 +224,20 @@ for file in os.listdir(data_dir):
 	i+=1
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
-#Autenticação
-api = autentication(auths)
 
+
+#Autenticação
+
+# Registre sua aplicacao em https://apps.twitter.com
+
+consumer_key="6JURlBsCpoDnG97JcQXb1DVDq"
+consumer_secret="8dzL2NSfOXg3QSBb97LWS4ChDb9ycUYGIDBuIKHXkKfdWYMccg"
+access_token="849270909034692608-zZav8hfaWZtBwXIctKtK9FnhHiBS4eq"
+access_token_secret="iarzO6gXEN7o260zesA9aVesLvZcElKsSZ2fomQKulzrQ"
+
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth, wait_on_rate_limit=True)
 	
 #Executa o método main
 if __name__ == "__main__": main()
