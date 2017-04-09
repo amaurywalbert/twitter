@@ -59,7 +59,6 @@ def read_arq_bin(file):
 #
 ######################################################################################################################################################################
 def get_friends(user):												#Coleta dos amigos de um usuário específico
-	global key
 	global dictionary
 	global i
 	
@@ -78,11 +77,11 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 		error = {}
 		with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
+				error = {'user':user,'reason': e.message,'date':agora}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
 			else:
-				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
+				error = {'user':user,'reason': str(e),'date':agora}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:

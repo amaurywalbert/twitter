@@ -59,7 +59,6 @@ def read_arq_bin(file):
 #
 ######################################################################################################################################################################
 def get_followers(user):												#Coleta dos seguidores de um usuário específico
-	global key
 	global dictionary
 	global i
 	
@@ -78,11 +77,11 @@ def get_followers(user):												#Coleta dos seguidores de um usuário espec�
 		error = {}
 		with open(error_dir+"followers_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
+				error = {'user':user,'reason': e.message,'date':agora}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
 			else:
-				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
+				error = {'user':user,'reason': str(e),'date':agora}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:
@@ -187,16 +186,10 @@ def main():
 #
 ######################################################################################################################################################################
 
-################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
-oauth_keys = multi_oauth.keys()
-auths = oauth_keys['auths_ok']
+
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-
-key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
-key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
-key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"############### Arquivo contendo a lista dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/n5/alters_followers/bin/" ##################### Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n5/alters_followers/error/" ################## Diretório para armazenamento dos arquivos de erro
