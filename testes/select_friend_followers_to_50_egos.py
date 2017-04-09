@@ -48,7 +48,7 @@ def main():
 			j+=1
 			try:
 				if os.path.isfile(followers_collected_dir+str(user)+".dat"):
-					shutil.copy(followers_collected_dir+str(user)+".bin",followers_collected_50_egos)
+					shutil.copy(followers_collected_dir+str(user)+".dat",followers_collected_50_egos)
 					k+=1
 					print ("Arquivo copiado com sucesso!")
 			except Exception as e:
