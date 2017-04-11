@@ -38,11 +38,12 @@ def read_arq_bin(file):
 
 def main():
 	i = 0											#QTDE total de favorites
-#	j = 0											#QTDE total de alters
+	j = 0											#QTDE total de egos
 	k = 0											#QTDE de arquivos copiados
 	l = 0											#QTDE de erros
 	for file in os.listdir(egos_favorites_dir):
-		with open(collected_dir+file,'r') as favorites:
+		j+=1
+		with open(egos_favorites_dir+file,'r') as favorites:
 			for line in favorites:
 				i+=1
 				tweet = json.loads(line)
@@ -57,7 +58,7 @@ def main():
 					print (e)
 	print
 	print ("QTDE de friends no diretório: "+str(i))
-#	print ("QTDE de friends_of_friends verificados: "+str(j))
+	print ("QTDE de egos verificados: "+str(j))
 	print ("QTDE de arquivos copiados: "+str(k))
 	print ("QTDE de erros: "+str(l))
 			
