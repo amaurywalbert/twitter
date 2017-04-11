@@ -42,7 +42,7 @@ def main():
 	k = 0											#QTDE de arquivos copiados
 	l = 0											#QTDE de erros
 	for file in os.listdir(egos_favorites_dir):
-		with open(favorites_collected_dir+file,'r') as favorites:
+		with open(collected_dir+file,'r') as favorites:
 			for line in favorites:
 				i+=1
 				tweet = json.loads(line)
