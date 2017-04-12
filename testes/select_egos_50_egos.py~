@@ -88,33 +88,8 @@ def main():
 		
 				print ("##############################################")
 			
-#		if egos_lists_ownership:
-#			try:
-#				with open(lists_ego_50_bin_ownership+str(ego)+".dat", "w+b") as f:	
-#					for list in egos_lists_ownership:		
-#						f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
-#					j+=1
-#					print ("##############################################")
-#					print ("Arquivo criado com sucesso!")
-#					print ("##############################################")
-#			except Exception as e:
-#				l+=1
-#				print (e)
-#				
-#		if egos_lists_subscription:
-#			try:
-#				with open(lists_ego_50_bin_subscription+str(ego)+".dat", "w+b") as f:	
-#					for list in egos_lists_subscription:
-#							f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
-#					k+=1
-#					print ("##############################################")
-#					print ("Arquivo criado com sucesso!")
-#					print ("##############################################")
-#			except Exception as e:
-#				l+=1
-#				print (e)				
 	print
-	print ("QTDE de egos verificados: "+str(i))
+	print ("QTDE de egos verificados: "+str(q))
 	print ("QTDE de arquivos gerados - owner: "+str(j))
 	print ("QTDE de arquivos gerados - subs: "+str(k))
 	print ("QTDE de erros: "+str(l))

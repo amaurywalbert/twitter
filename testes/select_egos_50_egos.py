@@ -59,6 +59,7 @@ def get_lists(ego):
 
 def main():
 	global i										#controla a quantidade de egos a serrem selecionados
+	global dictionary
 	q = 0											#QTDE total de egos
 	j = 0											#QTDE de listas - owner
 	k = 0											#QTDE de listas - subs
@@ -123,7 +124,7 @@ if not os.path.exists(lists_ego_50_bin_ownership):
 if not os.path.exists(lists_ego_50_bin_subscription):
 	os.makedirs(lists_ego_50_bin_subscription)	
 	
-	
+dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
 print
 print("######################################################################")
