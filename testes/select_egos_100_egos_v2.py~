@@ -9,7 +9,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Avalia o conjunto de usuarios coletados e verifica quais atendem aos requisitos de ter pelo menos 02 duas.
-##								ESSE SCRIPT VERIFICA E COMPLETA OS 1000 EGOS
+##								ESSE SCRIPT VERIFICA E COMPLETA OS 100 EGOS
 ## 
 ######################################################################################################################################################################
 
