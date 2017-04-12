@@ -51,8 +51,7 @@ def main():
 			l+=1
 			print (e)
 	print
-	print ("QTDE de friends no diretório: "+str(i))
-	print ("QTDE de friends_of_friends verificados: "+str(j))
+	print ("QTDE de egos verificados: "+str(j))
 	print ("QTDE de arquivos copiados: "+str(k))
 	print ("QTDE de erros: "+str(l))
 			
@@ -68,8 +67,8 @@ def main():
 
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"
 
-collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
-collected_50_egos = "/home/amaury/coleta/lists_info/members_lists_collected/50/bin/"	
+collected_dir = "/home/amaury/coleta/lists_info/subscribers_lists_collected/bin/"
+collected_50_egos = "/home/amaury/coleta/lists_info/subscribers_lists_collected/50/bin/"	
 
 formato = 'l'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

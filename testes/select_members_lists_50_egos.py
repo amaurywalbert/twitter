@@ -51,8 +51,7 @@ def main():
 			l+=1
 			print (e)
 	print
-	print ("QTDE de friends no diretório: "+str(i))
-	print ("QTDE de friends_of_friends verificados: "+str(j))
+	print ("QTDE de egos verificados: "+str(j))
 	print ("QTDE de arquivos copiados: "+str(k))
 	print ("QTDE de erros: "+str(l))
 			
