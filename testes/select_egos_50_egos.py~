@@ -57,7 +57,7 @@ def get_lists(ego):
 ######################################################################################################################################################################
 
 def main():
-	c = 0											#controla a quantidade de egos
+	q = 0											#controla a quantidade de egos a serrem selecionados
 	i = 0											#QTDE total de egos
 	j = 0											#QTDE de listas - owner
 	k = 0											#QTDE de listas - subs
@@ -70,7 +70,13 @@ def main():
 		egos_lists_ownership,egos_lists_subscription = get_lists(ego)
 		print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Ownership ("+str(len(egos_lists_ownership))+"): "+str(egos_lists_ownership))
 		print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription ("+str(len(egos_lists_subscription))+"): "+str(egos_lists_subscription))
-		if len(egos_lists_ownership)+len(egos_lists_subscription):
+		if len(egos_lists_ownership)+len(egos_lists_subscription) > 1:
+			q+=1
+			
+			print (str(q)+" - Ok!")
+		else:
+			print ("Não atende")
+		print ("##############################################")
 			
 #		if egos_lists_ownership:
 #			try:

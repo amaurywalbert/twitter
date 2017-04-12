@@ -73,9 +73,11 @@ def main():
 		if len(egos_lists_ownership)+len(egos_lists_subscription) > 1:
 			q+=1
 			
-			print (str(q)+"Ok!")
+			print (str(q)+" - Ok!")
 		else:
 			print ("Não atende")
+		
+		print ("##############################################")
 			
 #		if egos_lists_ownership:
 #			try:
