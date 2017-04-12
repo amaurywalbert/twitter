@@ -44,7 +44,7 @@ def main():
 		j+=1
 		try:
 			if os.path.isfile(collected_dir+str(file)):
-				shutil.copy(collected_dir+str(file)+".dat",collected_50_egos)
+				shutil.copy(collected_dir+str(file),collected_50_egos)
 				k+=1
 				print ("Arquivo copiado com sucesso!")
 		except Exception as e:
