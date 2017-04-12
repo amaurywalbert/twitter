@@ -71,8 +71,7 @@ def main():
 #			try:
 			with open(lists_ego_50_bin_ownership+str(ego)+".dat", "w+b") as f:	
 				for list in egos_lists_ownership:		
-					for member in list:
-						f.write(list_struct.pack(member))						# Grava os ids dos amigos no arquivo binário do usuário	
+					f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
 				j+=1
 				print ("##############################################")
 				print ("Arquivo copiado com sucesso!")
@@ -84,9 +83,8 @@ def main():
 		if egos_lists_subscription:
 #			try:
 			with open(lists_ego_50_bin_subscription+str(ego)+".dat", "w+b") as f:	
-				for item in egos_lists_subscription:		
-					for user in item:
-						f.write(list_struct.pack(user))						# Grava os ids dos amigos no arquivo binário do usuário	
+				for list in egos_lists_subscription:
+						f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
 				k+=1
 				print ("##############################################")
 				print ("Arquivo copiado com sucesso!")
