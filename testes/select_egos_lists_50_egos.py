@@ -126,7 +126,7 @@ if not os.path.exists(collected_50_egos):
 	os.makedirs(collected_50_egos)
 if not os.path.exists(lists_ego_50_bin_ownership):
 	os.makedirs(lists_ego_50_bin)
-if not os.path.exists(lists_ego_50_bin):
+if not os.path.exists(lists_ego_50_bin_subscription):
 	os.makedirs(lists_ego_50_bin_subscription)	
 #Executa o método main
 if __name__ == "__main__": main()
