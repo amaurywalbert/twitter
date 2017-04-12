@@ -38,7 +38,7 @@ def get_lists(ego):
 	eof = False
 	with open(lists_ego, 'r') as lists_file:
 		for line in lists_file:
-			lists = json.loads(user_lists)
+			lists = json.loads(line)
 			if ego == long(lists['user']):
 				print "Ego encontrado! Localizando listas..."
 				for list in lists['owner']:
