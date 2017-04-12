@@ -9,6 +9,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Avalia o conjunto de usuarios coletados e verifica quais atendem aos requisitos de ter pelo menos 02 duas.
+##								ESSE SCRIPT VERIFICA APENAS OS 50 EGOS QUE JA'HAVIAM SIDO SELECIONADOS PELO PROTOTIPO MAS NAO TINHAMOS VERIFICADO A SITUAÇÃO DAS LISTAS
 ## 
 ######################################################################################################################################################################
 
@@ -63,21 +64,29 @@ def main():
 	k = 0											#QTDE de listas - subs
 	l = 0											#QTDE de erros
 
-	for file in os.listdir(egos_friends_dir):
-		i+=1 
-		ego = file.split(".dat")
-		ego = long(ego[0])
-		egos_lists_ownership,egos_lists_subscription = get_lists(ego)
-		print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Ownership ("+str(len(egos_lists_ownership))+"): "+str(egos_lists_ownership))
-		print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription ("+str(len(egos_lists_subscription))+"): "+str(egos_lists_subscription))
-		if len(egos_lists_ownership)+len(egos_lists_subscription) > 1:
-			q+=1
-			
-			print (str(q)+" - Ok!")
-		else:
-			print ("Não atende")
+	for file in os.listdir(egos_friends_dir_50_egos):	#Contando quantos egos já existem no diretório...
+		q+=1
+	
+	while q < ego_limit:
+		for file in os.listdir(egos_friends_dir):
+			i+=1 
+			ego = file.split(".dat")
+			ego = long(ego[0])
+			egos_lists_ownership,egos_lists_subscription = get_lists(ego)
+			print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Ownership ("+str(len(egos_lists_ownership))+"): "+str(egos_lists_ownership))
+			print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription ("+str(len(egos_lists_subscription))+"): "+str(egos_lists_subscription))
+			qtde_listas = len(egos_lists_ownership)+len(egos_lists_subscription) 
+			if  qtde_listas > 1:	
+				print (str(q)+" - Ok! - Quantidade de listas: "+str(qtde_listas))
+				try:
+					shutil.copy(egos_friends_dir+file,egos_friends_dir_50_egos)
+					print ("Arquivo copiado com sucesso!")
+				except Exception as e:
+					print (e)
+			else:
+				print ("Não atende")
 		
-		print ("##############################################")
+			print ("##############################################")
 			
 #		if egos_lists_ownership:
 #			try:
@@ -86,7 +95,7 @@ def main():
 #						f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
 #					j+=1
 #					print ("##############################################")
-#					print ("Arquivo copiado com sucesso!")
+#					print ("Arquivo criado com sucesso!")
 #					print ("##############################################")
 #			except Exception as e:
 #				l+=1
@@ -99,7 +108,7 @@ def main():
 #							f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
 #					k+=1
 #					print ("##############################################")
-#					print ("Arquivo copiado com sucesso!")
+#					print ("Arquivo criado com sucesso!")
 #					print ("##############################################")
 #			except Exception as e:
 #				l+=1
@@ -120,7 +129,7 @@ def main():
 ######################################################################################################################
 
 ego_limit = 50
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/bin/"
+egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50_old/bin"
 lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists_overview.json"
 
 egos_friends_dir_50_egos = "/home/amaury/coleta/n1/egos_friends/50_egos_bin/"
