@@ -77,9 +77,10 @@ def main():
 			print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription ("+str(len(egos_lists_subscription))+"): "+str(egos_lists_subscription))
 			qtde_listas = len(egos_lists_ownership)+len(egos_lists_subscription) 
 			if  qtde_listas > 1:	
-				print (str(q)+" - Ok! - Quantidade de listas: "+str(qtde_listas))
 				try:
 					shutil.copy(egos_friends_dir+file,egos_friends_dir_50_egos)
+					q+=1
+					print (str(q)+" - Ok! - Quantidade de listas: "+str(qtde_listas))
 					print ("Arquivo copiado com sucesso!")
 				except Exception as e:
 					print (e)
