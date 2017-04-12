@@ -68,11 +68,10 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-egos_lists_dir_ownership = "/home/amaury/coleta/lists_info/egos_lists_collected/50/ownership/bin/"
-egos_lists_dir_subscription = "/home/amaury/coleta/lists_info/egos_lists_collected/50/subscription/bin/"
+egos_lists_dir = "/home/amaury/coleta/lists_info/egos_lists_collected/50/bin/"
 
-collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
-collected_50_egos = "/home/amaury/coleta/lists_info/members_lists_collected/50/bin/"	
+collected_dir = "/home/amaury/coleta/lists_info/subscribers_lists_collected/bin/"
+collected_50_egos = "/home/amaury/coleta/lists_info/subscribers_lists_collected/50/bin/"	
 
 formato = 'l'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

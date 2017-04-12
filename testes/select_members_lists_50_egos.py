@@ -40,17 +40,32 @@ def main():
 	j = 0											#QTDE total de egos
 	k = 0											#QTDE de arquivos copiados
 	l = 0											#QTDE de erros
-	for file in os.listdir(egos_friends_dir):
+	for file in os.listdir(egos_lists_dir_ownership):
 		j+=1
-		try:
-			print collected_dir+str(file)
-			if os.path.isfile(collected_dir+str(file)):
-				shutil.copy(collected_dir+str(file),collected_50_egos)
-				k+=1
-				print ("Arquivo copiado com sucesso!")
-		except Exception as e:
-			l+=1
-			print (e)
+		egos_lists = read_arq_bin(egos_lists_dir_ownership+str(file))
+		if egos_lists:
+			for list in egos_lists:
+				try:
+					if os.path.isfile(collected_dir+str(list)+".dat"):
+						shutil.copy(collected_dir+str(list)+".dat",collected_50_egos)
+						k+=1
+						print ("Arquivo copiado com sucesso!")
+				except Exception as e:
+					l+=1
+					print (e)
+	for file in os.listdir(egos_lists_dir_subscription):
+		j+=1
+		egos_lists = read_arq_bin(egos_lists_dir_subscription+str(file))
+		if egos_lists:
+			for list in egos_lists:
+				try:
+					if os.path.isfile(collected_dir+str(list)+".dat"):
+						shutil.copy(collected_dir+str(list)+".dat",collected_50_egos)
+						k+=1
+						print ("Arquivo copiado com sucesso!")
+				except Exception as e:
+					l+=1
+					print (e)
 	print
 	print ("QTDE de egos verificados: "+str(j))
 	print ("QTDE de arquivos copiados: "+str(k))
@@ -66,7 +81,8 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"
+egos_lists_dir_ownership = "/home/amaury/coleta/lists_info/egos_lists_collected/50/ownership/bin/"
+egos_lists_dir_subscription = "/home/amaury/coleta/lists_info/egos_lists_collected/50/subscription/bin/"
 
 collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
 collected_50_egos = "/home/amaury/coleta/lists_info/members_lists_collected/50/bin/"	
