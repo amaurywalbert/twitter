@@ -101,9 +101,6 @@ def main():
 			
 	print
 	print ("QTDE de egos verificados: "+str(q))
-	print ("QTDE de arquivos gerados - owner: "+str(j))
-	print ("QTDE de arquivos gerados - subs: "+str(k))
-	print ("QTDE de erros: "+str(l))
 			
 ######################################################################################################################################################################
 #
