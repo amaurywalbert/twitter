@@ -129,7 +129,7 @@ def main():
 ######################################################################################################################
 
 ego_limit = 50
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50_old/bin"
+egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50_old/bin/"
 lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists_overview.json"
 
 egos_friends_dir_50_egos = "/home/amaury/coleta/n1/egos_friends/50_egos_bin/"

@@ -79,9 +79,8 @@ def main():
 			if  qtde_listas > 1:	
 				print (str(q)+" - Ok! - Quantidade de listas: "+str(qtde_listas))
 				try:
-					if os.path.isfile(favorites_collected+str(user)+".json"):
-						shutil.copy(favorites_collected+str(user)+".json",egos_50_favorites)
-						print ("Arquivo copiado com sucesso!")
+					shutil.copy(egos_friends_dir+file,egos_friends_dir_50_egos)
+					print ("Arquivo copiado com sucesso!")
 				except Exception as e:
 					print (e)
 			else:
@@ -96,7 +95,7 @@ def main():
 #						f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
 #					j+=1
 #					print ("##############################################")
-#					print ("Arquivo copiado com sucesso!")
+#					print ("Arquivo criado com sucesso!")
 #					print ("##############################################")
 #			except Exception as e:
 #				l+=1
@@ -109,7 +108,7 @@ def main():
 #							f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
 #					k+=1
 #					print ("##############################################")
-#					print ("Arquivo copiado com sucesso!")
+#					print ("Arquivo criado com sucesso!")
 #					print ("##############################################")
 #			except Exception as e:
 #				l+=1
