@@ -61,17 +61,16 @@ def main():
 	global i										#controla a quantidade de egos a serrem selecionados
 	global dictionary
 	q = 0											#QTDE total de egos
-	j = 0											#QTDE de listas - owner
-	k = 0											#QTDE de listas - subs
 	l = 0											#QTDE de erros
 	
 	for file in os.listdir(egos_friends_dir):
 		if i < ego_limit:
+			j = 0											#QTDE de listas - owner
+			k = 0											#QTDE de listas - subs
 			q+=1 
 			ego = file.split(".dat")
 			ego = long(ego[0])
 			if not dictionary.has_key(ego):
-				j = 0
 				egos_lists_ownership,egos_lists_subscription = get_lists(ego)
 				print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Ownership: "+str(len(egos_lists_ownership)))
 				print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription: "+str(len(egos_lists_subscription)))
@@ -115,7 +114,7 @@ ego_limit = 50
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50_old/bin/"
 lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists_overview.json"
 
-egos_friends_dir_50_egos = "/home/amaury/coleta/n1/egos_friends/50_egos_bin/"
+egos_friends_dir_50_egos = "/home/amaury/coleta/n1/egos_friends/50/"
 
 lists_collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
 

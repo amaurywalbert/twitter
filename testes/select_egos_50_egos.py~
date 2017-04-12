@@ -95,7 +95,7 @@ def main():
 					except Exception as e:
 						print (e)
 				else:
-					print ("Não atende")
+					print ("Não atende!")
 		
 				print ("##############################################")
 			
@@ -115,7 +115,7 @@ ego_limit = 50
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50_old/bin/"
 lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists_overview.json"
 
-egos_friends_dir_50_egos = "/home/amaury/coleta/n1/egos_friends/50_egos_bin/"
+egos_friends_dir_50_egos = "/home/amaury/coleta/n1/egos_friends/50/"
 
 lists_collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
 
