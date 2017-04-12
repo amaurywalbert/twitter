@@ -65,16 +65,26 @@ def main():
 	k = 0											#QTDE de listas - subs
 	l = 0											#QTDE de erros
 	
-	while i < ego_limit:
-		for file in os.listdir(egos_friends_dir):
+	for file in os.listdir(egos_friends_dir):
+		if i < ego_limit:
 			q+=1 
 			ego = file.split(".dat")
 			ego = long(ego[0])
 			if not dictionary.has_key(ego):
+				j = 0
 				egos_lists_ownership,egos_lists_subscription = get_lists(ego)
 				print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Ownership ("+str(len(egos_lists_ownership))+"): "+str(egos_lists_ownership))
 				print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription ("+str(len(egos_lists_subscription))+"): "+str(egos_lists_subscription))
-				qtde_listas = len(egos_lists_ownership)+len(egos_lists_subscription) 
+				if egos_lists_ownership:
+					for list in egos_lists_ownership:
+						if os.path.isfile(lists_collected_dir+str(list)+".dat"):
+							j+=1
+				if egos_lists_subscription:
+					for list in egos_lists_ownership:
+						if os.path.isfile(lists_collected_dir+str(list)+".dat"):
+							k+=1
+				qtde_listas = j+k 
+
 				if  qtde_listas > 1:	
 					try:
 						shutil.copy(egos_friends_dir+file,egos_friends_dir_50_egos)
@@ -109,6 +119,8 @@ egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50_old/bin/"
 lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists_overview.json"
 
 egos_friends_dir_50_egos = "/home/amaury/coleta/n1/egos_friends/50_egos_bin/"
+
+lists_collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
 
 lists_ego_50_bin_ownership = "/home/amaury/coleta/lists_info/egos_lists_collected/50/ownership/bin/"
 lists_ego_50_bin_subscription = "/home/amaury/coleta/lists_info/egos_lists_collected/50/subscription/bin/"
