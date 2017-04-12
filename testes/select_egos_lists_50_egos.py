@@ -68,30 +68,30 @@ def main():
 		ego = long(ego[0])
 		egos_lists_ownership,egos_lists_subscription = get_lists(ego)
 		if egos_lists_ownership:
-#			try:
-			with open(lists_ego_50_bin_ownership+str(ego)+".dat", "w+b") as f:	
-				for list in egos_lists_ownership:		
-					f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
-				j+=1
-				print ("##############################################")
-				print ("Arquivo copiado com sucesso!")
-				print ("##############################################")
-#			except Exception as e:
-#				l+=1
-#				print (e)
+			try:
+				with open(lists_ego_50_bin_ownership+str(ego)+".dat", "w+b") as f:	
+					for list in egos_lists_ownership:		
+						f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
+					j+=1
+					print ("##############################################")
+					print ("Arquivo copiado com sucesso!")
+					print ("##############################################")
+			except Exception as e:
+				l+=1
+				print (e)
 				
 		if egos_lists_subscription:
-#			try:
-			with open(lists_ego_50_bin_subscription+str(ego)+".dat", "w+b") as f:	
-				for list in egos_lists_subscription:
-						f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
-				k+=1
-				print ("##############################################")
-				print ("Arquivo copiado com sucesso!")
-				print ("##############################################")
-#			except Exception as e:
-#				l+=1
-#				print (e)				
+			try:
+				with open(lists_ego_50_bin_subscription+str(ego)+".dat", "w+b") as f:	
+					for list in egos_lists_subscription:
+							f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
+					k+=1
+					print ("##############################################")
+					print ("Arquivo copiado com sucesso!")
+					print ("##############################################")
+			except Exception as e:
+				l+=1
+				print (e)				
 	print
 	print ("QTDE de egos verificados: "+str(i))
 	print ("QTDE de arquivos gerados - owner: "+str(j))

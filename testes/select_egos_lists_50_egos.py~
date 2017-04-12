@@ -113,15 +113,10 @@ lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists
 lists_ego_50_bin_ownership = "/home/amaury/coleta/lists_info/egos_lists_collected/50/ownership/bin/"
 lists_ego_50_bin_subscription = "/home/amaury/coleta/lists_info/egos_lists_collected/50/subscription/bin/"
 
-collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
-collected_50_egos = "/home/amaury/coleta/lists_info/members_lists_collected/50/bin/"	
-
 formato = 'l'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
 list_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 #Cria os diretórios para armazenamento dos arquivos
-if not os.path.exists(collected_50_egos):
-	os.makedirs(collected_50_egos)
 if not os.path.exists(lists_ego_50_bin_ownership):
 	os.makedirs(lists_ego_50_bin_ownership)
 if not os.path.exists(lists_ego_50_bin_subscription):
