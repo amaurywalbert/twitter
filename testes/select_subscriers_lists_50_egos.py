@@ -43,6 +43,7 @@ def main():
 	for file in os.listdir(egos_friends_dir):
 		j+=1
 		try:
+			print collected_dir+str(file)
 			if os.path.isfile(collected_dir+str(file)):
 				shutil.copy(collected_dir+str(file),collected_50_egos)
 				k+=1
