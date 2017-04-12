@@ -73,8 +73,8 @@ def main():
 			if not dictionary.has_key(ego):
 				j = 0
 				egos_lists_ownership,egos_lists_subscription = get_lists(ego)
-				print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Ownership ("+str(len(egos_lists_ownership))+"): "+str(egos_lists_ownership))
-				print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription ("+str(len(egos_lists_subscription))+"): "+str(egos_lists_subscription))
+				print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Ownership: "+str(len(egos_lists_ownership)))
+				print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription: "+str(len(egos_lists_subscription)))
 				if egos_lists_ownership:
 					for list in egos_lists_ownership:
 						if os.path.isfile(lists_collected_dir+str(list)+".dat"):
@@ -84,7 +84,7 @@ def main():
 						if os.path.isfile(lists_collected_dir+str(list)+".dat"):
 							k+=1
 				qtde_listas = j+k 
-
+				print ("Quantidade de listas coletadas: "+str(qtde_listas))
 				if  qtde_listas > 1:	
 					try:
 						shutil.copy(egos_friends_dir+file,egos_friends_dir_50_egos)
@@ -101,7 +101,6 @@ def main():
 			
 	print
 	print ("QTDE de egos verificados: "+str(q))
-	print ("QTDE de erros: "+str(l))
 			
 ######################################################################################################################################################################
 #
