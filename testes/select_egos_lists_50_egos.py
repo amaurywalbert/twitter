@@ -67,6 +67,8 @@ def main():
 		ego = file.split(".dat")
 		ego = long(ego[0])
 		egos_lists_ownership,egos_lists_subscription = get_lists(ego)
+		print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Ownership ("+str(len(egos_lists_ownership))+"): "+str(egos_lists_ownership))
+		print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription ("+str(len(egos_lists_subscription))+"): "+str(egos_lists_subscription))
 		if egos_lists_ownership:
 			try:
 				with open(lists_ego_50_bin_ownership+str(ego)+".dat", "w+b") as f:	
