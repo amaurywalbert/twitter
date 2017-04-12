@@ -20,12 +20,12 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		followers_file = []
+		lists_file = []
 		while f.tell() < tamanho:
-			buffer = f.read(user_struct.size)
-			follower = user_struct.unpack(buffer)
-			followers_file.append(follower[0])
-	return followers_file
+			buffer = f.read(list_struct.size)
+			lists = list_struct.unpack(buffer)
+			lists_file.append(follower[0])
+	return lists_file
 
 ######################################################################################################################################################################
 #
@@ -84,9 +84,9 @@ def main():
 		if egos_lists_subscription:
 #			try:
 			with open(lists_ego_50_bin_subscription+str(ego)+".dat", "w+b") as f:	
-				for list in egos_lists_subscription:		
-					for member in list:
-						f.write(list_struct.pack(member))						# Grava os ids dos amigos no arquivo binário do usuário	
+				for item in egos_lists_subscription:		
+					for user in item:
+						f.write(list_struct.pack(user))						# Grava os ids dos amigos no arquivo binário do usuário	
 				k+=1
 				print ("##############################################")
 				print ("Arquivo copiado com sucesso!")
