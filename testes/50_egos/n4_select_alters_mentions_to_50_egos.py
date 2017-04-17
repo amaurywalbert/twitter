@@ -3,7 +3,7 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n2
+import multi_oauth_n4
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
