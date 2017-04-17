@@ -37,7 +37,6 @@ def main():
 				
 				tweet = json.loads(line)
 				user =  tweet['user']['id']
-				user = long(user)
 
 				try:
 					if os.path.isfile(favorites_collected+str(user)+".dat"):

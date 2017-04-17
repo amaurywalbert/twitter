@@ -37,7 +37,6 @@ def main():
 				tweet = json.loads(line)
 				try:
 					user =  tweet['retweeted_status']['user']['id']
-					user = long(user)
 					try:
 						if os.path.isfile(timeline_collected+str(user)+".dat"):
 							shutil.copy(timeline_collected+str(user)+".dat",dst_timeline_collected)
