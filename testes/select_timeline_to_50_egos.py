@@ -46,7 +46,7 @@ egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"
 timeline_collected = "/home/amaury/coleta_old/timeline_collect/10mil_egos/json/"
 egos_50_timeline = "/home/amaury/coleta/timeline_collect/50/json/"	
 
-Cria os diretórios para armazenamento dos arquivos
+#Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(egos_50_timeline):
 	os.makedirs(egos_50_timeline)
 
