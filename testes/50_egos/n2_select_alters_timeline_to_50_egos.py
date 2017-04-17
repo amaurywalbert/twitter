@@ -31,7 +31,7 @@ def main():
 	
 	for file in os.listdir(egos_50_timeline):
 		j+=1
-		with open(timeline_collected+file,'r') as timeline:
+		with open(egos_50_timeline+file,'r') as timeline:
 			for line in timeline:
 				l+=1
 				tweet = json.loads(line)
