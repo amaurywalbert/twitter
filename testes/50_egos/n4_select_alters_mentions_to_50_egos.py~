@@ -66,7 +66,7 @@ def main():
 egos_50_timeline = "/home/amaury/coleta/timeline_collect/50/json/"
 
 mentions_collected = "/home/amaury/coleta_old/n4/timeline_collect/alters/bin/"
-dst_mentions_collected = "/home/amaury/coleta_old/n4/timeline_collect/alters/50/bin/"
+dst_mentions_collected = "/home/amaury/coleta/n4/mentions_collect/alters/50/bin/"
 
 
 #Cria os diretórios para armazenamento dos arquivos
