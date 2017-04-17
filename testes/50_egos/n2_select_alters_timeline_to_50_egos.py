@@ -26,6 +26,7 @@ sys.setdefaultencoding('utf-8')
 def main():
 	j = 0
 	l = 0
+	k = 0
 	m = 0
 	
 	for file in os.listdir(egos_50_timeline):
@@ -38,9 +39,10 @@ def main():
 					user =  tweet['retweeted_status']['user']['id']
 					user = long(user)
 						try:
-							if os.path.isfile(timeline_collected+str(user)+".json"):
-							shutil.copy(timeline_collected+str(user)+".json",egos_50_timeline)
-							print ("Arquivo copiado com sucesso!")
+							if os.path.isfile(timeline_collected+str(user)+".dat"):
+								shutil.copy(timeline_collected+str(user)+".dat",dst_timeline_collected)
+								print ("Arquivo copiado com sucesso!")
+								k+=1
 						except Exception as e:
 							print (e)
 
@@ -63,10 +65,8 @@ def main():
 
 egos_50_timeline = "/home/amaury/coleta/timeline_collect/50/json/"
 
-timeline_collected = "/home/amaury/coleta_old/timeline_collect/10mil_egos/json/"
+timeline_collected = "/home/amaury/coleta_old/n2/timeline_collect/alters/bin/"
 dst_timeline_collected = "/home/amaury/coleta/n2/timeline_collect/alters/50/bin/"
-
-
 
 
 #Cria os diretórios para armazenamento dos arquivos
