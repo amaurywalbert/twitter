@@ -32,6 +32,8 @@ def main():
 
 				except Exception as e:
 					print (e)
+			else
+			print tam_members, tam_subscribers
 		else:
 			print ("Não está na interseção! Lista: "+str(file))
 	print ("##############################################")
