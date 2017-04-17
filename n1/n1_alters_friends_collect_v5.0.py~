@@ -224,7 +224,7 @@ error_dir = "/home/amaury/coleta/n1/alters_friends/50/error/" ################# 
 
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-wait = 5
+wait = 15
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
