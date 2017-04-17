@@ -1,14 +1,11 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-# Script para coletar amigos a partir de um conjunto de alters do twitter
-#	
-#
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
-##		Status - Versão 1 - Avalia o conjunto de usuarios coletados e verifica quais atendem aos requisitos de ter pelo menos 02 duas.
+##		Status - Versão 1 - Avalia o conjunto de usuarios coletados e verifica quais atendem aos requisitos de ter pelo menos 02 listas com pelo menos 05 membros em cada.
 ##								ESSE SCRIPT VERIFICA APENAS OS 50 EGOS QUE JA'HAVIAM SIDO SELECIONADOS PELO PROTOTIPO MAS NAO TINHAMOS VERIFICADO A SITUAÇÃO DAS LISTAS
 ## 
 ######################################################################################################################################################################
@@ -33,7 +30,7 @@ def read_arq_bin(file):
 # Obtem as listas já coletadas do ego
 #
 ######################################################################################################################################################################
-def get_lists(ego):
+def get_lists(ego):	# Procura pelo usuário no arquivo das listas e retorna as listas separando as que ele é dono e as que está inscrito.
 	egos_lists_ownership = []
 	egos_lists_subscription = []
 	eof = False
@@ -111,26 +108,19 @@ def main():
 ######################################################################################################################
 
 ego_limit = 50
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50_old/bin/"
-lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists_overview.json"
+egos_friends_dir = "/home/amaury/coleta_old/n1/egos_friends/50_old/bin/"
+lists_ego = "/home/amaury/coleta/ego_lists_collected/data/ego_lists_overview_full.json"
 
 egos_friends_dir_50_egos = "/home/amaury/coleta/n1/egos_friends/50/bin/"
 
-lists_collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
-
-lists_ego_50_bin_ownership = "/home/amaury/coleta/lists_info/egos_lists_collected/50/ownership/bin/"
-lists_ego_50_bin_subscription = "/home/amaury/coleta/lists_info/egos_lists_collected/50/subscription/bin/"
+lists_collected_dir = "/home/amaury/coleta/ground_truth/members_lists_collected/bin/" # Apenas pra pagar o id das listas - poderia ser tbm com os subscribers
 
 formato = 'l'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
 list_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(egos_friends_dir_50_egos):
-	os.makedirs(egos_friends_dir_50_egos)	
-if not os.path.exists(lists_ego_50_bin_ownership):
-	os.makedirs(lists_ego_50_bin_ownership)
-if not os.path.exists(lists_ego_50_bin_subscription):
-	os.makedirs(lists_ego_50_bin_subscription)	
+	os.makedirs(egos_friends_dir_50_egos)
 	
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.

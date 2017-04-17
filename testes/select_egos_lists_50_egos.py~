@@ -76,7 +76,7 @@ def main():
 						f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
 					j+=1
 					print ("##############################################")
-					print ("Arquivo copiado com sucesso!")
+					print ("Arquivo criado com sucesso!")
 					print ("##############################################")
 			except Exception as e:
 				l+=1
@@ -89,7 +89,7 @@ def main():
 							f.write(list_struct.pack(list))						# Grava os ids dos amigos no arquivo binário do usuário	
 					k+=1
 					print ("##############################################")
-					print ("Arquivo copiado com sucesso!")
+					print ("Arquivo criado com sucesso!")
 					print ("##############################################")
 			except Exception as e:
 				l+=1

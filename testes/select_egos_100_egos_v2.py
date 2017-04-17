@@ -118,9 +118,6 @@ egos_friends_dir_100_egos = "/home/amaury/coleta/n1/egos_friends/100/bin/"
 
 lists_collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
 
-lists_ego_100_bin_ownership = "/home/amaury/coleta/lists_info/egos_lists_collected/100/ownership/bin/"
-lists_ego_100_bin_subscription = "/home/amaury/coleta/lists_info/egos_lists_collected/100/subscription/bin/"
-
 formato = 'l'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
 list_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 

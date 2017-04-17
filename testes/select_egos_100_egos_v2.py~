@@ -114,7 +114,7 @@ ego_limit = 100
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/bin/"
 lists_ego = "/home/amaury/coleta/ego_lists_collected/data/201701300152_ego_lists_overview.json"
 
-egos_friends_dir_100_egos = "/home/amaury/coleta/n1/egos_friends/100/"
+egos_friends_dir_100_egos = "/home/amaury/coleta/n1/egos_friends/100/bin/"
 
 lists_collected_dir = "/home/amaury/coleta/lists_info/members_lists_collected/bin/"
 
