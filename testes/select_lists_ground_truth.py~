@@ -19,14 +19,19 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 
 def main():
-	print ("Copiando arquivos..."
+	print ("Copiando arquivos...")
 	for file in os.listdir(origin_members):
 		if os.path.isfile(origin_subscribers+file):
-			try:
-				shutil.copy(origin_members+file,dest_members)
-				shutil.copy(origin_subscribers+file,dest_subscribers)
-			except Exception as e:
-				print (e)
+			tam_members = os.path.getsize(origin_members+file)
+			tam_subscribers = os.path.getsize(origin_subscribers+file)
+			if tam_members != 0 and tam_subscribers != 0:
+				try:
+
+					shutil.copy(origin_members+file,dest_members)
+					shutil.copy(origin_subscribers+file,dest_subscribers)
+
+				except Exception as e:
+					print (e)
 		else:
 			print ("Não está na interseção! Lista: "+str(file))
 	print ("##############################################")
