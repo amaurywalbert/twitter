@@ -38,13 +38,13 @@ def main():
 				try:
 					user =  tweet['retweeted_status']['user']['id']
 					user = long(user)
-						try:
-							if os.path.isfile(timeline_collected+str(user)+".dat"):
-								shutil.copy(timeline_collected+str(user)+".dat",dst_timeline_collected)
-								print ("Arquivo copiado com sucesso!")
-								k+=1
-						except Exception as e:
-							print (e)
+					try:
+						if os.path.isfile(timeline_collected+str(user)+".dat"):
+							shutil.copy(timeline_collected+str(user)+".dat",dst_timeline_collected)
+							print ("Arquivo copiado com sucesso!")
+							k+=1
+					except Exception as e:
+						print (e)
 
 				except KeyError:
 					m+=1
