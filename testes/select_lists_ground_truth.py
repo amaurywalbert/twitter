@@ -24,7 +24,7 @@ def main():
 		if os.path.isfile(origin_subscribers+file):
 			tam_members = os.path.getsize(origin_members+file)
 			tam_subscribers = os.path.getsize(origin_subscribers+file)
-			if tam_members != 0 and tam_subscribers != 0:
+			if tam_members != 0 or tam_subscribers != 0:
 				try:
 
 					shutil.copy(origin_members+file,dest_members)
