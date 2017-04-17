@@ -63,7 +63,7 @@ def main():
 egos_50_favorites = "/home/amaury/coleta/favorites_collect/50/json/"
 
 favorites_collected = "/home/amaury/coleta_old/favorites_collect/alters/bin/"
-dst_favorites_collected = "/home/amaury/coleta_old/favorites_collect/alters/50/bin"
+dst_favorites_collected = "/home/amaury/coleta/favorites_collect/alters/50/bin"
 
 
 #Cria os diretórios para armazenamento dos arquivos
