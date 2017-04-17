@@ -120,11 +120,7 @@ list_struct = struct.Struct(formato) ###################################### Inic
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(egos_friends_dir_50_egos):
-	os.makedirs(egos_friends_dir_50_egos)	
-if not os.path.exists(lists_ego_50_bin_ownership):
-	os.makedirs(lists_ego_50_bin_ownership)
-if not os.path.exists(lists_ego_50_bin_subscription):
-	os.makedirs(lists_ego_50_bin_subscription)	
+	os.makedirs(egos_friends_dir_50_egos)
 	
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
