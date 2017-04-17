@@ -19,7 +19,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 
 def main():
-	print ("Copiando arquivos..."
+	print ("Copiando arquivos...")
 	for file in os.listdir(origin_members):
 		if os.path.isfile(origin_subscribers+file):
 			try:
