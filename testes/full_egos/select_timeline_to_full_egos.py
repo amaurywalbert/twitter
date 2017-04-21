@@ -43,10 +43,10 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/100/bin/"
+egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/500/bin/"
 
 timeline_collected = "/home/amaury/coleta_old/timeline_collect/10mil_egos/json/"
-egos_50_timeline = "/home/amaury/coleta/timeline_collect/100/json/"	
+egos_50_timeline = "/home/amaury/coleta/timeline_collect/500/json/"	
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(egos_50_timeline):

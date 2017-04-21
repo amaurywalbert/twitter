@@ -8,7 +8,7 @@ import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, ran
 reload(sys)
 sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
-##		Status - Versão 1 - Para cada um dos 50 egos coletados, verifica na pasta dos timeline coletados  (10.0000) e copia o arquivo para a pasta timeline/50/
+##		Status - Versão 1 - Para cada um dos 50 egos coletados, verifica na pasta dos favoritos coletados  (10.0000) e copia o arquivo para a pasta favorites/50/
 ##									Esse processo é apenas para agilizar e organizar os diretórios de favoritos já coletados.
 ## 
 ######################################################################################################################################################################
@@ -22,13 +22,13 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 
 def main():
-	i=0
+	i = 0
 	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		user = file.split(".dat")
 		user = long(user[0])
 		try:
-			if os.path.isfile(timeline_collected+str(user)+".json"):
-				shutil.copy(timeline_collected+str(user)+".json",egos_50_timeline)
+			if os.path.isfile(favorites_collected+str(user)+".json"):
+				shutil.copy(favorites_collected+str(user)+".json",egos_50_favorites)
 				i+=1
 				print ("Arquivo copiado com sucesso! "+str(i))
 		except Exception as e:
@@ -43,14 +43,14 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/100/bin/"
+egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/full/bin/"
 
-timeline_collected = "/home/amaury/coleta_old/timeline_collect/10mil_egos/json/"
-egos_50_timeline = "/home/amaury/coleta/timeline_collect/100/json/"	
+favorites_collected = "/home/amaury/coleta_old/favorites_collect/ego/json/"
+egos_50_favorites = "/home/amaury/coleta/favorites_collect/full/json/"	
 
 #Cria os diretórios para armazenamento dos arquivos
-if not os.path.exists(egos_50_timeline):
-	os.makedirs(egos_50_timeline)
+if not os.path.exists(egos_50_favorites):
+	os.makedirs(egos_50_favorites)
 
 #Executa o método main
 if __name__ == "__main__": main()
