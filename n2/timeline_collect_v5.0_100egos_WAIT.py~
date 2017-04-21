@@ -3,20 +3,20 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n3
+import multi_oauth
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 3.0 - Coletar favorites dos usuários especificados
+##		Status - Versão 5.0 - Coletar timeline dos usuários especificados
 ##						
-##						3.1 - Uso do Tweepy para controlar as autenticações... WAIT
+##						5.1 - Uso do Tweepy para controlar as autenticações... WAIT
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
-##						STATUS - Coletando - OK - Salvar arquivos JSON contendo os a tweets favoritados dos usuários.
+##						STATUS - Coletando - OK - Salvar arquivos JSON contendo os a timeline dos usuários.
 ##
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletada
 ##
@@ -38,27 +38,24 @@ class DateTimeEncoder(json.JSONEncoder):
 
 ######################################################################################################################################################################
 #
-# Tweepy - Realiza a busca e devolve os favofitos de um usuário específico 
+# Tweepy - Realiza a busca e devolve a timeline de um usuário específico 
 #
 ######################################################################################################################################################################
-def get_favorites(user):												#Coleta dos favoritos
+def get_timeline(user):												#Coleta da timeline
 	global key
 	global dictionary
 	global i
-	favorites = []
+	timeline = []
 	try:
-		for page in tweepy.Cursor(api.favorites,id=user, count=200, wait_on_rate_limit = True, wait_on_rate_limit_notify = True).pages(16):				#Retorna os favoritos do usuário
+		for page in tweepy.Cursor(api.user_timeline,id=user, count=200, wait_on_rate_limit=True, wait_on_rate_limit_notify=True).pages(16):				#Retorna os últimos 3200 tweets (16*20)
 			for tweet in page:
-				favorites.append(tweet)
-		return (favorites)
-	
-	except tweepy.error.RateLimitError as e:
-			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
+				timeline.append(tweet)
+		return (timeline)
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		error = {}
-		with open(error_dir+"favorites_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+		with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
 				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
@@ -84,13 +81,12 @@ def get_favorites(user):												#Coleta dos favoritos
 				i +=1	
 		except Exception as e3:
 			print ("E3: "+str(e3))
-		
 ######################################################################################################################################################################
 #
-# Obtem favoritos dos usuários
+# Obtem timeline dos usuários
 #
 ######################################################################################################################################################################
-def save_favorites(j,user): # j = número do usuário que esta sendo coletado
+def save_timeline(j,user): # j = número do usuário que esta sendo coletado
 	global i	# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
 	 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
@@ -98,11 +94,11 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 
 	#Chama a função e recebe como retorno a lista de tweets do usuário
 	k = 0 																# Número de Tweets por usuário
-	favorites = get_favorites(user)
-	if favorites:	
+	timeline = get_timeline(user)
+	if timeline:	
 		try:
 			with open(data_dir+str(user)+".json", "w") as f:	
-				for tweet in favorites:
+				for tweet in timeline:
 					k+=1
 					f.write(json.dumps(tweet._json)+"\n")		# ... no arquivo, imprime o tweet (status) inteiro.
 			
@@ -112,7 +108,7 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 	
 		except Exception as e:	
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-			with open(error_dir+"favorite_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+			with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 				if e.message:		
 					error = {'user':user,'reason': e.message,'date':agora}
 				else:
@@ -121,32 +117,28 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 				print error
 			if os.path.exists(data_dir+str(user)+".json"):
 				os.remove(data_dir+str(user)+".json")
-	else:
-		with open(data_dir+str(user)+".json", "w") as f:
-			print ("Não há favoritos para este usuário...")
 
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
 # Método principal do programa.
-# Realiza teste e coleta dos favoritos do user especificado no arquivo. 
+# Realiza teste e coleta a timeline do user especificado no arquivo. 
 #
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 
 def main():
 	global i 													# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
-	j = 0															# Exibe o número ordinal do ego que está sendo usado para a coleta dos favoritos
+	j = 0															#Exibe o número ordinal do ego que está sendo usado para a coleta da timeline
 	for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		j+=1
 		ego = file.split(".dat")
 		ego = long(ego[0])
 		if not dictionary.has_key(ego):
-			print (str(j)+" - ego_id: "+str(ego)+" - Coletando...")		
-			save_favorites(j, ego)						#Inicia função de busca dos favoritos
+			save_timeline(j, ego)							#Inicia função de busca da timeline
 		else:
-			print (str(j)+" - Já coletado!")	
+			print "Usuário: "+str(ego)+" já coletado!"
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -159,8 +151,8 @@ def main():
 ######################################################################################################################################################################
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
-oauth_keys = multi_oauth_n3.keys()
-auths = oauth_keys['auths_test']
+oauth_keys = multi_oauth.keys()
+auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
@@ -168,9 +160,9 @@ auths = oauth_keys['auths_test']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_dir = "/home/amaury/coleta/n1/egos_friends/100/bin/"###################### Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/favorites_collect/100/json/" ################## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/favorites_collect/100/error/" ################ Diretório para armazenamento dos arquivos de erro
+egos_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"########################## Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/timeline_collect/ego/json/" ################### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/timeline_collect/ego/error/" ################# Diretório para armazenamento dos arquivos de erro
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
