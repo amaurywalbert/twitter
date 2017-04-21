@@ -47,7 +47,7 @@ def get_favorites(user):												#Coleta dos favoritos
 	global i
 	favorites = []
 	try:
-		for page in tweepy.Cursor(api.favorites,id=user, count=200, wait_on_rate_limit = True, wait_on_rate_limit_notify = True).pages(16):				#Retorna os favoritos do usuário
+		for page in tweepy.Cursor(api.favorites,id=user, count=200, wait_on_rate_limit_notify = True).pages(16):				#Retorna os favoritos do usuário
 			for tweet in page:
 				favorites.append(tweet)
 		return (favorites)
