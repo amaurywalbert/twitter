@@ -12,7 +12,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 3.0 - Coletar favorites dos usuários especificados
 ##						
-##						3.1 - Uso do Tweepy para controlar as autenticações...
+##						3.1 - Uso do Tweepy para controlar as autenticações... WAIT
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -22,25 +22,6 @@ sys.setdefaultencoding('utf-8')
 ##
 ## 
 ######################################################################################################################################################################
-
-######################################################################################################################################################################
-#
-# Realiza autenticação da aplicação.
-#
-######################################################################################################################################################################
-
-def autentication(auths):
-	global key
-	key += 1
-	if (key >= key_limit):
-		key = key_init
-	print
-	print("######################################################################")
-	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
-	print("######################################################################\n")
-	time.sleep(wait)
-	api_key = tweepy.API(auths[key])
-	return (api_key)
 
 ######################################################################################################################################################################
 #
@@ -63,7 +44,6 @@ class DateTimeEncoder(json.JSONEncoder):
 def get_favorites(user):												#Coleta dos favoritos
 	global key
 	global dictionary
-	global api
 	global i
 	favorites = []
 	try:
@@ -74,7 +54,6 @@ def get_favorites(user):												#Coleta dos favoritos
 	
 	except tweepy.error.RateLimitError as e:
 			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
-			api = autentication(auths, wait_on_rate_limit = True)
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -91,7 +70,6 @@ def get_favorites(user):												#Coleta dos favoritos
 		try:
 			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429:
 				key = random.randint(key_init,key_limit)
-				api = autentication(auths, wait_on_rate_limit = True)
 			if e.message[0]['code'] == 34:									# Usuários não existentes
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
@@ -112,7 +90,6 @@ def get_favorites(user):												#Coleta dos favoritos
 		try:
 			if e.message == 'Twitter error response: status code = 429' or e.message == 'Twitter error response: status code = 401': #muitas requisições simultâneas
 				key = random.randint(key_init,key_limit)
-				api = autentication(auths, wait_on_rate_limit = True)
 				i +=1
 		except Exception as e4:
 			print ("E4: "+str(e4))			
@@ -222,8 +199,20 @@ for file in os.listdir(data_dir):
 	i+=1
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
+
 #Autenticação
-api = autentication(auths, wait_on_rate_limit = True)
+
+# Registre sua aplicacao em https://apps.twitter.com
+
+consumer_key = "gOa37Y85DcbM2Oi3IpvvFWMj9"
+consumer_secret = "Fh334ZT5fXKDTS8zGJR1N6RU3kDdLKhEAk2ZB97iKydCUCaMQp"
+access_token = "849270909034692608-YPMJReaqxI6oVdP7RQ2cfqJinlghtuD"
+access_token_secret = "A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM"
+
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth, wait_on_rate_limit=True)
+
 
 	
 #Executa o método main
