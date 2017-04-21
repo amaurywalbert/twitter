@@ -122,7 +122,7 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 			if os.path.exists(data_dir+str(user)+".json"):
 				os.remove(data_dir+str(user)+".json")
 	else:
-		with open(data_dir+str(user)+".json", "w") as f:
+		with open(data_dir+str(user)+".json", "a+") as f:
 			print ("Não há favoritos para este usuário...")
 
 
