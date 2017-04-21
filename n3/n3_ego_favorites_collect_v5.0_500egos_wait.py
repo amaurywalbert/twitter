@@ -145,8 +145,8 @@ def main():
 		if not dictionary.has_key(ego):
 			print (str(j)+" - ego_id: "+str(ego)+" - Coletando...")		
 			save_favorites(j, ego)						#Inicia função de busca dos favoritos
-		else:
-			print (str(j)+" - Já coletado!")	
+#		else:
+#			print (str(j)+" - Já coletado!")	
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
