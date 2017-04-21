@@ -47,13 +47,13 @@ def get_favorites(user):												#Coleta dos favoritos
 	global i
 	favorites = []
 	try:
-		for page in tweepy.Cursor(api.favorites,id=user, count=200).pages(16):				#Retorna os favoritos do usuário
+		for page in tweepy.Cursor(api.favorites,id=user, count=200, wait_on_rate_limit_notify = True).pages(16):				#Retorna os favoritos do usuário
 			for tweet in page:
 				favorites.append(tweet)
 		return (favorites)
-	
-	except tweepy.error.RateLimitError as e:
-			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
+#	
+#	except tweepy.error.RateLimitError as e:
+#			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
