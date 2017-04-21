@@ -165,13 +165,16 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 
 def main():
 	global i 													# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
-	j = 0															#Exibe o número ordinal do ego que está sendo usado para a coleta dos favoritos
+	j = 0															# Exibe o número ordinal do ego que está sendo usado para a coleta dos favoritos
 	for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		j+=1
 		ego = file.split(".dat")
 		ego = long(ego[0])
+		print ("("+str(j)+") ego_id: "+str(ego)
 		if not dictionary.has_key(ego):
-				save_favorites(j, ego)						#Inicia função de busca dos favoritos
+			save_favorites(j, ego)						#Inicia função de busca dos favoritos
+		else:
+			print (str(j)+" Já coletado!")	
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
