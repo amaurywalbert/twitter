@@ -12,7 +12,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 3.0 - Coletar favorites dos usuários especificados
 ##						
-##						3.1 - Uso do Tweepy para controlar as autenticações...
+##						3.1 - Uso do Tweepy para controlar as autenticações... WAIT
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -22,25 +22,6 @@ sys.setdefaultencoding('utf-8')
 ##
 ## 
 ######################################################################################################################################################################
-
-######################################################################################################################################################################
-#
-# Realiza autenticação da aplicação.
-#
-######################################################################################################################################################################
-
-def autentication(auths):
-	global key
-	key += 1
-	if (key >= key_limit):
-		key = key_init
-	print
-	print("######################################################################")
-	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
-	print("######################################################################\n")
-	time.sleep(wait)
-	api_key = tweepy.API(auths[key])
-	return (api_key)
 
 ######################################################################################################################################################################
 #
@@ -63,18 +44,16 @@ class DateTimeEncoder(json.JSONEncoder):
 def get_favorites(user):												#Coleta dos favoritos
 	global key
 	global dictionary
-	global api
 	global i
 	favorites = []
 	try:
-		for page in tweepy.Cursor(api.favorites,id=user, count=200).pages(16):				#Retorna os favoritos do usuário
+		for page in tweepy.Cursor(api.favorites,id=user, count=200, wait_on_rate_limit = True, wait_on_rate_limit_notify = True).pages(16):				#Retorna os favoritos do usuário
 			for tweet in page:
 				favorites.append(tweet)
 		return (favorites)
 	
 	except tweepy.error.RateLimitError as e:
 			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
-			api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -89,9 +68,6 @@ def get_favorites(user):												#Coleta dos favoritos
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:
-			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429:
-				key = random.randint(key_init,key_limit)
-				api = autentication(auths)
 			if e.message[0]['code'] == 34:									# Usuários não existentes
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
@@ -109,13 +85,6 @@ def get_favorites(user):												#Coleta dos favoritos
 		except Exception as e3:
 			print ("E3: "+str(e3))
 		
-		try:
-			if e.message == 'Twitter error response: status code = 429' or e.message == 'Twitter error response: status code = 401': #muitas requisições simultâneas
-				key = random.randint(key_init,key_limit)
-				api = autentication(auths)
-				i +=1
-		except Exception as e4:
-			print ("E4: "+str(e4))			
 ######################################################################################################################################################################
 #
 # Obtem favoritos dos usuários
@@ -152,6 +121,9 @@ def save_favorites(j,user): # j = número do usuário que esta sendo coletado
 				print error
 			if os.path.exists(data_dir+str(user)+".json"):
 				os.remove(data_dir+str(user)+".json")
+	else:
+		with open(data_dir+str(user)+".json", "w") as f:
+			print ("Não há favoritos para este usuário...")
 
 
 ######################################################################################################################################################################
@@ -170,11 +142,11 @@ def main():
 		j+=1
 		ego = file.split(".dat")
 		ego = long(ego[0])
-		print ("("+str(j)+") ego_id: "+str(ego))
 		if not dictionary.has_key(ego):
+			print (str(j)+" - ego_id: "+str(ego)+" - Coletando...")		
 			save_favorites(j, ego)						#Inicia função de busca dos favoritos
 		else:
-			print (str(j)+" Já coletado!")	
+			print (str(j)+" - Já coletado!")	
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -188,7 +160,7 @@ def main():
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
 oauth_keys = multi_oauth_n3.keys()
-auths = oauth_keys['auths_ok']
+auths = oauth_keys['auths_test']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
@@ -196,9 +168,9 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_dir = "/home/amaury/coleta/n1/egos_friends/100/bin/"###################### Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/favorites_collect/100/json/" ################## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/favorites_collect/100/error/" ################ Diretório para armazenamento dos arquivos de erro
+egos_dir = "/home/amaury/coleta/n1/egos_friends/500/bin/"###################### Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/favorites_collect/500/json/" ################## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/favorites_collect/500/error/" ################ Diretório para armazenamento dos arquivos de erro
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
@@ -222,8 +194,20 @@ for file in os.listdir(data_dir):
 	i+=1
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
+
 #Autenticação
-api = autentication(auths)
+
+# Registre sua aplicacao em https://apps.twitter.com
+
+consumer_key = "gOa37Y85DcbM2Oi3IpvvFWMj9"
+consumer_secret = "Fh334ZT5fXKDTS8zGJR1N6RU3kDdLKhEAk2ZB97iKydCUCaMQp"
+access_token = "849270909034692608-YPMJReaqxI6oVdP7RQ2cfqJinlghtuD"
+access_token_secret = "A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM"
+
+auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
+auth.set_access_token(access_token, access_token_secret)
+api = tweepy.API(auth, wait_on_rate_limit=True)
+
 
 	
 #Executa o método main
