@@ -170,7 +170,7 @@ def main():
 		j+=1
 		ego = file.split(".dat")
 		ego = long(ego[0])
-		print ("("+str(j)+") ego_id: "+str(ego)
+		print ("("+str(j)+") ego_id: "+str(ego))
 		if not dictionary.has_key(ego):
 			save_favorites(j, ego)						#Inicia função de busca dos favoritos
 		else:
