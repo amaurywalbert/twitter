@@ -30,7 +30,7 @@ def main():
 			if os.path.isfile(timeline_collected+str(user)+".json"):
 				shutil.copy(timeline_collected+str(user)+".json",egos_50_timeline)
 				i+=1
-				print ("Arquivo copiado com sucesso! "+str(1))
+				print ("Arquivo copiado com sucesso! "+str(i))
 		except Exception as e:
 			print (e)
 
