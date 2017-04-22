@@ -71,16 +71,16 @@ def main():
 			print ("Ego nº "+str(i)+": "+str(ego)+" - Lists Subscription: "+str(len(egos_lists_subscription)))
 
 			try:			
-				with open(all_egos_lists+ego+".dat", 'a+b') as a:
-					with open(owner_egos_lists+ego+".dat", 'w+b') as f:			
+				with open(all_egos_lists+str(ego)+".dat", 'a+b') as a:
+					with open(owner_egos_lists+str(ego)+".dat", 'w+b') as f:			
 						if egos_lists_ownership:
 							for list in egos_lists_ownership:
 								if os.path.isfile(lists_collected+str(list)+".dat"):
 									a.write(list)	#Grava o id da lista no arquivo do ego que contem TODAS AS LISTAS.								
 									f.write(list)	#Grava o id da lista no arquivo do ego que contem as listas que ele é o dono. 
 			
-				with open(all_egos_lists+ego+".dat", 'a+b') as a:
-					with open(subs_egos_lists+ego+".dat", 'w+b') as g:			
+				with open(all_egos_lists+str(ego)+".dat", 'a+b') as a:
+					with open(subs_egos_lists+str(ego)+".dat", 'w+b') as g:			
 						if egos_lists_subscription:
 							for list in egos_lists_subscription:
 								if os.path.isfile(lists_collected+str(list)+".dat"):
@@ -108,9 +108,9 @@ egos_set = "/home/amaury/coleta/n1/egos_friends/50/bin/" # Conjunto de egos - Ap
 lists_set = "/home/amaury/coleta/users_lists/data/ego_lists_overview_full.json" # Diretório que contém o conjunto de listas de cada ego. 
 lists_collected = "/home/amaury/coleta/ground_truth/members_lists_collected/bin/" # Diretório que contém o conjunto de listas COLETADAS de cada ego. Só pra pegar o id das listas 
 
-all_egos_lists = "/home/amaury/coleta/ground_truth/egos_lists/50/all/" 
-owner_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/50/owner/"
-subs_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/50/subs/"
+all_egos_lists = "/home/amaury/coleta/ground_truth/egos_lists/50/all/bin/" 
+owner_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/50/owner/bin/"
+subs_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/50/subs/bin/"
 
 formato = 'l'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
 list_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
