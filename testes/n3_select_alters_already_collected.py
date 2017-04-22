@@ -78,7 +78,7 @@ origem2 = "/home/amaury/coleta_old/favorites_collect/alters/bin/"
 destino = "/home/amaury/coleta/n3/favorites_collect/alters/"+str(qtde_egos)+"/bin/"
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor
-timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+favorites_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(destino):
