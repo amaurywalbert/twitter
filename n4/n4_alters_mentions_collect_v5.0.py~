@@ -3,7 +3,7 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n4
+import multi_oauth_n7
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
@@ -109,7 +109,7 @@ def get_timeline(user):												#Coleta da timeline
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:
-			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215:
+			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 401:
 				key = random.randint(key_init,key_limit)
 				api = autentication(auths)
 			if e.message[0]['code'] == 34:									# Usuários não existentes
@@ -215,7 +215,7 @@ def main():
 ######################################################################################################################################################################
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
-oauth_keys = multi_oauth_n4.keys()
+oauth_keys = multi_oauth_n7.keys()
 auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
