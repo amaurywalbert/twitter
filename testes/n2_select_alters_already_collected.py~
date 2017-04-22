@@ -54,7 +54,6 @@ def main():
 						shutil.copy(origem+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")
-		print("######################################################################")	
 	print
 	print ("Alters: "+str(k))
 	print("######################################################################")
