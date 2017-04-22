@@ -651,18 +651,18 @@ access_token_secret.append("mTo67zDHgLd7DCV2jHv1WUWUCt6wJ4Cr38OUhMD0ryutF")
 #
 #
 #msc20160012_47_test
-#consumer_key_test.append("gOa37Y85DcbM2Oi3IpvvFWMj9")
-#consumer_secret_test.append("Fh334ZT5fXKDTS8zGJR1N6RU3kDdLKhEAk2ZB97iKydCUCaMQp")
-#access_token_test.append("849270909034692608-YPMJReaqxI6oVdP7RQ2cfqJinlghtuD")
-#access_token_secret_test.append("A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM")
+consumer_key_test.append("gOa37Y85DcbM2Oi3IpvvFWMj9")
+consumer_secret_test.append("Fh334ZT5fXKDTS8zGJR1N6RU3kDdLKhEAk2ZB97iKydCUCaMQp")
+access_token_test.append("849270909034692608-YPMJReaqxI6oVdP7RQ2cfqJinlghtuD")
+access_token_secret_test.append("A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM")
 #
 #
 #		EM USO NA COLETA DA TIMELINE FULL EGOS - RESTANTE...
 #msc20160012_48_test
-#consumer_key_test.append("6JURlBsCpoDnG97JcQXb1DVDq")
-#consumer_secret_test.append("8dzL2NSfOXg3QSBb97LWS4ChDb9ycUYGIDBuIKHXkKfdWYMccg")
-#access_token_test.append("849270909034692608-zZav8hfaWZtBwXIctKtK9FnhHiBS4eq")
-#access_token_secret_test.append("iarzO6gXEN7o260zesA9aVesLvZcElKsSZ2fomQKulzrQ")
+consumer_key_test.append("6JURlBsCpoDnG97JcQXb1DVDq")
+consumer_secret_test.append("8dzL2NSfOXg3QSBb97LWS4ChDb9ycUYGIDBuIKHXkKfdWYMccg")
+access_token_test.append("849270909034692608-zZav8hfaWZtBwXIctKtK9FnhHiBS4eq")
+access_token_secret_test.append("iarzO6gXEN7o260zesA9aVesLvZcElKsSZ2fomQKulzrQ")
 #
 #
 ##############################################################################################################

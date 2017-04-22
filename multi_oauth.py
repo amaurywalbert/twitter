@@ -659,11 +659,16 @@ access_token_secret_test.append("A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM")
 #
 #		EM USO NA COLETA DA TIMELINE FULL EGOS - RESTANTE...
 #msc20160012_48_test
-#consumer_key_test.append("6JURlBsCpoDnG97JcQXb1DVDq")
-#consumer_secret_test.append("8dzL2NSfOXg3QSBb97LWS4ChDb9ycUYGIDBuIKHXkKfdWYMccg")
-#access_token_test.append("849270909034692608-zZav8hfaWZtBwXIctKtK9FnhHiBS4eq")
-#access_token_secret_test.append("iarzO6gXEN7o260zesA9aVesLvZcElKsSZ2fomQKulzrQ")
+consumer_key_test.append("6JURlBsCpoDnG97JcQXb1DVDq")
+consumer_secret_test.append("8dzL2NSfOXg3QSBb97LWS4ChDb9ycUYGIDBuIKHXkKfdWYMccg")
+access_token_test.append("849270909034692608-zZav8hfaWZtBwXIctKtK9FnhHiBS4eq")
+access_token_secret_test.append("iarzO6gXEN7o260zesA9aVesLvZcElKsSZ2fomQKulzrQ")
 #
+#msc20160012_49_test
+consumer_key_test.append("7rHS37h9XeAT9q1mtoVMVFa3f")
+consumer_secret_test.append("4zTiSlXI4z6r0BHDTbGCuFBxeaPTKmoNi8ySV07y0f6ljB33Tf")
+access_token_test.append("849270909034692608-EQKnfSPKslFOYRPCvATXNnABh2lfsr1")
+access_token_secret_test.append("r80VmDdbSbFbm7SpEPHnyFqPRInu4oCkHuDTfkm6ynq1v")
 #
 ##############################################################################################################
 ##############################################################################################################
