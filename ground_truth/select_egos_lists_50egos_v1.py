@@ -86,8 +86,8 @@ def main():
 								if os.path.isfile(lists_collected+str(list)+".dat"):
 									a.write(list)								
 									g.write(list)
-			dictionary[ego] = ego
-			i+=1							
+				dictionary[ego] = ego
+				i+=1							
 			except Exception as e:
 				print e
 
