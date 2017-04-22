@@ -192,10 +192,10 @@ print("######################################################################\n"
 
 # Registre sua aplicacao em https://apps.twitter.com
 
-consumer_key = "gOa37Y85DcbM2Oi3IpvvFWMj9"
-consumer_secret = "Fh334ZT5fXKDTS8zGJR1N6RU3kDdLKhEAk2ZB97iKydCUCaMQp"
-access_token = "849270909034692608-YPMJReaqxI6oVdP7RQ2cfqJinlghtuD"
-access_token_secret = "A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM"
+consumer_key = "7rHS37h9XeAT9q1mtoVMVFa3f"
+consumer_secret = "4zTiSlXI4z6r0BHDTbGCuFBxeaPTKmoNi8ySV07y0f6ljB33Tf"
+access_token = "849270909034692608-EQKnfSPKslFOYRPCvATXNnABh2lfsr1"
+access_token_secret = "r80VmDdbSbFbm7SpEPHnyFqPRInu4oCkHuDTfkm6ynq1v"
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
