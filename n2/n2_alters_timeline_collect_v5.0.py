@@ -226,7 +226,7 @@ timeline_collected_dir = "/home/amaury/coleta/timeline_collect/50/json/"####### 
 data_dir = "/home/amaury/coleta/n2/timeline_collect/alters/50/bin/" ############## Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n2/timeline_collect/alters/50/error/" ########### Diretório para armazenamento dos arquivos de erro
 
-formato = 'll'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
+formato = 'll'				#######################################################  Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 wait = 5
