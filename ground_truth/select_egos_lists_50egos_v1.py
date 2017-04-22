@@ -76,16 +76,16 @@ def main():
 						if egos_lists_ownership:
 							for list in egos_lists_ownership:
 								if os.path.isfile(lists_collected+str(list)+".dat"):
-									a.write(list)	#Grava o id da lista no arquivo do ego que contem TODAS AS LISTAS.								
-									f.write(list)	#Grava o id da lista no arquivo do ego que contem as listas que ele é o dono. 
+									a.write(list_struct.pack(list))	#Grava o id da lista no arquivo do ego que contem TODAS AS LISTAS.								
+									f.write(list_struct.pack(list))	#Grava o id da lista no arquivo do ego que contem as listas que ele é o dono. 
 			
 				with open(all_egos_lists+str(ego)+".dat", 'a+b') as a:
 					with open(subs_egos_lists+str(ego)+".dat", 'w+b') as g:			
 						if egos_lists_subscription:
 							for list in egos_lists_subscription:
 								if os.path.isfile(lists_collected+str(list)+".dat"):
-									a.write(list)								
-									g.write(list)
+									a.write(list_struct.pack(list))
+									g.write(list_struct.pack(list))
 				dictionary[ego] = ego
 				i+=1							
 			except Exception as e:
