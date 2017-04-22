@@ -103,7 +103,7 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-egos_set = "/home/amaury/coleta/n1/egos_friends/500/bin/" # Conjunto de egos - Apenas para pegar o id de cada ego em cada conjunto (50-100-500-full)
+egos_set = "/home/amaury/coleta/n1/egos_friends/full/bin/" # Conjunto de egos - Apenas para pegar o id de cada ego em cada conjunto (50-100-500-full)
 
 lists_set = "/home/amaury/coleta/users_lists/data/ego_lists_overview_full.json" # Diretório que contém o conjunto de listas de cada ego. 
 lists_collected = "/home/amaury/coleta/ground_truth/members_lists_collected/bin/" # Diretório que contém o conjunto de listas COLETADAS de cada ego. Só pra pegar o id das listas 

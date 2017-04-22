@@ -108,9 +108,9 @@ egos_set = "/home/amaury/coleta/n1/egos_friends/500/bin/" # Conjunto de egos - A
 lists_set = "/home/amaury/coleta/users_lists/data/ego_lists_overview_full.json" # Diretório que contém o conjunto de listas de cada ego. 
 lists_collected = "/home/amaury/coleta/ground_truth/members_lists_collected/bin/" # Diretório que contém o conjunto de listas COLETADAS de cada ego. Só pra pegar o id das listas 
 
-all_egos_lists = "/home/amaury/coleta/ground_truth/egos_lists/500/all/bin/" 
-owner_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/500/owner/bin/"
-subs_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/500/subs/bin/"
+all_egos_lists = "/home/amaury/coleta/ground_truth/egos_lists/full/all/bin/" 
+owner_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/full/owner/bin/"
+subs_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/full/subs/bin/"
 
 formato = 'l'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
 list_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
