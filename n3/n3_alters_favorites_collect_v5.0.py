@@ -127,7 +127,6 @@ def get_favorites(user):												#Coleta dos favoritos
 					print ("Usuário não autorizada. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1	
 		except Exception as e3:
-			key = random.randint(key_init,key_limit)
 			api = autentication(auths)
 			print ("E3: "+str(e3))
 		

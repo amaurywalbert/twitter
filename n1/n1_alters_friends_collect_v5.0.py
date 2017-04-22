@@ -115,7 +115,6 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1
 		except Exception as e2:
-			key = random.randint(key_init,key_limit)
 			api = autentication(auths)
 			print ("E2: "+str(e2))
 		
