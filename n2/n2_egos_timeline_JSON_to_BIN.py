@@ -43,8 +43,8 @@ def main():
 		ego = file.split(".json")
 		ego = long(ego[0])
 		if not dictionary.has_key(ego):
-			print ("Buscando retweets do ego: "+str(ego))
 			j+=1
+			print (str(j)+" - Buscando retweets do ego: "+str(ego))
 			try:
 				with open(data_dir+str(ego)+".dat", 'w+b') as f:
 					with open(timeline_collected_dir+file,'r') as timeline:
@@ -57,7 +57,7 @@ def main():
 								user = long(user)
 								f.write(timeline_struct.pack(tweet, user))						# Grava os ids dos tweet  e o id do autor n
 							except KeyError:
-								print ("Não é retweet!")
+								print (str(j)+" - Não é retweet!")
 			except Exception as e:
 				print e		
 			print
@@ -77,10 +77,10 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-timeline_collected_dir = "/home/amaury/coleta/timeline_collect/500/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
+timeline_collected_dir = "/home/amaury/coleta/timeline_collect/full/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
 
-data_dir = "/home/amaury/coleta/n2/timeline_collect/egos/500/bin/" ############# Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n2/timeline_collect/egos/500/error/" ########## Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/n2/timeline_collect/egos/full/bin/" ############# Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n2/timeline_collect/egos/full/error/" ########## Diretório para armazenamento dos arquivos de erro
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
