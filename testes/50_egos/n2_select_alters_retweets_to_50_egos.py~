@@ -3,9 +3,6 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n2
-#Script que contém as chaves para autenticação do twitter
-
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -16,6 +13,22 @@ sys.setdefaultencoding('utf-8')
 ## 
 ######################################################################################################################################################################
 
+###############################################################################################
+# Imprime os arquivos binários com os ids dos amigos
+################################################################################################
+def read_arq_bin(file):
+	with open(file, 'r') as f:	 
+		f.seek(0,2)
+		tamanho = f.tell()
+		f.seek(0)
+		retweets_list = []
+		while f.tell() < tamanho:
+			buffer = f.read(timeline_struct.size)
+			retweet, user = timeline_struct.unpack(buffer)
+			status = {'retweet':retweet, 'user':user}
+			retweets_list.append(status)
+	return retweets_list
+	
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -24,32 +37,26 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	j = 0
-	l = 0
-	k = 0
-	m = 0
+	global i # Quantidade de arquivos no diretório de destino
+	j = 0		# Quantidade de arquivos não encontrados no destino 
+	k = 0		# Quantidade de alters verificados
 	
-	for file in os.listdir(egos_50_timeline):
-		j+=1
-		with open(egos_50_timeline+file,'r') as timeline:
-			for line in timeline:
-				l+=1
-				tweet = json.loads(line)
-				try:
-					user =  tweet['retweeted_status']['user']['id']
-					user = long(user)
-					try:
-						if os.path.isfile(timeline_collected+str(user)+".dat"):
-							shutil.copy(timeline_collected+str(user)+".dat",dst_timeline_collected)
-							print ("Arquivo copiado com sucesso!")
-							k+=1
-					except Exception as e:
-						print (e)
 
-				except KeyError:
-					m+=1
-					print "Não é retweet!"
+	for file in os.listdir(fonte):
+		retweets_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
+		if retweets_list:
+			for tweet in retweets_list:
+				k+=1
+				user = long(tweet['user'])
+				if not dictionary.has_key(user):
+					j+=1
+					if os.path.isfile(origem+str(user)+".dat"):
+						shutil.copy(origem+str(user)+".dat",destino)
+						dictionary[user] = user
+						print (str(j)+" - Arquivo copiado com sucesso!")
+		print("######################################################################")	
 	print
+	print ("Alters: "+str(l))
 	print("######################################################################")
 	print("Coleta finalizada!")
 	print("######################################################################\n")
@@ -63,15 +70,33 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-egos_50_timeline = "/home/amaury/coleta/timeline_collect/50/json/"
+qtde_egos = 50 		# 50, 100, 500 ou full
 
-timeline_collected = "/home/amaury/coleta_old/n2/timeline_collect/alters/bin/"
-dst_timeline_collected = "/home/amaury/coleta/n2/timeline_collect/alters/50/bin/"
+######################################################################################################################
+fonte = "/home/amaury/coleta/n2/timeline_collect/egos/"+str(qtde_egos)+"/bin/"
+origem = "/home/amaury/coleta_old/n2/timeline_collect/alters/bin/"
+destino = "/home/amaury/coleta/n2/timeline_collect/alters/"+str(qtde_egos)+"/bin/"
 
+formato = 'll'				####################################################### Long para id do tweet e outro long para autor
+timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 #Cria os diretórios para armazenamento dos arquivos
-if not os.path.exists(dst_timeline_collected):
-	os.makedirs(dst_timeline_collected)
+if not os.path.exists(destino):
+	os.makedirs(destino)
+
+###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
+print
+print("######################################################################")
+print ("Criando tabela hash...")
+dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
+i = 0	#Conta quantos usuários já foram coletados (todos arquivos no diretório)
+for file in os.listdir(destino):
+	user_id = file.split(".dat")
+	user_id = long(user_id[0])
+	dictionary[user_id] = user_id
+	i+=1
+print ("Tabela hash criada com sucesso...") 
+print("######################################################################\n")
 
 #Executa o método main
 if __name__ == "__main__": main()
