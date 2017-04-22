@@ -161,9 +161,9 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_dir = "/home/amaury/coleta/n1/egos_friends/full/bin/"########################## Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/timeline_collect/full/json/" ################### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/timeline_collect/full/error/" ################# Diretório para armazenamento dos arquivos de erro
+egos_dir = "/home/amaury/coleta/n1/egos_friends/full/bin/"##################### Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/timeline_collect/full/json/" ################## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/timeline_collect/full/error/" ################ Diretório para armazenamento dos arquivos de erro
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
@@ -199,7 +199,7 @@ access_token_secret = "A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM"
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth, wait_on_rate_limit=True)
+api = tweepy.API(auth)
 
 
 	
