@@ -6,7 +6,6 @@ import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, ran
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
-
 ######################################################################################################################################################################
 ##		Status - Versão 1 - verifica se os alters (autores de retweets) já foram coletados e copia os arquivos deles para o diretório correto
 ##									Esse processo é apenas para agilizar e organizar os diretórios de timeline já coletados.
@@ -59,7 +58,6 @@ def main():
 	print("######################################################################")
 	print("Coleta finalizada!")
 	print("######################################################################\n")
-
 #####################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
@@ -68,9 +66,7 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-
-qtde_egos = 50 		# 50, 100, 500 ou full
-
+qtde_egos = 100 		# 50, 100, 500 ou full
 ######################################################################################################################
 fonte = "/home/amaury/coleta/n2/timeline_collect/egos/"+str(qtde_egos)+"/bin/"
 origem = "/home/amaury/coleta_old/n2/timeline_collect/alters/bin/"

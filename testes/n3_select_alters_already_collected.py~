@@ -7,12 +7,12 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - verifica se os alters (autores de retweets) já foram coletados e copia os arquivos deles para o diretório correto
-##									Esse processo é apenas para agilizar e organizar os diretórios de timeline já coletados.
+##		Status - Versão 1 - verifica se os alters (autores de tweets favoritados) já foram coletados e copia os arquivos deles para o diretório correto
+##									Esse processo é apenas para agilizar e organizar os diretórios de favoritos já coletados.
 ## 
 ######################################################################################################################################################################
 
-###############################################################################################
+################################################################################################
 # Imprime os arquivos binários com os ids dos amigos
 ################################################################################################
 def read_arq_bin(file):
@@ -20,14 +20,14 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		retweets_list = []
+		tweets_list = []
 		while f.tell() < tamanho:
-			buffer = f.read(timeline_struct.size)
-			retweet, user = timeline_struct.unpack(buffer)
-			status = {'retweet':retweet, 'user':user}
-			retweets_list.append(status)
-	return retweets_list
-	
+			buffer = f.read(favorites_struct.size)
+			tweet, user = favorites_struct.unpack(buffer)
+			status = {'tweet':tweet, 'user':user}
+			tweets_list.append(status)
+	return tweets_list
+
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -42,14 +42,18 @@ def main():
 	
 
 	for file in os.listdir(fonte):
-		retweets_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
-		if retweets_list:
-			for tweet in retweets_list:
+		tweets_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
+		if tweets_list:
+			for favorited in tweets_list:
 				k+=1
-				user = long(tweet['user'])
+				user = long(favorited['user'])
 				if not dictionary.has_key(user):
 					j+=1
 					if os.path.isfile(origem+str(user)+".dat"):
+						shutil.copy(origem+str(user)+".dat",destino)
+						dictionary[user] = user
+						print (str(j)+" - Arquivo copiado com sucesso!")
+					elif os.path.isfile(origem2+str(user)+".dat"):
 						shutil.copy(origem+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")
@@ -68,9 +72,10 @@ def main():
 ######################################################################################################################
 qtde_egos = 100 		# 50, 100, 500 ou full
 ######################################################################################################################
-fonte = "/home/amaury/coleta/n2/timeline_collect/egos/"+str(qtde_egos)+"/bin/"
-origem = "/home/amaury/coleta_old/n2/timeline_collect/alters/bin/"
-destino = "/home/amaury/coleta/n2/timeline_collect/alters/"+str(qtde_egos)+"/bin/"
+fonte = "/home/amaury/coleta/n3/favorites_collect/egos/"+str(qtde_egos)+"/bin/"
+origem = "/home/amaury/coleta_old/n3/alters_favorites/50/"
+origem2 = "/home/amaury/coleta_old/favorites_collect/alters/bin/"
+destino = "/home/amaury/coleta/n3/favorites_collect/alters/"+str(qtde_egos)+"/bin/"
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
