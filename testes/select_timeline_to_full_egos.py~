@@ -33,7 +33,8 @@ def main():
 					shutil.copy(timeline_collected+str(user)+".json",egos_timeline)
 					print ("Arquivo copiado com sucesso!")
 				else:
-					print ("Arquivo NÃO encontrado!!!")
+					print ("Arquivo NÃO encontrado!!!\n")
+					print("######################################################################")
 			except Exception as e:
 				print (e)
 
@@ -52,7 +53,7 @@ timeline_collected = "/home/amaury/coleta_old/timeline_collect/10mil_egos/json/"
 egos_timeline = "/home/amaury/coleta/timeline_collect/full/json/"	
 
 
-
+dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
 print
 print("######################################################################")
@@ -65,12 +66,6 @@ for file in os.listdir(egos_timeline):
 	i+=1
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
-
-
-
-
-
-
 
 #Executa o método main
 if __name__ == "__main__": main()
