@@ -118,6 +118,7 @@ def get_favorites(user):												#Coleta dos favoritos
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1
 		except Exception as e2:
+			api = autentication(auths)
 			print ("E2: "+str(e2))
 		
 		try:
@@ -127,7 +128,6 @@ def get_favorites(user):												#Coleta dos favoritos
 					print ("Usuário não autorizada. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1	
 		except Exception as e3:
-			api = autentication(auths)
 			print ("E3: "+str(e3))
 		
 		try:
