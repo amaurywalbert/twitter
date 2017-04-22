@@ -84,9 +84,9 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-timeline_collected_dir = "/home/amaury/coleta/timeline_collect/500/json/"####### Arquivo contendo a timeline dos usuários ego já coletados em formato JSON
+timeline_collected_dir = "/home/amaury/coleta/timeline_collect/full/json/"####### Arquivo contendo a timeline dos usuários ego já coletados em formato JSON
 
-data_dir = "/home/amaury/coleta/n4/mentions_collect/egos/500/bin/" ############## Diretório para armazenamento dos arquivos
+data_dir = "/home/amaury/coleta/n4/mentions_collect/egos/full/bin/" ############## Diretório para armazenamento dos arquivos
 
 formato = 'lli'				#################################################### Long para id do tweet e outro long para autor e uma flag (0 ou 1) indicando se é um tetweet
 timeline_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
