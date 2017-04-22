@@ -45,7 +45,6 @@ def main():
 		if not dictionary.has_key(ego):
 			print ("Buscando retweets do ego: "+str(ego))
 			j+=1
-			l = 0														# Exibe o número ordinal do tweet
 			try:
 				with open(data_dir+str(ego)+".dat", 'w+b') as f:
 					with open(timeline_collected_dir+file,'r') as timeline:
@@ -56,8 +55,6 @@ def main():
 								tweet = long(tweet)									
 								user =  retweet['retweeted_status']['user']['id']
 								user = long(user)
-								l+=1
-								print l
 								f.write(timeline_struct.pack(tweet, user))						# Grava os ids dos tweet  e o id do autor n
 							except KeyError:
 								print ("Não é retweet!")
@@ -80,10 +77,10 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-timeline_collected_dir = "/home/amaury/coleta/timeline_collect/50/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
+timeline_collected_dir = "/home/amaury/coleta/timeline_collect/100/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
 
-data_dir = "/home/amaury/coleta/n2/timeline_collect/egos/50/bin/" ############# Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n2/timeline_collect/egos/50/error/" ########## Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/n2/timeline_collect/egos/100/bin/" ############# Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n2/timeline_collect/egos/100/error/" ########## Diretório para armazenamento dos arquivos de erro
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
