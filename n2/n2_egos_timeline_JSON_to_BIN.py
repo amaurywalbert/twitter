@@ -58,6 +58,10 @@ def main():
 								f.write(timeline_struct.pack(tweet, user))						# Grava os ids dos tweet  e o id do autor n
 							except KeyError:
 								print (str(j)+" - Não é retweet!")
+###
+#				retweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
+#				print retweets_list
+####	
 			except Exception as e:
 				print e		
 			print

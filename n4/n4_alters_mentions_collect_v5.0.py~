@@ -234,7 +234,7 @@ error_dir = "/home/amaury/coleta/n4/mentions_collect/alters/50/error/" ######## 
 formato = 'lli'				#################################################### Long para o código ('l') e depois o array de chars de X posições:	
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
-wait = 60
+wait = 30
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
