@@ -76,7 +76,7 @@ def main():
 ######################################################################################################################
 qtde_egos = 10 		#10, 50, 100, 500 ou full
 ######################################################################################################################
-fonte = "/home/amaury/coleta/n4/mentions_collect/egos/"+str(qtde_egos)+"/bin"
+fonte = "/home/amaury/coleta/n4/mentions_collect/egos/"+str(qtde_egos)+"/bin/"
 
 origem1 = "/home/amaury/coleta_old/n4/timeline_collect/alters/50/bin/"
 origem2 = "/home/amaury/coleta_old/n4/timeline_collect/alters/bin/"
