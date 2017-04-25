@@ -48,12 +48,16 @@ def main():
 				user = long(friend)
 				if not dictionary.has_key(user):
 					j+=1
-					if os.path.isfile(origem+str(user)+".dat"):
-						shutil.copy(origem+str(user)+".dat",destino)
+					if os.path.isfile(origem3+str(user)+".dat"):
+						shutil.copy(origem3+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")
 					elif os.path.isfile(origem2+str(user)+".dat"):
 						shutil.copy(origem2+str(user)+".dat",destino)
+						dictionary[user] = user
+						print (str(j)+" - Arquivo copiado com sucesso!")
+					elif os.path.isfile(origem1+str(user)+".dat"):
+						shutil.copy(origem1+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")
 	print
@@ -73,7 +77,7 @@ qtde_egos = 10 		#10, 50, 100, 500 ou full
 ######################################################################################################################
 fonte = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 
-origem = "/home/amaury/coleta_old/n1/egos_and_alters_friends/bin/"
+origem1 = "/home/amaury/coleta_old/n1/egos_and_alters_friends/bin/"
 origem2 = "/home/amaury/coleta_old/n1/alters_friends/50/bin/"
 origem3 = "/home/amaury/coleta/n1/alters_friends/50/bin/"  #Só pra qtde_egos 10
 

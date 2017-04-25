@@ -48,12 +48,16 @@ def main():
 				user = long(friend)
 				if not dictionary.has_key(user):
 					j+=1
-					if os.path.isfile(origem+str(user)+".dat"):
-						shutil.copy(origem+str(user)+".dat",destino)
+					if os.path.isfile(origem3+str(user)+".dat"):
+						shutil.copy(origem3+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")
 					elif os.path.isfile(origem2+str(user)+".dat"):
 						shutil.copy(origem2+str(user)+".dat",destino)
+						dictionary[user] = user
+						print (str(j)+" - Arquivo copiado com sucesso!")
+					elif os.path.isfile(origem+str(user)+".dat"):
+						shutil.copy(origem+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")
 	print
