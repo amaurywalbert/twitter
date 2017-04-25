@@ -42,9 +42,9 @@ def main():
 	
 
 	for file in os.listdir(fonte):
-		retweets_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
-		if retweets_list:
-			for tweet in retweets_list:
+		mentions_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
+		if mentions_list:
+			for mentioned in mentions_list:
 				k+=1
 				user = long(tweet['user'])
 				if not dictionary.has_key(user):
