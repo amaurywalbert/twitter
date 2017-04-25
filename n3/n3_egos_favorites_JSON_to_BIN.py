@@ -75,10 +75,10 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
+qtde_egos = 10 #10, 50, 100, 500, full
 
-favorites_collected_dir = "/home/amaury/coleta/favorites_collect/full/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
-
-data_dir = "/home/amaury/coleta/n3/favorites_collect/egos/full/bin/" ############# Diretório para armazenamento dos arquivos
+favorites_collected_dir = "/home/amaury/coleta/favorites_collect/"+str(qtde_egos)+"/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
+data_dir = "/home/amaury/coleta/n3/favorites_collect/egos/"+str(qtde_egos)+"/bin/" ############# Diretório para armazenamento dos arquivos
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor
 favorites_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

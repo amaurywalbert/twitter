@@ -49,10 +49,14 @@ def main():
 				user = long(tweet['user'])
 				if not dictionary.has_key(user):
 					j+=1
-					if os.path.isfile(origem+str(user)+".dat"):
-						shutil.copy(origem+str(user)+".dat",destino)
+					if os.path.isfile(origem2+str(user)+".dat"):
+						shutil.copy(origem2+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")
+				elif os.path.isfile(origem1+str(user)+".dat"):
+						shutil.copy(origem1+str(user)+".dat",destino)
+						dictionary[user] = user
+						print (str(j)+" - Arquivo copiado com sucesso!")						
 	print
 	print ("Alters: "+str(k))
 	print("######################################################################")
@@ -66,10 +70,13 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 100 		# 50, 100, 500 ou full
+qtde_egos = 10 		#10, 50, 100, 500 ou full
 ######################################################################################################################
 fonte = "/home/amaury/coleta/n2/timeline_collect/egos/"+str(qtde_egos)+"/bin/"
-origem = "/home/amaury/coleta_old/n2/timeline_collect/alters/bin/"
+
+origem1 = "/home/amaury/coleta_old/n2/timeline_collect/alters/bin/"
+origem2 = "/home/amaury/coleta/n2/timeline_collect/alters/50/bin/"
+
 destino = "/home/amaury/coleta/n2/timeline_collect/alters/"+str(qtde_egos)+"/bin/"
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor

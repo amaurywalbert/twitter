@@ -80,11 +80,10 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
+qtde_egos = 10 #10, 50, 100, 500, full
 
-timeline_collected_dir = "/home/amaury/coleta/timeline_collect/full/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
-
-data_dir = "/home/amaury/coleta/n2/timeline_collect/egos/full/bin/" ############# Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n2/timeline_collect/egos/full/error/" ########## Diretório para armazenamento dos arquivos de erro
+timeline_collected_dir = "/home/amaury/coleta/timeline_collect/"+str(qtde_egos)+"/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
+data_dir = "/home/amaury/coleta/n2/timeline_collect/egos/"+str(qtde_egos)+"/bin/" ############# Diretório para armazenamento dos arquivos
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
@@ -95,8 +94,6 @@ timeline_struct = struct.Struct(formato) ###################################### 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(data_dir):
 	os.makedirs(data_dir)
-if not os.path.exists(error_dir):
-	os.makedirs(error_dir)
 
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
 print
