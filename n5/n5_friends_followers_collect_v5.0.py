@@ -1,6 +1,6 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-# Script para coletar seguidores a partir de um conjunto de alters do twitter
+# Script para coletar seguidores a partir de um conjunto de amigos dos egos
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
@@ -11,7 +11,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 5 - Coletar seguidores dos alters do Twitter
+##		Status - Versão 5 - Coletar seguidores dos amigos dos egos
 ##						
 ##						5.1 - Uso do Tweepy para controlar as autenticações...
 ##
@@ -128,10 +128,10 @@ def get_followers(user):												#Coleta dos seguidores de um usuário espec�
 			print ("E3: "+str(e3))
 ######################################################################################################################################################################
 #
-# Obtem as seguidores dos alters
+# Obtem as seguidores dos amigos dos egos
 #
 ######################################################################################################################################################################
-def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = numero do alter que esta sendo verificado - l = tamanho da lista de amigos do ego
+def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = numero do amigo do ego que esta sendo verificado - l = tamanho da lista de amigos do ego
 	global i	# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
 	 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
@@ -147,7 +147,7 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 					f.write(user_struct.pack(follower))						# Grava os ids dos amigos no arquivo binário do usuário
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				i +=1
-				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
+				print ("Ego nº "+str(j)+" - Friend ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
 		except Exception as e:	
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -172,18 +172,18 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 ######################################################################################################################################################################
 
 def main():
-	j = 0																	#Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
-	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+	j = 0																	#Exibe o número ordinal do ego que está sendo usado para a coleta dos seguidores dos amigos
+	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os seguidores dos amigos listados no arquivo do ego.
 		j+=1 
-		friends_list = read_arq_bin(egos_friends_dir+file)	# Lista de alters (friends) de um determinado ego
+		friends_list = read_arq_bin(egos_friends_dir+file)	# Lista de friends de um determinado ego
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
-		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
+		k = 0																#Exibe o número ordinal do friend que está sendo coletado a lista de amigos
 		for friend in friends_list:
 			k+=1
 			if not dictionary.has_key(friend):
 				save_user(j,k,l,friend)							#Inicia função de busca
 
-#	with open("/home/amaury/coleta/n5/alters_followers/alters_followers_collected.txt", 'w') as f:
+#	with open("/home/amaury/coleta/n5/friends_followers/friends_followers_collected.txt", 'w') as f:
 #		print
 #		print("######################################################################")		
 #		print ("Criando arquivo com resumo da coleta...")	
@@ -194,7 +194,7 @@ def main():
 #			qtde_followers = len(followers_file)
 #			friendship = {'user':user_id,'followers': qtde_followers}
 #			f.write(json.dumps(friendship, separators=(',', ':'))+"\n")
-#		print ("Arquivo criado com sucesso: /home/amaury/coleta/n5/alters_followers/alters_followers_collected.txt" )
+#		print ("Arquivo criado com sucesso: /home/amaury/coleta/n5/friends_followers/friends_followers_collected.txt" )
 #		print("######################################################################\n")
 	print
 	print("######################################################################")
@@ -221,8 +221,8 @@ key_limit = len(auths)		#################################################### Usa
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"############### Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/n5/alters_followers/"+str(qtde_egos)+"/bin/" ##################### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n5/alters_followers/"+str(qtde_egos)+"/error/" ################## Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/n5/friends_followers/"+str(qtde_egos)+"/bin/" ##################### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n5/friends_followers/"+str(qtde_egos)+"/error/" ################## Diretório para armazenamento dos arquivos de erro
 
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
