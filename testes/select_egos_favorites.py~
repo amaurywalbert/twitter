@@ -41,10 +41,10 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"
+egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/10/bin/"
 
-favorites_collected = "/home/amaury/coleta/favorites_collect/ego/json/"
-egos_50_favorites = "/home/amaury/coleta/favorites_collect/50/json/"	
+favorites_collected = "/home/amaury/coleta/favorites_collect/full/json/"
+egos_50_favorites = "/home/amaury/coleta/favorites_collect/10/json/"	
 
 
 #Executa o método main

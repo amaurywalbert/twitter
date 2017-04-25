@@ -26,8 +26,8 @@ def main():
 		user = file.split(".dat")
 		user = long(user[0])
 		try:
-			if os.path.isfile(favorites_collected+str(user)+".json"):
-				shutil.copy(favorites_collected+str(user)+".json",egos_50_favorites)
+			if os.path.isfile(timeline_collected+str(user)+".json"):
+				shutil.copy(timeline_collected+str(user)+".json",egos_50_timeline)
 				print ("Arquivo copiado com sucesso!")
 		except Exception as e:
 			print (e)
@@ -43,8 +43,8 @@ def main():
 
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/10/bin/"
 
-favorites_collected = "/home/amaury/coleta/favorites_collect/full/json/"
-egos_50_favorites = "/home/amaury/coleta/favorites_collect/10/json/"	
+timeline_collected = "/home/amaury/coleta/timeline_collect/50/json/"
+egos_50_timeline = "/home/amaury/coleta/timeline_collect/10/json/"	
 
 
 #Executa o método main
