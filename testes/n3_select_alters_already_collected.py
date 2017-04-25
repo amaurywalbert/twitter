@@ -83,7 +83,7 @@ fonte = "/home/amaury/coleta/n3/favorites_collect/egos/"+str(qtde_egos)+"/bin/"
 
 origem1 = "/home/amaury/coleta_old/n3/alters_favorites/50/"
 origem2 = "/home/amaury/coleta_old/favorites_collect/alters/bin/"
-origem3 = "/home/amaury/coleta/n3/favorites_collect/alters/50/bin/"
+origem3 = "/home/amaury/coleta/n3/favorites_collect/alters/100/bin/"
 
 destino = "/home/amaury/coleta/n3/favorites_collect/alters/"+str(qtde_egos)+"/bin/"
 

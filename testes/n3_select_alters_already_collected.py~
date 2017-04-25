@@ -63,7 +63,6 @@ def main():
 					else:
 						k+=1						
 	print
-	print ("Tweets verificados: "+str(i))
 	print ("Arquivos copiados: "+str(j))
 	print ("Arquivos no diretório: "+str(len(dictionary)))
 	print ("Arquivos faltando: "+str(k))
