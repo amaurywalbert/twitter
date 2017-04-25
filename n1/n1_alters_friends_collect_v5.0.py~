@@ -11,9 +11,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 4 - Coletar amigos do Twitter
+##		Status - Versão 5 - Coletar amigos do Twitter
 ##						
-##						4.1 - Uso do Tweepy para controlar as autenticações...
+##						5.1 - Uso do Tweepy para controlar as autenticações...
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -115,7 +115,6 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1
 		except Exception as e2:
-			key = random.randint(key_init,key_limit)
 			api = autentication(auths)
 			print ("E2: "+str(e2))
 		
@@ -222,7 +221,6 @@ key = random.randint(key_init,key_limit) ###################################### 
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/50/bin/"############### Arquivo contendo a lista dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/n1/alters_friends/50/bin/" #################### Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n1/alters_friends/50/error/" ################# Diretório para armazenamento dos arquivos de erro
-
 
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

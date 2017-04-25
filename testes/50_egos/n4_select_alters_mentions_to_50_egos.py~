@@ -11,7 +11,7 @@ sys.setdefaultencoding('utf-8')
 
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - verifica se os alters (mencionados) já foram coletados e copia os arquivos deles para o diretório correto
+##		Status - Versão 1 - verifica se os alters (autores de tweets favoritados) já foram coletados e copia os arquivos deles para o diretório correto
 ##									Esse processo é apenas para agilizar e organizar os diretórios de favoritos já coletados.
 ## 
 ######################################################################################################################################################################
