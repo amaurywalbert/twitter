@@ -27,7 +27,7 @@ def main():
 		user = long(user[0])
 		try:
 			if os.path.isfile(timeline_collected+str(user)+".json"):
-				shutil.copy(timeline_collected+str(user)+".json",egos_50_timeline)
+				shutil.copy(timeline_collected+str(user)+".json",destino)
 				print ("Arquivo copiado com sucesso!")
 		except Exception as e:
 			print (e)
@@ -44,8 +44,11 @@ def main():
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/10/bin/"
 
 timeline_collected = "/home/amaury/coleta/timeline_collect/50/json/"
-egos_50_timeline = "/home/amaury/coleta/timeline_collect/10/json/"	
+destino = "/home/amaury/coleta/timeline_collect/10/json/"	
 
+#Cria os diretórios para armazenamento dos arquivos
+if not os.path.exists(destino):
+	os.makedirs(destino)
 
 #Executa o método main
 if __name__ == "__main__": main()

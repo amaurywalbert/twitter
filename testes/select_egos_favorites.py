@@ -27,7 +27,7 @@ def main():
 		user = long(user[0])
 		try:
 			if os.path.isfile(favorites_collected+str(user)+".json"):
-				shutil.copy(favorites_collected+str(user)+".json",egos_50_favorites)
+				shutil.copy(favorites_collected+str(user)+".json",destino)
 				print ("Arquivo copiado com sucesso!")
 		except Exception as e:
 			print (e)
@@ -44,8 +44,11 @@ def main():
 egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/10/bin/"
 
 favorites_collected = "/home/amaury/coleta/favorites_collect/full/json/"
-egos_50_favorites = "/home/amaury/coleta/favorites_collect/10/json/"	
+destino = "/home/amaury/coleta/favorites_collect/10/json/"	
 
-
+#Cria os diretórios para armazenamento dos arquivos
+if not os.path.exists(destino):
+	os.makedirs(destino)
+	
 #Executa o método main
 if __name__ == "__main__": main()
