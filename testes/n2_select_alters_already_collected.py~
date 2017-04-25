@@ -53,7 +53,7 @@ def main():
 						shutil.copy(origem2+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")
-				elif os.path.isfile(origem1+str(user)+".dat"):
+					elif os.path.isfile(origem1+str(user)+".dat"):
 						shutil.copy(origem1+str(user)+".dat",destino)
 						dictionary[user] = user
 						print (str(j)+" - Arquivo copiado com sucesso!")						
