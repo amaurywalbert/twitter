@@ -1,14 +1,12 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-#	
-#
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
+
 reload(sys)
 sys.setdefaultencoding('utf-8')
-
 ######################################################################################################################################################################
-##		Status - Versão 1 - verifica se os alters (SEGUIDORES dos AMIGOS) já foram coletados e copia os arquivos deles para o diretório correto
-##									Esse processo é apenas para agilizar e organizar os diretórios de favoritos já coletados.
+##		Status - Versão 1 - Avalia o conjunto de usuarios coletados e verifica quais atendem aos requisitos de ter pelo menos 02 listas com pelo menos 05 membros em cada.
+##								ESSE SCRIPT VERIFICA E COMPLETA OS 50 EGOS
 ## 
 ######################################################################################################################################################################
 
@@ -20,12 +18,12 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		friends_list = []
+		lists_file = []
 		while f.tell() < tamanho:
-			buffer = f.read(user_struct.size)
-			friend = user_struct.unpack(buffer)
-			friends_list.append(friend[0])
-	return friends_list
+			buffer = f.read(list_struct.size)
+			lists = list_struct.unpack(buffer)
+			lists_file.append(follower[0])
+	return lists_file
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -35,33 +33,29 @@ def read_arq_bin(file):
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	global i # Quantidade de arquivos no diretório de destino
-	j = 0		# Quantidade de arquivos não encontrados no destino 
-	k = 0		# Quantidade de alters verificados
+	global i										#controla a quantidade de egos a serem selecionados
+	global dictionary
+	q = 0											#QTDE total de egos
+	l = 0											#QTDE de erros
 	
-
-	for file in os.listdir(fonte):
-		friends_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
-		if friends_list:
-			for friend in friends_list:
-				k+=1
-				user = long(friend)
-				if not dictionary.has_key(user):
-					j+=1
-					if os.path.isfile(origem+str(user)+".dat"):
-						shutil.copy(origem+str(user)+".dat",destino)
-						dictionary[user] = user
-						print (str(j)+" - Arquivo copiado com sucesso!")
-					elif os.path.isfile(origem2+str(user)+".dat"):
-						shutil.copy(origem2+str(user)+".dat",destino)
-						dictionary[user] = user
-						print (str(j)+" - Arquivo copiado com sucesso!")
+	for file in os.listdir(origem):
+		if i < qtde_egos:
+			q+=1 
+			if not dictionary.has_key(ego):
+				try:
+					shutil.copy(origem+file,destino)
+					dictionary[ego] = ego									# Insere o usuário coletado na tabela em memória
+					i+=1
+					print ("Arquivo copiado com sucesso!")
+				except Exception as e:
+					print (e)
+			else:
+				print ("Já copiado!")
+			print ("##############################################")
 	print
-	print ("Friends: "+str(k))
-	print("######################################################################")
-	print("Coleta finalizada!")
-	print("######################################################################\n")
-#####################################################################################################################################################################
+	print ("QTDE de egos verificados: "+str(q))
+			
+######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
 #
@@ -69,26 +63,22 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 50 		# 50, 100, 500 ou full
+################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-fonte = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
-origem = "/home/amaury/coleta_old/n5/alters_followers/bin/"
-origem2 = "/home/amaury/coleta_old/n5/alters_followers/50/bin/"
-destino = "/home/amaury/coleta/n5/friends_followers/"+str(qtde_egos)+"/bin/"
-
-formato = 'l'				################################################### Long para id do amigo
-user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-
+qtde_egos = 10 		#10, 50, 100, 500 ou full
+######################################################################################################################
+fonte = "/home/amaury/coleta/n1/egos_friends/50/bin/"
+destino = "/home/amaury/coleta/n1/egos_friends/10/bin/"
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(destino):
-	os.makedirs(destino)
-
+	os.makedirs(destino)	
+	
+dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
 print
 print("######################################################################")
 print ("Criando tabela hash...")
-dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 i = 0	#Conta quantos usuários já foram coletados (todos arquivos no diretório)
 for file in os.listdir(destino):
 	user_id = file.split(".dat")
@@ -96,7 +86,6 @@ for file in os.listdir(destino):
 	dictionary[user_id] = user_id
 	i+=1
 print ("Tabela hash criada com sucesso...") 
-print("######################################################################\n")
-
+print("######################################################################\n")	
 #Executa o método main
 if __name__ == "__main__": main()

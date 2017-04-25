@@ -50,48 +50,48 @@ def read_arq_bin(file):
 ################################################################################################
 # Gera as redes - grafos
 ################################################################################################
-def ego_net(ego,alters,l):
-	global errors
+def ego_net(ego,alters_list,l):
+	ep = 0
 	G=nx.DiGraph()									# Inicia um grafo DIRECIONADO
 	vertices = {}									# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
-	m = 0 											# Conjunto de vértices
-	te_i = datetime.datetime.now()
+	ti = datetime.datetime.now()				# Tempo do inicio da construção do grafo 
 	vertices[ego] = ego							# Adiciona o Ego ao conjunto de vértices
-	m+=1											
-	for alter in alters_id:
+	for alter in alters_list:
 		alter = long(alter)
 		vertices[alter] = alter					# Adiciona cada Alter ao conjunto de vértices				
 		G.add_edge(ego,alter,weight=1)		# Cria uma aresta entre o Ego e cada Alter com peso 1
-		m+=1
 	
 	try:
-		for alter in alters_id:
-			followees = read_arq_bin(alters_dir+str(alter)+".dat")	# Recebe lista de amigos de cada alter
-			if followees:
-				for friend in followees:
+		for alter in alters_list:
+			friends = read_arq_bin(alters_dir+str(alter)+".dat")	# Recebe lista de amigos de cada alter
+			if friends:
+				for friend in friends:
 					friend = long(friend)
 					if dictionary.has_key(friend):							# Se amigo está na lista de alters
-						if G.has_edge(alter,friend):							### Se existe uma aresta entre o alter e o amigo
-							G[alter][friend]['weight']=+=1					##### Adiciona peso na aresta 
-						else:															# Senão
-							G.add_edge(alter,friend,weight=1)				# Cria aresta com peso 1
+						G.add_edge(alter,friend,weight=1)					### Cria aresta com peso 1
+
+#						if G.has_edge(alter,friend):							### Se existe uma aresta entre o alter e o amigo
+#							G[alter][friend]['weight']=+=1					##### Adiciona peso na aresta - Nesta rede não há adição de peso nas arestas... 
+#						else:															# Senão
+#							G.add_edge(alter,friend,weight=1)				# Cria aresta com peso 1
+
 
 	except IOError as a:
 		with open(output_dir_errors_alters+str(alter)+".json", 'a+') as outfile:
 			if e.message:		
-				error = {'ego':ego_id,'alter':alter,'reason': e.message}
+				error = {'ego':ego,'alter':alter,'reason': e.message}
 			else:
-				error = {'ego':ego_id,'alter':alter,'reason': str(e)}
+				error = {'ego':ego,'alter':alter,'reason': str(e)}
 			outfile.write(json.dumps(error)+"\n") 
-			print ("ERROR: "+str(error))
-			errors +=1
+		print ("ERROR: "+str(error))
+		ep +=1
 		
-	te_f =  datetime.datetime.now()
-	te	= te_f - te_i
+	tf =  datetime.datetime.now()
+	tp	= tf - ti
 	print ("Lista de arestas da grafo "+str(k)+" construído com sucesso. EGO: "+str(ego))
-	print("Tempo para construir o grafo: "+str(te))
+	print("Tempo para construir o grafo: "+str(tp))
 				
-	return G
+	return G,ep,tp
 			
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -104,26 +104,30 @@ def ego_net(ego,alters,l):
 def main():
 	errors = 0
 	l = 0															#Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
-	tt_i =  datetime.datetime.now()
-	for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
-		l+=1
-		ego = file.split(".dat")
-		ego = long(ego[0])
-		alters = read_arq_bin(egos_dir+file)
-		if alters:
+	ti =  datetime.datetime.now()
+	with open(output_overview+str(ti)+"_overview.json", 'w') as f:
+		for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+			l+=1
+			ego = file.split(".dat")
+			ego = long(ego[0])
+			alters_list = read_arq_bin(egos_dir+file)
+			alters = len(alters_list)
 			print("######################################################################")
-			print ("Construindo grafo do ego n: "+str(l))
-			print alters			
-			#G = ego_net(ego,alters, l)								#Inicia função de geração do grafo
+			print ("Construindo grafo do ego n: "+str(l)+"/"+str(qtde_egos))
+			print alters_list			
+			#G, ep,tp = ego_net(ego,alters_list, l)								#Inicia função de geração do grafo
 			#print("Quantidade de usuários faltando: "+str(errors))
 			print("######################################################################")
 			print
-		else:
-			print ("ERROR - Impossível obter lista de alters para o ego: "+str(ego))
-			errors +=1
-	tt_f =  datetime.datetime.now()
-	tt	= tt_f - tt_i
-	print("Tempo total do script: "+str(tt))
+			overview = {'ego':ego,'alters':alters,'errors':ep,'tempo_grafo': tp}
+			f.write(json.dumps(overview)+"\n")				
+		tf =  datetime.datetime.now()
+		t = tf - ti
+		overview_time = {'tempo_total':t} 
+		f.write(json.dumps(overview_time)+"\n")
+		f.write("######################################################################\n")
+		f.write("\n")
+	print("Tempo total do script: "+str(overview_time))
 	print("Quantidade total de usuários faltando: "+str(errors))
 	print("######################################################################")
 	print("Networks created!")
@@ -140,18 +144,19 @@ qtde_egos = 50 # 50, 100, 500, full
 egos_dir = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"######### Arquivo contendo a lista dos usuários ego já coletados
 alters_dir = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/bin/" #### Diretório para armazenamento dos arquivos
 output_dir = "/home/amaury/redes/n1/"+str(qtde_egos)+"/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors_alters = "/home/amaury/redes/n1/"+str(qtde_egos)+"/errors/alters" # Diretório para armazenamento dos erros dos alters
+output_dir_errors = "/home/amaury/redes/n1/"+str(qtde_egos)+"/errors/" # Diretório para armazenamento dos erros dos alters
+output_overview = "/home/amaury/redes/n1/"+str(qtde_egos)+"/"
 formato = 'l'				######################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ############################################ Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################
 ######################################################################################################################
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(output_dir):
-	os.makedirs(outup_dir)
-if not os.path.exists(output_dir_errors_egos):
-	os.makedirs(outup_dir_errors_egos)
-if not os.path.exists(output_dir_errors_alters):
-	os.makedirs(outup_dir_errors_alters)
+	os.makedirs(output_dir)
+if not os.path.exists(output_dir_errors):
+	os.makedirs(output_dir_errors)
+if not os.path.exists(output_overview):
+	os.makedirs(output_overview)	
 
 #Executa o método main
 if __name__ == "__main__": main()
