@@ -69,11 +69,14 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 50 		# 50, 100, 500 ou full
+qtde_egos = 10 		#10, 50, 100, 500 ou full
 ######################################################################################################################
 fonte = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
+
 origem = "/home/amaury/coleta_old/n1/egos_and_alters_friends/bin/"
 origem2 = "/home/amaury/coleta_old/n1/alters_friends/50/bin/"
+origem3 = "/home/amaury/coleta/n1/alters_friends/50/bin/"  #Só pra qtde_egos 10
+
 destino = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/bin/"
 
 formato = 'l'				################################################### Long para id do amigo
