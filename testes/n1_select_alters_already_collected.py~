@@ -42,8 +42,8 @@ def main():
 	for file in os.listdir(fonte):
 		friends_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
 		if friends_list:
-			for friend in friends_list:
-				i+=1
+			i+= len(friends_list)
+			for friend in friends_list:				
 				user = long(friend)
 				if not dictionary.has_key(user):
 					if os.path.isfile(origem3+str(user)+".dat"):

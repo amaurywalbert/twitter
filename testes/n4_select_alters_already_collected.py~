@@ -39,7 +39,6 @@ def main():
 	j = 0		# Quantidade de arquivos copiados
 	k = 0		# Quantidade de arquivos faltando
 	
-
 	for file in os.listdir(fonte):
 		mentions_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
 		if mentions_list:

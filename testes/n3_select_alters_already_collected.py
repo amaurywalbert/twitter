@@ -36,7 +36,6 @@ def read_arq_bin(file):
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	i = 0		# Quantidade de tweets verificados
 	j = 0		# Quantidade de arquivos copiados 
 	k = 0		# Quantidade de arquivos não encontrados
 
@@ -44,7 +43,6 @@ def main():
 		tweets_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
 		if tweets_list:
 			for favorited in tweets_list:
-				i+=1
 				user = long(favorited['user'])
 				if not dictionary.has_key(user):
 					if os.path.isfile(origem3+str(user)+".dat"):

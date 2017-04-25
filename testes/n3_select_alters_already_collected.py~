@@ -43,8 +43,8 @@ def main():
 	for file in os.listdir(fonte):
 		tweets_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
 		if tweets_list:
+			i+=len(tweets_list)
 			for favorited in tweets_list:
-				i+=1
 				user = long(favorited['user'])
 				if not dictionary.has_key(user):
 					if os.path.isfile(origem3+str(user)+".dat"):

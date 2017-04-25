@@ -35,15 +35,13 @@ def read_arq_bin(file):
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	i = 0		# Quantidade de tweets verificados
 	j = 0		# Quantidade de arquivos copiados 
 	k = 0		# Quantidade de arquivos não encontrados
 
 	for file in os.listdir(fonte):
 		friends_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
 		if friends_list:
-			for friend in friends_list:
-				i+=1
+			for friend in friends_list:				
 				user = long(friend)
 				if not dictionary.has_key(user):
 					if os.path.isfile(origem3+str(user)+".dat"):
@@ -64,7 +62,6 @@ def main():
 					else:
 						k+=1
 						
-	print ("Amigos verificados: "+str(i))
 	print ("Arquivos copiados: "+str(j))
 	print ("Arquivos no diretório: "+str(len(dictionary))
 	print ("Arquivos faltando: "+str(k))
