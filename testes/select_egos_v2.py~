@@ -67,7 +67,7 @@ def main():
 ######################################################################################################################
 qtde_egos = 10 		#10, 50, 100, 500 ou full
 ######################################################################################################################
-fonte = "/home/amaury/coleta/n1/egos_friends/50/bin/"
+origem = "/home/amaury/coleta/n1/egos_friends/50/bin/"
 destino = "/home/amaury/coleta/n1/egos_friends/10/bin/"
 
 #Cria os diretórios para armazenamento dos arquivos

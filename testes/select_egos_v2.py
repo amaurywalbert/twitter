@@ -40,7 +40,9 @@ def main():
 	
 	for file in os.listdir(origem):
 		if i < qtde_egos:
-			q+=1 
+			q+=1
+			ego = file.split(".dat")
+			ego = long(ego[0])
 			if not dictionary.has_key(ego):
 				try:
 					shutil.copy(origem+file,destino)
