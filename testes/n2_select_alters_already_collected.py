@@ -36,29 +36,33 @@ def read_arq_bin(file):
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	global i # Quantidade de arquivos no diretório de destino
-	j = 0		# Quantidade de arquivos não encontrados no destino 
-	k = 0		# Quantidade de alters verificados
-	
+	i = 0		# Quantidade de tweets verificados
+	j = 0		# Quantidade de arquivos copiados 
+	k = 0		# Quantidade de arquivos não encontrados
 
 	for file in os.listdir(fonte):
 		retweets_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
 		if retweets_list:
 			for tweet in retweets_list:
-				k+=1
+				i+=1
 				user = long(tweet['user'])
 				if not dictionary.has_key(user):
-					j+=1
 					if os.path.isfile(origem2+str(user)+".dat"):
 						shutil.copy(origem2+str(user)+".dat",destino)
 						dictionary[user] = user
+						j+=1
 						print (str(j)+" - Arquivo copiado com sucesso!")
 					elif os.path.isfile(origem1+str(user)+".dat"):
 						shutil.copy(origem1+str(user)+".dat",destino)
 						dictionary[user] = user
-						print (str(j)+" - Arquivo copiado com sucesso!")						
-	print
-	print ("Alters: "+str(k))
+						j+=1
+						print (str(j)+" - Arquivo copiado com sucesso!")
+					else:
+						k+=1						
+	print ("Tweets verificados: "+str(i))
+	print ("Arquivos copiados: "+str(j))
+	print ("Arquivos no diretório: "+str(len(dictionary))
+	print ("Arquivos faltando: "+str(k))
 	print("######################################################################")
 	print("Coleta finalizada!")
 	print("######################################################################\n")
@@ -91,12 +95,10 @@ print
 print("######################################################################")
 print ("Criando tabela hash...")
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
-i = 0	#Conta quantos usuários já foram coletados (todos arquivos no diretório)
 for file in os.listdir(destino):
 	user_id = file.split(".dat")
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
-	i+=1
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
 
