@@ -57,7 +57,6 @@ def main():
 						print (str(j)+" - Arquivo copiado com sucesso!")
 					else:
 						k+=1						
-	print ("Tweets verificados: "+str(i))
 	print ("Arquivos copiados: "+str(j))
 	print ("Arquivos no diretório: "+str(len(dictionary)))
 	print ("Arquivos faltando: "+str(k))
