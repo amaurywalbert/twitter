@@ -44,7 +44,7 @@ def main():
 	for file in os.listdir(fonte):
 		mentions_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
 		if mentions_list:
-			for mentioned in mentions_list:
+			for tweet in mentions_list:
 				k+=1
 				user = long(tweet['user'])
 				if not dictionary.has_key(user):

@@ -46,7 +46,7 @@ def main():
 		if mentions_list:
 			for mentioned in mentions_list:
 				k+=1
-				user = long(tweet['user'])
+				user = long(mentioned['user'])
 				if not dictionary.has_key(user):
 					j+=1
 					if os.path.isfile(origem3+str(user)+".dat"):
