@@ -65,7 +65,7 @@ def main():
 	print
 	print ("Tweets verificados: "+str(i))
 	print ("Arquivos copiados: "+str(j))
-	print ("Arquivos no diretório: "+str(len(dictionary))
+	print ("Arquivos no diretório: "+str(len(dictionary)))
 	print ("Arquivos faltando: "+str(k))
 	print("######################################################################")
 	print("Coleta finalizada!")
