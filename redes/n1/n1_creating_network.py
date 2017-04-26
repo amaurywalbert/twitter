@@ -133,7 +133,7 @@ def main():
 			friends = len(alters_list)											# Variável que armazena o tamanho da lista do usuário corrente
 			print("######################################################################")
 			print ("Construindo grafo do ego n: "+str(l)+"/"+str(qtde_egos)+" - Quantidade de amigos: "+str(friends))
-			G, ep, out = ego_net(ego,alters_list, l,friends)						# Inicia função de criação do grafo (lista de arestas) para o ego corrente
+			G, ep, out = ego_net(ego,alters_list)						# Inicia função de criação do grafo (lista de arestas) para o ego corrente
 			print("Quantidade de usuários faltando: "+str(ep))
 			print
 			print("Salvando o grafo...")
