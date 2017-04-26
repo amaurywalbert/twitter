@@ -65,14 +65,12 @@ class DateTimeEncoder(json.JSONEncoder):
 # Função para salvar os grafos em formato padrão para entrada nos algoritmos de detecção 
 ################################################################################################
 def save_graph(ego, G):															# Função recebe o id do ego corrente e o grafo (lista de arestas)
-	print
-	print("Salvando o grafo...")
+	print "Nada para salvar - Função em construção..."
 
 ################################################################################################
 # Gera as redes - grafos
 ################################################################################################
 def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a lista de alters e o número ordinal do ego corrente
-	print ("Construindo grafo do ego n: "+str(l)+"/"+str(qtde_egos))
 	ep = 0																			# Variável para armazenar os erros parciais - arquivos faltando referentes ao conjunto alters
 	G=nx.DiGraph()																	# Inicia um grafo DIRECIONADO
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
@@ -134,8 +132,11 @@ def main():
 			alters_list = read_arq_bin(egos_dir+file)						# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
 			friends = len(alters_list)											# Variável que armazena o tamanho da lista do usuário corrente
 			print("######################################################################")
-			G, ep, out = ego_net(ego,alters_list, l)						# Inicia função de criação do grafo (lista de arestas) para o ego corrente
+			print ("Construindo grafo do ego n: "+str(l)+"/"+str(qtde_egos)+" - Quantidade de amigos: "+str(friends))
+			G, ep, out = ego_net(ego,alters_list, l,friends)						# Inicia função de criação do grafo (lista de arestas) para o ego corrente
 			print("Quantidade de usuários faltando: "+str(ep))
+			print
+			print("Salvando o grafo...")
 			save_graph(ego,G)
 			print("######################################################################")
 			print
