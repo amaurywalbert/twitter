@@ -7,6 +7,8 @@ import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 import pylab
 import numpy as np
+import powerlaw
+import seaborn as sns
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -32,6 +34,39 @@ def read_arq_bin(file):
 	return friends_list
 
 ######################################################################################################################################################################
+# Powerlaw
+######################################################################################################################################################################
+def powerlaw_print(data):
+	print ("PowerLaw\n")
+	results = powerlaw.Fit(data) 
+	print results.power_law.alpha 
+	print results.power_law.xmin 
+	R, p = results.distribution_compare('power_law', 'lognormal')
+	plt.show() 
+
+######################################################################################################################################################################
+# Seaborn
+######################################################################################################################################################################
+def seaborn_print(data):
+	print ("Seaborn\n")
+	sns.distplot(data, kde=False, rug=True);
+	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn.png")
+#	sns.plt.show()
+	
+######################################################################################################################################################################
+# Plot and Save
+######################################################################################################################################################################
+def plot_and_save(data):
+	print ("Plot and Save\n")
+#	plt.hist(data, normed=0, facecolor='green', alpha=0.75)
+	plt.hist(data)
+	plt.xlabel ("Friends")
+	plt.ylabel ("Egos")
+	plt.title ("Número de amigos por ego")
+	plt.savefig(output_dir+str(qtde_egos)+"_plot.png")
+#	plt.show()
+
+######################################################################################################################################################################
 ######################################################################################################################################################################
 #
 # Método principal do programa.
@@ -50,16 +85,8 @@ def main():
 			user_id = long(user_id[0])
 			statistics[user_id] = {'n_of_friends':len(friends_list)}
 			n_friends.append(statistics[user_id]['n_of_friends'])
-	n_friends.sort()
-	print n_friends
-
-	pdf_print(n_friends)
-	
-	plt.hist(n_friends)
-	plt.xlabel ("Friends")
-	plt.ylabel ("Egos")
-	plt.title ("Número de amigos por ego")
-	plt.show()
+	plot_and_save(n_friends)
+	seaborn_print(n_friends)
 
 	print("######################################################################")
 	print("Script finalizado!")
