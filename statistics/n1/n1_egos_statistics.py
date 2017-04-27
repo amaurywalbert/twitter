@@ -49,7 +49,7 @@ def powerlaw_print(data):
 ######################################################################################################################################################################
 def seaborn_print(data):
 	print ("Seaborn\n")
-	sns.distplot(data, kde=False, rug=True);
+	sns.distplot(data, bins=10, kde=False, rug=True);
 	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn.png")
 #	sns.plt.show()
 	
@@ -58,8 +58,8 @@ def seaborn_print(data):
 ######################################################################################################################################################################
 def plot_and_save(data):
 	print ("Plot and Save\n")
-#	plt.hist(data, normed=0, facecolor='green', alpha=0.75)
-	plt.hist(data)
+#	plt.hist(data, bins=10, normed=0, facecolor='green', alpha=0.75)
+	plt.hist(data, bins=10)
 	plt.xlabel ("Friends")
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
