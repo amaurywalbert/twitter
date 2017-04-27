@@ -203,7 +203,7 @@ def main():
 							save_timeline(j,l,user)						#Inicia função de busca dos favoritos
 				except KeyError:
 					m+=1
-					print "Não há menções!"
+#					print "Não há menções!"
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
