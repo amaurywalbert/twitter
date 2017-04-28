@@ -59,9 +59,9 @@ def seaborn_print(data,i):
 def plot_and_save(data,i):
 	print ("Plot and Save\n")
 #	plt.hist(data, normed=0, facecolor='green', alpha=0.75)
-	plt.hist(data,label=str(i))
+	plt.hist(data,label=str(i)+" egos")
 	plt.xlabel ("Friends")
-	plt.xlim([0, 50000])
+	plt.xlim([0, 30000])
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
 	plt.legend(loc='best')
