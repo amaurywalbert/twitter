@@ -61,11 +61,12 @@ def plot_and_save(data,i):
 #	plt.hist(data, normed=0, facecolor='green', alpha=0.75)
 	plt.hist(data,label=str(i)+" egos")
 	plt.xlabel ("Friends")
-	plt.xlim([0, 30000])
+	num_egos = 10000
+	plt.xlim([0, num_egos])
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+str(qtde_egos)+"_plot.png")
+	plt.savefig(output_dir+str(qtde_egos)+"_plot_"+str(num_egos)+".png")
 #	plt.show()
 
 ######################################################################################################################################################################
