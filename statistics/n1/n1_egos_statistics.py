@@ -54,11 +54,13 @@ def seaborn_print(data,i):
 	print ("Seaborn\n")
 	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(i)+" egos")
 	plt.xlim([0, num_egos])
-	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn.png")
+	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn_full_bins.png")
 	
 	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(i)+" egos")
-	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn_full_bins.png")
-#	sns.plt.show()
+	plt.xlim([0, num_egos])
+	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn.png")
+	
+	
 	
 ######################################################################################################################################################################
 # Plot and Save
@@ -68,18 +70,18 @@ def plot_and_save(data,i):
 	
 	plt.hist(data,bins=bins,label=str(i)+" egos")
 	plt.xlabel ("Friends")
-	plt.xlim([0, num_egos])
-	plt.ylabel ("Egos")
-	plt.title ("Número de amigos por ego")
-	plt.legend(loc='best')
-	plt.savefig(output_dir+str(qtde_egos)+"_plot.png")
-	
-	plt.hist(data,bins=bins,label=str(i)+" egos")
-	plt.xlabel ("Friends")
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
 	plt.legend(loc='best')
 	plt.savefig(output_dir+str(qtde_egos)+"_plot_full_bins.png")
+
+	plt.hist(data,bins=bins,label=str(i)+" egos")
+	plt.xlabel ("Friends")
+	plt.xlim([0, num_egos])
+	plt.ylabel ("Egos")
+	plt.title ("Número de amigos por ego")
+	plt.legend(loc='best')
+	plt.savefig(output_dir+str(qtde_egos)+"_plot.png")	
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
