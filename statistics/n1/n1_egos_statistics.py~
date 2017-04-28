@@ -66,7 +66,7 @@ def plot_and_save(data,i):
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+str(qtde_egos)+"_plot.png")
+	plt.savefig(output_dir+str(qtde_egos)+"_plot_"+str(num_egos)+".png")
 #	plt.show()
 
 ######################################################################################################################################################################
