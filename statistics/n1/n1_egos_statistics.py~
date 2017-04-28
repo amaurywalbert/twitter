@@ -50,9 +50,9 @@ def powerlaw_print(data,i):
 ######################################################################################################################################################################
 def seaborn_print(data,i):
 	print ("Seaborn\n")
-	sns.distplot(data, bins=50, kde=False, rug=False,label=str(i))
+	sns.distplot(data, bins=50, kde=False, rug=False,label=str(i)+" egos")
 #	plt.xlim([0, num_egos])
-	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaaborn_"+str(num_egos)+".png")
+	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn_"+str(num_egos)+".png")
 #	sns.plt.show()
 	
 ######################################################################################################################################################################
