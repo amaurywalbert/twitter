@@ -9,6 +9,9 @@ import pylab
 import numpy as np
 import powerlaw
 import seaborn as sns
+import plotly
+import plotly.plotly as py
+import plotly.graph_objs as go
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -36,23 +39,23 @@ def read_arq_bin(file):
 ######################################################################################################################################################################
 # Powerlaw
 ######################################################################################################################################################################
-def powerlaw_print(data,i):
-	print ("PowerLaw\n")
-	results = powerlaw.Fit(data) 
-	print results.power_law.alpha 
-	print results.power_law.xmin 
-	R, p = results.distribution_compare('power_law', 'lognormal')
-	#	plt.xlim([0, num_egos])
-	powerlaw.plot_pdf(data)
+def normalized_print(data,i):
+	print ("Normalized\n")
+	normalized = [go.Histogram(x=data,histnorm='probability')]
+	plotly.offline.plot(normalized, filename=output_dir+str(qtde_egos)+"_normalized.html")
+
 
 ######################################################################################################################################################################
 # Seaborn
 ######################################################################################################################################################################
 def seaborn_print(data,i):
 	print ("Seaborn\n")
-	sns.distplot(data, bins=50, kde=False, rug=False,label=str(i)+" egos")
+	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(i)+" egos")
 	plt.xlim([0, num_egos])
-	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn_"+str(num_egos)+".png")
+	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn.png")
+	
+	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(i)+" egos")
+	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn_full_bins.png")
 #	sns.plt.show()
 	
 ######################################################################################################################################################################
@@ -60,15 +63,21 @@ def seaborn_print(data,i):
 ######################################################################################################################################################################
 def plot_and_save(data,i):
 	print ("Plot and Save\n")
-#	plt.hist(data, normed=0, facecolor='green', alpha=0.75)
-	plt.hist(data,bins=50,label=str(i)+" egos")
+	
+	plt.hist(data,bins=bins,label=str(i)+" egos")
 	plt.xlabel ("Friends")
 	plt.xlim([0, num_egos])
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+str(qtde_egos)+"_plot_"+str(num_egos)+".png")
-#	plt.show()
+	plt.savefig(output_dir+str(qtde_egos)+"_plot.png")
+	
+	plt.hist(data,bins=bins,label=str(i)+" egos")
+	plt.xlabel ("Friends")
+	plt.ylabel ("Egos")
+	plt.title ("Número de amigos por ego")
+	plt.legend(loc='best')
+	plt.savefig(output_dir+str(qtde_egos)+"_plot_full_bins.png")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -92,7 +101,7 @@ def main():
 			n_friends.append(statistics[user_id]['n_of_friends'])
 	plot_and_save(n_friends,i)
 	seaborn_print(n_friends,i)
-#	powerlaw_print(n_friends,i)
+	normalized_print(n_friends,i)
 	print("######################################################################")
 	print("Script finalizado!")
 	print("######################################################################\n")
@@ -105,6 +114,7 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 qtde_egos = 'full' 		#10, 50, 100, 500 ou full
+bins=20
 num_egos = 10000
 ######################################################################################################################
 data_dir = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
