@@ -36,33 +36,35 @@ def read_arq_bin(file):
 ######################################################################################################################################################################
 # Powerlaw
 ######################################################################################################################################################################
-def powerlaw_print(data):
+def powerlaw_print(data,i):
 	print ("PowerLaw\n")
 	results = powerlaw.Fit(data) 
 	print results.power_law.alpha 
 	print results.power_law.xmin 
 	R, p = results.distribution_compare('power_law', 'lognormal')
-	plt.show() 
+	powerlaw.plot_pdf(data)
 
 ######################################################################################################################################################################
 # Seaborn
 ######################################################################################################################################################################
-def seaborn_print(data):
+def seaborn_print(data,i):
 	print ("Seaborn\n")
-	sns.distplot(data, bins=10, kde=False, rug=True);
+	sns.distplot(data, kde=False, rug=True,label=str(i))
 	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn.png")
 #	sns.plt.show()
 	
 ######################################################################################################################################################################
 # Plot and Save
 ######################################################################################################################################################################
-def plot_and_save(data):
+def plot_and_save(data,i):
 	print ("Plot and Save\n")
-#	plt.hist(data, bins=20, normed=0, facecolor='green', alpha=0.75)
-	plt.hist(data, bins=20)
+#	plt.hist(data, normed=0, facecolor='green', alpha=0.75)
+	plt.hist(data,label=str(i))
 	plt.xlabel ("Friends")
+	plt.xlim([0, 50000])
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
+	plt.legend(loc='best')
 	plt.savefig(output_dir+str(qtde_egos)+"_plot.png")
 #	plt.show()
 
@@ -77,17 +79,18 @@ def main():
 	statistics={}
 	n_users=[]
 	n_friends=[]
-
+	i=0
 	for file in os.listdir(data_dir):
 		friends_list = read_arq_bin(data_dir+file) # Função para converter o binário de volta em string em formato json.
 		if friends_list:
+			i+=1
 			user_id = file.split(".dat")
 			user_id = long(user_id[0])
 			statistics[user_id] = {'n_of_friends':len(friends_list)}
 			n_friends.append(statistics[user_id]['n_of_friends'])
-	plot_and_save(n_friends)
-	seaborn_print(n_friends)
-
+	plot_and_save(n_friends,i)
+	seaborn_print(n_friends,i)
+#	powerlaw_print(n_friends,i)
 	print("######################################################################")
 	print("Script finalizado!")
 	print("######################################################################\n")
