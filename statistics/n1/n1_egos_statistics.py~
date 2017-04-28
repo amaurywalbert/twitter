@@ -43,7 +43,9 @@ def normalized_print(data,i):
 	print ("Normalized\n")
 	normalized = [go.Histogram(x=data,histnorm='probability')]
 	plotly.offline.plot(normalized, filename=output_dir+str(qtde_egos)+"_normalized.html")
-
+	
+	cumulative = [go.Histogram(x=data,cumulative=True,histnorm='probability')]
+	plotly.offline.plot(cumulative, filename=output_dir+str(qtde_egos)+"_cumulative.html")
 
 ######################################################################################################################################################################
 # Seaborn
