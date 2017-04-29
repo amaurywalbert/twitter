@@ -45,18 +45,8 @@ def main():
 			for favorited in tweets_list:
 				user = long(favorited['user'])
 				if not dictionary.has_key(user):
-					if os.path.isfile(origem3+str(user)+".dat"):
-						shutil.copy(origem3+str(user)+".dat",destino)
-						dictionary[user] = user
-						j+=1
-						print (str(j)+" - Arquivo copiado com sucesso!")
-					elif os.path.isfile(origem2+str(user)+".dat"):
-						shutil.copy(origem2+str(user)+".dat",destino)
-						dictionary[user] = user
-						j+=1
-						print (str(j)+" - Arquivo copiado com sucesso!")
-					elif os.path.isfile(origem1+str(user)+".dat"):
-						shutil.copy(origem1+str(user)+".dat",destino)
+					if os.path.isfile(origem+str(user)+".dat"):
+						shutil.copy(origem+str(user)+".dat",destino)
 						dictionary[user] = user
 						j+=1
 						print (str(j)+" - Arquivo copiado com sucesso!")
@@ -79,13 +69,11 @@ def main():
 ######################################################################################################################
 qtde_egos = 10 		# 50, 100, 500 ou full
 ######################################################################################################################
-fonte = "/home/amaury/coleta/n3/favorites_collect/egos/"+str(qtde_egos)+"/bin/"
+fonte = "/home/amaury/coleta/n3/egos/"+str(qtde_egos)+"/bin/"
 
-origem1 = "/home/amaury/coleta_old/n3/alters_favorites/50/"
-origem2 = "/home/amaury/coleta_old/favorites_collect/alters/bin/"
-origem3 = "/home/amaury/coleta/n3/favorites_collect/alters/100/bin/"
+origem = "/home/amaury/coleta/n3/favorites_collect/alters/full/bin/"
 
-destino = "/home/amaury/coleta/n3/favorites_collect/alters/"+str(qtde_egos)+"/bin/"
+destino = "/home/amaury/coleta/n3/alters/"+str(qtde_egos)+"/bin/"
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor
 favorites_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
