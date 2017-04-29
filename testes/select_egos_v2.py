@@ -71,9 +71,9 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 qtde_egos = '10' 		#10, 50, 100, 500 ou full
-qtde_egos2 = '100' 		#10, 50, 100, 500 ou full
+qtde_egos2 = '50' 		#10, 50, 100, 500 ou full
 ######################################################################################################################
-origem = "/home/amaury/coleta_old_02/n1/egos_friends/"+str(qtde_egos)+"/bin/"
+origem = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos2)+"/bin/"
 destino = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 
 #Cria os diretórios para armazenamento dos arquivos
