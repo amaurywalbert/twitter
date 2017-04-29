@@ -71,7 +71,7 @@ qtde_egos = 10 		#10, 50, 100, 500 ou full
 ######################################################################################################################
 fonte = "/home/amaury/coleta/n4/egos/"+str(qtde_egos)+"/bin/"
 
-origem = "/home/amaury/coleta_old/n4/timeline_collect/alters/full/bin/"
+origem = "/home/amaury/coleta_old/n4/mentions_collect/alters/full/bin/"
 
 destino = "/home/amaury/coleta/n4/alters/"+str(qtde_egos)+"/bin/"
 
