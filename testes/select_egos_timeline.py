@@ -22,12 +22,15 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 
 def main():
-	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+	for file in os.listdir(fonte):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		user = file.split(".dat")
 		user = long(user[0])
 		try:
-			if os.path.isfile(timeline_collected+str(user)+".json"):
-				shutil.copy(timeline_collected+str(user)+".json",destino)
+			if os.path.isfile(origem1+str(user)+".json"):
+				shutil.copy(origem1+str(user)+".json",destino)
+				print ("Arquivo copiado com sucesso!")
+			elif os.path.isfile(origem2+str(user)+".json"):
+				shutil.copy(origem2+str(user)+".json",destino)
 				print ("Arquivo copiado com sucesso!")
 		except Exception as e:
 			print (e)
@@ -40,11 +43,15 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
+qtde_egos = 10 		#10, 50, 100, 500 ou full
+######################################################################################################################
 
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/10/bin/"
+fonte = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 
-timeline_collected = "/home/amaury/coleta/timeline_collect/50/json/"
-destino = "/home/amaury/coleta/timeline_collect/10/json/"	
+origem1 = "/home/amaury/coleta_old_01/timeline_collect/full/json/"
+origem2 = "/home/amaury/coleta_old_02/timeline_collect/full/json/"
+
+destino = "/home/amaury/coleta/timeline_collect/"+str(qtde_egos)+"/json/"	
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(destino):
