@@ -60,7 +60,7 @@ def main():
 						j+=1
 						print (str(j)+" - Arquivo copiado com sucesso!")
 					elif os.path.isfile(origem4+str(user)+".dat"):
-						shutil.copy(origem+str(user)+".dat",destino)
+						shutil.copy(origem4+str(user)+".dat",destino)
 						dictionary[user] = user
 						j+=1
 						print (str(j)+" - Arquivo copiado com sucesso!")						
