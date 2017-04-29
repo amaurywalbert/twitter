@@ -5,9 +5,10 @@ import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, ran
 reload(sys)
 sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
-##		Status - Versão 1 - Avalia o conjunto de usuarios coletados e verifica quais atendem aos requisitos de ter pelo menos 02 listas com pelo menos 05 membros em cada.
+##		Status - Versão 2 - Avalia o conjunto de usuarios coletados e verifica quais atendem aos requisitos de ter pelo menos 02 listas com pelo menos 05 membros em cada.
 ##								ESSE SCRIPT VERIFICA E COMPLETA OS 50 EGOS
-## 
+##								
+## 							ESSE SCRIPT IGNORA EGOS COM MAIS DE 5 MIL AMIGOS
 ######################################################################################################################################################################
 
 ################################################################################################
@@ -18,12 +19,12 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		lists_file = []
+		friends_list = []
 		while f.tell() < tamanho:
-			buffer = f.read(list_struct.size)
-			lists = list_struct.unpack(buffer)
-			lists_file.append(follower[0])
-	return lists_file
+			buffer = f.read(user_struct.size)
+			friend = user_struct.unpack(buffer)
+			friends_list.append(friend[0])
+	return friends_list
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -45,10 +46,12 @@ def main():
 			ego = long(ego[0])
 			if not dictionary.has_key(ego):
 				try:
-					shutil.copy(origem+file,destino)
-					dictionary[ego] = ego									# Insere o usuário coletado na tabela em memória
-					i+=1
-					print ("Arquivo copiado com sucesso!")
+					friends_list = read_arq_bin(origem+file)
+					if len(friends_list) <= 5000:								#Ignora arquivos com mais de 5000
+						shutil.copy(origem+file,destino)
+						dictionary[ego] = ego									# Insere o usuário coletado na tabela em memória
+						i+=1
+						print ("Arquivo copiado com sucesso! - Quantidade de amigos: "+str(len(friends_list)))
 				except Exception as e:
 					print (e)
 			else:
@@ -67,14 +70,17 @@ def main():
 ######################################################################################################################
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 10 		#10, 50, 100, 500 ou full
+qtde_egos = 'full' 		#10, 50, 100, 500 ou full
 ######################################################################################################################
-origem = "/home/amaury/coleta/n1/egos_friends/50/bin/"
-destino = "/home/amaury/coleta/n1/egos_friends/10/bin/"
+origem = "/home/amaury/coleta_old_02/n1/egos_friends/"+str(qtde_egos)+"/bin/"
+destino = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(destino):
 	os.makedirs(destino)	
+
+formato = 'l'				################################################### Long para id do amigo
+user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 	
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados	
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
