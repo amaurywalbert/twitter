@@ -44,8 +44,8 @@ def main():
 			for friend in friends_list:				
 				user = long(friend)
 				if not dictionary.has_key(user):
-					if os.path.isfile(origem3+str(user)+".dat"):
-						shutil.copy(origem3+str(user)+".dat",destino)
+					if os.path.isfile(origem1+str(user)+".dat"):
+						shutil.copy(origem1+str(user)+".dat",destino)
 						dictionary[user] = user
 						j+=1
 						print (str(j)+" - Arquivo copiado com sucesso!")
@@ -54,11 +54,16 @@ def main():
 						dictionary[user] = user
 						j+=1
 						print (str(j)+" - Arquivo copiado com sucesso!")
-					elif os.path.isfile(origem1+str(user)+".dat"):
-						shutil.copy(origem1+str(user)+".dat",destino)
+					elif os.path.isfile(origem3+str(user)+".dat"):
+						shutil.copy(origem3+str(user)+".dat",destino)
 						dictionary[user] = user
 						j+=1
 						print (str(j)+" - Arquivo copiado com sucesso!")
+					elif os.path.isfile(origem4+str(user)+".dat"):
+						shutil.copy(origem+str(user)+".dat",destino)
+						dictionary[user] = user
+						j+=1
+						print (str(j)+" - Arquivo copiado com sucesso!")						
 					else:
 						k+=1
 						
@@ -80,11 +85,14 @@ qtde_egos = 10 		#10, 50, 100, 500 ou full
 ######################################################################################################################
 fonte = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 
-origem1 = "/home/amaury/coleta_old_01/n1/egos_and_alters_friends/bin/"
-origem2 = "/home/amaury/coleta_old_01/n1/alters_friends/50/bin/"
-origem3 = "/home/amaury/coleta_old_02/n1/alters_friends/100/bin/"
+origem4 = "/home/amaury/coleta_old_01/n1/egos_and_alters_friends/bin/"
+origem3 = "/home/amaury/coleta_old_01/n1/alters_friends/50/bin/"
+origem2 = "/home/amaury/coleta_old_02/n1/alters_friends/50/bin/"
+origem1 = "/home/amaury/coleta_old_02/n1/alters_friends/10/bin/"
+
 
 destino = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/bin/"
+
 
 formato = 'l'				################################################### Long para id do amigo
 user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
