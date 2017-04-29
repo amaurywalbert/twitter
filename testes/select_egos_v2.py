@@ -47,7 +47,7 @@ def main():
 			if not dictionary.has_key(ego):
 				try:
 					friends_list = read_arq_bin(origem+file)
-					if len(friends_list) <= 5000:								#Ignora arquivos com mais de 5000
+					if len(friends_list) < 5000:								#Ignora arquivos com mais de 5000
 						shutil.copy(origem+file,destino)
 						dictionary[ego] = ego									# Insere o usuário coletado na tabela em memória
 						i+=1

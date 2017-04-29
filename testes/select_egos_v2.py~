@@ -47,7 +47,7 @@ def main():
 			if not dictionary.has_key(ego):
 				try:
 					friends_list = read_arq_bin(origem+file)
-					if len(friends_list) <= 5000:								#Ignora arquivos com mais de 5000
+					if len(friends_list) < 5000:								#Ignora arquivos com mais de 5000
 						shutil.copy(origem+file,destino)
 						dictionary[ego] = ego									# Insere o usuário coletado na tabela em memória
 						i+=1
@@ -72,7 +72,7 @@ def main():
 ######################################################################################################################
 qtde_egos = 'full' 		#10, 50, 100, 500 ou full
 ######################################################################################################################
-origem = "/home/amaury/coleta_old/n1/egos_friends/"+str(qtde_egos)+"/bin/"
+origem = "/home/amaury/coleta_old_02/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 destino = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 
 #Cria os diretórios para armazenamento dos arquivos
