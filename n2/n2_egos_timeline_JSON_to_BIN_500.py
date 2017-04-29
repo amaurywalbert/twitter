@@ -80,7 +80,7 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 10 #10, 50, 100, 500, full
+qtde_egos = 500 #10, 50, 100, 500, full
 
 timeline_collected_dir = "/home/amaury/coleta/timeline_collect/"+str(qtde_egos)+"/json/"####### Arquivo contendo a lista dos usuários ego já coletados em formato JSON
 data_dir = "/home/amaury/coleta/n2/egos/"+str(qtde_egos)+"/bin/" ############# Diretório para armazenamento dos arquivos

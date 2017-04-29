@@ -103,14 +103,14 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-egos_set = "/home/amaury/coleta/n1/egos_friends/50/bin/" # Conjunto de egos - Apenas para pegar o id de cada ego em cada conjunto (50-100-500-full)
+egos_set = "/home/amaury/coleta/n1/egos_friends/10/bin/" # Conjunto de egos - Apenas para pegar o id de cada ego em cada conjunto (50-100-500-full)
 
 lists_set = "/home/amaury/coleta/users_lists/data/ego_lists_overview_full.json" # Diretório que contém o conjunto de listas de cada ego. 
 lists_collected = "/home/amaury/coleta/ground_truth/members_lists_collected/bin/" # Diretório que contém o conjunto de listas COLETADAS de cada ego. Só pra pegar o id das listas 
 
-all_egos_lists = "/home/amaury/coleta/ground_truth/egos_lists/50/all/bin/" 
-owner_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/50/owner/bin/"
-subs_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/50/subs/bin/"
+all_egos_lists = "/home/amaury/coleta/ground_truth/egos_lists/10/all/bin/" 
+owner_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/10/owner/bin/"
+subs_egos_lists ="/home/amaury/coleta/ground_truth/egos_lists/10/subs/bin/"
 
 formato = 'l'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
 list_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
