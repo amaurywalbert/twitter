@@ -221,20 +221,23 @@ auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
+################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
+######################################################################################################################
+qtde_egos = 10 		# 50, 100, 500 ou full
+######################################################################################################################
+######################################################################################################################
+key_init = 0					################################################################ Essas duas linhas atribuem as chaves para cada script
+key_limit = len(auths)		################################################################ Usa todas as chaves (tamanho da lista de chaves)
+key = random.randint(key_init,key_limit) ################################################## Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
-key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
-key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
-key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-
-timeline_collected_dir = "/home/amaury/coleta/timeline_collect/50/json/"####### Arquivo contendo a lista dos usuários ego já coletados
-
-data_dir = "/home/amaury/coleta/n4/mentions_collect/alters/50/bin/" ########### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n4/mentions_collect/alters/50/error/" ######## Diretório para armazenamento dos arquivos de erro
+timeline_collected_dir = "/home/amaury/coleta/timeline_collect/"+str(qtde_egos)+"/json/"####### Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/n4/mentions_collect/alters/"+str(qtde_egos)+"/bin/" ########### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n4/mentions_collect/alters/"+str(qtde_egos)+"/error/" ######## Diretório para armazenamento dos arquivos de erro
 
 formato = 'lli'				#################################################### Long para id do tweet e outro long para autor e uma flag (0 ou 1) indicando se é um tetweet
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
-wait = 30
+wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
 ######################################################################################################################
