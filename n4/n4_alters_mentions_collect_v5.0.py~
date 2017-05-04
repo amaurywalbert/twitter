@@ -231,8 +231,8 @@ key_limit = len(auths)		########################################################
 key = random.randint(key_init,key_limit) ################################################## Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
 timeline_collected_dir = "/home/amaury/coleta/timeline_collect/"+str(qtde_egos)+"/json/"####### Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/n4/mentions_collect/alters/"+str(qtde_egos)+"/bin/" ########### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n4/mentions_collect/alters/"+str(qtde_egos)+"/error/" ######## Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/n4/alters/"+str(qtde_egos)+"/bin/" ########### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n4/alters/"+str(qtde_egos)+"/error/" ######## Diretório para armazenamento dos arquivos de erro
 
 formato = 'lli'				#################################################### Long para id do tweet e outro long para autor e uma flag (0 ou 1) indicando se é um tetweet
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
