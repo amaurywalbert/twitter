@@ -4,7 +4,7 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n3
+import multi_oauth_n7
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
@@ -173,7 +173,7 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 
 def main():
 	j = 0																	#Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
-	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+	for file in os.listdir(egos_followees_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		j+=1
 		friends_list = read_arq_bin(egos_friends_dir+file)
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
@@ -183,19 +183,6 @@ def main():
 			if not dictionary.has_key(friend):
 				save_user(j,k,l,friend)							#Inicia função de busca
 
-#	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:
-#		print
-#		print("######################################################################")		
-#		print ("Criando arquivo com resumo da coleta...")	
-#		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
-#			user_id = file.split(".dat")
-#			user_id = long(user_id[0])
-#			friends_file = read_arq_bin(data_dir+file)
-#			qtde_friends = len(friends_file)
-#			friendship = {'user':user_id,'friends': qtde_friends}
-#			f.write(json.dumps(friendship, separators=(',', ':'))+"\n")
-#		print ("Arquivo criado com sucesso: /home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt" )
-#		print("######################################################################\n")
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -208,21 +195,21 @@ def main():
 ######################################################################################################################################################################
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
-oauth_keys = multi_oauth_n3.keys()
+oauth_keys = multi_oauth_n7.keys()
 auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-qtde_egos = 500 #10,50,100,500,full
+qtde_egos = 10 #10,50,100,500,full
 
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
-egos_friends_dir = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"############### Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/bin/" #################### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/error/" ################# Diretório para armazenamento dos arquivos de erro
+egos_followees_dir = "/home/amaury/coleta/n9/egos_followers/"+str(qtde_egos)+"/bin/"############### Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/bin/" #################### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/error/" ################# Diretório para armazenamento dos arquivos de erro
 
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
