@@ -22,8 +22,8 @@ def read_arq_bin(file):
 		mentions_list = []
 		while f.tell() < tamanho:
 			buffer = f.read(timeline_struct.size)
-			tweet, user, is_retweet = timeline_struct.unpack(buffer)
-			status = {'tweet':tweet, 'user':user, 'is_retweet':is_retweet}
+			tweet, user = timeline_struct.unpack(buffer)
+			status = {'tweet':tweet, 'user':user}
 			mentions_list.append(status)
 	return mentions_list
 	
@@ -31,14 +31,13 @@ def read_arq_bin(file):
 ######################################################################################################################################################################
 #
 # Método principal do programa.
-# Realiza teste e coleta dos favoritos do user especificado no arquivo. 
 #
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 
 def main():
 	global i 													# numero de usuários com arquivos já coletados / Número de arquivos no diretório
-	for file in os.listdir(timeline_collected_dir):	# Verifica a lista de egos coletados e para cada um, busca a timeline dos alters listados no arquivo do ego.
+	for file in os.listdir(timeline_collected_dir):	# Verifica a lista de egos coletados 
 		ego = file.split(".json")
 		ego = long(ego[0])
 		if not dictionary.has_key(ego):
@@ -48,18 +47,13 @@ def main():
 					with open(timeline_collected_dir+file,'r') as timeline:
 						for line in timeline:
 							tweet = json.loads(line)
-							is_retweet = 0
-							if tweet.has_key('retweeted_status'):
-								is_retweet = 1
-			
-							try:		
-								mentions = tweet['entities']['user_mentions']
-								if mentions:
-									for mention in mentions:
+							if not tweet.has_key('retweeted_status'):																	#Ignora retweets
+								try:		
+									for mention in tweet['entities']['user_mentions']:
 										user_mentioned = long(mention['id'])
-										f.write(timeline_struct.pack(tweet['id'], user_mentioned, is_retweet))		# Grava os ids dos tweet, o id do user mencionado e se foi um retweet ou não no arquivo binário do usuário
-							except KeyError:
-								pass
+										f.write(timeline_struct.pack(tweet['id'], user_mentioned))		# Grava os ids dos tweet, o id do user mencionado
+								except KeyError:
+									pass
 ###
 #				mentions_list = read_arq_bin(data_dir+str(ego)+".dat") # Função para converter o binário de volta em string em formato json.
 #				print mentions_list
@@ -83,12 +77,12 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 'full' #10, 50, 100, 500, full
+qtde_egos = '100' #10, 50, 100, 500, full
 
 timeline_collected_dir = "/home/amaury/coleta/timeline_collect/"+str(qtde_egos)+"/json/"####### Arquivo contendo a timeline dos usuários ego já coletados em formato JSON
 data_dir = "/home/amaury/coleta/n4/egos/"+str(qtde_egos)+"/bin/" ############## Diretório para armazenamento dos arquivos
 
-formato = 'lli'				#################################################### Long para id do tweet e outro long para autor e uma flag (0 ou 1) indicando se é um tetweet
+formato = 'll'				#################################################### Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 ######################################################################################################################
