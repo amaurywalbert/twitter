@@ -175,7 +175,7 @@ def main():
 	j = 0																	#Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
 	for file in os.listdir(egos_followees_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		j+=1
-		friends_list = read_arq_bin(egos_friends_dir+file)
+		friends_list = read_arq_bin(egos_followees_dir+file)
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
 		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
 		for friend in friends_list:
