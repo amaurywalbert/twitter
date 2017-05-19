@@ -232,7 +232,7 @@ for file in os.listdir(data_dir):
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
 #Autenticação
-api = autentication(auths,wait_on_rate_limit=True)
+api = autentication(auths)
 
 	
 #Executa o método main
