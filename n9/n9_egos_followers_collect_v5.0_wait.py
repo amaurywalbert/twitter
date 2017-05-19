@@ -180,9 +180,12 @@ def main():
 	for file in os.listdir(egos_list):							# Verifica a lista de egos coletados e para cada um, busca os seguidores dos egos.
 		k+=1 
 		user = file.split(".dat")
-		user = long(user[0])	
-		if not dictionary.has_key(user):
-			save_user(k,user)
+		user = long(user[0])
+		if not os.path.isfile(acima_5000_dir+str(user)+".dat"):
+			if not dictionary.has_key(user):
+				save_user(k,user)
+		else:
+			print ("Usuário já coletado - possui mais de 5 mil amigos!")
 	
 	print("######################################################################")
 	print("Coleta finalizada!")
