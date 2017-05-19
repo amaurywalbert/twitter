@@ -20,7 +20,8 @@ sys.setdefaultencoding('utf-8')
 ##						5.1.3 - Evita o retorno de lista de amigos vazias
 ##						5.1.4 - Seleciona chave randomicamente para nova autenticação em caso de erro do Tweepy						
 ##
-##
+##						ESPERA PELA COLETA SEM PULAR O USUÁRIO
+##						SEPARA USUÁRIOS COM MAIS DE 5.000 SEGUIDORES
 ## 
 ######################################################################################################################################################################
 
@@ -148,6 +149,10 @@ def save_user(k,user): # j = número do ego que esta sendo coletado - k = numero
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				i +=1
 				print ("Seguidores do ego nº "+str(k)+": "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
+
+			if len(followers_list) > 5000:									#Poda usuários com mais de 5000 seguidores, movendo o arquivo do ego para o local apropriado
+				shutil.move(data_dir+str(user)+".dat",acima_5000_dir)
+				print ("Podado!"+str(len(followers_list)))
 	
 		except Exception as e:	
 			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
@@ -206,6 +211,7 @@ key = random.randint(key_init,key_limit) #################################### In
 egos_list = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/" ### Arquivo contendo a lista dos usuários a serem buscados
 data_dir = "/home/amaury/coleta/n9/egos_followers/"+str(qtde_egos)+"/bin/" ## Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n9/egos_followers/"+str(qtde_egos)+"/error/" # Diretório para armazenamento dos arquivos de erro
+acima_5000_dir = "/home/amaury/coleta/n9/egos_followers/acima5000/"+str(qtde_egos)+"/bin/" ## Diretório para armazenamento dos arquivos
 
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
@@ -218,6 +224,8 @@ if not os.path.exists(data_dir):
 	os.makedirs(data_dir)
 if not os.path.exists(error_dir):
 	os.makedirs(error_dir)
+if not os.path.exists(acima_5000_dir):
+	os.makedirs(acima_5000_dir)	
 
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
 print
