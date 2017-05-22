@@ -4,7 +4,7 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth
+import multi_oauth_n3
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
@@ -208,13 +208,13 @@ def main():
 ######################################################################################################################################################################
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
-oauth_keys = multi_oauth.keys()
+oauth_keys = multi_oauth_n3.keys()
 auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-qtde_egos = 500 #10,50,100,500,full
+qtde_egos = 'full' #10,50,100,500,full
 
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
