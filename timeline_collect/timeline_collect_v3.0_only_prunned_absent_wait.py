@@ -1,5 +1,6 @@
 # -*- coding: latin1 -*-
 ################################################################################################
+# Script para coletar amigos a partir de um conjunto de egos do twitter
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
@@ -8,6 +9,7 @@ import multi_oauth
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
+
 
 ######################################################################################################################################################################
 ##		Status - Versão 3.0 - Coletar timeline dos usuários especificados
@@ -20,7 +22,7 @@ sys.setdefaultencoding('utf-8')
 ##
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletada
 ##
-## 
+## 					APENAS PARA COLETAR AS TIMELINES DOS EGOS QUE AINDA FALTAM...
 ######################################################################################################################################################################
 
 ######################################################################################################################################################################
@@ -67,7 +69,7 @@ def get_timeline(user):												#Coleta da timeline
 	global i
 	timeline = []
 	try:
-		for page in tweepy.Cursor(api.user_timeline,id=user, count=200).pages(16):				#Retorna os últimos 3200 tweets (16*20)
+		for page in tweepy.Cursor(api.user_timeline,id=user,count=200,wait_on_rate_limit_notify=True,wait_on_rate_limit=True).pages(16):				#Retorna os últimos 3200 tweets (16*20)
 			for tweet in page:
 				timeline.append(tweet)
 		return (timeline)
@@ -163,7 +165,7 @@ def main():
 		ego = file.split(".dat")
 		ego = long(ego[0])
 		if not dictionary.has_key(ego):
-			save_timeline(j, ego)							#Inicia função de busca da timeline
+				save_timeline(j, ego)							#Inicia função de busca da timeline
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -177,7 +179,7 @@ def main():
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
 oauth_keys = multi_oauth.keys()
-auths = oauth_keys['auths_ok']
+auths = oauth_keys['auths_test']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
@@ -185,9 +187,9 @@ auths = oauth_keys['auths_ok']
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
-egos_dir = "/home/amaury/coleta/n1/egos_friends/bin/"########################## Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/timeline_collect/ego/json/" ################### Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/timeline_collect/ego/error/" ################# Diretório para armazenamento dos arquivos de erro
+egos_dir = "/home/amaury/coleta/n1/egos_friends_with_prunned/full/bin/"######### Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/timeline_collect/full_with_prunned/json/" ################### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/timeline_collect/full_with_prunned/error/" ##################### Diretório para armazenamento dos arquivos de erro
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
 ######################################################################################################################
