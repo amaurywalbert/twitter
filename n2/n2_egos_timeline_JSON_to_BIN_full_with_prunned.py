@@ -39,7 +39,7 @@ def read_arq_bin(file):
 def main():
 	global i 													# numero de usuários com arquivos já coletados / Número de arquivos no diretório
 	j = 0															# Exibe o número ordinal do ego que está sendo usado para a busca da timeline
-	for file in os.listdir(timeline_collected_dir):					# Verifica a lista de egos coletados e para cada um, busca a timeline dos alters listados no arquivo do ego.
+	for file in os.listdir(timeline_collected_dir):	# Verifica a lista de egos coletados e para cada um, busca a timeline dos alters listados no arquivo do ego.
 		ego = file.split(".json")
 		ego = long(ego[0])
 		if not dictionary.has_key(ego):

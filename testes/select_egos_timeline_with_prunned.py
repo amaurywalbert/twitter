@@ -46,7 +46,7 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-fonte = "/home/amaury/coleta/n1/egos_friends_with_prunned/"+str(qtde_egos)+"/bin/"
+fonte = "/home/amaury/coleta/n1/egos_friends_with_prunned/full/bin/"
 
 origem = "/home/amaury/coleta_old/timeline_collect/full/json/"
 destino = "/home/amaury/coleta/timeline_collect/full_with_prunned/json/"	
