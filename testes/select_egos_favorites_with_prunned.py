@@ -49,7 +49,7 @@ def main():
 fonte = "/home/amaury/coleta/n1/egos_friends_with_prunned/full/bin/"
 
 origem = "/home/amaury/coleta_old/favorites_collect/ego/json/"
-destino = "/home/amaury/coleta/favorites_collect/"+str(qtde_egos)+"/json/"	
+destino = "/home/amaury/coleta/favorites_collect/full_with_prunned/json/"	
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(destino):
