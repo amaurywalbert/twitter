@@ -31,7 +31,7 @@ def main():
 					shutil.copy(origem+str(user)+".json",destino)
 					print ("Arquivo copiado com sucesso!")
 			else:
-				print ("Arquivo já existe no destino..."))
+				print ("Arquivo já existe no destino...")
 		except Exception as e:
 			print (e)
 
