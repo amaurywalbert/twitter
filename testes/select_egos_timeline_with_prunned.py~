@@ -26,11 +26,8 @@ def main():
 		user = file.split(".dat")
 		user = long(user[0])
 		try:
-			if os.path.isfile(origem1+str(user)+".json"):
-				shutil.copy(origem1+str(user)+".json",destino)
-				print ("Arquivo copiado com sucesso!")
-			elif os.path.isfile(origem2+str(user)+".json"):
-				shutil.copy(origem2+str(user)+".json",destino)
+			if os.path.isfile(origem+str(user)+".json"):
+				shutil.copy(origem+str(user)+".json",destino)
 				print ("Arquivo copiado com sucesso!")
 		except Exception as e:
 			print (e)
@@ -48,7 +45,7 @@ qtde_egos = 'full' 		#10, 50, 100, 500 ou full
 
 fonte = "/home/amaury/coleta/n1/egos_friends_with_prunned/"+str(qtde_egos)+"/bin/"
 
-origem1 = "/home/amaury/coleta_old/timeline_collect/full/json/"
+origem = "/home/amaury/coleta_old/timeline_collect/full/json/"
 
 destino = "/home/amaury/coleta/timeline_collect/full_with_prunned/json/"	
 
