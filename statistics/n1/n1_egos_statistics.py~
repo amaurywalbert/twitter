@@ -53,6 +53,7 @@ def normalized_print(data,i):
 def seaborn_print(data,i):
 	print ("Seaborn\n")
 	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(i)+" egos")
+	plt.xlim([0, num_egos])
 	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn_full_bins.png")
 	
 	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(i)+" egos")
