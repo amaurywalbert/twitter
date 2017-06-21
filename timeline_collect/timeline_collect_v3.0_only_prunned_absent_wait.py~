@@ -163,7 +163,7 @@ def main():
 	for file in os.listdir(egos_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		j+=1
 		ego = file.split(".dat")
-		ego = int(ego[0])
+		ego = long(ego[0])
 		if not dictionary.has_key(ego):
 				save_timeline(j, ego)							#Inicia função de busca da timeline
 	print
