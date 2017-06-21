@@ -26,10 +26,10 @@ def main():
 		user = file.split(".dat")
 		user = long(user[0])
 		try:
-			if os.path.isfile(origem+str(user)+".json"):
-				if not os.path.isfile(destino+str(user)+".json"):
-				shutil.copy(origem+str(user)+".json",destino)
-				print ("Arquivo copiado com sucesso!")
+			if not os.path.isfile(destino+str(user)+".json"):
+				if os.path.isfile(origem+str(user)+".json"):	
+					shutil.copy(origem+str(user)+".json",destino)
+					print ("Arquivo copiado com sucesso!")
 		except Exception as e:
 			print (e)
 
