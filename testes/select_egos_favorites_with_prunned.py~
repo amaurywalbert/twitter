@@ -26,14 +26,9 @@ def main():
 		user = file.split(".dat")
 		user = long(user[0])
 		try:
-			if not os.path.isfile(destino+str(user)+".json"):
-				if os.path.isfile(origem+str(user)+".json"):	
-					shutil.copy(origem+str(user)+".json",destino)
-					print ("Arquivo copiado com sucesso!")
-				else:
-					print ("Arquivo não encontrado...!")
-#			else:
-#				print ("Arquivo já existe no destino...")
+			if os.path.isfile(origem+str(user)+".json"):
+				shutil.copy(origem+str(user)+".json",destino)
+				print ("Arquivo copiado com sucesso!")
 		except Exception as e:
 			print (e)
 
@@ -45,15 +40,18 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
+qtde_egos = 'full' 		#10, 50, 100, 500 ou full
+######################################################################################################################
 
-fonte = "/home/amaury/coleta/n1/egos_friends_with_prunned/"+str(qtde_egos)+"/bin/"
+fonte = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 
-origem = "/home/amaury/coleta_old/timeline_collect/full/json/"
-destino = "/home/amaury/coleta/timeline_collect/full_with_prunned/json/"	
+origem1 = "/home/amaury/coleta_old_01/favorites_collect/full/json/"
+
+destino = "/home/amaury/coleta/favorites_collect/"+str(qtde_egos)+"/json/"	
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(destino):
 	os.makedirs(destino)
-
+	
 #Executa o método main
 if __name__ == "__main__": main()
