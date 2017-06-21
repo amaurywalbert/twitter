@@ -77,10 +77,8 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 'full' #10, 50, 100, 500, full
-
 timeline_collected_dir = "/home/amaury/coleta/timeline_collect/full_with_prunned/json/"####### Arquivo contendo a timeline dos usuários ego já coletados em formato JSON
-data_dir = "/home/amaury/coleta/n4/egos_with_prunned/"+str(qtde_egos)+"/bin/" ############## Diretório para armazenamento dos arquivos
+data_dir = "/home/amaury/coleta/n4/egos_with_prunned/full/bin/" ############## Diretório para armazenamento dos arquivos
 
 formato = 'll'				#################################################### Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

@@ -79,7 +79,7 @@ def main():
 ######################################################################################################################
 qtde_egos = 'full' #10, 50, 100, 500, full
 
-timeline_collected_dir = "/home/amaury/coleta_old/timeline_collect/"+str(qtde_egos)+"/json/"####### Arquivo contendo a timeline dos usuários ego já coletados em formato JSON
+timeline_collected_dir = "/home/amaury/coleta/timeline_collect/full_with_prunned/json/"####### Arquivo contendo a timeline dos usuários ego já coletados em formato JSON
 data_dir = "/home/amaury/coleta/n4/egos_with_prunned/"+str(qtde_egos)+"/bin/" ############## Diretório para armazenamento dos arquivos
 
 formato = 'll'				#################################################### Long para id do tweet e outro long para autor
