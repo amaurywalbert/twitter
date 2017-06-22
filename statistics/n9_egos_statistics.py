@@ -110,7 +110,7 @@ def main():
 ######################################################################################################################
 qtde_egos = 'full_with_prunned' 		#10, 50, 100, 500 ou full ou full_with_prunned
 bins=20
-axis_x_limit = 10000 							#Limite para eixo x (zoom)
+axis_x_limit = 100000 							#Limite para eixo x (zoom)
 ######################################################################################################################
 data_dir = "/home/amaury/coleta/n9/egos_followers_with_prunned/full/bin/"
 output_dir =  "/home/amaury/coleta/statistics/n9/"+str(qtde_egos)+"/"
