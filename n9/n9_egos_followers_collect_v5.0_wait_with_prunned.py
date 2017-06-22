@@ -21,7 +21,6 @@ sys.setdefaultencoding('utf-8')
 ##						5.1.4 - Seleciona chave randomicamente para nova autenticação em caso de erro do Tweepy						
 ##
 ##						ESPERA PELA COLETA SEM PULAR O USUÁRIO
-##						SEPARA USUÁRIOS COM MAIS DE 5.000 SEGUIDORES
 ## 
 ######################################################################################################################################################################
 
@@ -179,8 +178,6 @@ def main():
 		user = long(user[0])
 		if not dictionary.has_key(user):
 			save_user(k,user)
-		else:
-			print ("Usuário já coletado - possui mais de 5 mil amigos!")
 	
 	print("######################################################################")
 	print("Coleta finalizada!")
