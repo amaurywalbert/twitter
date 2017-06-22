@@ -12,12 +12,13 @@ import seaborn as sns
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
+import pandas as pd
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Exibe estatísticas do ego.
+##		Status - Versão 1 - Gera histogramas para a rede N1 - amigos do ego
 ## 
 ######################################################################################################################################################################
 
@@ -37,52 +38,69 @@ def read_arq_bin(file):
 	return friends_list
 
 ######################################################################################################################################################################
-# Powerlaw
-######################################################################################################################################################################
-def normalized_print(data,i):
-	print ("Normalized\n")
-	normalized = [go.Histogram(x=data,histnorm='probability')]
-	plotly.offline.plot(normalized, filename=output_dir+str(qtde_egos)+"_normalized.html")
-	
-#	cumulative = [go.Histogram(x=data,cumulative=True,histnorm='probability')]
-#	plotly.offline.plot(cumulative, filename=output_dir+str(qtde_egos)+"_cumulative.html")
-
-######################################################################################################################################################################
 # Seaborn
 ######################################################################################################################################################################
-def seaborn_print(data,i):
-	print ("Seaborn\n")
-	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(i)+" egos")
-	plt.xlim([0, num_egos])
-	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn_full_bins.png")
-	
-	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(i)+" egos")
-	plt.xlim([0, num_egos])
-	sns.plt.savefig(output_dir+str(qtde_egos)+"_seaborn.png")
-	
-	
+#def seaborn_print(data):
+#	print ("Seaborn\n")
+#	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(len(data))+" egos")
+#	plt.xlim([0, axis_x_limit])
+#	sns.plt.savefig(output_dir+"seaborn_full_bins.png")
+#	
+#	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(len(data))+" egos")
+#	plt.xlim([0, axis_x_limit])
+#	sns.plt.savefig(output_dir+"seaborn.png")	
+
 	
 ######################################################################################################################################################################
-# Plot and Save
+# HTML
 ######################################################################################################################################################################
-def plot_and_save(data,i):
-	print ("Plot and Save\n")
+def normalized_print(data):
+	print ("Criando histograma dinâmico...")
+	normalized = [go.Histogram(x=data,histnorm='probability')]
+	plotly.offline.plot(normalized, filename=output_dir+"normalized.html")
 	
-	plt.hist(data,bins=bins,label=str(i)+" egos")
+#	cumulative = [go.Histogram(x=data,cumulative=True,histnorm='probability')]
+#	plotly.offline.plot(cumulative, filename=output_dir+"cumulative.html")
+
+	print ("OK")
+	print
+	
+######################################################################################################################################################################
+# Histograma
+######################################################################################################################################################################
+def histogram(data,i):
+	print ("Criando histograma...")
+	
+	plt.hist(data,bins=bins,label=str(len(data))+" egos")
 	plt.xlabel ("Friends")
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+str(qtde_egos)+"_plot_full_bins.png")
+	plt.savefig(output_dir+"hist_full_bins.png")
 
-	plt.hist(data,bins=bins,label=str(i)+" egos")
+	plt.hist(data,bins=bins,label=str(len(data))+" egos")
 	plt.xlabel ("Friends")
-	plt.xlim([0, num_egos])
+	plt.xlim([0, axis_x_limit])
 	plt.ylabel ("Egos")
 	plt.title ("Número de amigos por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+str(qtde_egos)+"_plot.png")	
+	plt.savefig(output_dir+"histograma.png")	
 
+	print ("OK!")
+	print
+
+######################################################################################################################################################################
+# Gráfico de Linhas
+######################################################################################################################################################################
+def line_graph(data):
+	print ("Criando gráfico de linhas...")	
+
+	plt.plot([10,20,30,40], [15, 40, 75, 90], linestyle='--', color='r', marker='s', linewidth=3.0)
+	plt.axis([0,50,0,100])
+	plt.show()
+	
+	print ("OK!")
+	print	
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -92,20 +110,24 @@ def plot_and_save(data,i):
 ######################################################################################################################################################################
 def main():
 	statistics={}
-	n_users=[]
 	n_friends=[]
-	i=0
+	print ("Preparando dados...")
 	for file in os.listdir(data_dir):
 		friends_list = read_arq_bin(data_dir+file) # Função para converter o binário de volta em string em formato json.
 		if friends_list:
-			i+=1
 			user_id = file.split(".dat")
 			user_id = long(user_id[0])
 			statistics[user_id] = {'n_of_friends':len(friends_list)}
 			n_friends.append(statistics[user_id]['n_of_friends'])
-	plot_and_save(n_friends,i)
-	seaborn_print(n_friends,i)
-	normalized_print(n_friends,i)
+		else:
+			print ("Impossível recuperar dados de "+str(file))
+	print ("Total de usuários ego: "+str(len(n_friends)))
+	print ("OK!")
+	print	
+	histogram(n_friends)
+	normalized_print(n_friends)
+#	line_graph(n_friends)
+
 	print("######################################################################")
 	print("Script finalizado!")
 	print("######################################################################\n")
@@ -117,12 +139,12 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 'full' 		#10, 50, 100, 500 ou full
+qtde_egos = 'full_with_prunned' 		#10, 50, 100, 500 ou full ou full_with_prunned
 bins=20
-num_egos = 10000
+axis_x_limit = 10000 							#Limite para eixo x (zoom)
 ######################################################################################################################
 data_dir = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
-output_dir =  "/home/amaury/statistics/n1/"
+output_dir =  "/home/amaury/coleta/statistics/n1/"+str(qtde_egos)+"/"
 formato = 'l'				################################################### Long para id do amigo
 user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
