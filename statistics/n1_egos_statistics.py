@@ -36,20 +36,6 @@ def read_arq_bin(file):
 			friend = user_struct.unpack(buffer)
 			friends_list.append(friend[0])
 	return friends_list
-
-######################################################################################################################################################################
-# Seaborn
-######################################################################################################################################################################
-#def seaborn_print(data):
-#	print ("Seaborn\n")
-#	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(len(data))+" egos")
-#	plt.xlim([0, axis_x_limit])
-#	sns.plt.savefig(output_dir+"seaborn_full_bins.png")
-#	
-#	sns.distplot(data, bins=bins, kde=False, rug=False,label=str(len(data))+" egos")
-#	plt.xlim([0, axis_x_limit])
-#	sns.plt.savefig(output_dir+"seaborn.png")	
-
 	
 ######################################################################################################################################################################
 # HTML
@@ -68,7 +54,7 @@ def normalized_print(data):
 ######################################################################################################################################################################
 # Histograma
 ######################################################################################################################################################################
-def histogram(data,i):
+def histogram(data):
 	print ("Criando histograma...")
 	
 	plt.hist(data,bins=bins,label=str(len(data))+" egos")
