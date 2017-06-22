@@ -200,15 +200,13 @@ auths = oauth_keys['auths_test']
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 
-qtde_egos = 'full' #10,50,100,500,full
-
 key_init = 0					################################################## Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		################################################## Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) #################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
-egos_list = "/home/amaury/coleta_old_02/n1/egos_friends/"+str(qtde_egos)+"/bin/" ### Arquivo contendo a lista dos usuários a serem buscados
-data_dir = "/home/amaury/coleta/n9/egos_followers_with_prunned/"+str(qtde_egos)+"/bin/" ## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n9/egos_followers_with_prunned/"+str(qtde_egos)+"/error/" # Diretório para armazenamento dos arquivos de erro
+egos_list = "/home/amaury/coleta/n1/egos_friends_with_prunned/full/bin/" ### Arquivo contendo a lista dos usuários a serem buscados
+data_dir = "/home/amaury/coleta/n9/egos_followers_with_prunned/full/bin/" ## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n9/egos_followers_with_prunned/full/error/" # Diretório para armazenamento dos arquivos de erro
 
 
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
