@@ -59,7 +59,8 @@ def histogram(data):
 	plt.title ("Número de seguidores por ego")
 	plt.legend(loc='best')
 	plt.savefig(output_dir+"hist_full_bins.png")
-
+	plt.close()
+	
 	plt.hist(data,bins=bins,label=str(len(data))+" egos",color='black')
 	plt.xlabel ("Followers")
 	plt.xlim([0, axis_x_limit])
@@ -67,7 +68,8 @@ def histogram(data):
 	plt.title ("Número de seguidores por ego")
 	plt.legend(loc='best')
 	plt.savefig(output_dir+"histograma.png")	
-
+	plt.close()
+	
 	print ("OK!")
 	print
 
