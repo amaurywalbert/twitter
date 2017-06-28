@@ -202,8 +202,8 @@ key_limit = len(auths)		################################################## Usa t
 key = random.randint(key_init,key_limit) #################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
 egos_list = "/home/amaury/coleta/n1/egos_friends_with_prunned/full/bin/" ### Arquivo contendo a lista dos usuários a serem buscados
-data_dir = "/home/amaury/coleta/n9/egos_followers_with_prunned/full/bin/" ## Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n9/egos_followers_with_prunned/full/error/" # Diretório para armazenamento dos arquivos de erro
+data_dir = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" ## Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/error/" # Diretório para armazenamento dos arquivos de erro
 
 
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
