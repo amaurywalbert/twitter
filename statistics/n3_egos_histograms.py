@@ -45,13 +45,13 @@ def read_arq_bin(file):
 def dynamic_histogram(n_tweets,n_authors):
 	print ("Criando histograma dinâmico... Número de Favoritos por ego")
 	histogram = [go.Histogram(x=n_tweets,marker=dict(color='green'))]
-	plotly.offline.plot(histogram, filename=output_dir+"Favoritos.html")
+	plotly.offline.plot(histogram, filename=output_dir_html+"likes_hist_k_"+str(k)+".html")
 	print ("OK")
 	print
 	
 	print ("Criando histograma dinâmico... Número de Autores_tweets_favoritos por ego")
 	histogram = [go.Histogram(x=n_authors,marker=dict(color='green'))]
-	plotly.offline.plot(histogram, filename=output_dir+"Autores_Tweets_Favoritos.html")
+	plotly.offline.plot(histogram, filename=output_dir_html+"likes_authors_hist_k_"+str(k)+".html")
 	print ("OK")
 	print
 ######################################################################################################################################################################
@@ -59,20 +59,20 @@ def dynamic_histogram(n_tweets,n_authors):
 ######################################################################################################################################################################
 def histogram_full(n_tweets,n_authors):
 	print ("Criando histograma... Número de Favoritos por ego")
-	plt.hist(n_tweets,bins=bins,color='green')
+	plt.hist(n_tweets,bins=bins,label="k = "+str(k)+" - "+str(len(n_tweets))+" egos",color='green')
 	plt.xlabel ("Tweets Favoritos")
 	plt.ylabel ("Egos")
 	plt.title ("Rede de Favoritos - Número de favoritos por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+"Favoritos_hist_full_bins.png")
+	plt.savefig(output_dir+"likes_hist_k_"+str(k)+".png")
 	plt.close()
 	print ("Criando histograma... Número de Autores_Tweets_Favoritos por ego")
-	plt.hist(n_authors,bins=bins,color='green')
-	plt.xlabel ("Autores de Tweets Favoritos")
+	plt.hist(n_authors,bins=bins,label="k = "+str(k)+" - "+str(len(n_tweets))+" egos",color='green')
+	plt.xlabel ("Autores distintos de tweets favoritados pelo ego")
 	plt.ylabel ("Egos")
 	plt.title ("Rede de Favoritos - Número de Autores_Tweets_Favoritos por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+"Autores_Tweets_Favoritos_hist_full_bins.png")
+	plt.savefig(output_dir+"likes_authors_hist_k_"+str(k)+".png")
 	plt.close()
 
 	print ("OK!")
@@ -88,7 +88,7 @@ def scatter_graph(n_tweets,n_authors):
 	plt.title ("Rede de Favoritos - Gráfico de Dispersão ")
 	plt.legend(loc='best')
 
-	plt.savefig(output_dir+"Scatter.png")		
+	plt.savefig(output_dir+"likes_scatter_k_"+str(k)+".png")		
 	plt.close()
 	print ("OK!")
 	print	
@@ -103,12 +103,14 @@ def main():
 	n_tweets = []
 	n_authors = []
 	print ("Preparando dados...")
-	for file in os.listdir(data_dir):
-		tweets_list,authors_list = read_arq_bin(data_dir+file) # Função para converter o binário de volta em string em formato json.
-		authors_set = set()
-		authors_set.update(authors_list)
-		n_tweets.append(len(tweets_list))
-		n_authors.append(len(authors_set))
+	with open(input_file, 'r') as infile:
+		intersection = json.load(infile)
+		for user in intersection:
+			tweets_list,authors_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
+			authors_set = set()
+			authors_set.update(authors_list)
+			n_tweets.append(len(tweets_list))
+			n_authors.append(len(authors_set))
 
 	print ("Total de usuários ego: "+str(len(n_tweets))) 
 	print ("OK!")
@@ -117,9 +119,6 @@ def main():
 	histogram_full(n_tweets,n_authors)
 	scatter_graph(n_tweets,n_authors)
 
-	print("######################################################################")
-	print("Script finalizado!")
-	print("######################################################################\n")
 #####################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
@@ -128,16 +127,31 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 'full_with_prunned' 		#10, 50, 100, 500 ou full ou full_with_prunned
-bins=50
+qtde_egos = 'full_with_prunned'	########################################## 10, 50, 100, 500 ou full ou full_with_prunned
+bins=50 ################################################################### Quantidade de barras no histograma
+formato = 'll'				################################################### Long para o código ('l') e depois o array de chars de X posições:	
+favorites_struct = struct.Struct(formato) ################################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################
-data_dir = "/home/amaury/coleta/n3/egos/"+str(qtde_egos)+"/bin/"
-output_dir =  "/home/amaury/coleta/statistics/n3/"+str(qtde_egos)+"/"
-formato = 'll'				################################################################### Long para o código ('l') e depois o array de chars de X posições:	
-favorites_struct = struct.Struct(formato) ################################################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+threshold = [0,10,20,30,40,50,100,200]
+for i in range(len(threshold)):
+	k = threshold[i]
+	print ("Gerando gráficos com k = "+str(k)) 
 
-if not os.path.exists(output_dir):
-	os.makedirs(output_dir)
-
-#Executa o método main
-if __name__ == "__main__": main()
+	input_file = "/home/amaury/coleta/subconjunto/"+str(qtde_egos)+"/intersection_k_"+str(k)+".txt"
+	data_dir = "/home/amaury/coleta/n3/egos/"+str(qtde_egos)+"/bin/"
+	output_dir =  "/home/amaury/coleta/statistics/n3/"+str(qtde_egos)+"/"
+	output_dir_zoom =  "/home/amaury/coleta/statistics/n3/"+str(qtde_egos)+"/zoom/"
+	output_dir_html =  "/home/amaury/coleta/statistics/n3/"+str(qtde_egos)+"/html/"	
+	
+	if not os.path.exists(output_dir):
+		os.makedirs(output_dir)
+	if not os.path.exists(output_dir_zoom):
+		os.makedirs(output_dir_zoom)
+	if not os.path.exists(output_dir_html):
+		os.makedirs(output_dir_html)
+		
+	#Executa o método main
+	if __name__ == "__main__": main()
+print("######################################################################")
+print("Script finalizado!")
+print("######################################################################\n")

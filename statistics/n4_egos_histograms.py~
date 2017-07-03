@@ -69,7 +69,7 @@ def histogram_full(n_tweets,n_mentions):
 	plt.close()
 	print ("Criando histograma... Conjunto de Mencionados por ego")
 	plt.hist(n_mentions,bins=bins,label="k = "+str(k)+" - "+str(len(n_tweets))+" egos",color='red')
-	plt.xlabel ("Usuários distintos mencionados pelo ego")
+	plt.xlabel ("Conjunto de Mencionados")
 	plt.ylabel ("Egos")
 	plt.title ("Rede de Menções - Conjunto de Mencionados por ego")
 	plt.legend(loc='best')

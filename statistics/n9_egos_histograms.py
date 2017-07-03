@@ -43,7 +43,7 @@ def read_arq_bin(file):
 def dynamic_histogram(data):
 	print ("Criando histograma dinâmico...")
 	normalized = [go.Histogram(x=data,marker=dict(color='black'))]
-	plotly.offline.plot(normalized, filename=output_dir+"normalized.html")
+	plotly.offline.plot(normalized, filename=output_dir_html+"followers_hist_k_"+str(k)+".html")
 	print ("OK")
 	print
 	
@@ -53,21 +53,21 @@ def dynamic_histogram(data):
 def histogram(data):
 	print ("Criando histograma...")
 	
-	plt.hist(data,bins=bins,label=str(len(data))+" egos",color='black')
+	plt.hist(data,bins=bins,label="k = "+str(k)+" - "+str(len(data))+" egos",color='black')
 	plt.xlabel ("Followers")
 	plt.ylabel ("Egos")
-	plt.title ("Número de seguidores por ego")
+	plt.title ("Rede de Seguidores - Número de seguidores por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+"hist_full_bins.png")
+	plt.savefig(output_dir+"followers_hist_k_"+str(k)+".png")	
 	plt.close()
 	
-	plt.hist(data,bins=bins,label=str(len(data))+" egos",color='black')
+	plt.hist(data,bins=bins,label="k = "+str(k)+" - "+str(len(data))+" egos",color='black')
 	plt.xlabel ("Followers")
 	plt.xlim([0, axis_x_limit])
 	plt.ylabel ("Egos")
-	plt.title ("Número de seguidores por ego")
+	plt.title ("Rede de Seguidores - Número de seguidores por ego")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+"histograma.png")	
+	plt.savefig(output_dir_zoom+"followers_hist_k_"+str(k)+".png")	
 	plt.close()
 	
 	print ("OK!")
@@ -81,27 +81,19 @@ def histogram(data):
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	statistics={}
 	n_followers=[]
 	print ("Preparando dados...")
-	for file in os.listdir(data_dir):
-		followers_list = read_arq_bin(data_dir+file) # Função para converter o binário de volta em string em formato json.
-		if followers_list:
-			user_id = file.split(".dat")
-			user_id = long(user_id[0])
-			statistics[user_id] = {'n_of_followers':len(followers_list)}
-			n_followers.append(statistics[user_id]['n_of_followers'])
-		else:
-			print ("Impossível recuperar dados de "+str(file))
+	with open(input_file, 'r') as infile:
+		intersection = json.load(infile)
+		for user in intersection:
+			followers_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
+			n_followers.append(len(followers_list))
 	print ("Total de usuários ego: "+str(len(n_followers)))
 	print ("OK!")
 	print	
 	histogram(n_followers)
 	dynamic_histogram(n_followers)
 
-	print("######################################################################")
-	print("Script finalizado!")
-	print("######################################################################\n")
 #####################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
@@ -110,17 +102,32 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 'full_with_prunned' 		#10, 50, 100, 500 ou full ou full_with_prunned
-bins=1500
-axis_x_limit = 100000 							#Limite para eixo x (zoom)
-######################################################################################################################
-data_dir = "/home/amaury/coleta/n9/egos_followers_with_prunned/full/bin/"
-output_dir =  "/home/amaury/coleta/statistics/n9/"+str(qtde_egos)+"/"
+qtde_egos = 'full_with_prunned'	########################################## 10, 50, 100, 500 ou full ou full_with_prunned
+bins=1500 ################################################################# Quantidade de barras no histograma
+axis_x_limit = 100000	################################################### Limite para eixo x (zoom)
 formato = 'l'				################################################### Long para id do seguidor
 user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+######################################################################################################################
+threshold = [0,10,20,30,40,50,100,200]
+for i in range(len(threshold)):
+	k = threshold[i]
+	print ("Gerando gráficos com k = "+str(k)) 
 
-if not os.path.exists(output_dir):
-	os.makedirs(output_dir)
+	input_file = "/home/amaury/coleta/subconjunto/"+str(qtde_egos)+"/intersection_k_"+str(k)+".txt"
+	data_dir = "/home/amaury/coleta/n9/egos_followers/"+str(qtde_egos)+"/bin/"
+	output_dir =  "/home/amaury/coleta/statistics/n9/"+str(qtde_egos)+"/"
+	output_dir_zoom =  "/home/amaury/coleta/statistics/n9/"+str(qtde_egos)+"/zoom/"
+	output_dir_html =  "/home/amaury/coleta/statistics/n9/"+str(qtde_egos)+"/html/"	
 
-#Executa o método main
-if __name__ == "__main__": main()
+	if not os.path.exists(output_dir):
+		os.makedirs(output_dir)
+	if not os.path.exists(output_dir_zoom):
+		os.makedirs(output_dir_zoom)
+	if not os.path.exists(output_dir_html):
+		os.makedirs(output_dir_html)
+		
+	#Executa o método main
+	if __name__ == "__main__": main()
+print("######################################################################")
+print("Script finalizado!")
+print("######################################################################\n")

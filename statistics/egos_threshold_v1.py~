@@ -126,9 +126,8 @@ def read_arq_bin_mentions(file):
 #
 ######################################################################################################################################################################
 def save_intersection(intersection):
-	with open(output_dir+str("intersection_k_")+k+str(".txt"), 'w') as outfile:
-		outfile.write(json.dumps(intersection)+"\n")
-		
+	with open(output_dir+"intersection_k_"+str(k)+".txt", 'w') as outfile:
+		outfile.write(json.dumps(intersection))
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -138,11 +137,7 @@ def save_intersection(intersection):
 ######################################################################################################################################################################
 def main():
 	i=0														# Contador
-	friends = set()										# Conjunto de egos acima do threshold de amigos
-	followers = set()										# Conjunto de egos acima do threshold de seguidores
-	retweets = set()										# Conjunto de egos acima do threshold de retuítes
-	likes = set()											# Conjunto de egos acima do threshold de favoritos
-	mentions = set()										# Conjunto de egos acima do threshold de menções
+	intersection = [] 
 
 	print ("Preparando dados...")
 
@@ -151,58 +146,21 @@ def main():
 		ego_id = file.split(".dat")
 		ego_id = long(ego_id[0])
 
-
 		friends_set = read_arq_bin_friends(friends_dir+file) # Função para converter o binário de volta em string em formato json.
 		followers_set = read_arq_bin_followers(followers_dir+file)
 		retweets_set = read_arq_bin_retweets(retweets_dir+file)
 		likes_set = read_arq_bin_likes(likes_dir+file)
 		mentions_set = read_arq_bin_mentions(mentions_dir+file)
 		 
-		if len(friends_set) >= k:
-			friends.add(ego_id)
+		if (len(friends_set) >= k) and (len(followers_set) >= k) and (len(retweets_set) >= k) and (len(likes_set) >= k) and (len(mentions_set) >= k):
+			intersection.append(ego_id)
 		else:
-			print (str(i)+" - Menor - Friends - id: "+str(ego_id))
-
-
-		if len(followers_set) >= k:
-			followers.add(ego_id)
-		else:
-			print (str(i)+" - Menor - Followers - id: "+str(ego_id))			
-			
-
-
-		if len(retweets_set) >= k:
-			retweets.add(ego_id)
-		else:
-			print (str(i)+" - Menor - Retweets - id: "+str(ego_id))
-
-
-		
-		if len(likes_set) >= k:
-			likes.add(ego_id)
-		else:
-			print (str(i)+" - Menor - Likes - id: "+str(ego_id))			
-
-
-
-		if len(mentions_set) >= k:
-			mentions.add(ego_id)
-		else:
-			print (str(i)+" - Menor - Mentions - id: "+str(ego_id))
-			
-									
-	print ("Conjunto de egos acima do threshold - FRIENDS: "+str(len(friends)))
-	print ("Conjunto de egos acima do threshold - FOLLOWERS: "+str(len(followers)))
-	print ("Conjunto de egos acima do threshold - RETWEETS: "+str(len(retweets)))
-	print ("Conjunto de egos acima do threshold - LIKES: "+str(len(likes)))
-	print ("Conjunto de egos acima do threshold - MENTIONS: "+str(len(mentions)))
-	print
-	print ("Gerando intersecção")
-	intersection = set.intersection(friends, followers, retweets, likes, mentions)
-	print ("Intersecção: "+str(len(intersection)))
+			print (str(i)+" - "+str(ego_id)+" - abaixo do threshold")
+			print ("FRIENDS: "+str(len(friends_set))+" - FOLLOWERS: "+str(len(followers_set))+" - RETWEETS: "+str(len(retweets_set))+" - LIKES: "+str(len(likes_set))+" - MENTIONS: "+str(len(mentions_set)))
+			print
 	
 	save_intersection(intersection)
-	print ("OK!")
+	print ("Tamanho da intersecção com k="+str(k)+": "+str(len(intersection)))
 	print	
 	print("######################################################################")
 	print("Script finalizado!")
@@ -216,7 +174,7 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 qtde_egos = 'full_with_prunned' 		#10, 50, 100, 500 ou full ou full_with_prunned
-k = 10 										# threshold - Conjunto mínimo
+k = 100 										# threshold - Conjunto mínimo - 10,20,30,40,50, 'full'
 ######################################################################################################################
 friends_dir = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 followers_dir = "/home/amaury/coleta/n9/egos_followers/"+str(qtde_egos)+"/bin/"
