@@ -112,7 +112,7 @@ def get_timeline(user):												#Coleta da timeline
 			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
 				key = random.randint(key_init,key_limit)
 				api = autentication(auths)
-			if e.message[0]['code'] == 34:									# Usuários não existentes
+			if e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
@@ -216,7 +216,7 @@ auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 100 		# 50, 100, 500 ou full
+qtde_egos = 'full' 		# 50, 100, 500 ou full
 ######################################################################################################################
 ######################################################################################################################
 key_init = 0					############################################################### Essas duas linhas atribuem as chaves para cada script

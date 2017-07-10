@@ -109,7 +109,7 @@ def get_friends(user):												#Coleta dos amigos de um usuário específico
 			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
 				key = random.randint(key_init,key_limit)
 				api = autentication(auths)
-			if e.message[0]['code'] == 34:									# Usuários não existentes
+			if e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w+b") as f:		# Cria arquivo vazio	
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
