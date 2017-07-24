@@ -31,6 +31,9 @@ Usa-se o conjunto de seguidores dos amigos dos egos (obtidos da rede N5) para fo
 Não é necessária nenhuma coleta (pelo menos por enquanto). A formação da rede N8 se dá a partir do dados já coletados para a rede N4.
 # seeds_collect
 Coleta dos seeds iniciais, definidos como os 100 tweets retornados pela requisição de trend topics. Os autores desses tweets são considerados como sementes para o ínício da busca dos egos (usuários que atendem certos critérios definidos pela pesquisa).
+
+# statistics
+script para geração de dados estatísticos que auxiliam no desenvolvimento do trabalho. 
 # testes
 Script de testes usados durante a construção dos scripts de coleta. Também pode conter arquivos usados para verificação da integridade e estatística dos arquivos gerados. Manipulação dos arquivos coletados para facilitar o trabalho de coleta de outros scripts ou até mesmo para separar os arquivos usados pelo protótipo.
 # threshold
