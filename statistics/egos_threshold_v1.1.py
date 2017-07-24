@@ -3,16 +3,6 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random, time
-import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
-import pylab
-import numpy as np
-import powerlaw
-import seaborn as sns
-import plotly
-import plotly.plotly as py
-import plotly.graph_objs as go
-import pandas as pd
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
