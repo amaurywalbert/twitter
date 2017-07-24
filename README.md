@@ -1,8 +1,15 @@
 # twitter
 Coleta e manipulação de dados no Twitter
+# create_folds
+Arquivos temporarios contendo 03 subconjuntos dos egos coletados, usados para testes estatísticos (KS-test).
+
 # ego_collect
 Scripts para coleta de egos a partir de uma lista de seeds (coletados a partir dos trend topics). Uma lista (txt) é gerada com os ids dos egos - usuários que atendem aos requisitos mínimos para o projeto. Foram feitas duas coletas de trend topics. Além do arquivo com os ids dos egos, os scripts também geram arquivos com as LISTAS desses usuários. Os arquivos estão no BOX. ego_collection.tar.bz2 e ego_list_collected.tar.bz2
+# graphs
+scripts para criação dos grafos das redes.
 # lists_members_collect
+# ground_truth
+scripts para organizar as listas dos usuários egos. 
 Scripts para coleta dos membros das listas especificadas a partir da coleta dos egos. São gerados arquivos binários identificados pelo id da lista, contendo os ids dos seus membros.
 # lists_subscrbers_collect
 Scripts para coleta dos inscritos das listas especificadas a partir da coleta dos egos. São gerados arquivos binários identificados pelo id da lista, contendo os ids dos seus membros.
@@ -26,5 +33,7 @@ Não é necessária nenhuma coleta (pelo menos por enquanto). A formação da re
 Coleta dos seeds iniciais, definidos como os 100 tweets retornados pela requisição de trend topics. Os autores desses tweets são considerados como sementes para o ínício da busca dos egos (usuários que atendem certos critérios definidos pela pesquisa).
 # testes
 Script de testes usados durante a construção dos scripts de coleta. Também pode conter arquivos usados para verificação da integridade e estatística dos arquivos gerados. Manipulação dos arquivos coletados para facilitar o trabalho de coleta de outros scripts ou até mesmo para separar os arquivos usados pelo protótipo.
+# threshold
+Contem a lista de egos depois da poda com trheshold k=10 e também a lista com uma sequencia aleatória dos indices e dos IDs dos egos. Apenas os 500 primeiros egos aleatórios serão usados para a construção das redes.
 # timeline_collect
 Scripts para coleta dos últimos 3200 tweets postados pelos usuários. Retweets estão incluidos nesse conjunto. Inicialmente coletamos a timeline dos egos e depois faremos a coleta de acordo com o necessário. Esta tarefa passou a ser feita pelo servidor na nuvem Amazon a partir do dia 23-03-2017. A coleta foi transferida para um novo PC no LAB 255 a partir de 04-2017.
