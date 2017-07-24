@@ -20,8 +20,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Two-Sided Kolmogorov-Smirnov Tests - Testar se dois grupos de amostras foram tirados de conjuntos com a mesma distribuição.
-##									Compara de dois em dois.EX: 03 folds - A,B,C - compara AeB, AeC, e BeC.  
+##		Status - Versão 1 - Two-Sided Kolmogorov-Smirnov Tests - Testar se dois grupos de amostras foram tirados de conjuntos com a mesma distribuição. 
+##									Compara de dois em dois.EX: 03 folds - A,B,C - compara AeB, AeC, e BeC. 
+##									USA TODOS OS 3980 EGOS.
 ## 
 ######################################################################################################################################################################
 
@@ -227,7 +228,7 @@ def n4():
 
 	for ego in fold1:
 		tweets_list,mentions_list = read_arq_bin_n4(data_dir_n4+str(ego)+".dat")		 			# Função para converter o binário de volta em string em formato json.
-		f1.append(len(mentions_list))														# Salva a quantidade de menções para cada ego.
+		f1.append(len(mentions_list))																				# Salva a quantidade de menções para cada ego.
 
 	for ego in fold2:
 		tweets_list,mentions_list = read_arq_bin_n4(data_dir_n4+str(ego)+".dat")		 			# Função para converter o binário de volta em string em formato json.
@@ -315,15 +316,15 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-arq_fold1 = "/home/amaury/twitter/create_folds/egos_fold1.json"						#################### Arquivo JSON contendo a lista de usuários egos aleatórios FOLD 1
-arq_fold2 = "/home/amaury/twitter/create_folds/egos_fold2.json"						#################### Arquivo JSON contendo a lista de usuários egos aleatórios FOLD 2
-arq_fold3 = "/home/amaury/twitter/create_folds/egos_fold3.json"						#################### Arquivo JSON contendo a lista de usuários egos aleatórios FOLD 3
+arq_fold1 = "/home/amaury/twitter/create_folds/egos_full_fold1.json"						#################### Arquivo JSON contendo a lista de usuários egos aleatórios FOLD 1
+arq_fold2 = "/home/amaury/twitter/create_folds/egos_full_fold2.json"						#################### Arquivo JSON contendo a lista de usuários egos aleatórios FOLD 2
+arq_fold3 = "/home/amaury/twitter/create_folds/egos_full_fold3.json"						#################### Arquivo JSON contendo a lista de usuários egos aleatórios FOLD 3
 
-data_dir_n1 = "/home/amaury/coleta/n1/egos_friends/full_with_prunned/bin/" 		#################### Diretório contendo todos os egos da rede n1
-data_dir_n2 = "/home/amaury/coleta/n2/egos/full_with_prunned/bin/" 					#################### Diretório contendo todos os egos da rede n2
-data_dir_n3 = "/home/amaury/coleta/n3/egos/full_with_prunned/bin/" 					#################### Diretório contendo todos os egos da rede n3
-data_dir_n4 = "/home/amaury/coleta/n4/egos/full_with_prunned/bin/" 					#################### Diretório contendo todos os egos da rede n4
-data_dir_n9 = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" 		#################### Diretório contendo todos os egos da rede n9
+data_dir_n1 = "/home/amaury/coleta/n1/egos_friends/full_with_prunned/bin/" 			#################### Diretório contendo todos os egos da rede n1
+data_dir_n2 = "/home/amaury/coleta/n2/egos/full_with_prunned/bin/" 						#################### Diretório contendo todos os egos da rede n2
+data_dir_n3 = "/home/amaury/coleta/n3/egos/full_with_prunned/bin/" 						#################### Diretório contendo todos os egos da rede n3
+data_dir_n4 = "/home/amaury/coleta/n4/egos/full_with_prunned/bin/" 						#################### Diretório contendo todos os egos da rede n4
+data_dir_n9 = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" 			#################### Diretório contendo todos os egos da rede n9
 
 formato_user = 'l'				########################### Long para id do amigo
 user_struct = struct.Struct(formato_user) ############### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

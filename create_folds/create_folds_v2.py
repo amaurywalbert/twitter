@@ -1,0 +1,128 @@
+# -*- coding: latin1 -*-
+################################################################################################
+#	
+#
+import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+######################################################################################################################################################################
+##		Status - Versão 1 - Recebe três vetores aleatórios e identifica os egos correspondentes, criando um arquivo para cada FOLD.
+##								Usa todo o conjunto de 3980 egos e cria 03 folds - v1=1327, v2=1327, v3=1326 
+## 
+######################################################################################################################################################################
+
+######################################################################################################################################################################
+######################################################################################################################################################################
+#
+# Método principal do programa.
+#
+######################################################################################################################################################################
+######################################################################################################################################################################
+def main():
+	v1=[]
+	v2=[]
+	v3=[]
+
+	i = 0
+	eof = False
+	with open(arq1, 'r') as file:
+		while not eof:																			#Enquanto não for final do arquivo
+			i+=1
+			id = file.readline()																#Leia o id da lista
+			if (id == ''):																		#Se id for igual a vazio é porque chegou ao final do arquivo.
+					eof = True
+																									# Ler arquivos com os números aleatórios e armazenar em vetores
+			else:
+				if i <= 1327:
+					v1.append(int(id))
+				elif i > 2654:
+					v3.append(int(id))
+				else:
+					v2.append(int(id))					
+				
+
+
+																# Ordenar os vetores
+	v1=sorted(v1)
+	v2=sorted(v2)
+	v3=sorted(v3)
+
+	egos_v1=[]
+	egos_v2=[]
+	egos_v3=[]
+	
+																# Localizar os índices (números aleatórios) e armazenar a lista com os respectivos IDs dos egos											
+	for indice in v1:
+		print indice,egos[indice-1]
+		egos_v1.append(egos[indice-1])													
+	for indice in v2:
+		print indice,egos[indice-1]
+		egos_v2.append(egos[indice-1])
+	for indice in v3:
+		print indice,egos[indice-1]
+		egos_v3.append(egos[indice-1])			
+
+																# Salvando os IDS dos egos aleatórios em arquivos JSON
+	with open(folds+"egos_full_fold1.json", 'w') as f:
+		json.dump(egos_v1, f)
+	with open(folds+"egos_full_fold2.json", 'w') as f:
+		json.dump(egos_v2, f)
+	with open(folds+"egos_full_fold3.json", 'w') as f:
+		json.dump(egos_v3, f)
+		
+######################################################################################################################################################################
+	
+	print("######################################################################")
+	print("Script finalizado!")
+	print("######################################################################\n")
+
+
+#####################################################################################################################################################################
+#
+# INÍCIO DO PROGRAMA
+#
+######################################################################################################################################################################
+
+################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
+######################################################################################################################
+data_dir_n1 = "/home/amaury/coleta/n1/egos_friends/full_with_prunned/bin/" 	#################### Diretório contendo todos os egos da rede n1
+data_dir_n2 = "/home/amaury/coleta/n2/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n2
+data_dir_n3 = "/home/amaury/coleta/n3/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n3
+data_dir_n4 = "/home/amaury/coleta/n4/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n4
+data_dir_n9 = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" 	#################### Diretório contendo todos os egos da rede n9
+
+arq1 = "/home/amaury/twitter/create_folds/random1.txt"								#################### Arquivo com a sequencia de numeros aleatórios 1
+
+egos = []																							#################### Lista de todos os egos
+folds = "/home/amaury/twitter/create_folds/"					 							#################### Diretório contendo a lista com os membros de cada fold
+
+
+#Cria os diretórios para armazenamento dos arquivos
+if not os.path.exists(destino_n1):
+	os.makedirs(destino_n1)
+if not os.path.exists(destino_n2):
+	os.makedirs(destino_n2)
+if not os.path.exists(destino_n3):
+	os.makedirs(destino_n3)
+if not os.path.exists(destino_n4):
+	os.makedirs(destino_n4)	
+if not os.path.exists(destino_n9):
+	os.makedirs(destino_n9)
+
+###### Iniciando dicionário - tabela hash a partir de todos os egos
+
+print
+print("######################################################################")
+print ("Criando tabela hash...")
+for file in os.listdir(data_dir_n1):
+	user_id = file.split(".dat")
+	user_id = long(user_id[0])
+	egos.append(user_id)
+print ("Lista de egos gerada com sucesso...") 
+print("######################################################################\n")
+print
+print("######################################################################\n")
+print
+#Executa o método main
+if __name__ == "__main__": main()

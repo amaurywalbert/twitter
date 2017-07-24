@@ -131,17 +131,14 @@ def n1():
 	for ego in fold1:
 		friends_list = read_arq_bin_n1(data_dir_n1+str(ego)+".dat")		 			# Função para converter o binário de volta em string em formato json.
 		f1.append(len(friends_list))															# Salva a quantidade de amigos para cada ego.
-	print len(f1)
 
 	for ego in fold2:
 		friends_list = read_arq_bin_n1(data_dir_n1+str(ego)+".dat")		 			# Função para converter o binário de volta em string em formato json.
 		f2.append(len(friends_list))															# Salva a quantidade de amigos para cada ego.
-	print len(f2)
 	
 	for ego in fold3:
 		friends_list = read_arq_bin_n1(data_dir_n1+str(ego)+".dat")		 			# Função para converter o binário de volta em string em formato json.
 		f3.append(len(friends_list))															# Salva a quantidade de amigos para cada ego.
-	print len(f3)
 		
 	print ("Executando KS-TEST entre Fold1 e Fold2...")
 	ks_test(f1,f2)
@@ -322,11 +319,11 @@ arq_fold1 = "/home/amaury/twitter/create_folds/egos_fold1.json"						###########
 arq_fold2 = "/home/amaury/twitter/create_folds/egos_fold2.json"						#################### Arquivo JSON contendo a lista de usuários egos aleatórios FOLD 2
 arq_fold3 = "/home/amaury/twitter/create_folds/egos_fold3.json"						#################### Arquivo JSON contendo a lista de usuários egos aleatórios FOLD 3
 
-data_dir_n1 = "/home/amaury/folds/n1/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 1
-data_dir_n2 = "/home/amaury/folds/n2/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 2
-data_dir_n3 = "/home/amaury/folds/n3/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 3
-data_dir_n4 = "/home/amaury/folds/n4/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 4
-data_dir_n9 = "/home/amaury/folds/n9/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 9
+data_dir_n1 = "/home/amaury/coleta/n1/egos_friends/full_with_prunned/bin/" 	#################### Diretório contendo todos os egos da rede n1
+data_dir_n2 = "/home/amaury/coleta/n2/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n2
+data_dir_n3 = "/home/amaury/coleta/n3/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n3
+data_dir_n4 = "/home/amaury/coleta/n4/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n4
+data_dir_n9 = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" 	#################### Diretório contendo todos os egos da rede n9
 
 formato_user = 'l'				########################### Long para id do amigo
 user_struct = struct.Struct(formato_user) ############### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

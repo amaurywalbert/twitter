@@ -7,15 +7,10 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Recebe três vetores aleatórios e identifica os egos correspondentes, criando um arquivo para cada FOLD e copiando os egos para um diretório comum.
+##		Status - Versão 1 - Recebe três vetores aleatórios e identifica os egos correspondentes, criando um arquivo para cada FOLD.
 ## 
 ######################################################################################################################################################################
 
-######################################################################################################################################################################
-def copy(egos_set,origem,destino):											#Copiar o arquivo dos egos da rede nX para o destino
-	for user in egos_set:
-		if not os.path.isfile(destino+str(user)+".dat"):
-			shutil.copy(origem+str(user)+".dat",destino)
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -74,21 +69,6 @@ def main():
 
 		
 ######################################################################################################################################################################
-																	#Copiar arquivos dos egos para os diretórios das redes correspondentes
-	print ("Criando FOLDS para a rede de amigos...")
-	copy(egos_set,data_dir_n1,destino_n1)		
-
-	print ("Criando FOLDS para a rede de retweets...")	
-	copy(egos_set,data_dir_n2,destino_n2)	
-
-	print ("Criando FOLDS para a rede de likes...")																
-	copy(egos_set,data_dir_n3,destino_n3)
-
-	print ("Criando FOLDS para a rede de menções...")	
-	copy(egos_set,data_dir_n4,destino_n4)
-	
-	print ("Criando FOLDS para a rede de seguidores...")	
-	copy(egos_set,data_dir_n9,destino_n9)
 ######################################################################################################################################################################			
 	
 	print("######################################################################")
@@ -119,11 +99,6 @@ n = 175																								#################### Número de elementos em cada
 
 folds = "/home/amaury/twitter/create_folds/"					 							#################### Diretório contendo a lista com os membros de cada fold
 
-destino_n1 = "/home/amaury/folds/n1/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 1
-destino_n2 = "/home/amaury/folds/n2/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 2
-destino_n3 = "/home/amaury/folds/n3/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 3
-destino_n4 = "/home/amaury/folds/n4/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 4
-destino_n9 = "/home/amaury/folds/n9/egos/bin/" 											#################### Diretório contendo os egos aleatórios da rede 9
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(destino_n1):

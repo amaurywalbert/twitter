@@ -186,7 +186,7 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 qtde_egos = 'full_with_prunned' 		#10, 50, 100, 500 ou full ou full_with_prunned
-k = 0 										# threshold - Conjunto mínimo - 0,10,20,30,40,50,100,200
+k = 10 										# threshold - Conjunto mínimo - 0,10,20,30,40,50,100,200
 ######################################################################################################################
 friends_dir = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
 followers_dir = "/home/amaury/coleta/n9/egos_followers/"+str(qtde_egos)+"/bin/"
