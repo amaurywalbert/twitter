@@ -185,7 +185,7 @@ retweets_dir = "/home/amaury/coleta/n2/egos/"+str(qtde_egos)+"/bin/"
 likes_dir = "/home/amaury/coleta/n3/egos/"+str(qtde_egos)+"/bin/"
 mentions_dir = "/home/amaury/coleta/n4/egos/"+str(qtde_egos)+"/bin/"
 
-output_dir =  "/home/amaury/coleta/threshold/"
+output_dir =  "/home/amaury/twitter/threshold/"
 
 user_format = 'l'				################################################### Long para id do amigo
 user_struct = struct.Struct(user_format) ##################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
