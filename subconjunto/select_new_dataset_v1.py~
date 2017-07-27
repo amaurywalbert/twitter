@@ -8,7 +8,10 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		28-07-2017
+##
+##		28-07-2017 - NÃO RODAR NOVAMENTE.... RISCO DE MODIFICAR OS ALTERS A SEREM COLETADOS!!!!!
+##
+##
 ##		Status - Versão 1 - Recebe lista com 500 egos aleatórios e verifica quais deles extrapolam o número de 5mil alters.
 ##		Gera arquivo com o id do ego e o número de alters de cada um.
 ##						
