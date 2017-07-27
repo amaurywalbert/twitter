@@ -40,8 +40,9 @@ def main():
 	print("Localizando egos...")															# Localizar os índices (números aleatórios) e armazenar a lista com os respectivos IDs dos egos
 	egos_v1=[]											
 	for indice in v1:
-#		print indice,egos[indice-1]
-		egos_v1.append(egos[indice-1])		
+		print indice,egos[indice-1]
+		egos_v1.append(egos[indice-1])
+	#print len(egos_v1)		
 
 
 	print("Salvando lista de egos aleatórios em arquivo...")
@@ -70,7 +71,7 @@ data_dir_n4 = "/home/amaury/coleta/n4/egos/full_with_prunned/bin/" 				#########
 data_dir_n9 = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" 	#################### Diretório contendo todos os egos da rede n9
 
 arq1 = "/home/amaury/twitter/subconjunto/random_k_10_3572_egos.txt"				#################### Arquivo com a sequencia de numeros aleatórios 1
-egos_threshold = "/home/amaury/twitter/threshold/intersection_k_10.json"			#################### Arquivo com egos q tenham um mínimo de alters... k = 10
+egos_threshold = "/home/amaury/twitter/threshold/intersection_k_10.json"		#################### Arquivo com egos q tenham um mínimo de alters... k = 10
 random_egos = "/home/amaury/coleta/subconjunto/random_egos/k10/"	 				#################### Saída - Diretório contendo arquivo com os IDs egos aleatórios podados com k=10
 n_egos = 500																						#################### Tamanho do vetor aleatório - egos aleatórios para o subconjunto
 
@@ -88,7 +89,8 @@ egos = []																							#################### Lista de todos os egos
 with open(egos_threshold, 'r') as f:
 	file = json.load(f)	
 	for user in file:
-		egos.append(user_id)
+		egos.append(user)
+	print len(egos)
 print ("Lista de egos gerada com sucesso...") 
 print("######################################################################\n")
 print

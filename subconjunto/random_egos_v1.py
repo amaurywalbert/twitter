@@ -41,7 +41,8 @@ def main():
 	egos_v1=[]											
 	for indice in v1:
 #		print indice,egos[indice-1]
-		egos_v1.append(egos[indice-1])		
+		egos_v1.append(egos[indice-1])
+#	print len(egos_v1)		
 
 
 	print("Salvando lista de egos aleatórios em arquivo...")
@@ -88,7 +89,8 @@ egos = []																							#################### Lista de todos os egos
 with open(egos_threshold, 'r') as f:
 	file = json.load(f)	
 	for user in file:
-		egos.append(user_id)
+		egos.append(user)
+	print len(egos)
 print ("Lista de egos gerada com sucesso...") 
 print("######################################################################\n")
 print

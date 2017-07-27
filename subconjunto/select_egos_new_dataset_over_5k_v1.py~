@@ -51,13 +51,26 @@ def read_arq_bin_followers(file):
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
+	i = 0
+	j = 0
+	k = 0
 	with open(arq1, 'r') as f:
 		file = json.load(f)
 		for user in file:
-			friends_list = read_arq_bin_friends(egos_n1+str(user)+".dat") 			#Verificando número de amigos
-			followers_list = read_arq_bin_followers(egos_n9+str(user)+".dat")		#Verificando número de seguidores
-			print len(friends_list)
-			print len(followers_list)
+			friends_list = read_arq_bin_friends(data_dir_n1+str(user)+".dat") 			#Verificando número de amigos
+			followers_list = read_arq_bin_followers(data_dir_n9+str(user)+".dat")		#Verificando número de seguidores
+			
+			if len(friends_list) > 5000:
+				i+=1
+				print ("User: "+str(user)+" - QTDE Friends: "+str(len(friends_list)))
+			if len(followers_list) > 5000:
+				j+=1
+				print ("User: "+str(user)+" - QTDE Followers: "+str(len(followers_list)))
+			if len(followers_list) > 5000 and len(friends_list) > 5000:
+				k+=1	
+		print ("Usuários com mais de 5k amigos: "+str(i))
+		print ("Usuários com mais de 5k seguidores: "+str(j))
+		print ("Usuários com mais de 5k amigos e seguidores: "+str(k))
 					
 ######################################################################################################################################################################
 	
@@ -78,8 +91,18 @@ def main():
 arq1 = "/home/amaury/coleta/subconjunto/random_egos/k10/500.json"					#################### Arquivo com 500 egos aleatórios (de um total de 3980)
 egos_over_5k = "/home/amaury/coleta/subconjunto/egos_over_5k/"	 					#################### Saída - Diretório contendo os egos aleatórios podados com k=10
 
-egos_n1 = "/home/amaury/coleta/n1/egos_friends/full_with_prunned/bin/" 			#################### Diretório contendo todos os egos da rede n1
-egos_n9 = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" 		#################### Diretório contendo todos os egos da rede n9
+data_dir_n1 = "/home/amaury/coleta/n1/egos_friends/full_with_prunned/bin/" 	#################### Diretório contendo todos os egos da rede n1
+data_dir_n2 = "/home/amaury/coleta/n2/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n2
+data_dir_n3 = "/home/amaury/coleta/n3/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n3
+data_dir_n4 = "/home/amaury/coleta/n4/egos/full_with_prunned/bin/" 				#################### Diretório contendo todos os egos da rede n4
+data_dir_n9 = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" 	#################### Diretório contendo todos os egos da rede n9
+
+new_data_dir_n1 = "/home/amaury/dataset/n1/egos_limited_5k/bin/" 					#################### Diretório contendo 500 egos aleatórios da rede n1
+new_data_dir_n2 = "/home/amaury/dataset/n2/egos/bin/" 								#################### Diretório contendo 500 egos aleatórios da rede n1
+new_data_dir_n3 = "/home/amaury/dataset/n3/egos/bin/" 								#################### Diretório contendo 500 egos aleatórios da rede n1
+new_data_dir_n4 = "/home/amaury/dataset/n4/egos/bin/" 								#################### Diretório contendo 500 egos aleatórios da rede n1
+new_data_dir_n9 = "/home/amaury/dataset/n9/egos_limited_5k/bin/" 					#################### Diretório contendo 500 egos aleatórios da rede n1
+
 
 
 #Cria os diretórios para armazenamento dos arquivos
