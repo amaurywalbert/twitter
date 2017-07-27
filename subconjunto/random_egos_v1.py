@@ -7,7 +7,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Recebe arquivo com 3572 egos (podados com k=10 do conjunto original e cria arquivo com os egos correpondentes)
+##		Status - Versão 1 - Recebe arquivo com 3572 egos (podados com k=10 do conjunto original), cria uma tabela hash e mapeia um vetor com números aleatórios aos IDs dos egos correspondentes)
+##  	Um arquivo JSON com os ids dos egos é gerado e armazenado
 ##						
 ## 
 ######################################################################################################################################################################
@@ -69,11 +70,9 @@ data_dir_n4 = "/home/amaury/coleta/n4/egos/full_with_prunned/bin/" 				#########
 data_dir_n9 = "/home/amaury/coleta/n9/egos_followers/full_with_prunned/bin/" 	#################### Diretório contendo todos os egos da rede n9
 
 arq1 = "/home/amaury/coleta/subconjunto/random_k_10_3572_egos.txt"				#################### Arquivo com a sequencia de numeros aleatórios 1
-n_egos = 500																						#################### Tamanho do vetor aleatório - egos aleatórios para o subconjunto
-
-egos = []																							#################### Lista de todos os egos
+egos_threshold = "/home/amaury/coleta/threshold/intersection_k_10.json"			#################### Arquivo com egos q tenham um mínimo de alters... k = 10
 random_egos = "/home/amaury/coleta/subconjunto/random_egos/k10/"	 				#################### Saída - Diretório contendo os egos aleatórios podados com k=10
-
+n_egos = 500																						#################### Tamanho do vetor aleatório - egos aleatórios para o subconjunto
 
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(random_egos):
@@ -85,10 +84,11 @@ if not os.path.exists(random_egos):
 print
 print("######################################################################")
 print ("Criando tabela hash...")
-for file in os.listdir(data_dir_n1):
-	user_id = file.split(".dat")
-	user_id = long(user_id[0])
-	egos.append(user_id)
+egos = []																							#################### Lista de todos os egos
+with open(egos_threshold, 'r') as f:
+	file = json.load(f)	
+	for user in file:
+		egos.append(user_id)
 print ("Lista de egos gerada com sucesso...") 
 print("######################################################################\n")
 print
