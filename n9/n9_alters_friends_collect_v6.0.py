@@ -182,9 +182,9 @@ def main():
 		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
 		for friend in friends_list:
 			k+=1
-#			if not dictionary.has_key(friend):
-#				save_user(j,k,l,friend)							#Inicia função de busca
-		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" alters.")
+			if not dictionary.has_key(friend):
+				save_user(j,k,l,friend)							#Inicia função de busca
+#		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" alters.")
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
