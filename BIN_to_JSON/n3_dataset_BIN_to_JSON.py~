@@ -10,7 +10,6 @@ sys.setdefaultencoding('utf-8')
 ##	2017-07-31
 ##		Status - Versão 1 - Faz leitura do binário, separa o id do tweet do id do autor e salva apenas o ID DO AUTOR em formato JSON.
 ##								Cria um ÙNICO ARQUIVO com todos os alters...
-##								ARQUIVOS GERADOS PARA SEREM USADOS NO mytweetf0rm
 ## 
 ######################################################################################################################################################################
 

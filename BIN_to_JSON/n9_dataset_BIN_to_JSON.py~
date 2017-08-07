@@ -7,9 +7,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##	2017-07-31
-##		Status - Versão 1 - Faz leitura do binário, separa o id do tweet do id do autor e salva apenas o ID DO AUTOR em formato JSON.
-##								Cria um ÙNICO ARQUIVO com todos os alters...
+##	2017-08-06
+##		Status - Versão 1 - Faz leitura do binário e salva apenas o ID DOS AMIGOS em formato JSON.
+##								Cria um ÙNICO ARQUIVO com todos os alters... 
 ##								ARQUIVOS GERADOS PARA SEREM USADOS NO mytweetf0rm
 ## 
 ######################################################################################################################################################################
@@ -22,12 +22,12 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		authors_list = []
+		followers_file = []
 		while f.tell() < tamanho:
-			buffer = f.read(favorites_struct.size)
-			tweet, user = favorites_struct.unpack(buffer)
-			authors_list.append(user)
-	return authors_list
+			buffer = f.read(user_struct.size)
+			follower = user_struct.unpack(buffer)
+			followers_file.append(follower[0])
+	return followers_file
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -43,12 +43,12 @@ def main():
 
 	for file in os.listdir(fonte):
 		i+=1
-		authors_list = read_arq_bin(fonte+file)
+		followers_list = read_arq_bin(fonte+file)
 		ego = file.split(".dat")
 		ego = long(ego[0])
-		if authors_list:
+		if followers_list:
 			print i
-			for user in authors_list:
+			for user in followers_list:
 				alters_set.add(user)
 
 	alters_list = list(alters_set)	
@@ -73,12 +73,11 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-fonte = "/home/amaury/dataset/n3/egos/bin/"
-output = "/home/amaury/dataset/n3/egos/n3_500_egos_favorites_alters_ids.json"
+fonte = "/home/amaury/dataset/n9/egos_limited_5k/bin/"
+output = "/home/amaury/dataset/n9/egos_limited_5k/n9_500_egos_friends_alters_ids.json"
 
-formato = 'll'				####################################################### Long para id do tweet e outro long para autor
-favorites_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-
+formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
+user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 #Executa o método main
 if __name__ == "__main__": main()

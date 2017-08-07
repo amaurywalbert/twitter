@@ -7,8 +7,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##	2017-07-31
-##		Status - Versão 1 - Faz leitura do binário, separa o id do tweet do id do autor e salva apenas o ID DO AUTOR em formato JSON.
+##	2017-08-06
+##		Status - Versão 1 - Faz leitura do binário e salva apenas o ID DOS AMIGOS em formato JSON.
 ##								Cria um ÙNICO ARQUIVO com todos os alters...
 ##								ARQUIVOS GERADOS PARA SEREM USADOS NO mytweetf0rm
 ## 
@@ -24,8 +24,8 @@ def read_arq_bin(file):
 		f.seek(0)
 		authors_list = []
 		while f.tell() < tamanho:
-			buffer = f.read(favorites_struct.size)
-			tweet, user = favorites_struct.unpack(buffer)
+			buffer = f.read(timeline_struct.size)
+			retweet, user = timeline_struct.unpack(buffer)
 			authors_list.append(user)
 	return authors_list
 
@@ -73,12 +73,11 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-fonte = "/home/amaury/dataset/n3/egos/bin/"
-output = "/home/amaury/dataset/n3/egos/n3_500_egos_favorites_alters_ids.json"
+fonte = "/home/amaury/dataset/n2/egos/bin/"
+output = "/home/amaury/dataset/n2/egos/n2_500_egos_retweets_alters_ids.json"
 
-formato = 'll'				####################################################### Long para id do tweet e outro long para autor
-favorites_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-
+formato = 'll'				##################################################################  Long para id do tweet e outro long para autor
+timeline_struct = struct.Struct(formato) ################################################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 #Executa o método main
 if __name__ == "__main__": main()
