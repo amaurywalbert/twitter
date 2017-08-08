@@ -12,7 +12,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Criar rede Ne (retweets) a partir dos dados coletados e de acordo com as instruções a seguir:
 ##					Versão 1.1 - Tentar corrigir problema de elevado consumo de memória durante a criação das redes.
-##									- Clear no grafo em 3 locais (deu certo - verificar qual dos 3??)
+##									- Corrigido -  Clear no grafo 
 ##					Versão 1.2 - Usar conjunto de dados com 500 egos aleatórios.
 ##								
 ## # INPUT:
@@ -64,19 +64,26 @@ class DateTimeEncoder(json.JSONEncoder):
         return encoded_object
         
 ################################################################################################
+# Função para plotar o grafo
+################################################################################################
+def plt_graph(ego, G):															# Função para plotar o grafo
+	nx.draw(G)
+	plt.show() 																	# display
+        
+################################################################################################
 # Função para salvar os grafos em formato padrão para entrada nos algoritmos de detecção 
 ################################################################################################
 def save_graph(ego, G):															# Função recebe o id do ego corrente e o grafo (lista de arestas)
 	with open(output_dir+str(ego)+".edge_list", 'wb') as graph:
-		nx.write_edgelist(G, graph, data=False)
-	G.clear()
+#		nx.write_edgelist(G, graph, data=False)
+		nx.write_weighted_edgelist(G,graph)									# Imprimir lista de arestas COM PESO
 
 ################################################################################################
 # Gera as redes - grafos
 ################################################################################################
 def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a lista de alters e o número ordinal do ego corrente
 	G=nx.DiGraph()																	# Inicia um grafo DIRECIONADO
-	G.clear()
+	G.clear()	
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
 	partial_missing=[]															# Lista de usuários faltando
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
@@ -84,15 +91,15 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	for alter in alters_list:
 		alter = long(alter)
 		vertices[alter] = alter													# Adiciona cada Alter ao conjunto de vértices				
-		G.add_edge(ego,alter,weight=1)										# Cria uma aresta entre o Ego e cada Alter - Adiciona alter com arquivo em branco
-	i = 0
+		if G.has_edge(ego,alter):							### Se existe uma aresta entre o alter e o autor
+			G[ego][alter]['weight']+=1						##### Adiciona peso na aresta 
+		else:														# Senão
+			G.add_edge(ego,alter,weight=1)				##### Cria aresta com peso 1
+
 	for alter in alters_list:
-		i+=1	
 		try:
 			authors = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de autores de cada alter
 			if author:
-#				G.add_edge(ego,alter,weight=1)								# Cria uma aresta entre o Ego e cada Alter - NÃO Adiciona alter com arquivo em branco
-#				print i
 				for author in authors:											# Para cada autor
 					author = long(author)
 					if vertices.has_key(author):								# Se autor está na lista de alters
@@ -139,7 +146,7 @@ def main():
 		print
 		print("Salvando o grafo...")
 		save_graph(ego,G)
-		G.clear()
+#		plt_graph(ego,G)		
 		print("######################################################################")
 
 		print

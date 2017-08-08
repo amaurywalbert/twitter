@@ -8,7 +8,7 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ##		Status - Versão 1 - verifica se os alters (amigos dos egos) já foram coletados e copia os arquivos deles para o diretório correto
-##									Esse processo é apenas para agilizar e organizar os diretórios de favoritos já coletados.
+##									Esse processo é apenas para agilizar e organizar os diretórios já coletados.
 ## 
 ######################################################################################################################################################################
 
@@ -20,12 +20,12 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		friends_list = []
+		alters_list = []
 		while f.tell() < tamanho:
 			buffer = f.read(user_struct.size)
-			friend = user_struct.unpack(buffer)
-			friends_list.append(friend[0])
-	return friends_list
+			alter = user_struct.unpack(buffer)
+			alters_list.append(alter[0])
+	return alters_list
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -39,28 +39,13 @@ def main():
 	k = 0		# Quantidade de arquivos não encontrados
 
 	for file in os.listdir(fonte):
-		friends_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
-		if friends_list:
-			for friend in friends_list:				
-				user = long(friend)
+		alters_list = read_arq_bin(fonte+file) # Função para converter o binário de volta em string em formato json.
+		if alters_list:
+			for alter in alters_list:				
+				user = long(alter)
 				if not dictionary.has_key(user):
-					if os.path.isfile(origem1+str(user)+".dat"):
-						shutil.copy(origem1+str(user)+".dat",destino)
-						dictionary[user] = user
-						j+=1
-						print (str(j)+" - Arquivo copiado com sucesso!")
-					elif os.path.isfile(origem2+str(user)+".dat"):
-						shutil.copy(origem2+str(user)+".dat",destino)
-						dictionary[user] = user
-						j+=1
-						print (str(j)+" - Arquivo copiado com sucesso!")
-					elif os.path.isfile(origem3+str(user)+".dat"):
-						shutil.copy(origem3+str(user)+".dat",destino)
-						dictionary[user] = user
-						j+=1
-						print (str(j)+" - Arquivo copiado com sucesso!")
-					elif os.path.isfile(origem4+str(user)+".dat"):
-						shutil.copy(origem4+str(user)+".dat",destino)
+					if os.path.isfile(origem+str(user)+".dat"):
+						shutil.copy(origem+str(user)+".dat",destino)
 						dictionary[user] = user
 						j+=1
 						print (str(j)+" - Arquivo copiado com sucesso!")						
@@ -81,18 +66,10 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 100 		#10, 50, 100, 500 ou full
-######################################################################################################################
-fonte = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"
+fonte = "/home/amaury/dataset/n1/egos_limited_5k/bin/"
+origem = "/home/amaury/coleta/n1/alters_friends/full/bin/"
 
-origem4 = "/home/amaury/coleta_old_01/n1/egos_and_alters_friends/bin/"
-origem3 = "/home/amaury/coleta_old_01/n1/alters_friends/50/bin/"
-origem2 = "/home/amaury/coleta_old_02/n1/alters_friends/50/bin/"
-origem1 = "/home/amaury/coleta_old_02/n1/alters_friends/10/bin/"
-
-
-destino = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/bin/"
-
+destino = "/home/amaury/dataset/n1/alters/bin/"
 
 formato = 'l'				################################################### Long para id do amigo
 user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

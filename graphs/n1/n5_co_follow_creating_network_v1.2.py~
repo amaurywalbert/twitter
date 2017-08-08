@@ -5,50 +5,49 @@
 import datetime, sys, time, json, os, os.path, shutil, time, struct, random
 import networkx as nx
 import matplotlib.pyplot as plt
+from math import*
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Criar rede Ne (retweets) a partir dos dados coletados e de acordo com as instruções a seguir:
+##		Status - Versão 1 - Criar rede N5 (co-follow) a partir dos dados coletados e de acordo com as instruções a seguir:
 ##					Versão 1.1 - Tentar corrigir problema de elevado consumo de memória durante a criação das redes.
-##									- Corrigido -  Clear no grafo
+##									- Corrigido - Clear no grafo
 ##					Versão 1.2 - Usar conjunto de dados com 500 egos aleatórios.
 ##								
 ## # INPUT:
 ##		- Lista de Egos (egos)
-##		- Lista mencionados (alters) de cada Ego - Formação do conjunto de Alters
-##		- Lista mencionados de cada Alter (ids)
+##		- Lista Followee (alters) de cada Ego - Formação do conjunto de Alters
+##		- Lista Followee (followees) de cada Alter (ids)
 ##
 ## # ALGORITMO
 ##					0 - Para cada ego[i]:
-##					1 - 	Inicializa o ego_[i] e todos os mencionados (alters[i][n]) como vértices de um grafo - (tabela hash - ego+alters - vertices)
-##					2 - 	Cria uma aresta direcionada entre o ego[i] e todos os alters (alter[i][n])
-##					3 - 	Para cada elemento no conjunto de alters (alter[i][j]):
-##					4 - 		Para cada elemento no conjunto de mencionados do alter (mentions[i][j][k]):
-##					5 - 			Se mentions[i][j][k] está no conjunto de vértices (tabela hash - ego+alters):
-##					6 - 				Se não existe uma aresta direcionada entre alter[i][j] e mentions[i][j][k]:
-##					7 - 					Cria uma aresta direcionada entre alter[i][j] e mentions[i][j][k]
-##					8 -#####			Senão:								##### Nessa rede não há peso nas arestas
-##					9 -#####				Adiciona peso na aresta.	##### Nessa rede não há peso nas arestas
+##					1 - 	Inicializa o ego_[i] e todos os seus amigos (alters[i][n]) como vértices de um grafo - (tabela hash - ego+alters - vertices)
+##					2 - 	Para cada elemento i no conjunto de vertices (v[i]):
+##					3 - 		Para cada elemento j no conjunto de vértices (v[j]):
+##					4 - 			Se não existe uma aresta (v[i],v[j]):
+##					5 - 				Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
+##					6 - 	Remova arestas com peso igual a zero
 ##
 ## 
 ######################################################################################################################################################################
 
 ################################################################################################
 # Função para converter os arquivos binários em formato específico para ser usado na construção do grafo
+#  - Aqui há o retorno da lista de amigos de um alter (alter = amigo do ego)
 ################################################################################################
-def read_arq_bin(file):
+def read_arq_bin(file):															# Função recebe o arquivo binário
 	with open(file, 'r') as f:	 
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		mentions_list = []
+		friends_set = set()
 		while f.tell() < tamanho:
-			buffer = f.read(timeline_struct.size)
-			tweet, mentioned = timeline_struct.unpack(buffer)
-			mentions_list.append(mentioned)
-	return mentions_list
+			buffer = f.read(user_struct.size)
+			friend = user_struct.unpack(buffer)
+			friends_set.add(friend[0])
+	return friends_set
 	
 ######################################################################################################################################################################
 #
@@ -64,60 +63,76 @@ class DateTimeEncoder(json.JSONEncoder):
         return encoded_object
 
 ################################################################################################
-# Função para plotar o grafo
-################################################################################################
-def plt_graph(ego, G):															# Função para plotar o grafo
-	nx.draw(G)
-	plt.show() 																	# display
-        
+# Função para calcular o csj entre dois conjuntos de dados
+################################################################################################         
+def csj(a,b):
+ intersection = len(a.intersection(b))
+ union = len(a.union(b))
+ return intersection/float(union)
+ 
 ################################################################################################
 # Função para salvar os grafos em formato padrão para entrada nos algoritmos de detecção 
 ################################################################################################
 def save_graph(ego, G):															# Função recebe o id do ego corrente e o grafo (lista de arestas)
 	with open(output_dir+str(ego)+".edge_list", 'wb') as graph:
-#		nx.write_edgelist(G, graph, data=False)
+#		nx.write_edgelist(G, graph, data=False)							# Imprimir lista de arestas SEM PESO
 		nx.write_weighted_edgelist(G,graph)									# Imprimir lista de arestas COM PESO
+	G.clear()
 
 ################################################################################################
 # Gera as redes - grafos
 ################################################################################################
 def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a lista de alters e o número ordinal do ego corrente
-	G=nx.DiGraph()																	# Inicia um grafo DIRECIONADO
+	G=nx.Graph()																	# Inicia um grafo NÂO DIRECIONADO
 	G.clear()
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
-	partial_missing=[]															# Lista de usuários faltando
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
+	partial_missing = set()
 	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_list:
 		alter = long(alter)
 		vertices[alter] = alter													# Adiciona cada Alter ao conjunto de vértices				
-		if G.has_edge(ego,alter):							### Se existe uma aresta entre o alter e o autor
-			G[ego][alter]['weight']+=1						##### Adiciona peso na aresta 
-		else:														# Senão
-			G.add_edge(ego,alter,weight=1)				##### Cria aresta com peso 1
 
-	for alter in alters_list:
-		try:
-			mentions = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de autores de cada alter
-			if mentions:
-				for mentioned in mentions:										# Para cada autor
-					mentioned = long(mentioned)
-					if vertices.has_key(mentioned):							# Se autor está na lista de alters
-						if G.has_edge(alter,mentioned):						### Se existe uma aresta entre o alter e o autor
-							G[alter][mentioned]['weight']+=1				##### Adiciona peso na aresta - Nesta rede não há adição de peso nas arestas... 
-						else:															# Senão
-							G.add_edge(alter,mentioned,weight=1)			# Cria aresta com peso 1
-################################################################################################
-		except IOError as e:														# Tratamento de exceção - caso falte algum arquivo de um autor do alter, 
-			partial_missing.append(alter)										# Adiciona alter à lista com usuários faltando		
-#			print ("ERROR: "+str(e))
-		
+	indice = 0
+
+	for i in vertices:
+		indice +=1
+		for j in vertices:
+			if i != j:
+				if not G.has_edge(i,j):													### Se ainda não existe uma aresta entre os dois vértices
+					try:
+						if i == ego:
+							i_friends = read_arq_bin(egos_dir+str(i)+".dat")		# Recebe conjunto de amigos do ego
+							j_friends = read_arq_bin(alters_dir+str(j)+".dat")		# Recebe conjunto de amigos do alter i
+						elif j == ego:
+							i_friends = read_arq_bin(alters_dir+str(i)+".dat")		# Recebe conjunto de amigos do alter i
+							j_friends = read_arq_bin(egos_dir+str(j)+".dat")		# Recebe conjunto de amigos do ego
+						else:
+							i_friends = read_arq_bin(alters_dir+str(i)+".dat")		# Recebe conjunto de amigos do alter i
+							j_friends = read_arq_bin(alters_dir+str(j)+".dat")		# Recebe conjunto de amigos do ego
+					
+						csj_i_j = csj(i_friends,j_friends)								# Calcula o CSJ entre os dois conjuntos
+
+						print ("Verificando arestas para alter "+str(indice)+" - CSJ: ("+str(i,j)+") - "+str(csj_i_j))
+
+						G.add_edge(i,j,weight=csj_i_j)									# Cria aresta
+
+					except IOError:															# Tratamento de exceção - caso falte algum arquivo de um autor do alter, 
+						partial_missing.add(i)												# Adiciona ao conjunto de usuários faltando
+						partial_missing.add(j)												# Adiciona ao conjunto de usuários faltando
+
+	for (u,v,d) in G.edges(data='weight'):
+		if d==0:
+			print u,v,d
+			print('(%d, %d, %.3f)'%(n,nbr,d))
+#			G.remove_edge(u,v)															# Remove arestas com CJS igual a zero. Deixar pra remover aqui pq a criação delas é interessante durante o processo de geração das redes...
+#			G.remove_edge(n,nbr)															# Remove arestas com CJS igual a zero. Deixar pra remover aqui pq a criação delas é interessante durante o processo de geração das redes...
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
 	tp	= tf - ti																	# Cálculo do tempo gasto para a construção do grafo
 	print ("Lista de arestas do grafo "+str(l)+" construído com sucesso. EGO: "+str(ego))
 	print("Tempo para construir o grafo: "+str(tp))
 				
-	return G,partial_missing													# Função retorna o grafo, o número de erros parciais e o tempo gasto para a construção do grafo
+	return G,list(partial_missing)
 			
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -135,22 +150,22 @@ def main():
 		l+=1																			# Incrementa contador do número do Ego
 		ego = file.split(".dat")												# Separa a extensão do id do usuário no nome do arquivo
 		ego = long(ego[0])														# recebe o id do usuário em formato Long
-		alters_list = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de alters do ego do formato Binário para uma lista do python
-		n_alters = len(alters_list)												# Variável que armazena o tamanho da lista do usuário corrente
+		alters_list = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
+		n_friends = len(alters_list)											# Variável que armazena o tamanho da lista do usuário corrente
 
 		print("######################################################################")
-		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de alters: "+str(n_alters))
-		G, partial_missing = ego_net(ego,alters_list, l)				# Inicia função de criação do grafo (lista de arestas) para o ego corrente
+		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de amigos: "+str(n_friends))
+		G, partial_missing = ego_net(ego,alters_list, l)							# Inicia função de criação do grafo (lista de arestas) para o ego corrente
 		print("Quantidade de usuários faltando: "+str(len(partial_missing)))
 		print
 		print("Salvando o grafo...")
 		save_graph(ego,G)
-#		plt_graph(ego,G)
+		G.clear()
 		print("######################################################################")
 
 		print
-		missing.update(partial_missing)												# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
-		overview = {'ego':ego,'n_alters':n_alters,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
+		missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
+		overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
 		with open(output_overview+str(ego)+".json", 'w') as f:
 			f.write(json.dumps(overview)) 											# Escreve o dicionário python em formato JSON no arquivo overview
 		tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos
@@ -168,13 +183,13 @@ def main():
 ######################################################################################################################################################################
 
 ######################################################################################################################
-egos_dir = "/home/amaury/dataset/n4/egos/bin/"############################################ Diretório contendo os arquivos dos Egos
-alters_dir = "/home/amaury/dataset/n4/alters/bin" ######################################## Diretório contendo os arquivos dos Alters
-output_dir = "/home/amaury/graphs/n4/graphs/" ############################################ Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n4/errors/" ##################################### Diretório para armazenamento dos erros
-output_overview = "/home/amaury/graphs/n4/overview/" ##################################### Diretório contendo arquivos com informações sobre a construção das redes. 
-formato = 'll'				################################################################## Long para id do tweet e outro long para autor e uma flag (0 ou 1) indicando se é um tetweet
-timeline_struct = struct.Struct(formato) ################################################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+egos_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
+alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin" ## Diretório contendo os arquivos dos Alters
+output_dir = "/home/amaury/graphs/n5/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
+output_dir_errors = "/home/amaury/graphs/n5/errors/" ########## Diretório para armazenamento dos erros
+output_overview = "/home/amaury/graphs/n5/overview/" ########## Diretório contendo arquivos com informações sobre a construção das redes. 
+formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
+user_struct = struct.Struct(formato) ########################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################
 
 #Cria os diretórios para armazenamento dos arquivos
