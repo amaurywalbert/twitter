@@ -66,7 +66,7 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-fonte = "/home/amaury/dataset/n2/egos_limited_5k/bin/"
+fonte = "/home/amaury/dataset/n2/egos/bin/"
 origem = "/home/amaury/coleta/n2/alters_friends/full/bin/"
 
 destino = "/home/amaury/dataset/n2/alters/bin/"

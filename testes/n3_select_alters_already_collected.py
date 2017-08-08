@@ -35,6 +35,7 @@ def read_arq_bin(file):
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
+	i = 0		# Ego verificado	
 	j = 0		# Quantidade de arquivos copiados 
 	k = 0		# Quantidade de arquivos não encontrados
 
@@ -48,10 +49,11 @@ def main():
 						shutil.copy(origem+str(user)+".dat",destino)
 						dictionary[user] = user
 						j+=1
-						print (str(j)+" - Arquivo copiado com sucesso!")						
+#						print (str(j)+" - Arquivo copiado com sucesso!")						
 					else:
 						k+=1
-						
+		i+=1
+		print ("Ego nº: "+str(i)+" - Arquivos copiados com sucesso!")								
 	print ("Arquivos copiados: "+str(j))
 	print ("Arquivos no diretório: "+str(len(dictionary)))
 	print ("Arquivos faltando: "+str(k))
