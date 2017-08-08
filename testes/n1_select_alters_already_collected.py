@@ -53,7 +53,7 @@ def main():
 					else:
 						k+=1
 		i+=1
-		print ("Ego nº: "+str(i)+" - Arquivos copiados com sucesso!")								
+		print ("Ego nº: "+str(i)+" - Verificado!")								
 	print ("Arquivos copiados: "+str(j))
 	print ("Arquivos no diretório: "+str(len(dictionary)))
 	print ("Arquivos faltando: "+str(k))

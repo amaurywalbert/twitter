@@ -53,7 +53,7 @@ def main():
 					else:
 						k+=1
 		i+=1
-		print ("Ego nº: "+str(i)+" - Arquivos copiados com sucesso!")								
+		print ("Ego nº: "+str(i)+" - Verificado!")								
 	print ("Arquivos copiados: "+str(j))
 	print ("Arquivos no diretório: "+str(len(dictionary)))
 	print ("Arquivos faltando: "+str(k))
@@ -69,7 +69,7 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 fonte = "/home/amaury/dataset/n3/egos/bin/"
-origem = "/home/amaury/coleta/n3/alters_friends/full/bin/"
+origem = "/home/amaury/coleta/n3/alters/full/bin/"
 
 destino = "/home/amaury/dataset/n3/alters/bin/"
 
