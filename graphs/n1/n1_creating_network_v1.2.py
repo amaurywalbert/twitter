@@ -13,6 +13,7 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Criar rede N1 (follow) a partir dos dados coletados e de acordo com as instruções a seguir:
 ##					Versão 1.1 - Tentar corrigir problema de elevado consumo de memória durante a criação das redes.
 ##									- Clear no grafo em 3 locais (deu certo - verificar qual dos 3??)
+##					Versão 1.2 - Usar conjunto de dados com 500 egos aleatórios.
 ##								
 ## # INPUT:
 ##		- Lista de Egos (egos)
@@ -75,24 +76,23 @@ def save_graph(ego, G):															# Função recebe o id do ego corrente e o
 # Gera as redes - grafos
 ################################################################################################
 def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a lista de alters e o número ordinal do ego corrente
-	ep = 0																			# Variável para armazenar os erros parciais - arquivos faltando referentes ao conjunto alters
 	G=nx.DiGraph()																	# Inicia um grafo DIRECIONADO
 	G.clear()
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
-	out=[]																			# Lista de usuários faltando
+	partial_missing=[]																			# Lista de usuários faltando
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
 	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_list:
 		alter = long(alter)
 		vertices[alter] = alter													# Adiciona cada Alter ao conjunto de vértices				
-#		G.add_edge(ego,alter)													# Cria uma aresta entre o Ego e cada Alter - Adiciona alter com arquivo em branco
+		G.add_edge(ego,alter)													# Cria uma aresta entre o Ego e cada Alter - Adiciona alter com arquivo em branco
 	i = 0
 	for alter in alters_list:
 		i+=1	
 		try:
 			friends = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de amigos de cada alter
 			if friends:
-				G.add_edge(ego,alter)											# Cria uma aresta entre o Ego e cada Alter - NÃO Adiciona alter com arquivo em branco
+#				G.add_edge(ego,alter)											# Cria uma aresta entre o Ego e cada Alter - NÃO Adiciona alter com arquivo em branco
 #				print i
 				for friend in friends:											# Para cada amigo
 					friend = long(friend)
@@ -108,8 +108,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 ################################################################################################
 
 		except IOError as e:															# Tratamento de exceção - caso falte algum arquivo de um amigo do alter, 
-			ep +=1																		# Incrementa os erros parciais (do ego corrente)
-			out.append(alter)															# Adiciona alter à lista com usuários faltando		
+			partial_missing.append(alter)															# Adiciona alter à lista com usuários faltando		
 #			print ("ERROR: "+str(e))
 		
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
@@ -117,7 +116,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	print ("Lista de arestas do grafo "+str(l)+" construído com sucesso. EGO: "+str(ego))
 	print("Tempo para construir o grafo: "+str(tp))
 				
-	return G,ep,out																	# Função retorna o grafo, o número de erros parciais e o tempo gasto para a construção do grafo
+	return G,partial_missing																	# Função retorna o grafo, o número de erros parciais e o tempo gasto para a construção do grafo
 			
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -128,7 +127,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	errors = 0																		# Variável para armazenar o total de erros (arquivos faltando)	
+	missing = set()																# Conjunto de usuários faltando faltando...	
 	l = 0																				# Variável para exibir o número ordinal do ego que está sendo usado para a construção do grafo
 	ti =  datetime.datetime.now()												# Tempo de início do processo de criação de todos os grafos
 	for file in os.listdir(egos_dir):										# Para cada arquivo de Ego no diretório
@@ -136,25 +135,27 @@ def main():
 		ego = file.split(".dat")												# Separa a extensão do id do usuário no nome do arquivo
 		ego = long(ego[0])														# recebe o id do usuário em formato Long
 		alters_list = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
-		friends = len(alters_list)												# Variável que armazena o tamanho da lista do usuário corrente
+		n_friends = len(alters_list)											# Variável que armazena o tamanho da lista do usuário corrente
+
 		print("######################################################################")
-		print ("Construindo grafo do ego n: "+str(l)+"/"+str(qtde_egos)+" - Quantidade de amigos: "+str(friends))
-		G, ep, out = ego_net(ego,alters_list, l)							# Inicia função de criação do grafo (lista de arestas) para o ego corrente
-		print("Quantidade de usuários faltando: "+str(ep))
+		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de amigos: "+str(n_friends))
+		G, partial_missing = ego_net(ego,alters_list, l)							# Inicia função de criação do grafo (lista de arestas) para o ego corrente
+		print("Quantidade de usuários faltando: "+str(len(partial_missing)))
 		print
 		print("Salvando o grafo...")
 		save_graph(ego,G)
 		G.clear()
 		print("######################################################################")
+
 		print
-		errors+=ep																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
-		overview = {'ego':ego,'friends':friends,'errors':ep,'out':out}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
+		missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
+		overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
 		with open(output_overview+str(ego)+".json", 'w') as f:
 			f.write(json.dumps(overview)) 											# Escreve o dicionário python em formato JSON no arquivo overview
 		tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos
 		t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
 	print("Tempo total do script: "+str(t))
-	print("Quantidade total de usuários faltando: "+str(errors))
+	print("Quantidade total de usuários faltando: "+str(len(missing)))
 	print("######################################################################")
 	print("Networks created!")
 	print("######################################################################\n")
@@ -164,18 +165,17 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-qtde_egos = 10 # 50, 100, 500, full
+
 ######################################################################################################################
+egos_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
+alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin" ## Diretório contendo os arquivos dos Alters
+output_dir = "/home/amaury/graphs/n1/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
+output_dir_errors = "/home/amaury/graphs/n1/errors/" ########## Diretório para armazenamento dos erros
+output_overview = "/home/amaury/graphs/n1/overview/" ########## Diretório contendo arquivos com informações sobre a construção das redes. 
+formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
+user_struct = struct.Struct(formato) ########################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################
-egos_dir = "/home/amaury/coleta/n1/egos_friends/"+str(qtde_egos)+"/bin/"######### Diretório contendo os arquivos dos Egos
-alters_dir = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/bin/" #### Diretório contendo os arquivos dos Alters
-output_dir = "/home/amaury/graphs/n1/"+str(qtde_egos)+"/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n1/"+str(qtde_egos)+"/errors/" ########## Diretório para armazenamento dos erros
-output_overview = "/home/amaury/graphs/n1/"+str(qtde_egos)+"/overview/" ################### Diretório contendo arquivos com informações sobre a construção das redes. 
-formato = 'l'				######################################################### Long para o código ('l') e depois o array de chars de X posições:	
-user_struct = struct.Struct(formato) ############################################ Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-######################################################################################################################
-######################################################################################################################
+
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(output_dir):
 	os.makedirs(output_dir)

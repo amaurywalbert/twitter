@@ -94,7 +94,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 			friends = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de amigos de cada alter
 			if friends:
 				G.add_edge(ego,alter)											# Cria uma aresta entre o Ego e cada Alter - NÃO Adiciona alter com arquivo em branco
-				print i
+#				print i
 				for friend in friends:											# Para cada amigo
 					friend = long(friend)
 					if vertices.has_key(friend):								# Se amigo está na lista de alters		
