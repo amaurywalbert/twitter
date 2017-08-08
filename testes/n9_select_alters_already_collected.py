@@ -68,10 +68,10 @@ def main():
 
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-fonte = "/home/amaury/dataset/n5/egos_limited_5k/bin/"
-origem = "/home/amaury/coleta/n5/alters_friends/full/bin/"
+fonte = "/home/amaury/dataset/n9/egos_limited_5k/bin/"
+origem = "/home/amaury/coleta/n9/alters_friends/full/bin/"
 
-destino = "/home/amaury/dataset/n5/alters/bin/"
+destino = "/home/amaury/dataset/n9/alters/bin/"
 
 formato = 'l'				################################################### Long para id do amigo
 user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
