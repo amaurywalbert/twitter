@@ -24,7 +24,7 @@ def read_arq_bin(file):
 		while f.tell() < tamanho:
 			buffer = f.read(timeline_struct.size)
 			tweet, alter = timeline_struct.unpack(buffer)
-			alterss_list.append(alter)
+			alters_list.append(alter)
 	return alters_list
 
 ######################################################################################################################################################################

@@ -24,7 +24,7 @@ def read_arq_bin(file):
 		while f.tell() < tamanho:
 			buffer = f.read(timeline_struct.size)
 			tweet, alter = timeline_struct.unpack(buffer)
-			alterss_list.append(alter)
+			alters_list.append(alter)
 	return alters_list
 
 ######################################################################################################################################################################
@@ -69,7 +69,7 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 fonte = "/home/amaury/dataset/n4/egos/bin/"
-origem = "/home/amaury/coleta/n4/alters_friends/full/bin/"
+origem = "/home/amaury/coleta/n4/alters/full/bin/"
 
 destino = "/home/amaury/dataset/n4/alters/bin/"
 
