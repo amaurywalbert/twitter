@@ -77,7 +77,7 @@ def save_graph(ego, G):															# Função recebe o id do ego corrente e o
 ################################################################################################
 # Gera as redes - grafos
 ################################################################################################
-def ego_net(ego,alters_set):												# Função recebe o id do ego, a lista de alters e o número ordinal do ego corrente
+def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista de alters e o número ordinal do ego corrente
 	G=nx.Graph()																	# Inicia um grafo NÂO DIRECIONADO
 	G.clear()
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo
@@ -95,7 +95,7 @@ def ego_net(ego,alters_set):												# Função recebe o id do ego, a lista d
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-		print ("Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
+		print ("Verificando arestas para alter: "+str(indice)+"/"+str(l))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices
@@ -136,7 +136,7 @@ def main():
 
 		print("######################################################################")
 		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de amigos: "+str(n_friends))
-		G = ego_net(ego,alters_set)										# Inicia função de criação do grafo (lista de arestas) para o ego corrente
+		G = ego_net(ego,alters_set,l)										# Inicia função de criação do grafo (lista de arestas) para o ego corrente
 		print
 		print("Salvando o grafo...")
 		save_graph(ego,G)
