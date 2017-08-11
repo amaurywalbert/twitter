@@ -100,7 +100,6 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 
 		except IOError as e:															# Tratamento de exceção - caso falte algum arquivo de um amigo do alter, 
 			partial_missing.append(alter)															# Adiciona alter à lista com usuários faltando		
-#			print ("ERROR: "+str(e))
 		
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
 	tp	= tf - ti																	# Cálculo do tempo gasto para a construção do grafo

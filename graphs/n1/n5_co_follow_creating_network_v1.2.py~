@@ -26,10 +26,12 @@ sys.setdefaultencoding('utf-8')
 ##					1 - 	Inicializa o ego_[i] e todos os seus amigos (alters[i][n]) como vértices de um grafo - (tabela hash - ego+alters - vertices)
 ##					2 - 	Para cada elemento i no conjunto de vertices (v[i]):
 ##					3 - 		Para cada elemento j no conjunto de vértices (v[j]):
-##					4 - 			Se não existe uma aresta (v[i],v[j]):
-##					5 - 				Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
-##					6 - 	Remova arestas com peso igual a zero
+##					4 -   		Com i != j:	
+##					5 - 				Se não existe uma aresta (v[i],v[j]):
+##					6 - 					Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
+##					7 - 	Remova arestas com peso igual a zero
 ##
+##					OBS.: Se estiver demorando muito para criar - remover a parte de registrar arquivos faltando... "partial missing"
 ## 
 ######################################################################################################################################################################
 
@@ -66,16 +68,20 @@ class DateTimeEncoder(json.JSONEncoder):
 # Função para calcular o csj entre dois conjuntos de dados
 ################################################################################################         
 def csj(a,b):
- intersection = len(a.intersection(b))
- union = len(a.union(b))
- return intersection/float(union)
+	intersection = len(a.intersection(b))
+	union = len(a.union(b))
+# Calcula o CSJ entre os dois conjuntos e atribui 0 caso a união dos conjuntos for 0	
+	if union != 0:
+		result = intersection/float(union)
+	else:
+		result = 0
+	return result
  
 ################################################################################################
 # Função para salvar os grafos em formato padrão para entrada nos algoritmos de detecção 
 ################################################################################################
 def save_graph(ego, G):															# Função recebe o id do ego corrente e o grafo (lista de arestas)
 	with open(output_dir+str(ego)+".edge_list", 'wb') as graph:
-#		nx.write_edgelist(G, graph, data=False)							# Imprimir lista de arestas SEM PESO
 		nx.write_weighted_edgelist(G,graph)									# Imprimir lista de arestas COM PESO
 	G.clear()
 
@@ -88,6 +94,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
 	partial_missing = set()
+
 	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_list:
 		alter = long(alter)
@@ -97,9 +104,10 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 
 	for i in vertices:
 		indice +=1
+		print ("Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_list)))		
 		for j in vertices:
 			if i != j:
-				if not G.has_edge(i,j):													### Se ainda não existe uma aresta entre os dois vértices
+				if not G.has_edge(i,j):														### Se ainda não existe uma aresta entre os dois vértices
 					try:
 						if i == ego:
 							i_friends = read_arq_bin(egos_dir+str(i)+".dat")		# Recebe conjunto de amigos do ego
@@ -109,11 +117,11 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 							j_friends = read_arq_bin(egos_dir+str(j)+".dat")		# Recebe conjunto de amigos do ego
 						else:
 							i_friends = read_arq_bin(alters_dir+str(i)+".dat")		# Recebe conjunto de amigos do alter i
-							j_friends = read_arq_bin(alters_dir+str(j)+".dat")		# Recebe conjunto de amigos do ego
-					
-						csj_i_j = csj(i_friends,j_friends)								# Calcula o CSJ entre os dois conjuntos
+							j_friends = read_arq_bin(alters_dir+str(j)+".dat")		# Recebe conjunto de amigos do ego	
+							
+						csj_i_j = csj(i_retweets,j_retweets)									# Calcula o CSJ entre os dois conjuntos
 
-						print ("Verificando arestas para alter "+str(indice)+" - CSJ: ("+str(i,j)+") - "+str(csj_i_j))
+#						print ("Verificando arestas para alter "+str(indice)+" - CSJ: ("+str(i)+str(j)+") - "+str(csj_i_j))
 
 						G.add_edge(i,j,weight=csj_i_j)									# Cria aresta
 
@@ -124,9 +132,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	for (u,v,d) in G.edges(data='weight'):
 		if d==0:
 			print u,v,d
-			print('(%d, %d, %.3f)'%(n,nbr,d))
-#			G.remove_edge(u,v)															# Remove arestas com CJS igual a zero. Deixar pra remover aqui pq a criação delas é interessante durante o processo de geração das redes...
-#			G.remove_edge(n,nbr)															# Remove arestas com CJS igual a zero. Deixar pra remover aqui pq a criação delas é interessante durante o processo de geração das redes...
+			G.remove_edge(u,v)															# Remove arestas com CJS igual a zero. Deixar pra remover aqui pq a criação delas é interessante durante o processo de geração das redes...
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
 	tp	= tf - ti																	# Cálculo do tempo gasto para a construção do grafo
 	print ("Lista de arestas do grafo "+str(l)+" construído com sucesso. EGO: "+str(ego))
@@ -164,10 +170,11 @@ def main():
 		print("######################################################################")
 
 		print
-		missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
-		overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
-		with open(output_overview+str(ego)+".json", 'w') as f:
-			f.write(json.dumps(overview)) 											# Escreve o dicionário python em formato JSON no arquivo overview
+		if partial_missing:
+			missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
+			overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
+			with open(output_overview+str(ego)+".json", 'w') as f:
+				f.write(json.dumps(overview)) 										# Escreve o dicionário python em formato JSON no arquivo overview
 		tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos
 		t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
 	print("Tempo total do script: "+str(t))
@@ -184,7 +191,7 @@ def main():
 
 ######################################################################################################################
 egos_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
-alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin" ## Diretório contendo os arquivos dos Alters
+alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin/" # Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n5/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
 output_dir_errors = "/home/amaury/graphs/n5/errors/" ########## Diretório para armazenamento dos erros
 output_overview = "/home/amaury/graphs/n5/overview/" ########## Diretório contendo arquivos com informações sobre a construção das redes. 
