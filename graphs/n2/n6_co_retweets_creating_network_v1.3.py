@@ -99,7 +99,7 @@ def ego_net(ego,status_ego,l):												# Função recebe o id do ego, o conju
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-		print ("Verificando arestas para alter: "+str(indice)+"/"+str(l))
+		print ("Verificando arestas para alter: "+str(indice)+"/"+str(len(status_ego['authors'])))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices

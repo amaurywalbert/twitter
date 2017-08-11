@@ -95,7 +95,7 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-		print ("Verificando arestas para alter: "+str(indice)+"/"+str(l))
+		print ("Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices
