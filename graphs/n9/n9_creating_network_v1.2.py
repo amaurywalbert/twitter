@@ -92,24 +92,14 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 		try:
 			friends = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de amigos de cada alter
 			if friends:
-#				G.add_edge(alter,ego)											# Cria uma aresta entre cada ALTER e o EGO - NÃO Adiciona alter com arquivo em branco
-#				print i
 				for friend in friends:											# Para cada amigo
-					friend = long(friend)
-					if vertices.has_key(friend):								# Se amigo está na lista de alters		
-						G.add_edge(alter,friend)								### Cria aresta
-
-################################################################################################
-######## Para os outros scripts - grafos ponderados
-#						if G.has_edge(alter,friend):							### Se existe uma aresta entre o alter e o amigo
-#							G[alter][friend]['weight']=+=1					##### Adiciona peso na aresta - Nesta rede não há adição de peso nas arestas... 
-#						else:															# Senão
-#							G.add_edge(alter,friend,weight=1)				# Cria aresta com peso 1
-################################################################################################
+					if alter != friend:											# Remover self-loops
+						friend = long(friend)
+						if vertices.has_key(friend):								# Se amigo está na lista de alters		
+							G.add_edge(alter,friend)								### Cria aresta
 
 		except IOError as e:															# Tratamento de exceção - caso falte algum arquivo de um amigo do alter, 
 			partial_missing.append(alter)															# Adiciona alter à lista com usuários faltando		
-#			print ("ERROR: "+str(e))
 		
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
 	tp	= tf - ti																	# Cálculo do tempo gasto para a construção do grafo
@@ -168,7 +158,7 @@ def main():
 
 ######################################################################################################################
 egos_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
-alters_dir = "/home/amaury/dataset/n9/alters_limited_5k/bin" ## Diretório contendo os arquivos dos Alters
+alters_dir = "/home/amaury/dataset/n9/alters_limited_5k/bin/" ## Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n9/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
 output_dir_errors = "/home/amaury/graphs/n9/errors/" ########## Diretório para armazenamento dos erros
 output_overview = "/home/amaury/graphs/n9/overview/" ########## Diretório contendo arquivos com informações sobre a construção das redes. 

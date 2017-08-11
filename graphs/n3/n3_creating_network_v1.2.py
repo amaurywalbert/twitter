@@ -99,19 +99,18 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	for alter in alters_list:
 		try:
 			authors = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de autores de cada alter
-			if author:
+			if authors:
 				for author in authors:											# Para cada autor
-					author = long(author)
-					if vertices.has_key(author):								# Se autor está na lista de alters
-						if G.has_edge(alter,author):							### Se existe uma aresta entre o alter e o autor
-							G[alter][author]['weight']+=1					##### Adiciona peso na aresta 
-						else:															# Senão
-							G.add_edge(alter,author,weight=1)				# Cria aresta com peso 1
-################################################################################################
+					if alter != author:											# Remover self-loops
+						author = long(author)
+						if vertices.has_key(author):								# Se autor está na lista de alters
+							if G.has_edge(alter,author):							### Se existe uma aresta entre o alter e o autor
+								G[alter][author]['weight']+=1					##### Adiciona peso na aresta 
+							else:															# Senão
+								G.add_edge(alter,author,weight=1)				# Cria aresta com peso 1
 
 		except IOError as e:														# Tratamento de exceção - caso falte algum arquivo de um autor do alter, 
 			partial_missing.append(alter)										# Adiciona alter à lista com usuários faltando		
-#			print ("ERROR: "+str(e))
 		
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
 	tp	= tf - ti																	# Cálculo do tempo gasto para a construção do grafo
@@ -170,7 +169,7 @@ def main():
 
 ######################################################################################################################
 egos_dir = "/home/amaury/dataset/n3/egos/bin/"############################################ Diretório contendo os arquivos dos Egos
-alters_dir = "/home/amaury/dataset/n3/alters/bin" ######################################## Diretório contendo os arquivos dos Alters
+alters_dir = "/home/amaury/dataset/n3/alters/bin/" ######################################## Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n3/graphs/" ############################################ Diretório para armazenamento dos arquivos das listas de arestas 
 output_dir_errors = "/home/amaury/graphs/n3/errors/" ##################################### Diretório para armazenamento dos erros
 output_overview = "/home/amaury/graphs/n3/overview/" ##################################### Diretório contendo arquivos com informações sobre a construção das redes. 
