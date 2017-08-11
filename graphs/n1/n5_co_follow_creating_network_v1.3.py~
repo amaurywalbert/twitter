@@ -61,7 +61,7 @@ def csj(a,b):
 	union = len(a.union(b))
 # Calcula o CSJ entre os dois conjuntos e atribui 0 caso a união dos conjuntos for 0	
 	if union != 0:
-		result = intersection/float(union)
+		result = intersection/float(union)									# float(uniao) para resultado no intervalo [0,1]
 	else:
 		result = 0
 	return result
@@ -95,7 +95,7 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-		print ("Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
+#		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices
@@ -135,7 +135,7 @@ def main():
 		n_friends = len(alters_set)											# Variável que armazena o tamanho da lista do usuário corrente
 
 		print("######################################################################")
-		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de amigos: "+str(n_friends))
+		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de alters: "+str(n_friends))
 		G = ego_net(ego,alters_set,l)										# Inicia função de criação do grafo (lista de arestas) para o ego corrente
 		print
 		print("Salvando o grafo...")

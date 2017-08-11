@@ -63,9 +63,10 @@ def csj(a,b):
 	union = len(a.union(b))
 # Calcula o CSJ entre os dois conjuntos e atribui 0 caso a união dos conjuntos for 0	
 	if union != 0:
-		result = intersection/union
+		result = intersection/float(union)									# float(uniao) para resultado no intervalo [0,1
 	else:
 		result = 0
+#	print ("União: "+str(union)+" --- Interseção: "+str(intersection)+" --- CSJ: "+str(result))	
 	return result
  
 ################################################################################################
@@ -99,7 +100,7 @@ def ego_net(ego,status_ego,l):												# Função recebe o id do ego, o conju
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-		print ("Verificando arestas para alter: "+str(indice)+"/"+str(l))
+#		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(status_ego['authors'])))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices
@@ -139,7 +140,7 @@ def main():
 		n_alters = len(status_ego['authors'])								# Variável que armazena o tamanho do conjunto de alters do usuário corrente
 		
 		print("######################################################################")
-		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de amigos: "+str(n_alters))
+		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de alters: "+str(n_alters))
 		G = ego_net(ego,status_ego,l)										# Inicia função de criação do grafo (lista de arestas) para o ego corrente
 		print
 		print("Salvando o grafo...")
