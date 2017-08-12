@@ -50,7 +50,7 @@ def read_arq_bin(file):															# Função recebe o arquivo binário
 		while f.tell() < tamanho:
 			buffer = f.read(user_struct.size)
 			friend = user_struct.unpack(buffer)
-			friends_set.add(friend[0])
+			friends_set.add(long(friend[0]))
 	return friends_set
 	
 ################################################################################################

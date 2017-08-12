@@ -91,6 +91,7 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 		except IOError:																# Tratamento de exceção - caso falte algum arquivo do alter, 
 			pass
 	###########################################	
+	print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de vertices: "+str(len(vertices)))
 	indice = 0
 	########################################### # Criando arestas
 	for i in vertices:	

@@ -91,13 +91,11 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 		i+=1	
 		try:
 			friends = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de amigos de cada alter
-			if friends:
-				for friend in friends:											# Para cada amigo
-					if alter != friend:											# Remover self-loops
-						friend = long(friend)
-						if vertices.has_key(friend):								# Se amigo está na lista de alters		
-							G.add_edge(alter,friend)								### Cria aresta
-
+			for friend in friends:											# Para cada amigo
+				if alter != friend:											# Remover self-loops
+					friend = long(friend)
+					if vertices.has_key(friend):								# Se amigo está na lista de alters		
+						G.add_edge(alter,friend)								### Cria aresta
 		except IOError as e:															# Tratamento de exceção - caso falte algum arquivo de um amigo do alter, 
 			partial_missing.append(alter)															# Adiciona alter à lista com usuários faltando		
 		

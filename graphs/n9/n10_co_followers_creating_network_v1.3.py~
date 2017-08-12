@@ -33,7 +33,7 @@ sys.setdefaultencoding('utf-8')
 ##					6 - 					Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
 ##					7 - 	Remova arestas com peso igual a zero
 ##
-##					OBS.: Se estiver demorando muito para criar - remover a parte de registrar arquivos faltando... "partial missing"
+##					OBS.: Consumo muito elevado de memória... corrigir na próxima versão.
 ## 
 ######################################################################################################################################################################
 
@@ -91,11 +91,12 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 		except IOError:																# Tratamento de exceção - caso falte algum arquivo do alter, 
 			pass
 	###########################################	
+	print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de vertices: "+str(len(vertices)))
 	indice = 0
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-#		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
+		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices
@@ -160,8 +161,8 @@ def main():
 ######################################################################################################################
 egos_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n9/alters_limited_5k/bin/" # Diretório contendo os arquivos dos Alters
-output_dir = "/home/amaury/graphs/10/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/10/errors/" ########## Diretório para armazenamento dos erros
+output_dir = "/home/amaury/graphs/n10/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
+output_dir_errors = "/home/amaury/graphs/n10/errors/" ########## Diretório para armazenamento dos erros
 formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################

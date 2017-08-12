@@ -138,10 +138,11 @@ def main():
 		print("######################################################################")
 
 		print
-		missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
-		overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
-		with open(output_overview+str(ego)+".json", 'w') as f:
-			f.write(json.dumps(overview)) 											# Escreve o dicionário python em formato JSON no arquivo overview
+		if partial_missing:
+			missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
+			overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
+			with open(output_overview+str(ego)+".json", 'w') as f:
+				f.write(json.dumps(overview)) 											# Escreve o dicionário python em formato JSON no arquivo overview
 		tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos
 		t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
 	print("Tempo total do script: "+str(t))

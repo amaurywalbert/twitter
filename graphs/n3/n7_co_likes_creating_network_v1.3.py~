@@ -96,6 +96,7 @@ def ego_net(ego,status_ego,l):												# Função recebe o id do ego, o conju
 				pass
 
 	###########################################	
+	print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de vertices: "+str(len(vertices)))
 	indice = 0
 	########################################### # Criando arestas
 	for i in vertices:	
@@ -168,7 +169,7 @@ alters_dir = "/home/amaury/dataset/n3/alters/bin/" ############ Diretório conte
 output_dir = "/home/amaury/graphs/n7/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
 output_dir_errors = "/home/amaury/graphs/n7/errors/" ########## Diretório para armazenamento dos erros
 formato = 'll'				#######################################  Long para id do tweet e outro long para autor
-favorites_struct = struct.Struct(formato) ###################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
+favorites_struct = struct.Struct(formato) ##################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################
 
 #Cria os diretórios para armazenamento dos arquivos

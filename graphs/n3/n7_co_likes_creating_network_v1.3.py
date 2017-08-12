@@ -96,6 +96,7 @@ def ego_net(ego,status_ego,l):												# Função recebe o id do ego, o conju
 				pass
 
 	###########################################	
+	print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de vertices: "+str(len(vertices)))
 	indice = 0
 	########################################### # Criando arestas
 	for i in vertices:	

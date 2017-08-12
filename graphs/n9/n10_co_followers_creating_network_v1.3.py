@@ -33,7 +33,7 @@ sys.setdefaultencoding('utf-8')
 ##					6 - 					Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
 ##					7 - 	Remova arestas com peso igual a zero
 ##
-##					OBS.: Se estiver demorando muito para criar - remover a parte de registrar arquivos faltando... "partial missing"
+##					OBS.: Consumo muito elevado de memória... corrigir na próxima versão.
 ## 
 ######################################################################################################################################################################
 
@@ -91,11 +91,12 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 		except IOError:																# Tratamento de exceção - caso falte algum arquivo do alter, 
 			pass
 	###########################################	
+	print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de vertices: "+str(len(vertices)))
 	indice = 0
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-#		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
+		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices

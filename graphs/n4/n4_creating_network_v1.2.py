@@ -99,16 +99,14 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	for alter in alters_list:
 		try:
 			mentions = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de autores de cada alter
-			if mentions:
-				for mentioned in mentions:										# Para cada autor
-					if alter != mentioned:											# Remover self-loops
-						mentioned = long(mentioned)
-						if vertices.has_key(mentioned):							# Se autor está na lista de alters
-							if G.has_edge(alter,mentioned):						### Se existe uma aresta entre o alter e o autor
-								G[alter][mentioned]['weight']+=1					##### Adiciona peso na aresta - Nesta rede não há adição de peso nas arestas... 
-							else:															# Senão
-								G.add_edge(alter,mentioned,weight=1)			# Cria aresta com peso 1
-
+			for mentioned in mentions:										# Para cada autor
+				if alter != mentioned:											# Remover self-loops
+					mentioned = long(mentioned)
+					if vertices.has_key(mentioned):							# Se autor está na lista de alters
+						if G.has_edge(alter,mentioned):						### Se existe uma aresta entre o alter e o autor
+							G[alter][mentioned]['weight']+=1					##### Adiciona peso na aresta - Nesta rede não há adição de peso nas arestas... 
+						else:															# Senão
+							G.add_edge(alter,mentioned,weight=1)			# Cria aresta com peso 1
 		except IOError as e:														# Tratamento de exceção - caso falte algum arquivo de um autor do alter, 
 			partial_missing.append(alter)										# Adiciona alter à lista com usuários faltando		
 		
