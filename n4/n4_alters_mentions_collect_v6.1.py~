@@ -92,7 +92,7 @@ def save_error(user,reason):
 # Tweepy - Realiza a busca e devolve a timeline de um usuário específico 
 #
 ######################################################################################################################################################################
-def get_timeline(user):												#Coleta da timeline
+def get_timeline(j,k,l,user):												#Coleta da timeline
 	global key
 	global dictionary
 	global api
@@ -109,6 +109,7 @@ def get_timeline(user):												#Coleta da timeline
 		api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
+		print ("ERRO - Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user))
 		if e.reason == "Twitter error response: status code = 404":							# Usuários não existentes ou não encontrados
 			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 			with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio	
@@ -153,7 +154,7 @@ def save_timeline(j,k,l,user): # j = número do ego que esta sendo coletado - k 
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de tweets do usuário
-	timeline = get_timeline(user)
+	timeline = get_timeline(j,k,l,user)
 	if timeline:	
 		try:
 			with open(data_dir+str(user)+".dat", "w+b") as f:
@@ -218,9 +219,6 @@ def main():
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
 oauth_keys = multi_oauth_n7.keys()
 auths = oauth_keys['auths_ok']
-	
-################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
-######################################################################################################################
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 qtde_egos = 'full' 		#10, 50, 100, 500 ou 'full'
@@ -239,8 +237,6 @@ timeline_struct = struct.Struct(formato) ###################################### 
 
 wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
-######################################################################################################################
-######################################################################################################################
 ######################################################################################################################
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(data_dir):
