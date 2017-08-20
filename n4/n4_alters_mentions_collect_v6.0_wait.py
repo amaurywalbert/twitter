@@ -86,7 +86,7 @@ def get_timeline(user):												#Coleta da timeline
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:
-			print e.message.__dict__
+			print dir(e.message)
 			if e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
@@ -94,6 +94,7 @@ def get_timeline(user):												#Coleta da timeline
 				i +=1
 		except Exception as e2:
 			print ("E2: "+str(e2))
+			#e.reason  = Twitter error response: status code = 401
 		
 		try:
 			if e.message == 'Not authorized.': # Usuários não autorizados
