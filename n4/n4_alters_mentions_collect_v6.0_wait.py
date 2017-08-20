@@ -86,7 +86,9 @@ def get_timeline(user):												#Coleta da timeline
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:
-			print e.message
+			print dir(e)
+			print e.__dict__
+			print help(e)
 			if e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
