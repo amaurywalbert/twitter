@@ -77,33 +77,33 @@ def get_timeline(user):												#Coleta da timeline
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		error = {}
 		with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-			if e.message:
-				error = {'user':user,'reason': e.message,'date':agora}
-				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
-				print error
-			else:
-				error = {'user':user,'reason': str(e),'date':agora,}
-				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
-				print error
-		try:
-			print dir(e.message)
-			if e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
-				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-				with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
-					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
-				i +=1
-		except Exception as e2:
-			print ("E2: "+str(e2))
-			#e.reason  = Twitter error response: status code = 401
-		
-		try:
-			if e.message == 'Not authorized.': # Usuários não autorizados
-				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-				with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio
-					print ("Usuário não autorizada. User: "+str(user)+" - Arquivo criado com sucesso!")
-				i +=1	
-		except Exception as e3:
-			print ("E3: "+str(e3))	
+			if e.reason:
+				if e.reason == "Twitter error response: status code = 404":							# Usuários não existentes ou não encontrados
+					dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+					with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
+						print ("Usuário não encontrado. User: "+str(user)+" - Arquivo criado com sucesso!")
+					i +=1
+				else
+					try:
+						if e.message:
+							if e.message == 'Not authorized.': # Usuários não autorizados
+								dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+								with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio
+									print ("Usuário não autorizado. User: "+str(user)+" - Arquivo criado com sucesso!")
+								i +=1	
+
+							elif e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
+								dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+								with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
+									print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
+								i +=1
+					
+					except Exception as e2:
+						print ("E2: "+str(e2))
+						error = {'user':user,'reason': str(e2),'date':agora,}
+						outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
+						print error
+			
 ######################################################################################################################################################################
 #
 # Obtem timeline dos usuários
