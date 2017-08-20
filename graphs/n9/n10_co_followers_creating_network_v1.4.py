@@ -18,7 +18,8 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 1.3 - remover a parte de registrar arquivos faltando... "partial missing"
 ##									 Carregar dados dos alters em memória
 ##					Versão 1.4 - Não inserir arestas onde o CSJ entre dois usuários é 0	
-##						OBS.: em TESTE - Se não resolver, tentar fazer um dump do grafo quando chegar a um numero X de arestas e depois fazer dump do restante...		
+##						OBS.: em TESTE - Se não resolver, tentar fazer um dump do grafo quando chegar a um numero X de arestas e depois fazer dump do restante...
+##						OBS.: em TESTE - demorando muito... +/- 20 dias para processar todos os 500 no notebook... fazer teste no servidor com a versão anterior (memoria)		
 ## # INPUT:
 ##		- Lista de Egos (egos)
 ##		- Conjunto Followers (alters) de cada Ego - Formação do conjunto de Alters
