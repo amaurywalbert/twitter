@@ -3,7 +3,6 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n7
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
@@ -26,25 +25,6 @@ sys.setdefaultencoding('utf-8')
 ##
 ## 
 ######################################################################################################################################################################
-
-######################################################################################################################################################################
-#
-# Realiza autenticação da aplicação.
-#
-######################################################################################################################################################################
-
-def autentication(auths):
-	global key
-	key += 1
-	if (key >= key_limit):
-		key = key_init
-	print
-	print("######################################################################")
-	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
-	print("######################################################################\n")
-	time.sleep(wait)
-	api_key = tweepy.API(auths[key])
-	return (api_key)
 
 ######################################################################################################################################################################
 #
@@ -80,7 +60,6 @@ def read_arq_bin(file):
 #
 ######################################################################################################################################################################
 def get_timeline(user):												#Coleta da timeline
-	global key
 	global dictionary
 	global api
 	global i
@@ -92,32 +71,27 @@ def get_timeline(user):												#Coleta da timeline
 		return (timeline)
 	
 	except tweepy.error.RateLimitError as e:
-			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
-			api = autentication(auths)
+			print("Limite de acesso à API excedido. User: "+str(user)+" - Erro: "+str(e))
 
 	except tweepy.error.TweepError as e:
 		agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 		error = {}
 		with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 			if e.message:
-				error = {'user':user,'reason': e.message,'date':agora, 'key':key}
+				error = {'user':user,'reason': e.message,'date':agora}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 				print error
 			else:
-				error = {'user':user,'reason': str(e),'date':agora, 'key':key}
+				error = {'user':user,'reason': str(e),'date':agora,}
 				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n") 
 				print error
 		try:
-			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
-				key = random.randint(key_init,key_limit)
-				api = autentication(auths)
 			if e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".json", "w") as f:			# Cria arquivo vazio	
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1
 		except Exception as e2:
-			api = autentication(auths)
 			print ("E2: "+str(e2))
 		
 		try:
@@ -205,20 +179,11 @@ def main():
 #
 ######################################################################################################################################################################
 
-################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
-oauth_keys = multi_oauth_n7.keys()
-auths = oauth_keys['auths_ok']
-	
-################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
-######################################################################################################################
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 qtde_egos = 'full' 		#10, 50, 100, 500 ou 'full'
 ######################################################################################################################
 ######################################################################################################################
-key_init = 0					################################################################ Essas duas linhas atribuem as chaves para cada script
-key_limit = len(auths)		################################################################ Usa todas as chaves (tamanho da lista de chaves)
-key = random.randint(key_init,key_limit) ################################################## Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
 egos_mentions_dir = "/home/amaury/dataset/n4/egos/bin/"												# Arquivo contendo a lista dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/n4/alters/"+str(qtde_egos)+"/bin/" 								# Diretório para armazenamento dos arquivos
