@@ -12,8 +12,9 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 6 - Coletar amigos do Twitter
 ##						
-##						6.1 - Usando o conjunto de egos do diretório DATASET - è apenas um subconjunto para facilitar o desenvolvimento do trabalho..
+##						6.0 - Usando o conjunto de egos do diretório DATASET - è apenas um subconjunto para facilitar o desenvolvimento do trabalho..
 ##								Assim que concluída a coleta desse subconjunto, pode-se voltar a coletar usando a versão 5.
+##						6.1	Melhoria na recepção de erros da API
 ##
 ##				
 ##						SALVAR APENAS O NECESSÁRIO PARA ECONOMIZAR ESPAÇO EM DISCO. Coletar tweets completos ocupa muito espaço.
@@ -74,6 +75,19 @@ def read_arq_bin(file):
 			authors_list.add(user)
 	return authors_list
 
+######################################################################################################################################################################
+#
+# Grava o erro num arquivo específco 
+#
+######################################################################################################################################################################
+def save_error(user,reason):
+	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
+	error={}
+	with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+		error = {'user':user,'reason':reason ,'date':agora, 'key':key}
+		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
+	print error
+	
 ######################################################################################################################################################################
 #
 # Tweepy - Realiza a busca e devolve os favofitos de um usuário específico 

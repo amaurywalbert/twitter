@@ -113,23 +113,24 @@ def get_timeline(j,k,l,user):												#Coleta da timeline
 
 	except tweepy.error.TweepError as e:
 		print ("ERRO - Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user))
-		if e.reason == "Twitter error response: status code = 404":							# Usuários não existentes ou não encontrados
-			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-			with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio	
-				print ("Usuário não encontrado. User: "+str(user)+" - Arquivo criado com sucesso!")
-			i +=1
+		try:
+			if e.reason == "Twitter error response: status code = 404":							# Usuários não existentes ou não encontrados
+				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+				with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio	
+					print ("Usuário não encontrado. User: "+str(user)+" - Arquivo criado com sucesso!")
+				i +=1
 
-		elif e.reason == "Twitter error response: status code = 401":							# Usuários não existentes ou não encontrados
-			save_error(user,e.reason)
-			api = autentication(auths)
+			elif e.reason == "Twitter error response: status code = 401":							# Usuários não existentes ou não encontrados
+				save_error(user,e.reason)
+				api = autentication(auths)
 			
-		elif e.message == 'Not authorized.': # Usuários não autorizados
-			dictionary[user] = user											# Insere o usuário coletado na tabela em memória
-			with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio
-				print ("Usuário não autorizado. User: "+str(user)+" - Arquivo criado com sucesso!")
-			i +=1											
-		elif e.message[0]['code']:
-			if e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
+			elif e.message == 'Not authorized.': # Usuários não autorizados
+				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+				with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio
+					print ("Usuário não autorizado. User: "+str(user)+" - Arquivo criado com sucesso!")
+				i +=1											
+
+			elif e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
 				save_error(user,e.message)				
 				key = random.randint(key_init,key_limit)
 				api = autentication(auths)
@@ -140,11 +141,11 @@ def get_timeline(j,k,l,user):												#Coleta da timeline
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1
 			else:
-				save_error(user,e.message)
+				save_error(user,str(e))
 				api = autentication(auths)
-		else:
-			save_error(user,str(e))
-			api = autentication(auths)
+		except Exception as e2:
+			save_error(user,e2)
+			api = autentication(auths)	
 ######################################################################################################################################################################
 #
 # Obtem timeline dos usuários

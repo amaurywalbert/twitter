@@ -172,17 +172,13 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
 		except Exception as e:	
-			agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
-			with open(error_dir+"friends_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-				if e.message:		
-					error = {'user':user,'reason': e.message,'date':agora}
-				else:
-					error = {'user':user,'reason': str(e),'date':agora}
-				outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
-				print error
+			if e.message:		
+				save_error(user,e.message)
+			else:
+				save_error(user,str(e))
 			if os.path.exists(data_dir+str(user)+".dat"):
 				os.remove(data_dir+str(user)+".dat")
-
+				print ("Arquivo removido co sucesso...")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
