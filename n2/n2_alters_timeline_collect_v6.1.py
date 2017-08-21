@@ -86,7 +86,7 @@ def save_error(user,reason):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	error={}
 	with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-		error = {'user':user,'reason':reason ,'date':agora, 'key':key}
+		error = {'user':user,'reason':str(reason) ,'date':agora, 'key':key}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error
 
@@ -141,7 +141,7 @@ def get_timeline(j,k,l,user):												#Coleta da timeline
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1
 			else:
-				save_error(user,str(e))
+				save_error(user,e)
 				api = autentication(auths)
 		except Exception as e2:
 			save_error(user,e2)
