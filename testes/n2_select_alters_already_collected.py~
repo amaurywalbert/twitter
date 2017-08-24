@@ -69,9 +69,12 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 fonte = "/home/amaury/dataset/n2/egos/bin/"
-origem = "/home/amaury/coleta/n2/alters_friends/full/bin/"
+origem = "/home/amaury/coleta/n2/alters/full/bin/"
 
 destino = "/home/amaury/dataset/n2/alters/bin/"
+
+egos_output = "/home/amaury/dataset/n2/alters/egos_overview.json"
+full_output = "/home/amaury/dataset/n2/alters/full_overview.json"
 
 formato = 'll'				####################################################### Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
@@ -80,6 +83,8 @@ timeline_struct = struct.Struct(formato) ###################################### 
 if not os.path.exists(destino):
 	os.makedirs(destino)
 
+if os.path.isfile(egos_output):
+	os.remove(egos_output)
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
 print
 print("######################################################################")
