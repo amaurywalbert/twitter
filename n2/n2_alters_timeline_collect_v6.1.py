@@ -159,7 +159,7 @@ def save_timeline(j,k,l,user): # j = número do ego que esta sendo coletado - k 
 
 	#Chama a função e recebe como retorno a lista de tweets do usuário
 	t = 0 																# Número de Tweets por usuário
-	timeline = get_timeline(user)
+	timeline = get_timeline(j,k,l,user)
 	if timeline:	
 		try:
 			with open(data_dir+str(user)+".dat", "w+b") as f:

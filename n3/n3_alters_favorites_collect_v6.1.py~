@@ -161,7 +161,7 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 
 	#Chama a função e recebe como retorno a lista de tweets do usuário
 	t = 0 																# Número de Tweets por usuário
-	favorites = get_favorites(user)
+	favorites = get_favorites(j,k,l,user)
 	if favorites:	
 		try:
 			with open(data_dir+str(user)+".dat", "w+b") as f:

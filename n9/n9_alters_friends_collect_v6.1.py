@@ -162,7 +162,7 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
 	
-	friends_list = get_friends(user)
+	friends_list = get_friends(j,k,l,user)
 	if friends_list:	
 		try:
 			with open(data_dir+str(user)+".dat", "w+b") as f:	

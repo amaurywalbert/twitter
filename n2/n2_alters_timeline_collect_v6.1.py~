@@ -86,7 +86,7 @@ def save_error(user,reason):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	error={}
 	with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-		error = {'user':user,'reason':reason ,'date':agora, 'key':key}
+		error = {'user':user,'reason':str(reason) ,'date':agora, 'key':key}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error
 
@@ -121,7 +121,7 @@ def get_timeline(j,k,l,user):												#Coleta da timeline
 				i +=1
 
 			elif e.reason == "Twitter error response: status code = 401":							# Usuários não existentes ou não encontrados
-				save_error(user,str(e.reason))
+				save_error(user,e.reason)
 				api = autentication(auths)
 			
 			elif e.message == 'Not authorized.': # Usuários não autorizados
@@ -131,7 +131,7 @@ def get_timeline(j,k,l,user):												#Coleta da timeline
 				i +=1											
 
 			elif e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
-				save_error(user,st(e.message))				
+				save_error(user,e.message)				
 				key = random.randint(key_init,key_limit)
 				api = autentication(auths)
 					
@@ -141,10 +141,10 @@ def get_timeline(j,k,l,user):												#Coleta da timeline
 					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
 				i +=1
 			else:
-				save_error(user,str(e))
+				save_error(user,e)
 				api = autentication(auths)
 		except Exception as e2:
-			save_error(user,str(e2))
+			save_error(user,e2)
 			api = autentication(auths)	
 ######################################################################################################################################################################
 #
@@ -177,7 +177,7 @@ def save_timeline(j,k,l,user): # j = número do ego que esta sendo coletado - k 
 	
 		except Exception as e:	
 			if e.message:		
-				save_error(user,str(e.message))
+				save_error(user,e.message)
 			else:
 				save_error(user,str(e))
 			if os.path.exists(data_dir+str(user)+".dat"):
