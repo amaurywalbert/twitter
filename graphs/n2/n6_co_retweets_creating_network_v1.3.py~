@@ -137,20 +137,24 @@ def main():
 		l+=1																			# Incrementa contador do número do Ego
 		ego = file.split(".dat")												# Separa a extensão do id do usuário no nome do arquivo
 		ego = long(ego[0])														# recebe o id do usuário em formato Long
-		status_ego = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de autores de retweets do ego do formato Binário para uma lista do python
-		n_alters = len(status_ego['authors'])								# Variável que armazena o tamanho do conjunto de alters do usuário corrente
+		if not dictionary.has_key(ego):
+			status_ego = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de autores de retweets do ego do formato Binário para uma lista do python
+			n_alters = len(status_ego['authors'])								# Variável que armazena o tamanho do conjunto de alters do usuário corrente
 		
-		print("######################################################################")
-		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de alters: "+str(n_alters))
-		G = ego_net(ego,status_ego,l)										# Inicia função de criação do grafo (lista de arestas) para o ego corrente
-		print
-		print("Salvando o grafo...")
-		save_graph(ego,G)
-		G.clear()
-		print("######################################################################")
-		print
-		tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos
-		t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
+			print("######################################################################")
+			print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de alters: "+str(n_alters))
+			G = ego_net(ego,status_ego,l)										# Inicia função de criação do grafo (lista de arestas) para o ego corrente
+			print
+			print("Salvando o grafo...")
+			save_graph(ego,G)
+			G.clear()
+			print("######################################################################")
+
+		else:
+			print ("Lista de arestas já criada para o ego "+str(l)+": "+str(ego))
+	print		
+	tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos			
+	t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
 	print("Tempo total do script: "+str(t))
 	print("Quantidade total de usuários faltando: "+str(len(missing)))
 	print("######################################################################")

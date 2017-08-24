@@ -176,5 +176,17 @@ favorites_struct = struct.Struct(formato) ##################### Inicializa o obj
 if not os.path.exists(output_dir):
 	os.makedirs(output_dir)
 
+###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
+print
+print("######################################################################")
+print ("Criando tabela hash...")
+dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
+for file in os.listdir(output_dir):
+	user_id = file.split(".edge_list")
+	user_id = long(user_id[0])
+	dictionary[user_id] = user_id
+print ("Tabela hash criada com sucesso...") 
+print("######################################################################\n")
+
 #Executa o método main
 if __name__ == "__main__": main()

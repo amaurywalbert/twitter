@@ -122,27 +122,32 @@ def main():
 		l+=1																			# Incrementa contador do número do Ego
 		ego = file.split(".dat")												# Separa a extensão do id do usuário no nome do arquivo
 		ego = long(ego[0])														# recebe o id do usuário em formato Long
-		alters_list = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
-		n_friends = len(alters_list)											# Variável que armazena o tamanho da lista do usuário corrente
+		if not dictionary.has_key(ego):
+			alters_list = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
+			n_friends = len(alters_list)											# Variável que armazena o tamanho da lista do usuário corrente
 
-		print("######################################################################")
-		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de amigos: "+str(n_friends))
-		G, partial_missing = ego_net(ego,alters_list, l)							# Inicia função de criação do grafo (lista de arestas) para o ego corrente
-		print("Quantidade de usuários faltando: "+str(len(partial_missing)))
-		print
-		print("Salvando o grafo...")
-		save_graph(ego,G)
-		G.clear()
-		print("######################################################################")
+			print("######################################################################")
+			print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de amigos: "+str(n_friends))
+			G, partial_missing = ego_net(ego,alters_list, l)							# Inicia função de criação do grafo (lista de arestas) para o ego corrente
+			print("Quantidade de usuários faltando: "+str(len(partial_missing)))
+			print
+			print("Salvando o grafo...")
 
-		print
-		if partial_missing:
-			missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
-			overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
-			with open(output_overview+str(ego)+".json", 'w') as f:
-				f.write(json.dumps(overview)) 											# Escreve o dicionário python em formato JSON no arquivo overview
-		tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos
-		t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
+			save_graph(ego,G)
+			G.clear()
+			print("######################################################################")
+			if partial_missing:
+				missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
+				overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
+				with open(output_overview, 'a+') as f:
+					f.write(json.dumps(overview,separators=(',', ':'))+"\n")			# Escreve o dicionário python em formato JSON no arquivo overview
+
+		else:
+			print ("Lista de arestas já criada para o ego "+str(l)+": "+str(ego))
+
+	print	
+	tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos
+	t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
 	print("Tempo total do script: "+str(t))
 	print("Quantidade total de usuários faltando: "+str(len(missing)))
 	print("######################################################################")
@@ -160,7 +165,7 @@ egos_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"###### Diretório conte
 alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin/" ## Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n1/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
 output_dir_errors = "/home/amaury/graphs/n1/errors/" ########## Diretório para armazenamento dos erros
-output_overview = "/home/amaury/graphs/n1/overview/" ########## Diretório contendo arquivos com informações sobre a construção das redes. 
+output_overview = "/home/amaury/graphs/n1/overview.json" ########## Diretório contendo arquivos com informações sobre a construção das redes. 
 formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################
@@ -168,8 +173,21 @@ user_struct = struct.Struct(formato) ########################## Inicializa o obj
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(output_dir):
 	os.makedirs(output_dir)
-if not os.path.exists(output_overview):
-	os.makedirs(output_overview)	
+
+if os.path.isfile(output_overview):
+	os.remove(output_overview)	
+
+###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
+print
+print("######################################################################")
+print ("Criando tabela hash...")
+dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
+for file in os.listdir(output_dir):
+	user_id = file.split(".edge_list")
+	user_id = long(user_id[0])
+	dictionary[user_id] = user_id
+print ("Tabela hash criada com sucesso...") 
+print("######################################################################\n")
 
 #Executa o método main
 if __name__ == "__main__": main()

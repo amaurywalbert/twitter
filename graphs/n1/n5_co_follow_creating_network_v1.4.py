@@ -127,20 +127,24 @@ def main():
 		l+=1																			# Incrementa contador do número do Ego
 		ego = file.split(".dat")												# Separa a extensão do id do usuário no nome do arquivo
 		ego = long(ego[0])														# recebe o id do usuário em formato Long
-		alters_set = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
-		n_friends = len(alters_set)											# Variável que armazena o tamanho da lista do usuário corrente
+		if not dictionary.has_key(ego):
+			alters_set = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
+			n_friends = len(alters_set)											# Variável que armazena o tamanho da lista do usuário corrente
 
-		print("######################################################################")
-		print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de alters: "+str(n_friends))
-		G = ego_net(ego,alters_set,l)										# Inicia função de criação do grafo (lista de arestas) para o ego corrente
-		print
-		print("Salvando o grafo...")
-		save_graph(ego,G)
-		G.clear()
-		print("######################################################################")
-		print
-		tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos
-		t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
+			print("######################################################################")
+			print ("Construindo grafo do ego n: "+str(l)+" - Quantidade de alters: "+str(n_friends))
+			G = ego_net(ego,alters_set,l)										# Inicia função de criação do grafo (lista de arestas) para o ego corrente
+			print
+			print("Salvando o grafo...")
+			save_graph(ego,G)
+			G.clear()
+			print("######################################################################")
+		
+		else:
+			print ("Lista de arestas já criada para o ego "+str(l)+": "+str(ego))
+	print		
+	tf =  datetime.datetime.now()													# Recebe tempo final do processo de construção dos grafos			
+	t = tf - ti																			# Calcula o tempo gasto com o processo de criação dos grafos
 	print("Tempo total do script: "+str(t))
 	print("Quantidade total de usuários faltando: "+str(len(missing)))
 	print("######################################################################")
@@ -165,6 +169,18 @@ user_struct = struct.Struct(formato) ########################## Inicializa o obj
 #Cria os diretórios para armazenamento dos arquivos
 if not os.path.exists(output_dir):
 	os.makedirs(output_dir)
+
+###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
+print
+print("######################################################################")
+print ("Criando tabela hash...")
+dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
+for file in os.listdir(output_dir):
+	user_id = file.split(".edge_list")
+	user_id = long(user_id[0])
+	dictionary[user_id] = user_id
+print ("Tabela hash criada com sucesso...") 
+print("######################################################################\n")
 
 #Executa o método main
 if __name__ == "__main__": main()
