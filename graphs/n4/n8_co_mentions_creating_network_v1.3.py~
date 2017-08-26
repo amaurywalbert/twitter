@@ -143,7 +143,9 @@ def main():
 			print("Salvando o grafo...")
 			save_graph(ego,G)
 			G.clear()
-			print ("Tempo decorrido: "+str(ti))
+			tp = datetime.datetime.now()
+			tp = tp - ti
+			print ("Tempo decorrido: "+str(tp))
 			print("######################################################################")
 		else:
 			print ("Lista de arestas já criada para o ego "+str(l)+": "+str(ego))
