@@ -17,6 +17,8 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 1.2 - Usar conjunto de dados com 500 egos aleatórios.
 ##					Versão 1.3 - remover a parte de registrar arquivos faltando... "partial missing"
 ##									 Carregar dados dos alters em memória (mentions_set)
+##
+##					ATENÇÃO - NECESSÁRIO PELO MENOS 8GB DE RAM
 ##								
 ## # INPUT:
 ##		- Lista de Egos (egos)
@@ -32,8 +34,6 @@ sys.setdefaultencoding('utf-8')
 ##					5 - 				Se não existe uma aresta (v[i],v[j]):
 ##					6 - 					Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
 ##					7 - 	Remova arestas com peso igual a zero
-##
-##					OBS.: Se estiver demorando muito para criar:
 ## 
 ######################################################################################################################################################################
 
@@ -143,6 +143,9 @@ def main():
 			print("Salvando o grafo...")
 			save_graph(ego,G)
 			G.clear()
+			tp = datetime.datetime.now()
+			tp = tp - ti
+			print ("Tempo decorrido: "+str(tp))
 			print("######################################################################")
 		else:
 			print ("Lista de arestas já criada para o ego "+str(l)+": "+str(ego))

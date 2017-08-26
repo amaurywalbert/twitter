@@ -17,10 +17,12 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 1.2 - Usar conjunto de dados com 500 egos aleatórios.
 ##					Versão 1.3 - remover a parte de registrar arquivos faltando... "partial missing"
 ##									 Carregar dados dos alters em memória
+##
+##					ATENÇÃO - NECESSÁRIO PELO MENOS 8GB DE RAM
 ##								
 ## # INPUT:
 ##		- Lista de Egos (egos)
-##		- Conjunto Followers (alters) de cada Ego - Formação do conjunto de Alters
+##		- Conjunto Followers (seguidores) de cada Ego - Formação do conjunto de Alters
 ##		- Conjunto Followee (amigos) de cada Alter (ids)
 ##
 ## # ALGORITMO
@@ -32,8 +34,6 @@ sys.setdefaultencoding('utf-8')
 ##					5 - 				Se não existe uma aresta (v[i],v[j]):
 ##					6 - 					Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
 ##					7 - 	Remova arestas com peso igual a zero
-##
-##					OBS.: Consumo muito elevado de memória... corrigir na próxima versão.
 ## 
 ######################################################################################################################################################################
 
@@ -143,6 +143,9 @@ def main():
 			print("Salvando o grafo...")
 			save_graph(ego,G)
 			G.clear()
+			tp = datetime.datetime.now()
+			tp = tp - ti
+			print ("Tempo decorrido: "+str(tp))
 			print("######################################################################")
 
 		else:
