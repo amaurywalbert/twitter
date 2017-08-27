@@ -17,7 +17,8 @@ instructions()
 	# $1 == $DESCRIPTION
 	# $2 == $INPUT_DIR
 	# $3 == $OUTPUT_DIR
-	# $4 == $TYPE_GRAPH	
+	# $4 == $TYPE_GRAPH
+	# $5 == $Lower_Link_Weight_Threshold		
 	echo "###############################################################"
 	echo "																					"
 	echo " Algoritmo de Detecção de Comunidades CFinder-2.0.6--1448		"
@@ -36,9 +37,11 @@ instructions()
 			let i=$i+1;
 			echo "Detectando comunidades para o ego: $i"
 			#Passar argumentos para a função: input_file,output_dir,type_graph (-D ou -U)
+			LOWER_LINK=$5
 			INPUT_FILE=$2$file
-			OUTPUT_FILES=$3$file
-			cfinder $INPUT_FILE $OUTPUT_FILES $4
+			OUTPUT_FILES=$3"/"$LOWER_LINK"/"$file
+			TYPE_GRAPH=$4
+			cfinder $INPUT_FILE $OUTPUT_FILES $TYPE_GRAPH $LOWER_LINK
 		done
 	echo
 	echo -n "Script Finalizado!"
@@ -77,7 +80,7 @@ cfinder()
 #      link weight intensity threshold is set.)
 #  -h  help. More details about these options.
 
-	/home/amaury/algoritmos/CFinder-2.0.6--1448/CFinder_commandline64 -i $1 -o $2 $3 -l /home/amaury/algoritmos/CFinder-2.0.6--1448/licence.txt -w 10
+	/home/amaury/algoritmos/CFinder-2.0.6--1448/CFinder_commandline64 -i $1 -o $2 $3 -l /home/amaury/algoritmos/CFinder-2.0.6--1448/licence.txt -w $4
 }
 
 echo "###############################################################"
@@ -109,7 +112,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n1/cfinder/
 	TYPE_GRAPH="-D"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 02)clear
@@ -119,7 +124,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n2/cfinder/
 	TYPE_GRAPH="-D"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 03)clear
@@ -129,7 +136,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n3/cfinder/
 	TYPE_GRAPH="-D"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 04)clear
@@ -139,7 +148,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n4/cfinder/
 	TYPE_GRAPH="-D"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 05)clear
@@ -149,7 +160,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n5/cfinder/
 	TYPE_GRAPH="-U"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 06)clear
@@ -159,7 +172,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n6/cfinder/
 	TYPE_GRAPH="-U"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 07)clear
@@ -169,7 +184,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n7/cfinder/
 	TYPE_GRAPH="-U"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 08)clear
@@ -179,7 +196,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n8/cfinder/
 	TYPE_GRAPH="-U"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 09)clear
@@ -189,7 +208,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n9/cfinder/
 	TYPE_GRAPH="-D"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 10)clear
@@ -199,7 +220,9 @@ case $op in
 	OUTPUT_DIR=/home/amaury/communities/n10/cfinder/
 	TYPE_GRAPH="-U"
 	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	echo "Informe um valor para o Lower_Link_Weight_Threshold: "
+	read Lower_Link_Weight_Threshold
+	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH $Lower_Link_Weight_Threshold
 	;;
 
 *) echo
