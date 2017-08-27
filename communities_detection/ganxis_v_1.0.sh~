@@ -31,9 +31,6 @@ instructions()
 	echo -n "Informe um valor para o threshold r: "
 	read THRESHOLD
 	echo
-	if [ ! -d $3 ]; then
-		mkdir -p $3
-	fi
 	echo "Detectando comunidades para a rede $1"
 	echo
 	echo "Os arquivos serão armazenados em: \"$3\""
@@ -44,7 +41,8 @@ instructions()
 			let i=$i+1;
 			echo "Detectando comunidades para o ego: $i"
 			INPUT_FILE=$2$file
-			OUTPUT_FILES=$3"/"$THRESHOLD"/"$file
+			OUTPUT_FILES=$3$THRESHOLD"/"$file
+			mkdir -p $OUTPUT_FILES
 			TYPE_GRAPH=$4
 			ganxis $INPUT_FILE $OUTPUT_FILES $TYPE_GRAPH $THRESHOLD
 		done
@@ -83,22 +81,33 @@ ganxis()
 #  -EC evolution cutoff, a real value > 1.0 
 #NOTE: 1. more parameters refer to Readme.pdf
 #      2. parameters are *CASE-SENSITIVE*, e.g., -Onc is not -onc
-	
+##############################################################################################################
+	echo
+	echo
+	echo "INPUT_FILE: $1"
+	echo "OUTPUT_DIR: $2"
+	echo "THRESHOLD: $4"
 	R1=$(echo "$4 >= 0" | bc)
 	R2=$(echo "$4 <= 0.5" | bc)
 	if [ $R1 == 1 ] && [ $R2 == 1 ]; then
 		if [ $3 == "D" ]; then
+			echo "TYPE_GRAPH: DIRECTED - $3"
 			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2 -r $4
 		else
+			echo "TYPE_GRAPH: UNDIRECTED - $3"			
 			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2 -r $4
 		fi
 	else
 		if [ $3 == "D" ]; then
-			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2 # Directed Networks
+			echo "TYPE_GRAPH: DIRECTED - $3"
+			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2 -r $4
 		else
-			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2 #Undirected network	
+			echo "TYPE_GRAPH: UNDIRECTED - $3"			
+			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2 -r $4
 		fi
-	fi		 
+	fi
+	echo
+	echo		 
 }
 
 echo "###############################################################"
