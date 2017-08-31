@@ -4,7 +4,7 @@
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n3
+import multi_oauth_n7
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
@@ -17,6 +17,7 @@ sys.setdefaultencoding('utf-8')
 ##								Assim que concluída a coleta desse subconjunto, pode-se voltar a coletar usando a versão 5.
 ##						6.1	Melhoria na recepção de erros da API
 ##
+##				
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
 ##						STATUS - Coletando - OK - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
@@ -66,6 +67,8 @@ def save_error(user,reason):
 		error = {'user':user,'reason':str(reason) ,'date':agora}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error
+	
+
 ######################################################################################################################################################################
 #
 # Tweepy - Realiza a busca e devolve a lista de amigos de um usuário específico 
@@ -74,6 +77,7 @@ def save_error(user,reason):
 def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário específico
 	global dictionary
 	global i
+	
 	try:
 		friends_list = []
 		for page in tweepy.Cursor(api.friends_ids, id=user, count=5000, wait_on_rate_limit = True, wait_on_rate_limit_notify = True).pages():
@@ -83,6 +87,9 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 	
 	except tweepy.error.RateLimitError as e:
 			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
+
+	except tweepy.error.RateLimitError as e:
+		print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
 
 	except tweepy.error.TweepError as e:
 		print ("ERRO - Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user))
@@ -103,7 +110,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 				i +=1											
 
 			elif e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
-				save_error(user,e.message)	
+				save_error(user,e.message)				
 					
 			elif e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
@@ -113,7 +120,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 			else:
 				save_error(user,e)
 		except Exception as e2:
-			save_error(user,e2)	
+			save_error(user,e2)
 ######################################################################################################################################################################
 #
 # Obtem as amigos do ego
@@ -135,7 +142,7 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				i +=1
-				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
+				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
 		except Exception as e:	
 			if e.message:		
@@ -145,7 +152,6 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 			if os.path.exists(data_dir+str(user)+".dat"):
 				os.remove(data_dir+str(user)+".dat")
 				print ("Arquivo removido co sucesso...")
-
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -158,30 +164,16 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 
 def main():
 	j = 0																	#Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
-	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+	for file in os.listdir(egos_followees_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		j+=1
-		friends_list = read_arq_bin(egos_friends_dir+file)
+		friends_list = read_arq_bin(egos_followees_dir+file)
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
 		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
 		for friend in friends_list:
 			k+=1
 			if not dictionary.has_key(friend):
 				save_user(j,k,l,friend)							#Inicia função de busca
-
-#		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" amigos.")
-#	with open("/home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt", 'w') as f:
-#		print
-#		print("######################################################################")		
-#		print ("Criando arquivo com resumo da coleta...")	
-#		for file in os.listdir(data_dir):					#As próximas linhas são usadas para imprimir o conteúdo dos arquivos, possibilitando a verificação de inconsistências.
-#			user_id = file.split(".dat")
-#			user_id = long(user_id[0])
-#			friends_file = read_arq_bin(data_dir+file)
-#			qtde_friends = len(friends_file)
-#			friendship = {'user':user_id,'friends': qtde_friends}
-#			f.write(json.dumps(friendship, separators=(',', ':'))+"\n")
-#		print ("Arquivo criado com sucesso: /home/amaury/coleta/n1/egos_and_alters_friends/alters_collected.txt" )
-#		print("######################################################################\n")
+#		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" alters.")
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -192,15 +184,14 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-
-################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-qtde_egos = 'full' 		# 50, 100, 500 ou full
 
-egos_friends_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"				#### Arquivo contendo a lista dos usuários ego do subconjunto
-data_dir = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/bin/" 	# Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/error/" # Diretório para armazenamento dos arquivos de erro
+qtde_egos = 'full' #10,50,100,500,full
+
+egos_followees_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"				# Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/bin/" 	# Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/error/" # Diretório para armazenamento dos arquivos de erro
 
 formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
@@ -248,10 +239,10 @@ print("######################################################################\n"
 #Consumer Key (API Key)	TNs9lxCwAqXVd3Fuq0MiM1Y9V
 #Consumer Secret (API Secret)	oaE23LzAktOWNxRBRY4dT5icHTQ6nubPZlf8fTWqI6rGfNkRbU
 
-consumer_key = "0EMlPO3xsnI7woFX2X1ndE9SZ"
-consumer_secret = "5mwAJQ3zUo5A34815TBo2Plk4w4NghzuIXY8l2owSs0Jmd8QOK"
-access_token = "883452349641089025-H7cpOcBL3UGP5RlS1Wpvwzowzuvj56x"
-access_token_secret = "X5DGAble5W3kD00sgbhcLMHOqypQQGfRqOrUhLfuVv2vC"
+consumer_key = "2f18aOuyQU6K8NuMiy0Q1B61P"
+consumer_secret = "1mljO1psJeGzAWyT0QqwMULFM1ghj12XcOIcwccv7N3fcszPIg"
+access_token = "883452349641089025-XUnIkLA9u6DE8Bmc0D5lwl8Ya1SVhdd"
+access_token_secret = "FDfMTIMlSRHNZcy71UyOU8xUvAZ5crsqt8QKnJ4E0E576"
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)

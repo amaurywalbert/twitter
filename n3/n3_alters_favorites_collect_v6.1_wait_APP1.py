@@ -64,8 +64,8 @@ def read_arq_bin(file):
 def save_error(user,reason):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	error={}
-	with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-		error = {'user':user,'reason':str(reason) ,'date':agora, 'key':key}
+	with open(error_dir+"timeline_collect_wait.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+		error = {'user':user,'reason':str(reason) ,'date':agora}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error
 	
@@ -75,7 +75,6 @@ def save_error(user,reason):
 #
 ######################################################################################################################################################################
 def get_favorites(j,k,l,user):												#Coleta dos favoritos
-	global key
 	global dictionary
 	global api
 	global i
