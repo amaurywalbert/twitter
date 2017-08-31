@@ -1,6 +1,6 @@
 #!/bin/bash
 ######################################################################################################################################################################
-##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades GANXiS_v3.0.2 para cada rede-ego
+##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades LinkCommunity para cada rede-ego
 ##								
 ## # INPUT:
 ##		- Redes-ego
@@ -21,14 +21,13 @@ instructions()
 	clear
 	echo "###############################################################"
 	echo "																					"
-	echo " Algoritmo de Detecção de Comunidades GANXiS_v3.0.2		"
+	echo " Algoritmo de Detecção de Comunidades Link Community (Clustering)	"
 	echo "																					"
 	echo "###############################################################"
 	echo
-	echo "[0, 0.5] - Qualquer valor no intervalo"
-	echo "  1      - DEFAULT - rodar para cada valor de r ∈ {0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5}"
+	echo "Threshold to cut the dendrogram"
 	echo	
-	echo -n "Informe um valor para o threshold r: "
+	echo -n "Informe um valor para o threshold (optional): "
 	read THRESHOLD
 	echo
 	echo "Detectando comunidades para a rede $1"
@@ -41,7 +40,12 @@ instructions()
 			let i=$i+1;
 			echo "Detectando comunidades para o ego: $i"
 			INPUT_FILE=$2$file
-			OUTPUT_FILES=$3$THRESHOLD"/"$file
+
+			if [ -z $THRESHOLD ]; then
+				OUTPUT_FILES=$3"default/"$file
+			else
+				OUTPUT_FILES=$3$THRESHOLD"/"$file
+	
 			mkdir -p $OUTPUT_FILES
 			TYPE_GRAPH=$4
 			ganxis $INPUT_FILE $OUTPUT_FILES $TYPE_GRAPH $THRESHOLD
@@ -52,58 +56,82 @@ instructions()
 	
 ganxis()
 {
-#GANXiSw 3.0.2(used to be SLPAw) is for weighted (directed) networks, version=3.0.2
-#Usage: java -jar GANXiSw.jar -i networkfile
-#Options:
-#  -i input network file
-#  -d output director (default: output)
-#  -L set to 1 to use only the largest connected component
-#  -t maximum iteration (default: 100)
-#  -run number of repetitions
-#  -r a specific threshold in [0,0.5]
-#  -ov set to 0 to perform disjoint detection
-#  -W treat the input as a weighted network, set 0 to ignore the weights(default 1)
-#  -Sym set to 1 to make the edges symmetric/bi-directional (default 0)
-#  -seed user specified seed for random generator
-#  -help to display usage info
-# -----------------------------Advanced Parameters---------------------------------
-#  -v weighted version in {1,2,3}, default=3
-#  -Oov set to 1 to output overlapping file, default=0
-#  -Onc set to 1 to output <nodeID communityID> format, 2 to output <communityID nodeID> format
-#  -minC min community size threshold, default=2
-#  -maxC max community size threshold
-#  -ev embedded SLPAw's weighted version in {1,2,3}, default=1
-#  -loopfactor determine the num of loops for depomposing each large com, default=1.0
-#  -Ohis1 set to 1 to output histgram Level1
-#  -Ohis2 set to 1 to output histgram Level2
+#    usage = "usage: python %prog [options] filename"
+#    description = """The link communities method of Ahn, Bagrow, and Lehmann, Nature, 2010:
+#    www.nature.com/nature/journal/v466/n7307/full/nature09182.html (doi:10.1038/nature09182)
+#    """
+#    epilog = """
+#    
+#Input:
+#  An edgelist file where each line represents an edge:
+#    node_i <delimiter> node_j <newline>
+#  if unweighted, or
+#    node_i <delimiter> node_j <delimiter> weight_ij <newline>
+#  if weighted.
+#    
+#Output: 
+#  Three text files with extensions .edge2comm.txt, .comm2edges.txt,
+#  and .comm2nodes.txt store the communities.
+# 
+#  edge2comm, an edge on each line followed by the community
+#  id (cid) of the edge's link comm:
+#    node_i <delimiter> node_j <delimiter> cid <newline>
+#  
+#  comm2edges, a list of edges representing one community per line:
+#    cid <delimiter> ni,nj <delimiter> nx,ny [...] <newline>
 #
-#  -OMem1 set to 1 to output each node's memory content at Level 1
-#  -EC evolution cutoff, a real value > 1.0 
-#NOTE: 1. more parameters refer to Readme.pdf
-#      2. parameters are *CASE-SENSITIVE*, e.g., -Onc is not -onc
+#  comm2nodes, a list of nodes representing one community per line:
+#    cid <delimiter> ni <delimiter> nj [...] <newline>
+#  
+#  The output filename contains the threshold at which the dendrogram
+#  was cut, if applicable, or the threshold where the maximum
+#  partition density was found, and the value of the partition 
+#  density.
+#  
+#  If no threshold was given to cut the dendrogram, a file ending with
+#  `_thr_D.txt' is generated, containing the partition density as a
+#  function of clustering threshold.
+#
+#  If the dendrogram option was given, two files are generated. One with
+#  `.cid2edge.txt' records the id of each edge and the other one with
+#  `.linkage.txt' stores the linkage structure of the hierarchical 
+#  clustering. In the linkage file, the edge in the first column is 
+#  merged with the one in the second at the similarity value in the 
+#  third column.
+#"""
+#    parser = MyParser(usage, description=description,epilog=epilog)
+#    parser.add_option("-d", "--delimiter", dest="delimiter", default="\t",
+#                      help="delimiter of input & output files [default: tab]")
+#    parser.add_option("-t", "--threshold", dest="threshold", type="float", default=None,
+#                      help="threshold to cut the dendrogram (optional)")
+#    parser.add_option("-w", "--weighted", dest="is_weighted", action="store_true", default=False,
+#                    help="is the network weighted?")
+#    parser.add_option("-r", "--record-dendrogram", dest="dendro_flag", action="store_true", 
+#                      default=False, help="recording the whole dendrogram (optional)")
 ##############################################################################################################
 	echo
 	echo
 	echo "INPUT_FILE: $1"
 	echo "OUTPUT_DIR: $2"
-	echo "THRESHOLD: $4"
-	R1=$(echo "$4 >= 0" | bc)
-	R2=$(echo "$4 <= 0.5" | bc)
-	if [ $R1 == 1 ] && [ $R2 == 1 ]; then
+
+	if [ -z $THRESHOLD ]; then
+		echo "Sem THRESHOLD definido..."
 		if [ $3 == "D" ]; then
 			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2 -r $4
+			python /home/amaury/algoritmos/LinkCommunity/link_clustering.py -w $1
 		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2 -r $4
+			echo "TYPE_GRAPH: UNDIRECTED - $3"
+			python /home/amaury/algoritmos/LinkCommunity/link_clustering.py -w $1 ## ESTUDAR O ALGORITMO PRA VER A QUESTÃO DO PESO E DIFERENÇA ENTRE DIRECIONADO E NÃO DIRECIONADO
+
 		fi
 	else
+		echo "THRESHOLD: $4"
 		if [ $3 == "D" ]; then
 			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2
+			python /home/amaury/algoritmos/LinkCommunity/link_clustering.py -t -w $1
 		else
 			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2
+			python /home/amaury/algoritmos/LinkCommunity/link_clustering.py -t -w $1 ## ESTUDAR O ALGORITMO PRA VER A QUESTÃO DO PESO E DIFERENÇA ENTRE DIRECIONADO E NÃO DIRECIONADO
 		fi
 	fi
 	echo
@@ -112,7 +140,7 @@ ganxis()
 
 echo "###############################################################"
 echo "																					"
-echo " Algoritmo de Detecção de Comunidades CFinder-2.0.6--1448		"
+echo " Algoritmo de Detecção de Comunidades Link Community (Clustering)	"
 echo "																					"
 echo "###############################################################"
 echo
@@ -136,7 +164,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Follow"
 	INPUT_DIR=/home/amaury/graphs/n1/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n1/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n1/link/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -146,7 +174,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Retweets"
 	INPUT_DIR=/home/amaury/graphs/n2/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n2/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n2/link/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -156,7 +184,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Likes"
 	INPUT_DIR=/home/amaury/graphs/n3/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n3/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n3/link/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -166,7 +194,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Mentions"
 	INPUT_DIR=/home/amaury/graphs/n4/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n4/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n4/link/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -176,7 +204,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Follow"
 	INPUT_DIR=/home/amaury/graphs/n5/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n5/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n5/link/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -186,7 +214,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Retweets"
 	INPUT_DIR=/home/amaury/graphs/n6/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n6/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n6/link/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -196,7 +224,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Likes"
 	INPUT_DIR=/home/amaury/graphs/n7/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n7/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n7/link/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -206,7 +234,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Mentions"
 	INPUT_DIR=/home/amaury/graphs/n8/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n8/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n8/link/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -216,7 +244,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Followers"
 	INPUT_DIR=/home/amaury/graphs/n9/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n9/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n9/link/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -226,7 +254,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Followers"
 	INPUT_DIR=/home/amaury/graphs/n10/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n10/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n10/link/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
