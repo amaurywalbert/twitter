@@ -63,7 +63,7 @@ def read_arq_bin(file):
 def save_error(user,reason):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	error={}
-	with open(error_dir+"timeline_collect_wait.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+	with open(error_dir+"timeline_collect_wait.err.APP4", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 		error = {'user':user,'reason':str(reason) ,'date':agora}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error

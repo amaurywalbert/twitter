@@ -239,10 +239,12 @@ print("######################################################################\n"
 #Consumer Key (API Key)	TNs9lxCwAqXVd3Fuq0MiM1Y9V
 #Consumer Secret (API Secret)	oaE23LzAktOWNxRBRY4dT5icHTQ6nubPZlf8fTWqI6rGfNkRbU
 
-consumer_key = "2f18aOuyQU6K8NuMiy0Q1B61P"
-consumer_secret = "1mljO1psJeGzAWyT0QqwMULFM1ghj12XcOIcwccv7N3fcszPIg"
-access_token = "883452349641089025-XUnIkLA9u6DE8Bmc0D5lwl8Ya1SVhdd"
-access_token_secret = "FDfMTIMlSRHNZcy71UyOU8xUvAZ5crsqt8QKnJ4E0E576"
+#msc20160012_47_test
+
+consumer_key = "gOa37Y85DcbM2Oi3IpvvFWMj9"
+consumer_secret = "Fh334ZT5fXKDTS8zGJR1N6RU3kDdLKhEAk2ZB97iKydCUCaMQp"
+access_token = "849270909034692608-YPMJReaqxI6oVdP7RQ2cfqJinlghtuD"
+access_token_secret = "A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM"
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
