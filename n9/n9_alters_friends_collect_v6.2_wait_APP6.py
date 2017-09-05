@@ -255,10 +255,10 @@ print("######################################################################\n"
 #access_token_secret_test.append("iarzO6gXEN7o260zesA9aVesLvZcElKsSZ2fomQKulzrQ")
 #
 #msc20160012_49_test
-consumer_key.append("7rHS37h9XeAT9q1mtoVMVFa3f")
-consumer_secret.append("4zTiSlXI4z6r0BHDTbGCuFBxeaPTKmoNi8ySV07y0f6ljB33Tf")
-access_token.append("849270909034692608-EQKnfSPKslFOYRPCvATXNnABh2lfsr1")
-access_token_secret.append("r80VmDdbSbFbm7SpEPHnyFqPRInu4oCkHuDTfkm6ynq1v")
+consumer_key = "7rHS37h9XeAT9q1mtoVMVFa3f"
+consumer_secret = "4zTiSlXI4z6r0BHDTbGCuFBxeaPTKmoNi8ySV07y0f6ljB33Tf"
+access_token = "849270909034692608-EQKnfSPKslFOYRPCvATXNnABh2lfsr1"
+access_token_secret = "r80VmDdbSbFbm7SpEPHnyFqPRInu4oCkHuDTfkm6ynq1v"
 
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
