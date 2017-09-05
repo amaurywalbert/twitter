@@ -16,6 +16,8 @@ sys.setdefaultencoding('utf-8')
 ##						6.0 - Usando o conjunto de egos do diretório DATASET - è apenas um subconjunto para facilitar o desenvolvimento do trabalho..
 ##								Assim que concluída a coleta desse subconjunto, pode-se voltar a coletar usando a versão 5.
 ##						6.1	Melhoria na recepção de erros da API
+##						6.2	Não usa dicionário. Consulta se arquivo existe direto no disco para permitir o uso paralelo de diversas instancias do script.
+##						STATUS - EM TESTE - realizado o teste será necessário reescrever o script tirando o dicionário
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -24,6 +26,25 @@ sys.setdefaultencoding('utf-8')
 ##
 ## 
 ######################################################################################################################################################################
+
+######################################################################################################################################################################
+#
+# Realiza autenticação da aplicação.
+#
+######################################################################################################################################################################
+
+def autentication(auths):
+	global key
+	key += 1
+	if (key >= key_limit):
+		key = key_init
+	print
+	print("######################################################################")
+	print ("Autenticando usando chave número: "+str(key)+"/"+str(key_limit))
+	print("######################################################################\n")
+	time.sleep(wait)
+	api_key = tweepy.API(auths[key])
+	return (api_key)
 
 ######################################################################################################################################################################
 #
@@ -62,8 +83,8 @@ def read_arq_bin(file):
 def save_error(user,reason):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	error={}
-	with open(error_dir+"timeline_collect_wait.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
-		error = {'user':user,'reason':str(reason) ,'date':agora}
+	with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+		error = {'user':user,'reason':str(reason) ,'date':agora, 'key':key}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error
 ######################################################################################################################################################################
@@ -72,17 +93,21 @@ def save_error(user,reason):
 #
 ######################################################################################################################################################################
 def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário específico
+	global key
 	global dictionary
+	global api
 	global i
+	
 	try:
 		friends_list = []
-		for page in tweepy.Cursor(api.friends_ids, id=user, count=5000, wait_on_rate_limit = True, wait_on_rate_limit_notify = True).pages():
+		for page in tweepy.Cursor(api.friends_ids,id=user,wait_on_rate_limit_notify=True,count=5000).pages():
 			for friend in page:
 				friends_list.append(friend)
 		return (friends_list)
 	
 	except tweepy.error.RateLimitError as e:
 			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
+			api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
 		print ("ERRO - Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user))
@@ -95,6 +120,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 
 			elif e.reason == "Twitter error response: status code = 401":							# Usuários não existentes ou não encontrados
 				save_error(user,e.reason)
+				api = autentication(auths)
 			
 			elif e.message == 'Not authorized.': # Usuários não autorizados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
@@ -103,7 +129,9 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 				i +=1											
 
 			elif e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
-				save_error(user,e.message)	
+				save_error(user,e.message)				
+				key = random.randint(key_init,key_limit)
+				api = autentication(auths)
 					
 			elif e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
@@ -112,8 +140,10 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 				i +=1
 			else:
 				save_error(user,e)
+				api = autentication(auths)
 		except Exception as e2:
-			save_error(user,e2)	
+			save_error(user,e2)
+			api = autentication(auths)	
 ######################################################################################################################################################################
 #
 # Obtem as amigos do ego
@@ -165,7 +195,7 @@ def main():
 		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
 		for friend in friends_list:
 			k+=1
-		if not os.path.isfile(data_dir+str(friend)+".dat"):
+			if not os.path.isfile(data_dir+str(friend)+".dat"):
 				save_user(j,k,l,friend)							#Inicia função de busca
 
 #		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" amigos.")
@@ -194,9 +224,15 @@ def main():
 ######################################################################################################################################################################
 
 ################################### DEFINIR SE É TESTE OU NÃO!!! ### ['auths_ok'] OU  ['auths_test'] ################				
+oauth_keys = multi_oauth_n3.keys()
+auths = oauth_keys['auths_ok']
+	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 qtde_egos = 'full' 		# 50, 100, 500 ou full
+key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
+key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
+key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
 egos_friends_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"				#### Arquivo contendo a lista dos usuários ego do subconjunto
 data_dir = "/home/amaury/coleta/n1/alters_friends/"+str(qtde_egos)+"/bin/" 	# Diretório para armazenamento dos arquivos
@@ -226,37 +262,8 @@ for file in os.listdir(data_dir):
 	i+=1
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
-
 #Autenticação
-
-# Registre sua aplicacao em https://apps.twitter.com
-#App 1
-#Access Token	883452349641089025-H7cpOcBL3UGP5RlS1Wpvwzowzuvj56x
-#Access Token Secret	X5DGAble5W3kD00sgbhcLMHOqypQQGfRqOrUhLfuVv2vC
-#Consumer Key (API Key)	0EMlPO3xsnI7woFX2X1ndE9SZ
-#Consumer Secret (API Secret)	5mwAJQ3zUo5A34815TBo2Plk4w4NghzuIXY8l2owSs0Jmd8QOK
-
-#App 2
-#Access Token	883452349641089025-XUnIkLA9u6DE8Bmc0D5lwl8Ya1SVhdd
-#Access Token Secret	FDfMTIMlSRHNZcy71UyOU8xUvAZ5crsqt8QKnJ4E0E576
-#Consumer Key (API Key)	2f18aOuyQU6K8NuMiy0Q1B61P
-#Consumer Secret (API Secret)	1mljO1psJeGzAWyT0QqwMULFM1ghj12XcOIcwccv7N3fcszPIg
-
-#App3
-#Access Token	883452349641089025-bFOinBoce7oQvueecF9dTMWxoArTPDA
-#Access Token Secret	xnRAHwCoSOmFsRppkJtHU3O3mHk54SzSGQBw1fYVBORmD
-#Consumer Key (API Key)	TNs9lxCwAqXVd3Fuq0MiM1Y9V
-#Consumer Secret (API Secret)	oaE23LzAktOWNxRBRY4dT5icHTQ6nubPZlf8fTWqI6rGfNkRbU
-
-consumer_key = "0EMlPO3xsnI7woFX2X1ndE9SZ"
-consumer_secret = "5mwAJQ3zUo5A34815TBo2Plk4w4NghzuIXY8l2owSs0Jmd8QOK"
-access_token = "883452349641089025-H7cpOcBL3UGP5RlS1Wpvwzowzuvj56x"
-access_token_secret = "X5DGAble5W3kD00sgbhcLMHOqypQQGfRqOrUhLfuVv2vC"
-
-auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
-auth.set_access_token(access_token, access_token_secret)
-api = tweepy.API(auth, wait_on_rate_limit=True)
-
+api = autentication(auths)
 
 	
 #Executa o método main

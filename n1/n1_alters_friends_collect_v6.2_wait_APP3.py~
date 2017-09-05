@@ -16,6 +16,9 @@ sys.setdefaultencoding('utf-8')
 ##						6.0 - Usando o conjunto de egos do diretório DATASET - è apenas um subconjunto para facilitar o desenvolvimento do trabalho..
 ##								Assim que concluída a coleta desse subconjunto, pode-se voltar a coletar usando a versão 5.
 ##						6.1	Melhoria na recepção de erros da API
+##						6.2	Não usa dicionário. Consulta se arquivo existe direto no disco para permitir o uso paralelo de diversas instancias do script.
+##						STATUS - EM TESTE - realizado o teste será necessário reescrever o script tirando o dicionário
+##
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -62,7 +65,7 @@ def read_arq_bin(file):
 def save_error(user,reason):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	error={}
-	with open(error_dir+"timeline_collect_wait.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+	with open(error_dir+"timeline_collect_wait.err.APP3", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 		error = {'user':user,'reason':str(reason) ,'date':agora}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error
@@ -157,15 +160,15 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 ######################################################################################################################################################################
 
 def main():
-	j = 0																	#Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
+	j = 0																	# Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
 	for file in os.listdir(egos_friends_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
 		j+=1
 		friends_list = read_arq_bin(egos_friends_dir+file)
 		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
-		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
+		k = 0																# Exibe o número ordinal do alter que está sendo coletado a lista de amigos
 		for friend in friends_list:
 			k+=1
-		if not os.path.isfile(data_dir+str(friend)+".dat"):
+			if not os.path.isfile(data_dir+str(friend)+".dat"):
 				save_user(j,k,l,friend)							#Inicia função de busca
 
 #		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" amigos.")
@@ -248,10 +251,23 @@ print("######################################################################\n"
 #Consumer Key (API Key)	TNs9lxCwAqXVd3Fuq0MiM1Y9V
 #Consumer Secret (API Secret)	oaE23LzAktOWNxRBRY4dT5icHTQ6nubPZlf8fTWqI6rGfNkRbU
 
-consumer_key = "0EMlPO3xsnI7woFX2X1ndE9SZ"
-consumer_secret = "5mwAJQ3zUo5A34815TBo2Plk4w4NghzuIXY8l2owSs0Jmd8QOK"
-access_token = "883452349641089025-H7cpOcBL3UGP5RlS1Wpvwzowzuvj56x"
-access_token_secret = "X5DGAble5W3kD00sgbhcLMHOqypQQGfRqOrUhLfuVv2vC"
+#msc20160012_47_test
+#consumer_key = "2f18aOuyQU6K8NuMiy0Q1B61P"
+#consumer_secret = "1mljO1psJeGzAWyT0QqwMULFM1ghj12XcOIcwccv7N3fcszPIg"
+#access_token = "883452349641089025-XUnIkLA9u6DE8Bmc0D5lwl8Ya1SVhdd"
+#access_token_secret = "FDfMTIMlSRHNZcy71UyOU8xUvAZ5crsqt8QKnJ4E0E576"
+
+#msc20160012_48_test
+consumer_key.append("6JURlBsCpoDnG97JcQXb1DVDq")
+consumer_secret.append("8dzL2NSfOXg3QSBb97LWS4ChDb9ycUYGIDBuIKHXkKfdWYMccg")
+access_token.append("849270909034692608-zZav8hfaWZtBwXIctKtK9FnhHiBS4eq")
+access_token_secret.append("iarzO6gXEN7o260zesA9aVesLvZcElKsSZ2fomQKulzrQ")
+#
+#msc20160012_49_test
+#consumer_key.append("7rHS37h9XeAT9q1mtoVMVFa3f")
+#consumer_secret.append("4zTiSlXI4z6r0BHDTbGCuFBxeaPTKmoNi8ySV07y0f6ljB33Tf")
+#access_token.append("849270909034692608-EQKnfSPKslFOYRPCvATXNnABh2lfsr1")
+#access_token_secret.append("r80VmDdbSbFbm7SpEPHnyFqPRInu4oCkHuDTfkm6ynq1v")
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)

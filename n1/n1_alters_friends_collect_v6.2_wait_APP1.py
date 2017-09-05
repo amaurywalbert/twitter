@@ -16,6 +16,9 @@ sys.setdefaultencoding('utf-8')
 ##						6.0 - Usando o conjunto de egos do diretório DATASET - è apenas um subconjunto para facilitar o desenvolvimento do trabalho..
 ##								Assim que concluída a coleta desse subconjunto, pode-se voltar a coletar usando a versão 5.
 ##						6.1	Melhoria na recepção de erros da API
+##						6.2	Não usa dicionário. Consulta se arquivo existe direto no disco para permitir o uso paralelo de diversas instancias do script.
+##						STATUS - EM TESTE - realizado o teste será necessário reescrever o script tirando o dicionário
+##
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -165,7 +168,7 @@ def main():
 		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
 		for friend in friends_list:
 			k+=1
-		if not os.path.isfile(data_dir+str(friend)+".dat"):
+			if not os.path.isfile(data_dir+str(friend)+".dat"):
 				save_user(j,k,l,friend)							#Inicia função de busca
 
 #		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" amigos.")

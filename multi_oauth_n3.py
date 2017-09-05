@@ -254,6 +254,24 @@ access_token_secret.append("PY0jXqmLz1M4HPUU2JOfi5halAWINlZmHIwPcW7s6QAKm")
 #
 ##############################################################################################################
 ##############################################################################################################
+#		Conta: msc2016001234 - user: msc20160012341 - e-mail: twitter34msc20160012@gmail.com - senha: padrão
+#
+#msc20160012_341
+consumer_key.append("PMBN1F3Bs7ZSz40Ml4faCQcHa")
+consumer_secret.append("xtqWq18JDMxX3IqBR4H1j2sVyGZvacd8akv8rANvJZmCTMEkAJ")
+access_token.append("831909860824535041-uAxc7kRPe284De5khNX7YyA1K9dSg8V")
+access_token_secret.append("BhjgVvsSxe61SLxaDxrgU6hVa3cSRE7eY7y5ijkGsFeLl")
+#
+#
+#msc20160012_343
+consumer_key.append("OBc985s5wCrfqexSxrpvyzK9m")
+consumer_secret.append("maoAC3tbFFY0nKClBhl8S259ZFzlb4n8qy0Bkz8YEz1xajcJRt")
+access_token.append("831909860824535041-pbT1lZNqi3ExsitSAo47FmqhQSh0hSG")
+access_token_secret.append("UdjnFxDL1WppuS4yBKBh4qdibEUkmVNjGlBuww0sSTXrP")
+#
+#
+##############################################################################################################
+##############################################################################################################
 #		Conta: walbert1810 - user: walbert1810 - e-mail: amaurywalbert@live.com - senha: padrão
 #
 #msc20160012_teste_22
