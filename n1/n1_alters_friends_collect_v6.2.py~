@@ -106,8 +106,8 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 		return (friends_list)
 	
 	except tweepy.error.RateLimitError as e:
-			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
-			api = autentication(auths)
+		print("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Limite de acesso à API excedido. Autenticando novamente... "+str(e))
+		api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
 		print ("ERRO - Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user))
@@ -115,7 +115,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 			if e.reason == "Twitter error response: status code = 404":							# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio	
-					print ("Usuário não encontrado. User: "+str(user)+" - Arquivo criado com sucesso!")
+					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Usuário NÃO ENCONTRADO. Arquivo criado com sucesso!")
 				i +=1
 
 			elif e.reason == "Twitter error response: status code = 401":							# Usuários não existentes ou não encontrados
@@ -125,7 +125,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 			elif e.message == 'Not authorized.': # Usuários não autorizados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio
-					print ("Usuário não autorizado. User: "+str(user)+" - Arquivo criado com sucesso!")
+					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Usuário NÃO AUTORIZADO. Arquivo criado com sucesso!")
 				i +=1											
 
 			elif e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
@@ -136,7 +136,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 			elif e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio	
-					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
+					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Usuário INEXISTENTE. Arquivo criado com sucesso!")
 				i +=1
 			else:
 				save_error(user,e)
@@ -156,26 +156,24 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
-	
-	friends_list = get_friends(j,k,l,user)
-	if friends_list:	
-		try:
-			with open(data_dir+str(user)+".dat", "w+b") as f:	
+	try:
+		with open(data_dir+str(user)+".dat", "w+b") as f:
+			friends_list = get_friends(j,k,l,user)
+			if friends_list:		
 				for friend in friends_list:
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				i +=1
-				print ("Ego nº "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
+				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
-		except Exception as e:	
-			if e.message:		
-				save_error(user,e.message)
-			else:
-				save_error(user,str(e))
-			if os.path.exists(data_dir+str(user)+".dat"):
-				os.remove(data_dir+str(user)+".dat")
-				print ("Arquivo removido co sucesso...")
-
+	except Exception as e:	
+		if e.message:		
+			save_error(user,e.message)
+		else:
+			save_error(user,str(e))
+		if os.path.exists(data_dir+str(user)+".dat"):
+			os.remove(data_dir+str(user)+".dat")
+			print ("Arquivo removido co sucesso...")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################

@@ -18,8 +18,6 @@ sys.setdefaultencoding('utf-8')
 ##						6.1	Melhoria na recepção de erros da API
 ##						6.2	Não usa dicionário. Consulta se arquivo existe direto no disco para permitir o uso paralelo de diversas instancias do script.
 ##						STATUS - EM TESTE - realizado o teste será necessário reescrever o script tirando o dicionário
-##
-##
 ##				
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -110,11 +108,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 		return (friends_list)
 	
 	except tweepy.error.RateLimitError as e:
-			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
-			api = autentication(auths)
-
-	except tweepy.error.RateLimitError as e:
-		print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
+		print("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Limite de acesso à API excedido. Autenticando novamente... "+str(e))
 		api = autentication(auths)
 
 	except tweepy.error.TweepError as e:
@@ -123,7 +117,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 			if e.reason == "Twitter error response: status code = 404":							# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio	
-					print ("Usuário não encontrado. User: "+str(user)+" - Arquivo criado com sucesso!")
+					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Usuário NÃO ENCONTRADO. Arquivo criado com sucesso!")
 				i +=1
 
 			elif e.reason == "Twitter error response: status code = 401":							# Usuários não existentes ou não encontrados
@@ -133,7 +127,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 			elif e.message == 'Not authorized.': # Usuários não autorizados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio
-					print ("Usuário não autorizado. User: "+str(user)+" - Arquivo criado com sucesso!")
+					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Usuário NÃO AUTORIZADO. Arquivo criado com sucesso!")
 				i +=1											
 
 			elif e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
@@ -144,7 +138,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 			elif e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				with open(data_dir+str(user)+".dat", "w") as f:			# Cria arquivo vazio	
-					print ("Usuário inexistente. User: "+str(user)+" - Arquivo criado com sucesso!")
+					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Usuário INEXISTENTE. Arquivo criado com sucesso!")
 				i +=1
 			else:
 				save_error(user,e)
@@ -164,25 +158,24 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
-	
-	friends_list = get_friends(j,k,l,user)
-	if friends_list:	
-		try:
-			with open(data_dir+str(user)+".dat", "w+b") as f:	
+	try:
+		with open(data_dir+str(user)+".dat", "w+b") as f:	
+			friends_list = get_friends(j,k,l,user)
+			if friends_list:	
 				for friend in friends_list:
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				i +=1
 				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 	
-		except Exception as e:	
-			if e.message:		
-				save_error(user,e.message)
-			else:
-				save_error(user,str(e))
-			if os.path.exists(data_dir+str(user)+".dat"):
-				os.remove(data_dir+str(user)+".dat")
-				print ("Arquivo removido co sucesso...")
+	except Exception as e:	
+		if e.message:		
+			save_error(user,e.message)
+		else:
+			save_error(user,str(e))
+		if os.path.exists(data_dir+str(user)+".dat"):
+			os.remove(data_dir+str(user)+".dat")
+			print ("Arquivo removido com sucesso...")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -204,6 +197,7 @@ def main():
 			k+=1
 			if not os.path.isfile(data_dir+str(friend)+".dat"):
 				save_user(j,k,l,friend)							#Inicia função de busca
+
 #		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" alters.")
 	print
 	print("######################################################################")
@@ -222,9 +216,7 @@ auths = oauth_keys['auths_ok']
 	
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
-
 qtde_egos = 'full' #10,50,100,500,full
-
 key_init = 0					#################################################### Essas duas linhas atribuem as chaves para cada script
 key_limit = len(auths)		#################################################### Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ###################################### Inicia o script a partir de uma chave aleatória do conjunto de chaves
