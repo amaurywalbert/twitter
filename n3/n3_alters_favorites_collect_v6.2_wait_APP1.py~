@@ -180,10 +180,10 @@ def main():
 		authors_list = read_arq_bin(egos_favorites_dir+file) # Função para converter o binário de volta em string em formato json.
 		l = len(authors_list)										# Exibe o tamanho/quantidade de autores de retweets do ego
 		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
-		for authors in authors_list:
+		for author in authors_list:
 			k+=1
-			if not dictionary.has_key(authors):
-				save_favorites(j,k,l,authors)							#Inicia função de busca
+			if not os.path.isfile(data_dir+str(author)+".dat"):
+				save_favorites(j,k,l,author)							#Inicia função de busca
 #		print ("Ego: "+str(j)+" - "+str(len(authors_list))+" alters.")
 	print
 	print("######################################################################")
