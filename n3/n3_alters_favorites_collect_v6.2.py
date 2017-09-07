@@ -163,13 +163,11 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de tweets do usuário
-	t = 0 																# Número de Tweets por usuário
 	try:
 		with open(data_dir+str(user)+".dat", "w+b") as f:
 			favorites = get_favorites(j,k,l,user)
 			if favorites:
 				for status in favorites:
-					t+=1
 					f.write(favorites_struct.pack(status.id,status.user.id))						# Grava os ids dos amigos no arquivo binário do usuário
 ###
 #			tweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
@@ -177,7 +175,7 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 ####				
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
-			print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(t)+" tweets. Total coletados: "+str(i))
+			print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(favorites)+" tweets. Total coletados: "+str(i))
 	
 	except Exception as e:	
 		if e.message:		
@@ -186,7 +184,7 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 			save_error(user,str(e))
 		if os.path.exists(data_dir+str(user)+".dat"):
 			os.remove(data_dir+str(user)+".dat")
-			print ("Arquivo removido co sucesso...")
+			print ("Arquivo removido com sucesso...")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
