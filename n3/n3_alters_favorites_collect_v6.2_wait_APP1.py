@@ -67,7 +67,7 @@ def read_arq_bin(file):
 def save_error(user,reason):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	error={}
-	with open(error_dir+"timeline_collect_wait_APP1.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+	with open(error_dir+"favorites_collect_wait_APP1.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 		error = {'user':user,'reason':str(reason) ,'date':agora}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error
@@ -148,7 +148,7 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 ####				
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
-			print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(favorites)+" tweets. Total coletados: "+str(i))
+			print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(favorites))+" tweets. Total coletados: "+str(i))
 	
 	except Exception as e:	
 		if e.message:		

@@ -184,7 +184,7 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 			save_error(user,str(e))
 		if os.path.exists(data_dir+str(user)+".dat"):
 			os.remove(data_dir+str(user)+".dat")
-			print ("Arquivo removido co sucesso...")
+			print ("Arquivo removido com sucesso...")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
