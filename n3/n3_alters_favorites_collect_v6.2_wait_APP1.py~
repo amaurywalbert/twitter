@@ -148,7 +148,7 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 ####				
 			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 			i +=1
-			print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(favorites)+" tweets. Total coletados: "+str(i))
+			print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(favorites))+" tweets. Total coletados: "+str(i))
 	
 	except Exception as e:	
 		if e.message:		

@@ -146,9 +146,13 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 #			tweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
 #			print tweets_list
 ####				
-			dictionary[user] = user									# Insere o usuário coletado na tabela em memória
-			i +=1
-			print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(favorites))+" tweets. Total coletados: "+str(i))
+				dictionary[user] = user									# Insere o usuário coletado na tabela em memória
+				i +=1
+				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(favorites))+" tweets. Total coletados: "+str(i))
+			else:
+				if os.path.exists(data_dir+str(user)+".dat"):
+					os.remove(data_dir+str(user)+".dat")
+					print ("Arquivo removido com sucesso...")				
 	
 	except Exception as e:	
 		if e.message:		
