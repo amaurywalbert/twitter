@@ -128,7 +128,6 @@ def get_favorites(j,k,l,user):												#Coleta dos favoritos
 #
 # Obtem favoritos dos usuários
 #
-######################################################################################################################################################################
 def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - k = numero do alter que esta sendo verificado - l = tamanho da lista de amigos do ego
 	global i	# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
 	 
@@ -139,7 +138,7 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 	try:
 		with open(data_dir+str(user)+".dat", "w+b") as f:
 			favorites = get_favorites(j,k,l,user)
-			if favorites:
+			if favorites is not None:
 				for status in favorites:
 					f.write(favorites_struct.pack(status.id,status.user.id))						# Grava os ids dos amigos no arquivo binário do usuário
 ###
@@ -148,11 +147,11 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 ####				
 				dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 				i +=1
-				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(favorites))+" tweets. Total coletados: "+str(i))
+				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletado com sucesso. "+str(len(favorites))+" tweets. Total coletados: "+str(i))
 			else:
 				if os.path.exists(data_dir+str(user)+".dat"):
 					os.remove(data_dir+str(user)+".dat")
-					print ("Arquivo removido com sucesso...")				
+					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Favoritos não recuperados... Arquivo excluído!")
 	
 	except Exception as e:	
 		if e.message:		

@@ -139,7 +139,7 @@ def save_favorites(j,k,l,user):  # j = número do ego que esta sendo coletado - 
 	try:
 		with open(data_dir+str(user)+".dat", "w+b") as f:
 			favorites = get_favorites(j,k,l,user)
-			if favorites:
+			if favorites is not None:
 				for status in favorites:
 					f.write(favorites_struct.pack(status.id,status.user.id))						# Grava os ids dos amigos no arquivo binário do usuário
 ###
