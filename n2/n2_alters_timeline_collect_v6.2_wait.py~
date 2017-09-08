@@ -1,10 +1,9 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-# Script para coletar amigos a partir de um conjunto de alters do twitter
 #	
 #
 import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import multi_oauth_n7
+import multi_oauth_n3
 #Script que contém as chaves para autenticação do twitter
 
 reload(sys)
@@ -19,12 +18,16 @@ sys.setdefaultencoding('utf-8')
 ##						6.2	Não usa dicionário. Consulta se arquivo existe direto no disco para permitir o uso paralelo de diversas instancias do script.
 ##						STATUS - EM TESTE - realizado o teste será necessário reescrever o script tirando o dicionário
 ##
-##
-##				
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
-##						STATUS - Coletando - OK - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
-##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletado
+##				
+##						SALVAR APENAS O NECESSÁRIO PARA ECONOMIZAR ESPAÇO EM DISCO. Coletar tweets completos ocupa muito espaço.
+##
+##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
+##
+##						STATUS - Coletando - OK - Salvar arquivos BINÀRIOS!! contendo o id do retweet e id do autor a partir da lista de autores dos retweets do egos.
+##
+##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletada
 ##
 ## 
 ######################################################################################################################################################################
@@ -42,7 +45,6 @@ class DateTimeEncoder(json.JSONEncoder):
             encoded_object =json.JSONEncoder.default(self, obj)
         return encoded_object
 
-
 ################################################################################################
 # Imprime os arquivos binários com os ids dos amigos
 ################################################################################################
@@ -51,12 +53,12 @@ def read_arq_bin(file):
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		friends_file = []
+		authors_list = set()
 		while f.tell() < tamanho:
-			buffer = f.read(user_struct.size)
-			friend = user_struct.unpack(buffer)
-			friends_file.append(friend[0])
-	return friends_file
+			buffer = f.read(timeline_struct.size)
+			retweet, user = timeline_struct.unpack(buffer)
+			authors_list.add(user)
+	return authors_list
 
 ######################################################################################################################################################################
 #
@@ -66,33 +68,28 @@ def read_arq_bin(file):
 def save_error(user,reason):
 	agora = datetime.datetime.strftime(datetime.datetime.now(), '%Y%m%d%H%M')				# Recupera o instante atual na forma AnoMesDiaHoraMinuto
 	error={}
-	with open(error_dir+"timeline_collect_wait_APP4.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
+	with open(error_dir+"timeline_collect.err", "a+") as outfile:								# Abre o arquivo para gravação no final do arquivo
 		error = {'user':user,'reason':str(reason) ,'date':agora}
 		outfile.write(json.dumps(error, cls=DateTimeEncoder, separators=(',', ':'))+"\n")
 	print error
-	
 
 ######################################################################################################################################################################
 #
-# Tweepy - Realiza a busca e devolve a lista de amigos de um usuário específico 
+# Tweepy - Realiza a busca e devolve a timeline de um usuário específico 
 #
 ######################################################################################################################################################################
-def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário específico
+def get_timeline(j,k,l,user):												#Coleta da timeline
 	global dictionary
 	global i
-	
+	timeline = []
 	try:
-		friends_list = []
-		for page in tweepy.Cursor(api.friends_ids, id=user, count=5000, wait_on_rate_limit = True, wait_on_rate_limit_notify = True).pages():
-			for friend in page:
-				friends_list.append(friend)
-		return (friends_list)
+		for page in tweepy.Cursor(api.user_timeline,id=user, count=200, wait_on_rate_limit = True, wait_on_rate_limit_notify = True).pages(16):				#Retorna os últimos 3200 tweets (16*20)
+			for tweet in page:
+				timeline.append(tweet)
+		return (timeline)
 	
 	except tweepy.error.RateLimitError as e:
 			print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
-
-	except tweepy.error.RateLimitError as e:
-		print("Limite de acesso à API excedido. User: "+str(user)+" - Autenticando novamente... "+str(e))
 
 	except tweepy.error.TweepError as e:
 		print ("ERRO - Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user))
@@ -113,7 +110,7 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 				i +=1											
 
 			elif e.message[0]['code'] == 32 or e.message[0]['code'] == 215 or e.message[0]['code'] == 429 or e.message[0]['code'] == 401:
-				save_error(user,e.message)				
+				save_error(user,e.message)
 					
 			elif e.message[0]['code'] == 34 or e.message[0]['code'] == 404:									# Usuários não existentes ou não encontrados
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
@@ -126,56 +123,68 @@ def get_friends(j,k,l,user):												#Coleta dos amigos de um usuário espec�
 			save_error(user,e2)
 ######################################################################################################################################################################
 #
-# Obtem as amigos do ego
+# Obtem timeline dos usuários
 #
 ######################################################################################################################################################################
-def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = numero do alter que esta sendo verificado - l = tamanho da lista de amigos do ego
+def save_timeline(j,k,l,user): # j = número do ego que esta sendo coletado - k = numero do alter que esta sendo verificado - l = tamanho da lista de amigos do ego
 	global i	# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
 	 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
 
-	#Chama a função e recebe como retorno a lista de amigos do usuário
-	friends_list = get_friends(j,k,l,user)
-	if friends_list is not None:
-		try:
-			with open(data_dir+str(user)+".dat", "w+b") as f:				
-				for friend in friends_list:
-					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
-				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
+	#Chama a função e recebe como retorno a lista de tweets do usuário
+	try:
+		with open(data_dir+str(user)+".dat", "w+b") as f:
+			timeline = get_timeline(j,k,l,user)
+			if timeline is not None:
+				for status in timeline:
+					if hasattr(status, 'retweeted_status'):
+						f.write(timeline_struct.pack(status.retweeted_status.id, status.retweeted_status.user.id))						# Grava os ids dos retweet  e o id do autor no arquivo binário do usuário
+###
+#			retweets_list = read_arq_bin(data_dir+str(user)+".dat") # Função para converter o binário de volta em string em formato json.
+#			print retweets_list
+####				
+				dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 				i +=1
-				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
-		
-		except Exception as e:	
-			if e.message:		
-				save_error(user,e.message)
+				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(timeline))+" retweets. Total coletados: "+str(i))
 			else:
-				save_error(user,str(e))
-			if os.path.exists(data_dir+str(user)+".dat"):
-				os.remove(data_dir+str(user)+".dat")
-				print ("Arquivo removido com sucesso...")
+				if os.path.exists(data_dir+str(user)+".dat"):
+					os.remove(data_dir+str(user)+".dat")
+					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Timeline não recuperada... Arquivo excluído!")
+			
+	except Exception as e:	
+		if e.message:		
+			save_error(user,e.message)
+		else:
+			save_error(user,str(e))
+		if os.path.exists(data_dir+str(user)+".dat"):
+			os.remove(data_dir+str(user)+".dat")
+			print ("Arquivo removido co sucesso...")
+
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
 # Método principal do programa.
-# Realiza teste e coleta dos dados de cada user especificado no arquivo. 
+# Realiza teste e coleta dos favoritos do user especificado no arquivo. 
 #
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 
 def main():
-	j = 0																	#Exibe o número ordinal do ego que está sendo usado para a coleta dos amigos dos alters
-	for file in os.listdir(egos_followees_dir):					# Verifica a lista de egos coletados e para cada um, busca os amigos dos alters listados no arquivo do ego.
+	global i 													# numero de usuários com arquivos já coletados / Numero de arquivos no diretório
+	j = 0															# Exibe o número ordinal do ego que está sendo usado para a coleta dos favoritos
+
+	for file in os.listdir(egos_retweets_dir):					# Verifica a lista de egos coletados e para cada um, busca os autores de retweets dos alters listados no arquivo do ego.
 		j+=1
-		friends_list = read_arq_bin(egos_followees_dir+file)
-		l = len(friends_list)										# Exibe o tamanho/quantidade de amigos na lista de amigos do ego
+		authors_list = read_arq_bin(egos_retweets_dir+file) # Função para converter o binário de volta em string em formato json.
+		l = len(authors_list)										# Exibe o tamanho/quantidade de autores de retweets do ego
 		k = 0																#Exibe o número ordinal do alter que está sendo coletado a lista de amigos
-		for friend in friends_list:
+		for author in authors_list:
 			k+=1
-			if not os.path.isfile(data_dir+str(friend)+".dat"):
-				save_user(j,k,l,long(friend))							#Inicia função de busca
-#		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" alters.")
+			if not os.path.isfile(data_dir+str(author)+".dat"):
+				save_timeline(j,k,l,long(author))							#Inicia função de busca
+#		print ("Ego: "+str(j)+" - "+str(len(authors_list))+" alters.")
 	print
 	print("######################################################################")
 	print("Coleta finalizada!")
@@ -186,19 +195,22 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
+
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
+qtde_egos = 'full' 		# 50, 100, 500 ou full
+######################################################################################################################
+######################################################################################################################
+egos_retweets_dir = "/home/amaury/dataset/n2/egos/bin/"				################## Arquivo contendo a lista dos usuários ego já coletados
+data_dir = "/home/amaury/coleta/n2/alters/"+str(qtde_egos)+"/bin/" 						###### Diretório para armazenamento dos arquivos
+error_dir = "/home/amaury/coleta/n2/alters/"+str(qtde_egos)+"/error/"					###### Diretório para armazenamento dos arquivos de erro
 
-qtde_egos = 'full' #10,50,100,500,full
+formato = 'll'				##################################################################  Long para id do tweet e outro long para autor
+timeline_struct = struct.Struct(formato) ################################################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
-egos_followees_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"				# Arquivo contendo a lista dos usuários ego já coletados
-data_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/bin/" 	# Diretório para armazenamento dos arquivos
-error_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/error/" # Diretório para armazenamento dos arquivos de erro
-
-formato = 'l'				####################################################### Long para o código ('l') e depois o array de chars de X posições:	
-user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
-wait = 15
+wait = 5
 dictionary = {}				#################################################### Tabela {chave:valor} para facilitar a consulta dos usuários já coletados
+######################################################################################################################
 ######################################################################################################################
 ######################################################################################################################
 #Cria os diretórios para armazenamento dos arquivos
@@ -241,17 +253,14 @@ print("######################################################################\n"
 #Consumer Key (API Key)	TNs9lxCwAqXVd3Fuq0MiM1Y9V
 #Consumer Secret (API Secret)	oaE23LzAktOWNxRBRY4dT5icHTQ6nubPZlf8fTWqI6rGfNkRbU
 
-#msc20160012_47_test
-
-consumer_key = "gOa37Y85DcbM2Oi3IpvvFWMj9"
-consumer_secret = "Fh334ZT5fXKDTS8zGJR1N6RU3kDdLKhEAk2ZB97iKydCUCaMQp"
-access_token = "849270909034692608-YPMJReaqxI6oVdP7RQ2cfqJinlghtuD"
-access_token_secret = "A6g4aVqq17gAzNPmxsDFIPUo9PVb546JlGw0gK3agWgiM"
+consumer_key = "0EMlPO3xsnI7woFX2X1ndE9SZ"
+consumer_secret = "5mwAJQ3zUo5A34815TBo2Plk4w4NghzuIXY8l2owSs0Jmd8QOK"
+access_token = "883452349641089025-H7cpOcBL3UGP5RlS1Wpvwzowzuvj56x"
+access_token_secret = "X5DGAble5W3kD00sgbhcLMHOqypQQGfRqOrUhLfuVv2vC"
 
 auth = tweepy.OAuthHandler(consumer_key, consumer_secret)
 auth.set_access_token(access_token, access_token_secret)
 api = tweepy.API(auth, wait_on_rate_limit=True)
-
 
 	
 #Executa o método main
