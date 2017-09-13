@@ -19,7 +19,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def main():
 	for file in os.listdir(origem):
-		if os.path.getsize(file) > 0:
+		if os.path.getsize(origem+file) > 0:
 			shutil.move(origem+file,destino)
 	print("######################################################################")
 	print("Script finalizado!")
