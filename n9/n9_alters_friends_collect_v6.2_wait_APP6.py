@@ -175,7 +175,7 @@ def main():
 		for friend in friends_list:
 			k+=1
 			if not os.path.isfile(data_dir+str(friend)+".dat"):
-				save_user(j,k,l,long(friend)							#Inicia função de busca
+				save_user(j,k,l,long(friend))							#Inicia função de busca
 #		print ("Ego: "+str(j)+" - "+str(len(friends_list))+" alters.")
 	print
 	print("######################################################################")
