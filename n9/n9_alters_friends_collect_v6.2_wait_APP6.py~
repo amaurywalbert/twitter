@@ -25,6 +25,7 @@ sys.setdefaultencoding('utf-8')
 ##
 ##						STATUS - Coletando - OK - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletado
+##						STATUS - USANDO SUBCONJUNTO DE EGOS - Subconjunto 3
 ##
 ## 
 ######################################################################################################################################################################
@@ -136,28 +137,24 @@ def save_user(j,k,l,user): # j = número do ego que esta sendo coletado - k = nu
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de amigos do usuário
-	try:
-		with open(data_dir+str(user)+".dat", "w+b") as f:	
-			friends_list = get_friends(j,k,l,user)
-			if friends_list is not None:	
+	friends_list = get_friends(j,k,l,user)
+	if friends_list is not None:
+		try:
+			with open(data_dir+str(user)+".dat", "w+b") as f:				
 				for friend in friends_list:
 					f.write(user_struct.pack(friend))						# Grava os ids dos amigos no arquivo binário do usuário
 				dictionary[user] = user											# Insere o usuário coletado na tabela em memória
 				i +=1
 				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
-			else:
-				if os.path.exists(data_dir+str(user)+".dat"):
-					os.remove(data_dir+str(user)+".dat")
-					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Amigos não recuperados... Arquivo excluído!")
 		
-	except Exception as e:	
-		if e.message:		
-			save_error(user,e.message)
-		else:
-			save_error(user,str(e))
-		if os.path.exists(data_dir+str(user)+".dat"):
-			os.remove(data_dir+str(user)+".dat")
-			print ("Arquivo removido com sucesso...")
+		except Exception as e:	
+			if e.message:		
+				save_error(user,e.message)
+			else:
+				save_error(user,str(e))
+			if os.path.exists(data_dir+str(user)+".dat"):
+				os.remove(data_dir+str(user)+".dat")
+				print ("Arquivo removido com sucesso...")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -195,7 +192,8 @@ def main():
 
 qtde_egos = 'full' #10,50,100,500,full
 
-egos_followees_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"				# Arquivo contendo a lista dos usuários ego já coletados
+#egos_followees_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"				# Arquivo contendo a lista dos usuários ego já coletados
+egos_followees_dir = "/home/amaury/dataset/n9/egos_subconjunto_03/bin/"				# Arquivo contendo a lista dos usuários ego já coletados - Subconjunto 03
 data_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/bin/" 	# Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/error/" # Diretório para armazenamento dos arquivos de erro
 

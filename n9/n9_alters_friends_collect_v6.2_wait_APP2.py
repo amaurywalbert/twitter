@@ -25,6 +25,7 @@ sys.setdefaultencoding('utf-8')
 ##
 ##						STATUS - Coletando - OK - Salvar arquivos binários contendo os ids dos amigos de cada usuário.
 ##						STATUS - Refazer a coleta até que não tenha nenhuma mensagem de "Rate Limit Exceeded"  - A cada mensagem há um usuário que ficou sem ser coletado
+##						STATUS - USANDO SUBCONJUNTO DE EGOS - Subconjunto 1
 ##
 ## 
 ######################################################################################################################################################################
@@ -191,7 +192,8 @@ def main():
 
 qtde_egos = 'full' #10,50,100,500,full
 
-egos_followees_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"				# Arquivo contendo a lista dos usuários ego já coletados
+#egos_followees_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"				# Arquivo contendo a lista dos usuários ego já coletados
+egos_followees_dir = "/home/amaury/dataset/n9/egos_subconjunto_01/bin/"				# Arquivo contendo a lista dos usuários ego já coletados - Subconjunto 01
 data_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/bin/" 	# Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n9/alters_friends/"+str(qtde_egos)+"/error/" # Diretório para armazenamento dos arquivos de erro
 
