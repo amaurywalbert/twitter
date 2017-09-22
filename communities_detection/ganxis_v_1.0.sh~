@@ -100,10 +100,10 @@ ganxis()
 	else
 		if [ $3 == "D" ]; then
 			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2 -r $4
+			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2
 		else
 			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2 -r $4
+			java -jar /home/amaury/algoritmos/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2
 		fi
 	fi
 	echo

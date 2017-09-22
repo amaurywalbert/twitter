@@ -82,7 +82,7 @@ cfinder()
 #      link weight intensity threshold is set.)
 #  -h  help. More details about these options.
 
-	/home/amaury/algoritmos/CFinder-2.0.6--1448/CFinder_commandline64 -i $1 -o $2 -$3 -l /home/amaury/algoritmos/CFinder-2.0.6--1448/licence.txt -w $4
+	/home/amaury/algoritmos/Cliques/CFinder-2.0.6--1448/CFinder_commandline64 -i $1 -o $2 -$3 -l /home/amaury/algoritmos/CFinder-2.0.6--1448/licence.txt -w $4
 }
 
 echo "###############################################################"

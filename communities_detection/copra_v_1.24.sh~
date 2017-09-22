@@ -1,6 +1,6 @@
 #!/bin/bash
 ######################################################################################################################################################################
-##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades LinkCommunity para cada rede-ego
+##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades COPRA para cada rede-ego
 ##								
 ## # INPUT:
 ##		- Redes-ego
@@ -21,126 +21,82 @@ instructions()
 	clear
 	echo "###############################################################"
 	echo "																					"
-	echo " Algoritmo de Detecção de Comunidades Link Community (Clustering)	"
+	echo " Algoritmo de Detecção de Comunidades COPRA	"
 	echo "																					"
 	echo "###############################################################"
 	echo
-	echo "Threshold to cut the dendrogram"
+	echo "Sets the v parameter (the maximum number of communities per vertex) of the COPRA algorithm to v. Default: v=1."
+	echo "Repeats the execution r times for best modularity. Default: r=1."
 	echo	
-	echo -n "Informe um valor para o threshold (optional): "
+	echo -n "Informe um valor para o parâmetro v (optional): "
 	read THRESHOLD
+	echo -n "Informe um valor para o parâmetro r (optional): "
+	read REPEAT
 	echo
 	echo "Detectando comunidades para a rede $1"
 	echo
 	echo "Os arquivos serão armazenados em: \"$3\""
 	i=0
 
+	if [ -z $THRESHOLD ]; then
+		OUTPUT_DIR=$3"default/"
+		THRESHOLD=1
+	else	
+		OUTPUT_DIR=$3$THRESHOLD"/"
+	fi
+
+	mkdir -p $OUTPUT_DIR"/"
+	
 	for file in `ls $2`
 		do
 			let i=$i+1;
 			echo "Detectando comunidades para o ego: $i"
 			INPUT_FILE=$2$file
-
-			if [ -z $THRESHOLD ]; then
-				OUTPUT_FILES=$3"default/"$file
-			else
-				OUTPUT_FILES=$3$THRESHOLD"/"$file
-	
-			mkdir -p $OUTPUT_FILES
 			TYPE_GRAPH=$4
-			ganxis $INPUT_FILE $OUTPUT_FILES $TYPE_GRAPH $THRESHOLD
+			
+			if [ -z $REPEAT ]; then
+				REPEAT=1
+			fi
+			copra $INPUT_FILE $OUTPUT_DIR $TYPE_GRAPH $THRESHOLD $REPEAT $file
 		done
 	echo
 	echo -n "Script Finalizado!"
 }
 	
-ganxis()
+copra()
 {
-#    usage = "usage: python %prog [options] filename"
-#    description = """The link communities method of Ahn, Bagrow, and Lehmann, Nature, 2010:
-#    www.nature.com/nature/journal/v466/n7307/full/nature09182.html (doi:10.1038/nature09182)
-#    """
-#    epilog = """
-#    
-#Input:
-#  An edgelist file where each line represents an edge:
-#    node_i <delimiter> node_j <newline>
-#  if unweighted, or
-#    node_i <delimiter> node_j <delimiter> weight_ij <newline>
-#  if weighted.
-#    
-#Output: 
-#  Three text files with extensions .edge2comm.txt, .comm2edges.txt,
-#  and .comm2nodes.txt store the communities.
-# 
-#  edge2comm, an edge on each line followed by the community
-#  id (cid) of the edge's link comm:
-#    node_i <delimiter> node_j <delimiter> cid <newline>
-#  
-#  comm2edges, a list of edges representing one community per line:
-#    cid <delimiter> ni,nj <delimiter> nx,ny [...] <newline>
+#In general, to run the COPRA program:
 #
-#  comm2nodes, a list of nodes representing one community per line:
-#    cid <delimiter> ni <delimiter> nj [...] <newline>
-#  
-#  The output filename contains the threshold at which the dendrogram
-#  was cut, if applicable, or the threshold where the maximum
-#  partition density was found, and the value of the partition 
-#  density.
-#  
-#  If no threshold was given to cut the dendrogram, a file ending with
-#  `_thr_D.txt' is generated, containing the partition density as a
-#  function of clustering threshold.
+#java -cp copra.jar COPRA filename [options]
 #
-#  If the dendrogram option was given, two files are generated. One with
-#  `.cid2edge.txt' records the id of each edge and the other one with
-#  `.linkage.txt' stores the linkage structure of the hierarchical 
-#  clustering. In the linkage file, the edge in the first column is 
-#  merged with the one in the second at the similarity value in the 
-#  third column.
-#"""
-#    parser = MyParser(usage, description=description,epilog=epilog)
-#    parser.add_option("-d", "--delimiter", dest="delimiter", default="\t",
-#                      help="delimiter of input & output files [default: tab]")
-#    parser.add_option("-t", "--threshold", dest="threshold", type="float", default=None,
-#                      help="threshold to cut the dendrogram (optional)")
-#    parser.add_option("-w", "--weighted", dest="is_weighted", action="store_true", default=False,
-#                    help="is the network weighted?")
-#    parser.add_option("-r", "--record-dendrogram", dest="dendro_flag", action="store_true", 
-#                      default=False, help="recording the whole dendrogram (optional)")
+#where options include:
+#-bi filename is a bipartite network. Each edge listed in the file contains a mode-1 vertex name followed by a mode-2 vertex name, followed possibly by a weight (which will be ignored). Mode-1 and mode-2 vertices are disjoint even if they have the same names. E.g., an edge {a,a} is allowed and is not a self-edge. This option may not be used in conjunction with the “-w” option. Default: the network is unipartite; self-edges will be ignored, with a warning message.
+#-w filename is a weighted network. If there are actually no weights in the file, or if all edges have the same weight (the default weight of an edge is 1), a warning message will be printed. Otherwise, the weights will be used in the clustering process and may affect the result. This option may not be used in conjunction with the “-bi” option. Default: the network is unweighted; edge weights may still appear in the file but will be ignored.
+#-v v Sets the v parameter (the maximum number of communities per vertex) of the COPRA algorithm to v. Default: v=1.
+#-vs v 1 v 2 Executes the COPRA algorithm with the v parameter set to v 1 , v 1 +1, ..., v 2 . If used in conjunction with the “-repeat” option, the execution is performed for each value of v.
+#-prop p Limits the maximum number of iterations to p. The propagation will end as soon as the termination condition is satisfied, even if this happens after less than p iterations. Default: no limit, so the propagation will continue until the termination condition is satisfied.
+#-repeat r Repeats the execution r times. If used in conjunction with the “-vs” option, for each value of v, the execution will be repeated r times. If r>1, the screen display will show the averages of the statistics, as well as the standard deviation and maximum of the modularity. Default: r=1.
+#-mo Compute the overlap modularity (Nicosia et al.) of each solution. It is displayed on the screen, and used to decide which is the best solution to keep when “-repeat” is used. This is optional because the overlap modularity measure can be expensive to compute for large networks.
+#-nosplit Do not split discontiguous communities into contiguous subsets. If this option is selected, the “communities” in the solution will not be valid communities.
+#-extrasimplify Simplify the solution (by removing communities that are subsets of others) again after splitting discontiguous communities. This is always done anyway before the splitting, but splitting can create new communities which are subsumed by others. By default these are not removed, but they are when this option is selected. This operation is optional because its complexity is O(n 2 ), but in practice it is usually very fast and worthwhile.
+#-q Do not display the description of the parameters and the network when the program starts.
 ##############################################################################################################
 	echo
 	echo
 	echo "INPUT_FILE: $1"
 	echo "OUTPUT_DIR: $2"
-
-	if [ -z $THRESHOLD ]; then
-		echo "Sem THRESHOLD definido..."
-		if [ $3 == "D" ]; then
-			echo "TYPE_GRAPH: DIRECTED - $3"
-			python /home/amaury/algoritmos/LinkCommunity/link_clustering.py -w $1
-		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"
-			python /home/amaury/algoritmos/LinkCommunity/link_clustering.py -w $1 ## ESTUDAR O ALGORITMO PRA VER A QUESTÃO DO PESO E DIFERENÇA ENTRE DIRECIONADO E NÃO DIRECIONADO
-
-		fi
-	else
-		echo "THRESHOLD: $4"
-		if [ $3 == "D" ]; then
-			echo "TYPE_GRAPH: DIRECTED - $3"
-			python /home/amaury/algoritmos/LinkCommunity/link_clustering.py -t -w $1
-		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			python /home/amaury/algoritmos/LinkCommunity/link_clustering.py -t -w $1 ## ESTUDAR O ALGORITMO PRA VER A QUESTÃO DO PESO E DIFERENÇA ENTRE DIRECIONADO E NÃO DIRECIONADO
-		fi
-	fi
+	echo "TYPE_GRAPH: $3"
+	echo "THRESHOLD: $4"
+	echo "REPEAT: $5"
+	java -cp /home/amaury/algoritmos/LabelPropagation/COPRA/copra.jar COPRA $1 -w -v $4 -repeat $5
+	mv "clusters-"$6 $2
 	echo
 	echo		 
 }
 
 echo "###############################################################"
 echo "																					"
-echo " Algoritmo de Detecção de Comunidades Link Community (Clustering)	"
+echo " Algoritmo de Detecção de Comunidades COPRA	"
 echo "																					"
 echo "###############################################################"
 echo
@@ -164,7 +120,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Follow"
 	INPUT_DIR=/home/amaury/graphs/n1/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n1/link/
+	OUTPUT_DIR=/home/amaury/communities/n1/copra/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -174,7 +130,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Retweets"
 	INPUT_DIR=/home/amaury/graphs/n2/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n2/link/
+	OUTPUT_DIR=/home/amaury/communities/n2/copra/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -184,7 +140,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Likes"
 	INPUT_DIR=/home/amaury/graphs/n3/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n3/link/
+	OUTPUT_DIR=/home/amaury/communities/n3/copra/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -194,7 +150,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Mentions"
 	INPUT_DIR=/home/amaury/graphs/n4/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n4/link/
+	OUTPUT_DIR=/home/amaury/communities/n4/copra/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -204,7 +160,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Follow"
 	INPUT_DIR=/home/amaury/graphs/n5/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n5/link/
+	OUTPUT_DIR=/home/amaury/communities/n5/copra/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -214,7 +170,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Retweets"
 	INPUT_DIR=/home/amaury/graphs/n6/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n6/link/
+	OUTPUT_DIR=/home/amaury/communities/n6/copra/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -224,7 +180,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Likes"
 	INPUT_DIR=/home/amaury/graphs/n7/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n7/link/
+	OUTPUT_DIR=/home/amaury/communities/n7/copra/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -234,7 +190,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Mentions"
 	INPUT_DIR=/home/amaury/graphs/n8/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n8/link/
+	OUTPUT_DIR=/home/amaury/communities/n8/copra/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -244,7 +200,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Followers"
 	INPUT_DIR=/home/amaury/graphs/n9/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n9/link/
+	OUTPUT_DIR=/home/amaury/communities/n9/copra/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -254,7 +210,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Followers"
 	INPUT_DIR=/home/amaury/graphs/n10/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n10/link/
+	OUTPUT_DIR=/home/amaury/communities/n10/copra/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH

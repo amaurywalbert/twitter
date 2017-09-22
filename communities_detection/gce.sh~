@@ -1,6 +1,6 @@
 #!/bin/bash
 ######################################################################################################################################################################
-##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades GANXiS_v3.0.2 para cada rede-ego
+##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades Greedy Clique Expansion para cada rede-ego
 ##								
 ## # INPUT:
 ##		- Redes-ego
@@ -21,98 +21,67 @@ instructions()
 	clear
 	echo "###############################################################"
 	echo "																					"
-	echo " Algoritmo de Detecção de Comunidades GANXiS_v3.0.2		"
+	echo " Algoritmo de Detecção de Comunidades Greedy Clique Expansion - GCE	"
 	echo "																					"
 	echo "###############################################################"
 	echo
-	echo "[0, 0.5] - Qualquer valor no intervalo"
-	echo "  1      - DEFAULT - rodar para cada valor de r ∈ {0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5}"
+	echo "#Community finder. Processes graph in undirected, unweighted form. Edgelist must be two values separated with non digit character."
 	echo	
-	echo -n "Informe um valor para o threshold r: "
-	read THRESHOLD
-	echo
 	echo "Detectando comunidades para a rede $1"
 	echo
 	echo "Os arquivos serão armazenados em: \"$3\""
 	i=0
 
+	OUTPUT_DIR=$3"default/"
+	mkdir -p $OUTPUT_DIR"/"
+	
 	for file in `ls $2`
 		do
 			let i=$i+1;
 			echo "Detectando comunidades para o ego: $i"
 			INPUT_FILE=$2$file
-			OUTPUT_FILES=$3$THRESHOLD"/"$file
-			mkdir -p $OUTPUT_FILES
 			TYPE_GRAPH=$4
-			ganxis $INPUT_FILE $OUTPUT_FILES $TYPE_GRAPH $THRESHOLD
+			
+			gce $INPUT_FILE $OUTPUT_DIR $TYPE_GRAPH $file
 		done
 	echo
 	echo -n "Script Finalizado!"
 }
 	
-ganxis()
+gce()
 {
-#GANXiSw 3.0.2(used to be SLPAw) is for weighted (directed) networks, version=3.0.2
-#Usage: java -jar GANXiSw.jar -i networkfile
-#Options:
-#  -i input network file
-#  -d output director (default: output)
-#  -L set to 1 to use only the largest connected component
-#  -t maximum iteration (default: 100)
-#  -run number of repetitions
-#  -r a specific threshold in [0,0.5]
-#  -ov set to 0 to perform disjoint detection
-#  -W treat the input as a weighted network, set 0 to ignore the weights(default 1)
-#  -Sym set to 1 to make the edges symmetric/bi-directional (default 0)
-#  -seed user specified seed for random generator
-#  -help to display usage info
-# -----------------------------Advanced Parameters---------------------------------
-#  -v weighted version in {1,2,3}, default=3
-#  -Oov set to 1 to output overlapping file, default=0
-#  -Onc set to 1 to output <nodeID communityID> format, 2 to output <communityID nodeID> format
-#  -minC min community size threshold, default=2
-#  -maxC max community size threshold
-#  -ev embedded SLPAw's weighted version in {1,2,3}, default=1
-#  -loopfactor determine the num of loops for depomposing each large com, default=1.0
-#  -Ohis1 set to 1 to output histgram Level1
-#  -Ohis2 set to 1 to output histgram Level2
+#Greedy Clique Expansion Community Finder
+#Community finder. Requires edge list of nodes. Processes graph in undirected, unweighted form. Edgelist must be two values separated with non digit character.
 #
-#  -OMem1 set to 1 to output each node's memory content at Level 1
-#  -EC evolution cutoff, a real value > 1.0 
-#NOTE: 1. more parameters refer to Readme.pdf
-#      2. parameters are *CASE-SENSITIVE*, e.g., -Onc is not -onc
+#Use with either full (if specify all 5) or default (specify just graph file) parameters:
+#Full parameters are:
+
+# 1 - The name of the file to load
+# 2 - The minimum size of cliques to use as seeds. Recommend 4 as default, unless particularly small communities are required (in which case use 3).
+# 3 - The minimum value for one seed to overlap with another seed before it is considered sufficiently overlapping to be discarded (eta). 1 is complete overlap. However smaller values may be used to prune seeds more aggressively. A value of 0.6 is recommended.
+# 4 - The alpha value to use in the fitness function greedily expanding the seeds. 1.0 is recommended default. Values between .8 and 1.5 may be useful. As the density of edges increases, alpha may need to be increased to stop communities expanding to engulf the whole graph. If this occurs, a warning message advising that a higher value of alpha be used, will be printed.
+# 5 - The proportion of nodes (phi) within a core clique that must have already been covered by other cliques, for the clique to be 'sufficiently covered' in the Clique Coveage Heuristic
+#
+#Usage: ./GCECommunityFinderUbuntu910 graphfilename minimumCliqueSizeK overlapToDiscardEta fitnessExponentAlpha CCHthresholdPhi
+#
+#Usage (with defaults): ./GCECommunityFinderUbuntu910 graphfilename
+#This will run with the default values of: minimumCliqueSizeK 4, overlapToDiscardEta 0.6, fitnessExponentAlpha 1.0, CCHthresholdPhi .75
+#Communities will be output, one community per line, with the same numbering as the original nodes were provided.
+
 ##############################################################################################################
 	echo
 	echo
-	echo "INPUT_FILE: $1"
 	echo "OUTPUT_DIR: $2"
-	echo "THRESHOLD: $4"
-	R1=$(echo "$4 >= 0" | bc)
-	R2=$(echo "$4 <= 0.5" | bc)
-	if [ $R1 == 1 ] && [ $R2 == 1 ]; then
-		if [ $3 == "D" ]; then
-			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2 -r $4
-		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2 -r $4
-		fi
-	else
-		if [ $3 == "D" ]; then
-			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2
-		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2
-		fi
-	fi
+	echo "TYPE_GRAPH: $3"
+	cd /home/amaury/algoritmos/LocalExpansion/GCECommunityFinder/
+	./GCECommunityFinderUbuntu910 $1 4 0.6 1.5 0.75 > $2$file".communities"
 	echo
 	echo		 
 }
 
 echo "###############################################################"
 echo "																					"
-echo " Algoritmo de Detecção de Comunidades CFinder-2.0.6--1448		"
+echo " Algoritmo de Detecção de Comunidades Greedy Clique Expansion - GCE	"
 echo "																					"
 echo "###############################################################"
 echo
@@ -136,7 +105,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Follow"
 	INPUT_DIR=/home/amaury/graphs/n1/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n1/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n1/gce/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -146,7 +115,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Retweets"
 	INPUT_DIR=/home/amaury/graphs/n2/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n2/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n2/gce/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -156,7 +125,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Likes"
 	INPUT_DIR=/home/amaury/graphs/n3/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n3/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n3/gce/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -166,7 +135,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Mentions"
 	INPUT_DIR=/home/amaury/graphs/n4/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n4/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n4/gce/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -176,7 +145,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Follow"
 	INPUT_DIR=/home/amaury/graphs/n5/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n5/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n5/gce/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -186,7 +155,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Retweets"
 	INPUT_DIR=/home/amaury/graphs/n6/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n6/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n6/gce/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -196,7 +165,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Likes"
 	INPUT_DIR=/home/amaury/graphs/n7/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n7/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n7/gce/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -206,7 +175,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Mentions"
 	INPUT_DIR=/home/amaury/graphs/n8/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n8/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n8/gce/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -216,7 +185,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Followers"
 	INPUT_DIR=/home/amaury/graphs/n9/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n9/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n9/gce/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -226,7 +195,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Followers"
 	INPUT_DIR=/home/amaury/graphs/n10/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n10/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n10/gce/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
