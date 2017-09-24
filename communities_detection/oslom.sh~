@@ -1,6 +1,6 @@
 #!/bin/bash
 ######################################################################################################################################################################
-##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades GANXiS_v3.0.2 para cada rede-ego
+##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades OSLOM para cada rede-ego
 ##								
 ## # INPUT:
 ##		- Redes-ego
@@ -10,7 +10,7 @@
 
 op=0
 clear
-algorithm="ganxis"
+algorithm="oslom"
 
 instructions()
 {
@@ -26,94 +26,82 @@ instructions()
 	echo "																					"
 	echo "###############################################################"
 	echo
-	echo "[0, 0.5] - Qualquer valor no intervalo"
-	echo "  1      - DEFAULT - rodar para cada valor de r ∈ {0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5}"
+	echo
+	echo "-r - number of runs for the first hierarchical level. The default value is 10."
 	echo	
 	echo -n "Informe um valor para o threshold r: "
-	read THRESHOLD
-	echo
+	read THRESHOLD	
 	echo "Detectando comunidades para a rede $1"
 	echo
 	echo "Os arquivos serão armazenados em: \"$3\""
 	i=0
 
+	if [ -z $THRESHOLD ]; then
+		OUTPUT_DIR=$3"default/"
+		THRESHOLD=10
+	else	
+		OUTPUT_DIR=$3$THRESHOLD"/"
+	fi
+
+	mkdir -p $OUTPUT_DIR"/"
+	
 	for file in `ls $2`
 		do
 			let i=$i+1;
 			echo "Detectando comunidades para o ego: $i"
 			INPUT_FILE=$2$file
-			OUTPUT_FILES=$3$THRESHOLD"/"$file
-			mkdir -p $OUTPUT_FILES
 			TYPE_GRAPH=$4
-			ganxis $INPUT_FILE $OUTPUT_FILES $TYPE_GRAPH $THRESHOLD
+
+			oslom $INPUT_FILE $OUTPUT_DIR $TYPE_GRAPH $THRESHOLD $file
+
 		done
 	echo
 	echo -n "Script Finalizado!"
 }
 	
-ganxis()
+oslom()
 {
-#GANXiSw 3.0.2(used to be SLPAw) is for weighted (directed) networks, version=3.0.2
-#Usage: java -jar GANXiSw.jar -i networkfile
-#Options:
-#  -i input network file
-#  -d output director (default: output)
-#  -L set to 1 to use only the largest connected component
-#  -t maximum iteration (default: 100)
-#  -run number of repetitions
-#  -r a specific threshold in [0,0.5]
-#  -ov set to 0 to perform disjoint detection
-#  -W treat the input as a weighted network, set 0 to ignore the weights(default 1)
-#  -Sym set to 1 to make the edges symmetric/bi-directional (default 0)
-#  -seed user specified seed for random generator
-#  -help to display usage info
-# -----------------------------Advanced Parameters---------------------------------
-#  -v weighted version in {1,2,3}, default=3
-#  -Oov set to 1 to output overlapping file, default=0
-#  -Onc set to 1 to output <nodeID communityID> format, 2 to output <communityID nodeID> format
-#  -minC min community size threshold, default=2
-#  -maxC max community size threshold
-#  -ev embedded SLPAw's weighted version in {1,2,3}, default=1
-#  -loopfactor determine the num of loops for depomposing each large com, default=1.0
-#  -Ohis1 set to 1 to output histgram Level1
-#  -Ohis2 set to 1 to output histgram Level2
+#USAGE: ./oslom_undir -f network.dat -uw(-w)
+#-uw must be used if you want to use the unweighted null model; -w otherwise.
+#network.dat is the list of edges. Please look at ReadMe.pdf for more details.
 #
-#  -OMem1 set to 1 to output each node's memory content at Level 1
-#  -EC evolution cutoff, a real value > 1.0 
-#NOTE: 1. more parameters refer to Readme.pdf
-#      2. parameters are *CASE-SENSITIVE*, e.g., -Onc is not -onc
+#***************************************************************************************************************************************************
+#OPTIONS
+#  [-r R]:			sets the number of runs for the first hierarchical level, bigger this value, more accurate the output (of course, it takes more). Default value is 10.
+#  [-hr R]:			sets the number of runs  for higher hierarchical levels. Default value is 50 (the method should be faster since the aggregated network is usually much smaller).
+#  [-seed m]:			sets m equal to the seed for the random number generator. (instead of reading from time_seed.dat)
+#  [-hint filename]:		takes a partition from filename. The file is expected to have the nodes belonging to the same cluster on the same line.
+#  [-load filename]:		takes modules from a tp file you already got in a previous run.
+#  [-t T]:			sets the threshold equal to T, default value is 0.1
+#  [-singlet]:			 finds singletons. If you use this flag, the program generally finds a number of nodes which are not assigned to any module. the program will assign each node with at least one not homeless neighbor. This only applies to the lowest hierarchical level.
+#  [-cp P]:			sets a kind of resolution parameter equal to P. This parameter is used to decide if it is better to take some modules or their union. Default value is 0.5. Bigger value leads to bigger clusters. P must be in the interval (0, 1).
+#  [-fast]:			is equivalent to "-r 1 -hr 1" (the fastest possible execution).
+#  [-infomap runs]:		calls infomap and uses its output as a starting point. runs is the number of times you want to call infomap.
+#  [-copra runs]:		same as above using copra.
+#  [-louvain runs]:		same as above using louvain method.
+#Please look at ReadMe.pdf for a more detailed explanation.
 ##############################################################################################################
 	echo
 	echo
 	echo "INPUT_FILE: $1"
-	echo "OUTPUT_DIR: $2"
+	echo "OUTPUT_DIR: $2$5"_oslo_files/""
+	echo "TYPE_GRAPH: $3"
 	echo "THRESHOLD: $4"
-	R1=$(echo "$4 >= 0" | bc)
-	R2=$(echo "$4 <= 0.5" | bc)
-	if [ $R1 == 1 ] && [ $R2 == 1 ]; then
-		if [ $3 == "D" ]; then
-			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2 -r $4
-		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2 -r $4
-		fi
+
+	if [ $3 == "U" ]; then
+		`pwd`
+		/home/amaury/algoritmos/LocalExpansion/OSLOM2/oslom_undir -f $1 -w -r $4
 	else
-		if [ $3 == "D" ]; then
-			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2
-		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2
-		fi
+		/home/amaury/algoritmos/LocalExpansion/OSLOM2/oslom_dir -f $1 -w -r $4
 	fi
+	mv $1"_oslo_files" $2
 	echo
 	echo		 
 }
 
 echo "###############################################################"
 echo "																					"
-echo " Algoritmo de Detecção de Comunidades CFinder-2.0.6--1448		"
+echo " Algoritmo de Detecção de Comunidades $algorithm 					"
 echo "																					"
 echo "###############################################################"
 echo

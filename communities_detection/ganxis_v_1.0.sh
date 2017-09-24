@@ -10,6 +10,7 @@
 
 op=0
 clear
+algorithm="ganxis"
 
 instructions()
 {
@@ -21,7 +22,7 @@ instructions()
 	clear
 	echo "###############################################################"
 	echo "																					"
-	echo " Algoritmo de Detecção de Comunidades GANXiS_v3.0.2		"
+	echo " Algoritmo de Detecção de Comunidades $algorithm 					"
 	echo "																					"
 	echo "###############################################################"
 	echo
@@ -112,7 +113,7 @@ ganxis()
 
 echo "###############################################################"
 echo "																					"
-echo " Algoritmo de Detecção de Comunidades CFinder-2.0.6--1448		"
+echo " Algoritmo de Detecção de Comunidades $algorithm 					"
 echo "																					"
 echo "###############################################################"
 echo
@@ -136,7 +137,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Follow"
 	INPUT_DIR=/home/amaury/graphs/n1/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n1/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n1/$algorithm/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -146,7 +147,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Retweets"
 	INPUT_DIR=/home/amaury/graphs/n2/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n2/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n2/$algorithm/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -156,7 +157,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Likes"
 	INPUT_DIR=/home/amaury/graphs/n3/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n3/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n3/$algorithm/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -166,7 +167,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Mentions"
 	INPUT_DIR=/home/amaury/graphs/n4/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n4/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n4/$algorithm/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -176,7 +177,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Follow"
 	INPUT_DIR=/home/amaury/graphs/n5/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n5/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n5/$algorithm/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -186,7 +187,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Retweets"
 	INPUT_DIR=/home/amaury/graphs/n6/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n6/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n6/$algorithm/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -196,7 +197,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Likes"
 	INPUT_DIR=/home/amaury/graphs/n7/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n7/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n7/$algorithm/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -206,7 +207,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Mentions"
 	INPUT_DIR=/home/amaury/graphs/n8/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n8/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n8/$algorithm/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -216,7 +217,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Followers"
 	INPUT_DIR=/home/amaury/graphs/n9/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n9/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n9/$algorithm/
 	TYPE_GRAPH="D"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
@@ -226,7 +227,7 @@ case $op in
 	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 	DESCRIPTION="Co-Followers"
 	INPUT_DIR=/home/amaury/graphs/n10/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n10/ganxis/
+	OUTPUT_DIR=/home/amaury/communities/n10/$algorithm/
 	TYPE_GRAPH="U"
 	###############################################################
 	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH

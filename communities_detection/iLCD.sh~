@@ -1,6 +1,6 @@
 #!/bin/bash
 ######################################################################################################################################################################
-##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades GANXiS_v3.0.2 para cada rede-ego
+##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades iLCD para cada rede-ego
 ##								
 ## # INPUT:
 ##		- Redes-ego
@@ -10,7 +10,7 @@
 
 op=0
 clear
-algorithm="ganxis"
+algorithm="iLCD"
 
 instructions()
 {
@@ -26,10 +26,10 @@ instructions()
 	echo "																					"
 	echo "###############################################################"
 	echo
-	echo "[0, 0.5] - Qualquer valor no intervalo"
-	echo "  1      - DEFAULT - rodar para cada valor de r ∈ {0.01, 0.05, 0.1, 0.15, 0.2, 0.25, 0.3, 0.35, 0.4, 0.45, 0.5}"
+	echo "Size of the minimal community. Default : 3"
+	echo "NOT DIRECTED - NOT WEIGHTED"
 	echo	
-	echo -n "Informe um valor para o threshold r: "
+	echo -n "Informe um valor para o tamanho mínimo da comunidade - parâmetro s (optional): "
 	read THRESHOLD
 	echo
 	echo "Detectando comunidades para a rede $1"
@@ -37,83 +37,61 @@ instructions()
 	echo "Os arquivos serão armazenados em: \"$3\""
 	i=0
 
+	if [ -z $THRESHOLD ]; then
+		OUTPUT_DIR=$3"default/"
+		THRESHOLD=3
+	else	
+		OUTPUT_DIR=$3$THRESHOLD"/"
+	fi
+
+	mkdir -p $OUTPUT_DIR"/"
+	
 	for file in `ls $2`
 		do
 			let i=$i+1;
 			echo "Detectando comunidades para o ego: $i"
 			INPUT_FILE=$2$file
-			OUTPUT_FILES=$3$THRESHOLD"/"$file
-			mkdir -p $OUTPUT_FILES
 			TYPE_GRAPH=$4
-			ganxis $INPUT_FILE $OUTPUT_FILES $TYPE_GRAPH $THRESHOLD
+
+			cp $INPUT_FILE $INPUT_FILE".ncol"
+			INPUT_FILE_tmp=$INPUT_FILE".ncol"
+
+			ilcd $INPUT_FILE_tmp $OUTPUT_DIR $TYPE_GRAPH $THRESHOLD $file
+
+			rm	$INPUT_FILE_tmp
 		done
 	echo
 	echo -n "Script Finalizado!"
 }
 	
-ganxis()
+ilcd()
 {
-#GANXiSw 3.0.2(used to be SLPAw) is for weighted (directed) networks, version=3.0.2
-#Usage: java -jar GANXiSw.jar -i networkfile
-#Options:
-#  -i input network file
-#  -d output director (default: output)
-#  -L set to 1 to use only the largest connected component
-#  -t maximum iteration (default: 100)
-#  -run number of repetitions
-#  -r a specific threshold in [0,0.5]
-#  -ov set to 0 to perform disjoint detection
-#  -W treat the input as a weighted network, set 0 to ignore the weights(default 1)
-#  -Sym set to 1 to make the edges symmetric/bi-directional (default 0)
-#  -seed user specified seed for random generator
-#  -help to display usage info
-# -----------------------------Advanced Parameters---------------------------------
-#  -v weighted version in {1,2,3}, default=3
-#  -Oov set to 1 to output overlapping file, default=0
-#  -Onc set to 1 to output <nodeID communityID> format, 2 to output <communityID nodeID> format
-#  -minC min community size threshold, default=2
-#  -maxC max community size threshold
-#  -ev embedded SLPAw's weighted version in {1,2,3}, default=1
-#  -loopfactor determine the num of loops for depomposing each large com, default=1.0
-#  -Ohis1 set to 1 to output histgram Level1
-#  -Ohis2 set to 1 to output histgram Level2
-#
-#  -OMem1 set to 1 to output each node's memory content at Level 1
-#  -EC evolution cutoff, a real value > 1.0 
-#NOTE: 1. more parameters refer to Readme.pdf
-#      2. parameters are *CASE-SENSITIVE*, e.g., -Onc is not -onc
+#java SampleMain [options...] arguments...
+# -bThreshold N    : threshold of belonging. Default : 0.5 
+# -debug           : display some debug dialogs. Default : false
+# -fRatio N        : fusion of community ratio. Default : 0.5
+# -i VAL           : input file
+# -inputDateF VAL  : select your date formating. Default : YYYYMMDD. possibilities : YYYYMMDDHHMMSS, YYYYMMDD, NONE
+# -o VAL           : file to write the output in, without extention. If not specified, same name as input file
+# -outputDateF VAL : select your date formating. Default : YYYYMMDD. possibilities : YYYYMMDDHHMMSS, YYYYMMDD, NONE
+# -s N             : size of the minimal community. Default : 3
+# -staticN         : if true, the provided network will considered as static.
+# -verbose         : display basic dialogs (number of line processed...) Default : true
 ##############################################################################################################
 	echo
 	echo
 	echo "INPUT_FILE: $1"
-	echo "OUTPUT_DIR: $2"
+	echo "OUTPUT_FILE: $2$5"
+	echo "TYPE_GRAPH: $3"
 	echo "THRESHOLD: $4"
-	R1=$(echo "$4 >= 0" | bc)
-	R2=$(echo "$4 <= 0.5" | bc)
-	if [ $R1 == 1 ] && [ $R2 == 1 ]; then
-		if [ $3 == "D" ]; then
-			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2 -r $4
-		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2 -r $4
-		fi
-	else
-		if [ $3 == "D" ]; then
-			echo "TYPE_GRAPH: DIRECTED - $3"
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -d $2
-		else
-			echo "TYPE_GRAPH: UNDIRECTED - $3"			
-			java -jar /home/amaury/algoritmos/LabelPropagation/GANXiS_v3.0.2/GANXiS_v3.0.2/GANXiSw.jar -i $1 -Sym 1 -d $2
-		fi
-	fi
+	java -jar /home/amaury/algoritmos/LocalExpansion/iLCD/iLCD.jar -i $1 -o $2$5".tcom" -s $4
 	echo
 	echo		 
 }
 
 echo "###############################################################"
 echo "																					"
-echo " Algoritmo de Detecção de Comunidades CFinder-2.0.6--1448		"
+echo " Algoritmo de Detecção de Comunidades iLCD	"
 echo "																					"
 echo "###############################################################"
 echo
