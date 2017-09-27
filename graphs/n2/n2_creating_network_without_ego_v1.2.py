@@ -89,23 +89,23 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
 	partial_missing=[]															# Lista de usuários faltando
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
-	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
+#	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_list:
 		alter = long(alter)
 		vertices[alter] = alter													# Adiciona cada Alter ao conjunto de vértices
-		if G.has_edge(ego,alter):							### Se existe uma aresta entre o alter e o autor
-			G[ego][alter]['weight']+=1						##### Adiciona peso na aresta 
-		else:														# Senão
-			G.add_edge(ego,alter,weight=1)				##### Cria aresta com peso 1
+#		if G.has_edge(ego,alter):							### Se existe uma aresta entre o alter e o ego
+#			G[ego][alter]['weight']+=1						##### Adiciona peso na aresta 
+#		else:														# Senão
+#			G.add_edge(ego,alter,weight=1)				##### Cria aresta com peso 1
 
 	for alter in alters_list:
 		try:
-			authors = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de autores de cada alter
+			authors = read_arq_bin(alters_dir+str(alter)+".dat")	# Recebe lista de autores de cada alter
 			for author in authors:											# Para cada autor
 				if alter != author:											# Remover self-loops
 					author = long(author)
 					if vertices.has_key(author):								# Se autor está na lista de alters
-						if G.has_edge(alter,author):							### Se existe uma aresta entre o alter e o autor
+						if G.has_edge(alter,author):							### Se existe uma aresta entre o alter e o autor - AQUI ESTÁ EXCLUINDO O TAMBÈM ASRESTAS DIRECIONADAS AO EGO.
 							G[alter][author]['weight']+=1						##### Adiciona peso na aresta 
 						else:															# Senão
 							G.add_edge(alter,author,weight=1)				# Cria aresta com peso 1
@@ -128,7 +128,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	missing = set()																# Conjunto de usuários faltando faltando...	
+	missing = set()																# Conjunto de usuários faltando...	
 	l = 0																				# Variável para exibir o número ordinal do ego que está sendo usado para a construção do grafo
 	ti =  datetime.datetime.now()												# Tempo de início do processo de criação de todos os grafos
 	for file in os.listdir(egos_dir):										# Para cada arquivo de Ego no diretório
@@ -177,9 +177,9 @@ def main():
 ######################################################################################################################
 egos_dir = "/home/amaury/dataset/n2/egos/bin/"############################################ Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n2/alters/bin/" ####################################### Diretório contendo os arquivos dos Alters
-output_dir = "/home/amaury/graphs/n2/graphs/" ############################################ Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n2/errors/" ##################################### Diretório para armazenamento dos erros
-output_overview = "/home/amaury/graphs/n2/overview.json" ################################# Diretório contendo arquivos com informações sobre a construção das redes. 
+output_dir = "/home/amaury/graphs/n2/graphs_without_ego/" ################################ Diretório para armazenamento dos arquivos das listas de arestas 
+output_dir_errors = "/home/amaury/graphs/n2/error_without_ego/" ########################## Diretório para armazenamento dos erros
+output_overview = "/home/amaury/graphs/n2/overview_without_ego.json" ##################### Diretório contendo arquivos com informações sobre a construção das redes. 
 formato = 'll'				################################################################## Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ################################################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################

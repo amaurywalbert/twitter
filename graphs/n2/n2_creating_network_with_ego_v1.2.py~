@@ -128,7 +128,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	missing = set()																# Conjunto de usuários faltando faltando...	
+	missing = set()																# Conjunto de usuários faltando...	
 	l = 0																				# Variável para exibir o número ordinal do ego que está sendo usado para a construção do grafo
 	ti =  datetime.datetime.now()												# Tempo de início do processo de criação de todos os grafos
 	for file in os.listdir(egos_dir):										# Para cada arquivo de Ego no diretório
@@ -177,9 +177,9 @@ def main():
 ######################################################################################################################
 egos_dir = "/home/amaury/dataset/n2/egos/bin/"############################################ Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n2/alters/bin/" ####################################### Diretório contendo os arquivos dos Alters
-output_dir = "/home/amaury/graphs/n2/graphs/" ############################################ Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n2/errors/" ##################################### Diretório para armazenamento dos erros
-output_overview = "/home/amaury/graphs/n2/overview.json" ################################# Diretório contendo arquivos com informações sobre a construção das redes. 
+output_dir = "/home/amaury/graphs/n2/graph_with_ego/" ############################################ Diretório para armazenamento dos arquivos das listas de arestas 
+output_dir_errors = "/home/amaury/graphs/n2/error_with_ego/" ##################################### Diretório para armazenamento dos erros
+output_overview = "/home/amaury/graphs/n2/overview_with_ego.json" ################################# Diretório contendo arquivos com informações sobre a construção das redes. 
 formato = 'll'				################################################################## Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ################################################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################
