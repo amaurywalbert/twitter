@@ -7,8 +7,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - verifica se os alters (amigos dos egos) já foram coletados e copia os arquivos deles para o diretório correto
-##									Esse processo é apenas para agilizar e organizar os diretórios já coletados.
+##		Status - Versão 1 - Verifica se arquivo é maior que outro e copia para a pasta certa...
 ## 
 ######################################################################################################################################################################
 
