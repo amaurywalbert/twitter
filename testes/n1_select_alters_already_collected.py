@@ -86,8 +86,8 @@ origem = "/home/amaury/coleta/n1/alters_friends/full/bin/"
 
 destino = "/home/amaury/dataset/n1/alters/bin/"
 
-egos_output = "/home/amaury/dataset/n2/alters/egos_overview.json"
-full_output = "/home/amaury/dataset/n2/alters/full_overview.json"
+egos_output = "/home/amaury/dataset/n1/alters/egos_overview.json"
+full_output = "/home/amaury/dataset/n1/alters/full_overview.json"
 
 formato = 'l'				################################################### Long para id do amigo
 user_struct = struct.Struct(formato) ###################################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
