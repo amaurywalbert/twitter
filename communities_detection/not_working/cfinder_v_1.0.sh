@@ -6,6 +6,7 @@
 ##		- Redes-ego
 ## # OUTPUT:
 ##		- Comunidades
+## PROBLEM - Roda em tempo epxonencial de acordo com o tamanho da rede... impossível para os nossos propósitos.
 ######################################################################################################################################################################
 
 op=0
