@@ -81,9 +81,9 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 	G=nx.Graph()																	# Inicia um grafo NÂO DIRECIONADO
 	G.clear()
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo
-	########################################### # Criar tabela hash com o conjunto de dados (retweets) dos vértices (ego e todos os alters)
+	########################################### # Criar tabela hash com o conjunto de dados (amigos) dos vértices (ego e todos os alters)
 	vertices = {}
-	vertices[ego] = alters_set															# Adiciona o Ego ao conjunto de vértices
+	vertices[ego] = alters_set													# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_set:
 		try:
 			alters_friends = read_arq_bin(alters_dir+str(alter)+".dat")	# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
@@ -99,7 +99,7 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
 		for j in vertices:
 			if i != j:
-				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices
+				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices - como G foi criado como not direct, tanto faz ser (i,j) ou (j,i)
 					csj_i_j = csj(vertices[i],vertices[j])							# Calcula o CSJ entre os dois conjuntos
 					if not csj_i_j == 0:													# Se o CJS não for 0:
 						G.add_edge(i,j,weight=csj_i_j)								# Cria aresta
@@ -161,7 +161,6 @@ def main():
 egos_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin/" # Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n5/graphs_with_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n5/error_with_ego/" ########## Diretório para armazenamento dos erros
 formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################

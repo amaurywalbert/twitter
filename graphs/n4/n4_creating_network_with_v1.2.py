@@ -148,11 +148,10 @@ def main():
 #			plt_graph(ego,G)
 			print("######################################################################")
 
-			if partial_missing:
-				missing.update(partial_missing)												# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
-				overview = {'ego':ego,'n_alters':n_alters,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
-				with open(output_overview, 'a+') as f:
-					f.write(json.dumps(overview,separators=(',', ':'))+"\n")			# Escreve o dicionário python em formato JSON no arquivo overview								
+			missing.update(partial_missing)												# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
+			overview = {'ego':ego,'n_alters':n_alters,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
+			with open(output_overview, 'a+') as f:
+				f.write(json.dumps(overview,separators=(',', ':'))+"\n")			# Escreve o dicionário python em formato JSON no arquivo overview								
 
 		else:
 			print ("Lista de arestas já criada para o ego "+str(l)+": "+str(ego))
@@ -176,7 +175,6 @@ def main():
 egos_dir = "/home/amaury/dataset/n4/egos/bin/"############################################ Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n4/alters/bin/" ######################################## Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n4/graphs_with/" ############################################ Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n4/error_with/" ##################################### Diretório para armazenamento dos erros
 output_overview = "/home/amaury/graphs/n4/overview_with.json" ##################################### Diretório contendo arquivos com informações sobre a construção das redes. 
 formato = 'll'				################################################################## Long para id do tweet e outro long para autor e uma flag (0 ou 1) indicando se é um tetweet
 timeline_struct = struct.Struct(formato) ################################################# Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

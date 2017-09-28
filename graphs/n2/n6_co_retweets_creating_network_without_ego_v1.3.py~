@@ -86,7 +86,6 @@ def ego_net(ego,status_ego,l):												# Função recebe o id do ego, o conju
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo
 	########################################### # Criar tabela hash com o conjunto de dados (retweets) dos vértices (ego e todos os alters)
 	vertices = {}
-COMPARAR E TIRAR TODAS AS ARESTAS DO ALTER PARA O EGO
 #	vertices[ego] = status_ego['retweets']
 	for alter in status_ego['authors']:
 		if not alter == ego:																# Se não for o ego...
@@ -175,7 +174,6 @@ def main():
 egos_dir = "/home/amaury/dataset/n2/egos/bin/"################# Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n2/alters/bin/" ############ Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n6/graphs_without_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n6/error_without_ego/" ########## Diretório para armazenamento dos erros
 formato = 'll'				#######################################  Long para id do tweet e outro long para autor
 timeline_struct = struct.Struct(formato) ###################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################

@@ -78,8 +78,8 @@ def save_graph(ego, G):															# Função recebe o id do ego corrente e o
 def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a lista de alters e o número ordinal do ego corrente
 	G=nx.DiGraph()																	# Inicia um grafo DIRECIONADO
 	G.clear()
-	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
-	partial_missing=[]																			# Lista de usuários faltando
+	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - ALTERS
+	partial_missing=[]															# Lista de usuários faltando
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
 #	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_list:
@@ -91,8 +91,8 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 		i+=1	
 		try:
 			friends = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de amigos de cada alter
-			for friend in friends:											# Para cada amigo
-				if alter != friend:											# Remover self-loops				
+			for friend in friends:												# Para cada amigo
+				if alter != friend:												### Remover self-loops				
 					friend = long(friend)
 					if vertices.has_key(friend):								# Se amigo está na lista de alters		
 						G.add_edge(alter,friend)								### Cria aresta
@@ -136,11 +136,10 @@ def main():
 			save_graph(ego,G)
 			G.clear()
 			print("######################################################################")
-			if partial_missing:
-				missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
-				overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
-				with open(output_overview, 'a+') as f:
-					f.write(json.dumps(overview,separators=(',', ':'))+"\n")			# Escreve o dicionário python em formato JSON no arquivo overview
+			missing.update(partial_missing)																			# Incrementa erros totais com erros parciais recebidos da criação do grafo do ego corrente
+			overview = {'ego':ego,'n_friends':n_friends,'errors':len(partial_missing),'missing':partial_missing}		# cria dicionário python com informações sobre a criação do grafo do ego corrente
+			with open(output_overview, 'a+') as f:
+				f.write(json.dumps(overview,separators=(',', ':'))+"\n")			# Escreve o dicionário python em formato JSON no arquivo overview
 
 		else:
 			print ("Lista de arestas já criada para o ego "+str(l)+": "+str(ego))
@@ -164,7 +163,6 @@ def main():
 egos_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin/" ## Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n1/graphs_without_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n1/error_without_ego/" ########## Diretório para armazenamento dos erros
 output_overview = "/home/amaury/graphs/n1/overview_without_ego.json" ########## Diretório contendo arquivos com informações sobre a construção das redes. 
 formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário

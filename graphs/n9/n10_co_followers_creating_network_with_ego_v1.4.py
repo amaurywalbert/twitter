@@ -164,7 +164,6 @@ def main():
 egos_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n9/alters_limited_5k/bin/" # Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n10/graphs_with_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n10/error_with_ego/" ########## Diretório para armazenamento dos erros
 formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################

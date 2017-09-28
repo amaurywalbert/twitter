@@ -174,7 +174,6 @@ def main():
 egos_dir = "/home/amaury/dataset/n3/egos/bin/"################# Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n3/alters/bin/" ############ Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n7/graphs_without/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
-output_dir_errors = "/home/amaury/graphs/n7/error_without/" ########## Diretório para armazenamento dos erros
 formato = 'll'				#######################################  Long para id do tweet e outro long para autor
 favorites_struct = struct.Struct(formato) ##################### Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################

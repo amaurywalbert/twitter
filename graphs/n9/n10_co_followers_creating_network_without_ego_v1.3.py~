@@ -1,4 +1,3 @@
-
 # -*- coding: latin1 -*-
 ################################################################################################
 #	
@@ -18,12 +17,12 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 1.2 - Usar conjunto de dados com 500 egos aleatórios.
 ##					Versão 1.3 - remover a parte de registrar arquivos faltando... "partial missing"
 ##									 Carregar dados dos alters em memória
-##					Versão 1.4 - Não inserir arestas onde o CSJ entre dois usuários é 0	
-##						OBS.: em TESTE - Se não resolver, tentar fazer um dump do grafo quando chegar a um numero X de arestas e depois fazer dump do restante...
-##						OBS.: em TESTE - demorando muito... +/- 20 dias para processar todos os 500 no notebook... fazer teste no servidor com a versão anterior (memoria)		
+##
+##					ATENÇÃO - NECESSÁRIO PELO MENOS 8GB DE RAM
+##								
 ## # INPUT:
 ##		- Lista de Egos (egos)
-##		- Conjunto Followers (alters) de cada Ego - Formação do conjunto de Alters
+##		- Conjunto Followers (seguidores) de cada Ego - Formação do conjunto de Alters
 ##		- Conjunto Followee (amigos) de cada Alter (ids)
 ##
 ## # ALGORITMO
@@ -35,8 +34,6 @@ sys.setdefaultencoding('utf-8')
 ##					5 - 				Se não existe uma aresta (v[i],v[j]):
 ##					6 - 					Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
 ##					7 - 	Remova arestas com peso igual a zero
-##
-
 ## 
 ######################################################################################################################################################################
 
@@ -99,13 +96,18 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
+		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(vertices)))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices
 					csj_i_j = csj(vertices[i],vertices[j])							# Calcula o CSJ entre os dois conjuntos
-					if not csj_i_j == 0:													# Se o CJS não for 0:
-						G.add_edge(i,j,weight=csj_i_j)								# Cria aresta
+					G.add_edge(i,j,weight=csj_i_j)									# Cria aresta
+
+	########################################### # Remove arestas com CJS igual a zero.
+	########################################### # Deixar pra remover aqui pq a criação delas é interessante durante o processo de geração das redes...
+	for (u,v,d) in G.edges(data='weight'):
+		if d==0:
+			G.remove_edge(u,v)
 	###########################################
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
 	tp	= tf - ti																	# Cálculo do tempo gasto para a construção do grafo
@@ -141,6 +143,9 @@ def main():
 			print("Salvando o grafo...")
 			save_graph(ego,G)
 			G.clear()
+			tp = datetime.datetime.now()
+			tp = tp - ti
+			print ("Tempo decorrido: "+str(tp))
 			print("######################################################################")
 
 		else:

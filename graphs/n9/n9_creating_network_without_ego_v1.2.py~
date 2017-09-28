@@ -81,11 +81,11 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
 	partial_missing=[]															# Lista de usuários faltando
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
-	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
+#	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_list:
 		alter = long(alter)
 		vertices[alter] = alter													# Adiciona cada Alter ao conjunto de vértices				
-		G.add_edge(alter,ego)													# Cria uma aresta entre cada ALTER e o EGO - Adiciona alter com arquivo em branco
+#		G.add_edge(alter,ego)													# Cria uma aresta entre cada ALTER e o EGO - Adiciona alter com arquivo em branco
 	i = 0
 	for alter in alters_list:
 		i+=1	

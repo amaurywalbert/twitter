@@ -87,14 +87,14 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
 	partial_missing=[]															# Lista de usuários faltando
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
-	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
+#	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_list:
 		alter = long(alter)
 		vertices[alter] = alter													# Adiciona cada Alter ao conjunto de vértices				
-		if G.has_edge(ego,alter):							### Se existe uma aresta entre o alter e o autor
-			G[ego][alter]['weight']+=1						##### Adiciona peso na aresta 
-		else:														# Senão
-			G.add_edge(ego,alter,weight=1)				##### Cria aresta com peso 1
+#		if G.has_edge(ego,alter):							### Se existe uma aresta entre o alter e o autor
+#			G[ego][alter]['weight']+=1						##### Adiciona peso na aresta 
+#		else:														# Senão
+#			G.add_edge(ego,alter,weight=1)				##### Cria aresta com peso 1
 
 	for alter in alters_list:
 		try:

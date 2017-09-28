@@ -1,4 +1,3 @@
-
 # -*- coding: latin1 -*-
 ################################################################################################
 #	
@@ -12,31 +11,29 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Criar rede N10 (co-followers) a partir dos dados coletados e de acordo com as instruções a seguir:
+##		Status - Versão 1 - Criar rede N5 (co-follow) a partir dos dados coletados e de acordo com as instruções a seguir:
 ##					Versão 1.1 - Tentar corrigir problema de elevado consumo de memória durante a criação das redes.
 ##									- Corrigido - Clear no grafo
 ##					Versão 1.2 - Usar conjunto de dados com 500 egos aleatórios.
 ##					Versão 1.3 - remover a parte de registrar arquivos faltando... "partial missing"
 ##									 Carregar dados dos alters em memória
-##					Versão 1.4 - Não inserir arestas onde o CSJ entre dois usuários é 0	
-##						OBS.: em TESTE - Se não resolver, tentar fazer um dump do grafo quando chegar a um numero X de arestas e depois fazer dump do restante...
-##						OBS.: em TESTE - demorando muito... +/- 20 dias para processar todos os 500 no notebook... fazer teste no servidor com a versão anterior (memoria)		
+##
+##					ATENÇÃO - NECESSÁRIO PELO MENOS 8GB DE RAM
+##								
 ## # INPUT:
 ##		- Lista de Egos (egos)
-##		- Conjunto Followers (alters) de cada Ego - Formação do conjunto de Alters
-##		- Conjunto Followee (amigos) de cada Alter (ids)
+##		- Conjunto Followee (alters) de cada Ego - Formação do conjunto de Alters
+##		- Conjunto Followee (followees) de cada Alter (ids)
 ##
 ## # ALGORITMO
 ##					0 - Para cada ego[i]:
-##					1 - 	Inicializa o ego_[i] e todos os seus seguidores (alters[i][n]) como vértices de um grafo - (tabela hash - ego+alters - vertices)
+##					1 - 	Inicializa o ego_[i] e todos os seus amigos (alters[i][n]) como vértices de um grafo - (tabela hash - ego+alters - vertices)
 ##					2 - 	Para cada elemento i no conjunto de vertices (v[i]):
 ##					3 - 		Para cada elemento j no conjunto de vértices (v[j]):
 ##					4 -   		Com i != j:	
 ##					5 - 				Se não existe uma aresta (v[i],v[j]):
 ##					6 - 					Cria uma aresta entre (v[i],v[j]) com peso igual ao CSJ entre seus conjuntos de alters
 ##					7 - 	Remova arestas com peso igual a zero
-##
-
 ## 
 ######################################################################################################################################################################
 
@@ -49,12 +46,12 @@ def read_arq_bin(file):															# Função recebe o arquivo binário
 		f.seek(0,2)
 		tamanho = f.tell()
 		f.seek(0)
-		followers_set = set()
+		friends_set = set()
 		while f.tell() < tamanho:
 			buffer = f.read(user_struct.size)
-			follower = user_struct.unpack(buffer)
-			followers_set.add(long(follower[0]))
-	return followers_set
+			friend = user_struct.unpack(buffer)
+			friends_set.add(long(friend[0]))
+	return friends_set
 	
 ################################################################################################
 # Função para calcular o csj entre dois conjuntos de dados
@@ -89,7 +86,7 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 #	vertices[ego] = alters_set															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_set:
 		try:
-			alters_friends = read_arq_bin(alters_dir+str(alter)+".dat")	# Chama função para converter o conjunto de amigos dos alters do formato Binário para uma lista do python
+			alters_friends = read_arq_bin(alters_dir+str(alter)+".dat")	# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
 			vertices[alter] = alters_friends										# Adiciona conjunto de dados do alter à tabela hash
 		except IOError:																# Tratamento de exceção - caso falte algum arquivo do alter, 
 			pass
@@ -99,13 +96,18 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 	########################################### # Criando arestas
 	for i in vertices:	
 		indice +=1
-		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(alters_set)))
+		print ("Ego: "+str(l)+" - Verificando arestas para alter: "+str(indice)+"/"+str(len(vertices)))
 		for j in vertices:
 			if i != j:
 				if not G.has_edge(i,j):												### Se ainda não existe uma aresta entre os dois vértices
 					csj_i_j = csj(vertices[i],vertices[j])							# Calcula o CSJ entre os dois conjuntos
-					if not csj_i_j == 0:													# Se o CJS não for 0:
-						G.add_edge(i,j,weight=csj_i_j)								# Cria aresta
+					G.add_edge(i,j,weight=csj_i_j)									# Cria aresta
+
+	########################################### # Remove arestas com CJS igual a zero.
+	########################################### # Deixar pra remover aqui pq a criação delas é interessante durante o processo de geração das redes...
+	for (u,v,d) in G.edges(data='weight'):
+		if d==0:
+			G.remove_edge(u,v)
 	###########################################
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
 	tp	= tf - ti																	# Cálculo do tempo gasto para a construção do grafo
@@ -130,8 +132,8 @@ def main():
 		l+=1																			# Incrementa contador do número do Ego
 		ego = file.split(".dat")												# Separa a extensão do id do usuário no nome do arquivo
 		ego = long(ego[0])														# recebe o id do usuário em formato Long
-		if not dictionary.has_key(ego):
-			alters_set = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de seguidores do ego do formato Binário para uma lista do python
+		if not dictionary.has_key(ego):		
+			alters_set = read_arq_bin(egos_dir+file)							# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python
 			n_friends = len(alters_set)											# Variável que armazena o tamanho da lista do usuário corrente
 
 			print("######################################################################")
@@ -141,8 +143,11 @@ def main():
 			print("Salvando o grafo...")
 			save_graph(ego,G)
 			G.clear()
+			tp = datetime.datetime.now()
+			tp = tp - ti
+			print ("Tempo decorrido: "+str(tp))
 			print("######################################################################")
-
+	
 		else:
 			print ("Lista de arestas já criada para o ego "+str(l)+": "+str(ego))
 	print		
@@ -161,9 +166,9 @@ def main():
 ######################################################################################################################################################################
 
 ######################################################################################################################
-egos_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
-alters_dir = "/home/amaury/dataset/n9/alters_limited_5k/bin/" # Diretório contendo os arquivos dos Alters
-output_dir = "/home/amaury/graphs/n10/graphs_without_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
+egos_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
+alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin/" # Diretório contendo os arquivos dos Alters
+output_dir = "/home/amaury/graphs/n5/graphs_without_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
 formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
 user_struct = struct.Struct(formato) ########################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 ######################################################################################################################
