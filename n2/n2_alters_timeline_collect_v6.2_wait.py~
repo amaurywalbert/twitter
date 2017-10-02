@@ -16,7 +16,8 @@ sys.setdefaultencoding('utf-8')
 ##								Assim que concluída a coleta desse subconjunto, pode-se voltar a coletar usando a versão 5.
 ##						6.1	Melhoria na recepção de erros da API
 ##						6.2	Não usa dicionário. Consulta se arquivo existe direto no disco para permitir o uso paralelo de diversas instancias do script.
-##						STATUS - EM TESTE - realizado o teste será necessário reescrever o script tirando o dicionário
+##						STATUS - OK - Dicionário removido, algumas partes ainda precisam ser reescritas para tirar dicionário já sem uso deste script.
+##						STATUS - COLETANDO FULL EGOS
 ##
 ##						OBS> Twitter bloqueou diversas contas por suspeita de spam... redobrar as atenções com os scripts criados.				
 ##
@@ -133,10 +134,10 @@ def save_timeline(j,k,l,user): # j = número do ego que esta sendo coletado - k 
 	global dictionary
 
 	#Chama a função e recebe como retorno a lista de tweets do usuário
-	try:
-		with open(data_dir+str(user)+".dat", "w+b") as f:
-			timeline = get_timeline(j,k,l,user)
-			if timeline is not None:
+	timeline = get_timeline(j,k,l,user)
+	if timeline is not None:
+		try:
+			with open(data_dir+str(user)+".dat", "w+b") as f:
 				for status in timeline:
 					if hasattr(status, 'retweeted_status'):
 						f.write(timeline_struct.pack(status.retweeted_status.id, status.retweeted_status.user.id))						# Grava os ids dos retweet  e o id do autor no arquivo binário do usuário
@@ -147,19 +148,15 @@ def save_timeline(j,k,l,user): # j = número do ego que esta sendo coletado - k 
 				dictionary[user] = user									# Insere o usuário coletado na tabela em memória
 				i +=1
 				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. "+str(len(timeline))+" retweets. Total coletados: "+str(i))
-			else:
-				if os.path.exists(data_dir+str(user)+".dat"):
-					os.remove(data_dir+str(user)+".dat")
-					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Timeline não recuperada... Arquivo excluído!")
 			
-	except Exception as e:	
-		if e.message:		
-			save_error(user,e.message)
-		else:
-			save_error(user,str(e))
-		if os.path.exists(data_dir+str(user)+".dat"):
-			os.remove(data_dir+str(user)+".dat")
-			print ("Arquivo removido co sucesso...")
+		except Exception as e:	
+			if e.message:		
+				save_error(user,e.message)
+			else:
+				save_error(user,str(e))
+			if os.path.exists(data_dir+str(user)+".dat"):
+				os.remove(data_dir+str(user)+".dat")
+				print ("Arquivo removido com sucesso...")
 
 
 ######################################################################################################################################################################

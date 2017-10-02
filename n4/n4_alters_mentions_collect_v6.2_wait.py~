@@ -129,11 +129,11 @@ def save_timeline(j,k,l,user): # j = número do ego que esta sendo coletado - k 
 	# Dicionário - Tabela Hash contendo os usuários já coletados
 	global dictionary
 
-	try:
-		with open(data_dir+str(user)+".dat", "w+b") as f:
-			#Chama a função e recebe como retorno a lista de tweets do usuário
-			timeline = get_timeline(j,k,l,user)
-			if timeline is not None:
+	#Chama a função e recebe como retorno a lista de tweets do usuário
+	timeline = get_timeline(j,k,l,user)
+	if timeline is not None:
+		try:
+			with open(data_dir+str(user)+".dat", "w+b") as f:			
 				for status in timeline:
 					if not hasattr(status, 'retweeted_status'):	#Despreza retweets...
 						mentions = status.entities['user_mentions']
@@ -149,19 +149,15 @@ def save_timeline(j,k,l,user): # j = número do ego que esta sendo coletado - k 
 				i +=1
 				print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" coletados com sucesso. Total coletados: "+str(i))
 				
+
+		except Exception as e:	
+			if e.message:		
+				save_error(user,e.message)
 			else:
-				if os.path.exists(data_dir+str(user)+".dat"):
-					os.remove(data_dir+str(user)+".dat")
-					print ("Ego nº: "+str(j)+" - Alter ("+str(k)+"/"+str(l)+"): "+str(user)+" - Menções não recuperadas... Arquivo excluído!")		
-	
-	except Exception as e:	
-		if e.message:		
-			save_error(user,e.message)
-		else:
-			save_error(user,str(e))
-		if os.path.exists(data_dir+str(user)+".dat"):
-			os.remove(data_dir+str(user)+".dat")
-			print ("Arquivo removido co sucesso...")
+				save_error(user,str(e))
+			if os.path.exists(data_dir+str(user)+".dat"):
+				os.remove(data_dir+str(user)+".dat")
+				print ("Arquivo removido com sucesso...")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################

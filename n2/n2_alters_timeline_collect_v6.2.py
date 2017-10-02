@@ -234,7 +234,6 @@ key_limit = len(auths)		########################################################
 key = random.randint(key_init,key_limit) ################################################# Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
 ### - DATASET - JÁ COLETADO ### egos_retweets_dir = "/home/amaury/dataset/n2/egos/bin/"######################## Arquivo contendo a lista dos usuários ego já coletados
-
 egos_retweets_dir = "/home/amaury/coleta/n2/egos/full_with_prunned/bin/"################## Arquivo contendo a lista dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/n2/alters/"+str(qtde_egos)+"/bin/" 						###### Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n2/alters/"+str(qtde_egos)+"/error/"					###### Diretório para armazenamento dos arquivos de erro
