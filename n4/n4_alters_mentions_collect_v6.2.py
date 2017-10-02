@@ -16,7 +16,8 @@ sys.setdefaultencoding('utf-8')
 ##								Assim que concluída a coleta desse subconjunto, pode-se voltar a coletar usando a versão 5.
 ##						6.1	Melhoria na recepção de erros da API
 ##						6.2	Não usa dicionário. Consulta se arquivo existe direto no disco para permitir o uso paralelo de diversas instancias do script.
-##						STATUS - EM TESTE - realizado o teste será necessário reescrever o script tirando o dicionário
+##						STATUS - OK - Dicionário removido, algumas partes ainda precisam ser reescritas para tirar dicionário já sem uso deste script.
+##						STATUS - COLETANDO FULL EGOS
 ##				
 ##						SALVAR APENAS O NECESSÁRIO PARA ECONOMIZAR ESPAÇO EM DISCO. Coletar tweets completos ocupa muito espaço.
 ##
@@ -231,7 +232,8 @@ key_init = 0					###############################################################
 key_limit = len(auths)		################################################################ Usa todas as chaves (tamanho da lista de chaves)
 key = random.randint(key_init,key_limit) ################################################## Inicia o script a partir de uma chave aleatória do conjunto de chaves
 
-egos_mentions_dir = "/home/amaury/dataset/n4/egos/bin/"												# Arquivo contendo a lista dos usuários ego já coletados
+### DATASET - JÁ COLETADO ### egos_mentions_dir = "/home/amaury/dataset/n4/egos/bin/"												# Arquivo contendo a lista dos usuários ego já coletados
+egos_mentions_dir = "/home/amaury/coleta/n4/egos/full_with_prunned/bin/"												# Arquivo contendo a lista dos usuários ego já coletados
 data_dir = "/home/amaury/coleta/n4/alters/"+str(qtde_egos)+"/bin/" 								# Diretório para armazenamento dos arquivos
 error_dir = "/home/amaury/coleta/n4/alters/"+str(qtde_egos)+"/error/" 							# Diretório para armazenamento dos arquivos de erro
 
