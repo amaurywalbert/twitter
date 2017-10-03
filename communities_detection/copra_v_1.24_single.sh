@@ -22,12 +22,12 @@ instructions()
 	clear
 	echo "###############################################################"
 	echo "																					"
-	echo " Algoritmo de Detecção de Comunidades $algorithm 					"
+	echo " Algoritmo de Detecção de Comunidades $algorithm - versão SINGLE"
 	echo "																					"
 	echo "###############################################################"
 	echo
-	echo "Sets the v parameter (the maximum number of communities per vertex) of the COPRA algorithm to v. Default: v=1."
-	echo "Repeats the execution r times for best modularity. Default: r=1."
+	echo " - Sets the v parameter (the maximum number of communities per vertex) of the COPRA algorithm to v. Default: v=1."
+	echo " - Repeats the execution r times for best modularity. Default: r=1."
 	echo	
 	echo -n "Informe um valor para o parâmetro v (optional): "
 	read THRESHOLD
@@ -89,16 +89,16 @@ copra()
 	echo "TYPE_GRAPH: $3"
 	echo "THRESHOLD: $4"
 	echo "REPEAT: $5"
-	java -cp /home/amaury/algoritmos/LabelPropagation/COPRA/copra.jar COPRA $1 -w -v $4 -repeat $5
+	java -cp /home/amaury/algoritmos/LabelPropagation/COPRA/copra.jar COPRA $1 -w -v $4 -repeat $5 -extrasimplify
 	mv "clusters-"$6 $2
-	mv "best-clusters-"$6 $2
+#	mv "best-clusters-"$6 $2 ## Usar apenas se a opção -extrasimplify não for usada.
 	echo
 	echo		 
 }
 
 echo "###############################################################"
 echo "																					"
-echo " Algoritmo de Detecção de Comunidades $algorithm 					"
+echo " Algoritmo de Detecção de Comunidades $algorithm - versão SINGLE"
 echo "																					"
 echo "###############################################################"
 echo
@@ -116,106 +116,73 @@ echo " 10) Rede N10 - Co-Followers"
 echo
 echo -n "Escolha uma opção: "
 read op
+echo
+echo "###############################################################"
+echo "Utilizar grafo:" 
+echo " 01 - SEM ego (Padrão)"
+echo " 02 - COM o ego"
+echo
+echo -n "Escolha uma opção: "
+read ego
 
+if [ -z $ego ]; then
+	GRAPH="graphs_without_ego"
+elif [ $ego == 02 ]; then
+	GRAPH="graphs_with_ego"
+else
+	GRAPH="graphs_without_ego"
+fi
+###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
 case $op in
-01)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Follow"
-	INPUT_DIR=/home/amaury/graphs/n1/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n1/$algorithm/
+
+01)DESCRIPTION="Follow"	
 	TYPE_GRAPH="D"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	NET="n1"
 	;;
 
-02)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Retweets"
-	INPUT_DIR=/home/amaury/graphs/n2/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n2/$algorithm/
+02)DESCRIPTION="Retweets"
+	TYPE_GRAPH="D"	
+	NET="n2"
+	;;
+
+03)DESCRIPTION="Likes"
+	TYPE_GRAPH="D"	
+	NET="n3"
+	;;
+
+04)DESCRIPTION="Mentions"
 	TYPE_GRAPH="D"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	NET="n4"
 	;;
 
-03)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Likes"
-	INPUT_DIR=/home/amaury/graphs/n3/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n3/$algorithm/
+05)DESCRIPTION="Co-Follow"
+	TYPE_GRAPH="U"
+	NET="n5"
+	;;
+
+06)DESCRIPTION="Co-Retweets"
+	TYPE_GRAPH="U"	
+	NET="n6"
+	;;
+
+07)DESCRIPTION="Co-Likes"
+	TYPE_GRAPH="U"	
+	NET="n7"
+	;;
+
+08)DESCRIPTION="Co-Mentions"
+	TYPE_GRAPH="U"
+	NET="n8"
+	;;
+
+09)DESCRIPTION="Followers"
 	TYPE_GRAPH="D"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	NET="n9"
 	;;
 
-04)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Mentions"
-	INPUT_DIR=/home/amaury/graphs/n4/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n4/$algorithm/
-	TYPE_GRAPH="D"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
-	;;
-
-05)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Co-Follow"
-	INPUT_DIR=/home/amaury/graphs/n5/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n5/$algorithm/
+10)DESCRIPTION="Co-Followers"
 	TYPE_GRAPH="U"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
-	;;
-
-06)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Co-Retweets"
-	INPUT_DIR=/home/amaury/graphs/n6/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n6/$algorithm/
-	TYPE_GRAPH="U"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
-	;;
-
-07)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Co-Likes"
-	INPUT_DIR=/home/amaury/graphs/n7/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n7/$algorithm/
-	TYPE_GRAPH="U"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
-	;;
-
-08)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Co-Mentions"
-	INPUT_DIR=/home/amaury/graphs/n8/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n8/$algorithm/
-	TYPE_GRAPH="U"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
-	;;
-
-09)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Followers"
-	INPUT_DIR=/home/amaury/graphs/n9/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n9/$algorithm/
-	TYPE_GRAPH="D"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
-	;;
-
-10)clear
-	###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-	DESCRIPTION="Co-Followers"
-	INPUT_DIR=/home/amaury/graphs/n10/graphs/
-	OUTPUT_DIR=/home/amaury/communities/n10/$algorithm/
-	TYPE_GRAPH="U"
-	###############################################################
-	instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
+	NET="n10"
 	;;
 
 *) echo
@@ -223,3 +190,9 @@ case $op in
 	echo
 	;;
 esac
+INPUT_DIR=/home/amaury/graphs/$NET/$GRAPH/
+OUTPUT_DIR=/home/amaury/communities/$NET/$algorithm/$GRAPH/
+
+#Execução do algoritmo...
+###############################################################
+instructions $DESCRIPTION $INPUT_DIR $OUTPUT_DIR $TYPE_GRAPH
