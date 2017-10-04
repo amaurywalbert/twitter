@@ -191,7 +191,7 @@ def main():
 
 ######################################################################################################################
 egos_dir = "/home/amaury/dataset/n1/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
-alters_dir = "/home/amaury/dataset/n1/alters_limited_5k/bin/" # Diretório contendo os arquivos dos Alters
+alters_dir = "/home/amaury/dataset/n1/alters/bin/" # Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n5/graphs/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
 output_dir_errors = "/home/amaury/graphs/n5/errors/" ########## Diretório para armazenamento dos erros
 output_overview = "/home/amaury/graphs/n5/overview/" ########## Diretório contendo arquivos com informações sobre a construção das redes. 

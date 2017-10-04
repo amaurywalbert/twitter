@@ -83,7 +83,7 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo
 	########################################### # Criar tabela hash com o conjunto de dados (retweets) dos vértices (ego e todos os alters)
 	vertices = {}
-	vertices[ego] = alters_set															# Adiciona o Ego ao conjunto de vértices
+#	vertices[ego] = alters_set															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_set:
 		try:
 			alters_friends = read_arq_bin(alters_dir+str(alter)+".dat")	# Chama função para converter o conjunto de amigos do ego do formato Binário para uma lista do python

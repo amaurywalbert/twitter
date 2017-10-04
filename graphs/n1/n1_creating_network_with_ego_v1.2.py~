@@ -79,7 +79,7 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 	G=nx.DiGraph()																	# Inicia um grafo DIRECIONADO
 	G.clear()
 	vertices = {}																	# Inicia tabela hash - Conjunto de vértices - EGO + ALTERS
-	partial_missing=[]																			# Lista de usuários faltando
+	partial_missing=[]															# Lista de usuários faltando
 	ti = datetime.datetime.now()												# Tempo do inicio da construção do grafo 
 	vertices[ego] = ego															# Adiciona o Ego ao conjunto de vértices
 	for alter in alters_list:
@@ -91,13 +91,13 @@ def ego_net(ego,alters_list,l):												# Função recebe o id do ego, a list
 		i+=1	
 		try:
 			friends = read_arq_bin(alters_dir+str(alter)+".dat")		# Recebe lista de amigos de cada alter
-			for friend in friends:											# Para cada amigo
-				if alter != friend:											# Remover self-loops				
+			for friend in friends:												# Para cada amigo
+				if alter != friend:												#### Remover self-loops				
 					friend = long(friend)
 					if vertices.has_key(friend):								# Se amigo está na lista de alters		
 						G.add_edge(alter,friend)								### Cria aresta
-		except IOError as e:															# Tratamento de exceção - caso falte algum arquivo de um amigo do alter, 
-			partial_missing.append(alter)															# Adiciona alter à lista com usuários faltando		
+		except IOError as e:														# Tratamento de exceção - caso falte algum arquivo de um amigo do alter, 
+			partial_missing.append(alter)										### Adiciona alter à lista com usuários faltando		
 		
 	tf =  datetime.datetime.now()												# Tempo final da construção do grafo do ego corrente
 	tp	= tf - ti																	# Cálculo do tempo gasto para a construção do grafo

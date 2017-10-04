@@ -164,7 +164,7 @@ def main():
 
 ######################################################################################################################
 egos_dir = "/home/amaury/dataset/n9/egos_limited_5k/bin/"###### Diretório contendo os arquivos dos Egos
-alters_dir = "/home/amaury/dataset/n9/alters_limited_5k/bin/" ## Diretório contendo os arquivos dos Alters
+alters_dir = "/home/amaury/dataset/n9/alters/bin/" ## Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n9/graphs_without_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
 output_overview = "/home/amaury/graphs/n9/overview_without_ego.json" ########## Diretório contendo arquivos com informações sobre a construção das redes. 
 formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
