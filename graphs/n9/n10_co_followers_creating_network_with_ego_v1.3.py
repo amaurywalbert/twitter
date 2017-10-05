@@ -105,6 +105,7 @@ def ego_net(ego,alters_set,l):												# Função recebe o id do ego, a lista
 
 	########################################### # Remove arestas com CJS igual a zero.
 	########################################### # Deixar pra remover aqui pq a criação delas é interessante durante o processo de geração das redes...
+	print("Removendo arestas com peso 0...")	
 	for (u,v,d) in G.edges(data='weight'):
 		if d==0:
 			G.remove_edge(u,v)
