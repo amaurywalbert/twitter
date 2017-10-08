@@ -48,7 +48,10 @@ copra()
 				echo "ERROR - EGO: $i - Arquivo não encontrado!"
 			fi
 		done
-		echo "Total de arquivos verificados para o $THRESHOLD: $e"
+		echo "COPRA - Total de arquivos verificados para o THRESHOLD $THRESHOLD: $e"
+	echo "###############################################################"
+	echo "###############################################################"
+	echo
 	done
 }
 
