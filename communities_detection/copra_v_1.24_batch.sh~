@@ -87,7 +87,7 @@ copra()
 	echo "THRESHOLD: $4"
 
 	java -cp /home/amaury/algoritmos/LabelPropagation/COPRA/copra.jar COPRA $1 -w -v $4 -extrasimplify
-	mv "clusters-"$5 $2
+	mv "clusters-"$5 $2$5
 #	mv "best-clusters-"$5 $2 ## Usar apenas se a opção -extrasimplify não for usada.
 	echo
 	echo		 
@@ -188,7 +188,7 @@ case $op in
 	;;
 esac
 INPUT_DIR=/home/amaury/graphs/$NET/$GRAPH/
-OUTPUT_DIR=/home/amaury/communities/$NET/$algorithm/$GRAPH/
+OUTPUT_DIR=/home/amaury/communities/$NET/$GRAPH/$algorithm/
 
 #Execução do algoritmo...
 ###############################################################
