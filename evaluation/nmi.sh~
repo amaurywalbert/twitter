@@ -47,7 +47,7 @@ copra()
 					rm $OUTPUT_DIR$THRESHOLD".txt"				# Remover arquivos existentes na pasta de saída.
 				fi	
 				echo "Calculando $METRIC para o ego: $i"
-				echo "Ground-Truth: ${file_temp[1]}".txt" ----- Communitites Detected: $file"
+				echo "Ground-Truth File: ${file_temp[1]}".txt" ----- Communitites Detected File: $file"
 				/home/amaury/algoritmos/Metricas/mutual3/mutual $COMMUNITIES$THRESHOLD/$file $GROUND_TRUTH${file_temp[1]}".txt" >> $OUTPUT_DIR$THRESHOLD".txt"
 				let e=$e+1;
 			else
