@@ -47,7 +47,7 @@ copra()
 			
 			if [ -e $GROUND_TRUTH${file_temp[1]}".txt" ] ; then
 				echo "Calculando $METRIC para o ego: $i - THRESHOLD $THRESHOLD"
-				echo "Ground-Truth File: ${file_temp[1]}".txt" ----- Communitites Detected File: $file"
+#				echo "Ground-Truth File: ${file_temp[1]}".txt" ----- Communitites Detected File: $file"
 				/home/amaury/algoritmos/Metricas/mutual3/mutual $COMMUNITIES$THRESHOLD/$file $GROUND_TRUTH${file_temp[1]}".txt" >> $OUTPUT_DIR$THRESHOLD".txt"
 				let e=$e+1;
 			else
