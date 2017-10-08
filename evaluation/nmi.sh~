@@ -37,16 +37,16 @@ copra()
 	for ((THRESHOLD=1; THRESHOLD<=$V; THRESHOLD++)); do
 		i=0 		#Ponteiro para o ego
 		e=0		#Quantidade de arquivos compativeis... Alguns arquivos para algumas variações do parâmetro V não foram obtidos.
+		if [ -e $OUTPUT_DIR$THRESHOLD".txt" ] ; then
+			rm $OUTPUT_DIR$THRESHOLD".txt"				# Remover arquivos existentes na pasta de saída.
+		fi	
 		for file in `ls $COMMUNITIES$THRESHOLD`; do
 			let i=$i+1;
 			IFS="." read -a fields <<<"$file"					# Renomear (temp) o arquivo "clusters-97197087.edge_list" para clusters-97197087
 			IFS="-" read -a file_temp <<<"${fields[0]}"		# Renomear (temp) o arquivo "97197087.edge_list" para 97197087
 			
 			if [ -e $GROUND_TRUTH${file_temp[1]}".txt" ] ; then
-				if [ -e $OUTPUT_DIR$THRESHOLD".txt" ] ; then
-					rm $OUTPUT_DIR$THRESHOLD".txt"				# Remover arquivos existentes na pasta de saída.
-				fi	
-				echo "Calculando $METRIC para o ego: $i"
+				echo "Calculando $METRIC para o ego: $i - THRESHOLD $THRESHOLD"
 				echo "Ground-Truth File: ${file_temp[1]}".txt" ----- Communitites Detected File: $file"
 				/home/amaury/algoritmos/Metricas/mutual3/mutual $COMMUNITIES$THRESHOLD/$file $GROUND_TRUTH${file_temp[1]}".txt" >> $OUTPUT_DIR$THRESHOLD".txt"
 				let e=$e+1;

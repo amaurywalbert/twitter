@@ -46,7 +46,7 @@ copra()
 			IFS="-" read -a file_temp <<<"${fields[0]}"		# Renomear (temp) o arquivo "97197087.edge_list" para 97197087
 			
 			if [ -e $GROUND_TRUTH${file_temp[1]}".txt" ] ; then
-				echo "Calculando $METRIC para o ego: $i"
+				echo "Calculando $METRIC para o ego: $i - THRESHOLD $THRESHOLD"
 				echo "Ground-Truth File: ${file_temp[1]}".txt" ----- Communitites Detected File: $file"
 				/home/amaury/algoritmos/Metricas/mutual3/mutual $COMMUNITIES$THRESHOLD/$file $GROUND_TRUTH${file_temp[1]}".txt" >> $OUTPUT_DIR$THRESHOLD".txt"
 				let e=$e+1;
