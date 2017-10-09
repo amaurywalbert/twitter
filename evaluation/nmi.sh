@@ -12,7 +12,7 @@
 
 op=0
 clear
-METRIC="NMI"
+METRIC="nmi"
 
 
 copra()
@@ -26,7 +26,7 @@ copra()
 	ALG=$5
 	GROUND_TRUTH=/home/amaury/dataset/ground_truth/lists_users_TXT/
 	COMMUNITIES=/home/amaury/communities/$TYPE_GRAPH/$NET/$ALG/
-	OUTPUT_DIR=/home/amaury/evaluation/$TYPE_GRAPH/$NET/$ALG/
+	OUTPUT_DIR=/home/amaury/Dropbox/evaluation/$TYPE_GRAPH/$METRIC/$NET/$ALG/
 	############################################################################################################
 	mkdir -p $OUTPUT_DIR
 	V=10	#Parâmetro do COPRA
