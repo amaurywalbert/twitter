@@ -19,6 +19,35 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 #
+# Prepara apresentação dos resultados para o algoritmo COPRA 
+#
+######################################################################################################################################################################
+
+def copra(graph_type,metric,algorithm):
+	for i in range(10):
+		i+=1
+		communities = str(source_dir)+str(graph_type)+"/"+str(metric)+"/n"+str(i)+"/"+algorithm+"/"
+		values = []
+		try:		
+			for file in os.listdir(communities):										# Para cada arquivo no diretório
+				with open(communities+file, 'r') as f:
+					print communities+file
+					for line in f:
+						a = line.split('\t')
+						b= float(a[1])
+						try:
+							values.append(b)
+						except Exception as e:
+							pass	
+			print values				
+			print ("#########################")
+
+		except IOError as io:
+			print ("Arquivo não encontrado. Continuando.")
+		except OSError as os1:
+			print ("Diretório não encontrado. Continuando.")
+######################################################################################################################################################################
+#
 # Método principal do programa.
 # Realiza teste e coleta dos dados de cada user especificado no arquivo. 
 #
@@ -33,7 +62,7 @@ def main():
 	graph_type_op = int(raw_input("Escolha uma opção acima: "))
 	if graph_type_op == 01:
 		graph_type = "graphs_without_ego"
-	elif op == 02:
+	elif graph_type_op == 02:
 		graph_type = "graphs_with_ego"
 	else:
 		graph_type = "graphs_without_ego"
@@ -44,19 +73,34 @@ def main():
 	print("02 - Ômega Index.")
 	print("03 - Jaccard Similarity.")
 	print
+	print
 	metric_op = int(raw_input("Escolha uma opção acima: "))
-	if op == 01:
+	if metric_op == 01:
 		metric = "nmi"
-	elif op == 02:
+	elif metric_op == 02:
 		metric = "omega"
-	elif op == 03:
+	elif metric_op == 03:
 		metric = "jaccard"
 	else:
 		metric = ""
 		print("Opção inválida! Saindo...")
-	    sys.exit(0)
+		exit()
+	#######################################################################	
+	print
+	print
+	print("01 - COPRA. ")
+	print("02 - ")
+	print("03 - ")
+	print
+	algorithm_op = int(raw_input("Escolha uma opção acima: "))
+	if algorithm_op == 01:
+		algorithm = "copra"
+		copra(graph_type,metric,algorithm)			# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+	else:
+		algorithm = ""
+		print("Opção inválida! Saindo...")
+		exit()
 	
-	communities = str(source)+str(graph_type)/nmi/n1/copra/"					
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
@@ -64,9 +108,11 @@ def main():
 ######################################################################################################################################################################
 
 ######################################################################################################################
-source = "/home/amaury/Dropbox/evaluation/"
-ground_truth = "/home/amaury/dataset/n1/alters/bin/" # Diretório contendo os arquivos dos Alters
-output_dir = "/home/amaury/graphs/n5/graphs_without_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
+#####Alterar as linhas para Dropbox quando executado em ambiente de produção
+#source_dir = "/home/amaury/Dropbox/evaluation/"
+#output_dir = "/home/amaury/Dropbox/statistics/"
+source_dir = "/home/amaury/evaluation/"
+output_dir = "/home/amaury/statistics/"
 ######################################################################################################################
 
 
