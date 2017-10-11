@@ -42,7 +42,7 @@ def save_data(graph):
 				i=0
 				for file in os.listdir(source_dir+str(threshold)+"/"):		
 					i+=1
-					with open((source_dir+str(threshold)+"/"+file, 'r') as f:
+					with open(source_dir+str(threshold)+"/"+file, 'r') as f:
 						print (str(graph)+" - Verificando singletons para o threshold: "+str(threshold)+" - ego: "+str(i))
 						if os.path.isfile(output_without_singletons+file):
 							os.remove(output_without_singletons+file)
