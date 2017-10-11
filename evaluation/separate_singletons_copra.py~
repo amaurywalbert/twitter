@@ -23,9 +23,9 @@ sys.setdefaultencoding('utf-8')
 def save_data(graph):
 	for net in range(10):
 		net+=1
-		source_dir="/home/amaury/communities/"+str(graph)+"/copra/"+str(net)+"/"
-		output_singletons="/home/amaury/communities/"+str(graph)+"/copra/singletons/"+str(net)+"/"
-		output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra/without_singletons/"+str(net)+"/"
+		source_dir="/home/amaury/communities/"+str(graph)+"/copra/n"+str(net)+"/"
+		output_singletons="/home/amaury/communities/"+str(graph)+"/copra/singletons/n"+str(net)+"/"
+		output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra/without_singletons/n"+str(net)+"/"
 		
 		if os.path.isdir(source_dir):		
 
@@ -35,7 +35,7 @@ def save_data(graph):
 				os.makedirs(output_without_singletons)
 				
 			print		
-			print ("Separando comunidades da rede: "+str(net))
+			print ("Separando comunidades da rede: n"+str(net))
 			 
 			for threshold in range(20):
 				threshold+=1
