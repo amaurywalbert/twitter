@@ -13,6 +13,7 @@ import plotly.graph_objs as go
 import pandas as pd
 import math
 from math import*
+import omega_index
 
 
 reload(sys)
@@ -86,10 +87,30 @@ def save_data(communities,data):
 	
 ######################################################################################################################################################################
 #
-# Prepara apresentação dos resultados para o algoritmo COPRA 
+# Prepara apresentação dos resultados para o algoritmo COPRA - OMEGA
 #
 ######################################################################################################################################################################
+def omega_copra():
 
+#communities = {
+#   "com1": ["item1", "item2"],
+#    "com2": ["item3", "item4"],
+#    "com3": ["item5", "item6", "item9"],
+#    "com4": ["item7", "item8"],
+#    "com5": ["item9", "item10", "item4"],
+#    "com6": ["item11", "item12"],
+#    "com7": ["item13", "item14"]
+#}
+
+#	omega = omega_index.Omega(communities, ground_truth_communities)
+#	print omega.omega_score
+
+
+######################################################################################################################################################################
+#
+# Prepara apresentação dos resultados para o algoritmo COPRA - NMI
+#
+######################################################################################################################################################################
 def nmi_copra(communities_dir):
 	nmi_data = {}																				# Armazenar o nome da rede e o maior valor do trheshold do COPRA para o NMI - Formato {{'N1':0.012},...}
 	dictionary = {}																			# Armazenar todos os valores NMI para cada threshold do COPRA em cada rede - Formato {'n8': {1: {'soma': 6.059981138000007, 'media': 0.025787153778723433, 'desvio_padrao': 0.006377214443559922, 'variancia': 4.0668864059149294e-05}, 2: {'soma': 6.059981138000007...}}
@@ -138,8 +159,8 @@ def main():
 	print ("Métrica a ser aplicada na geração dos resultados:")
 	print
 	print("01 - NMI - Normalized Mutual Infomation. ")
-#	print("02 - Ômega Index.")
-#	print("03 - Jaccard Similarity.")
+	print("02 - Ômega Index.")
+	print("03 - Jaccard Similarity.")
 	print
 	print
 	metric_op = int(raw_input("Escolha uma opção acima: "))
@@ -167,25 +188,24 @@ def main():
 	if algorithm_op == 01 and metric_op == 01: 
 		algorithm = "copra"
 #######################################################################		
+		
+		communities = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"							# Diretório para procurar pelos arquivos do Threshold do COPRA
+		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(communities,data)	
 
-		communities_full = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"									# Diretório para procurar pelos arquivos do Threshold do COPRA
-		data_with_ego = nmi_copra(communities_full)																			# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(communities_full,data_with_ego)
 
-
-		communities_without_singletons = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"			# Diretório para procurar pelos arquivos do Threshold do COPRA
-		data_with_ego = nmi_copra(communities_without_singletons)																						# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(communities_without_singletons,data_with_ego)	
+		communities = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"		# Diretório para procurar pelos arquivos do Threshold do COPRA
+		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(communities,data)
 #######################################################################		
 
-		communities_full = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"									# Diretório para procurar pelos arquivos do Threshold do COPRA
-		data_without_ego = nmi_copra(communities_full)																								# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(communities_full,data_without_ego)
+		communities = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"						# Diretório para procurar pelos arquivos do Threshold do COPRA
+		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(communities,data)
 
-		communities_without_singletons = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"		# Diretório para procurar pelos arquivos do Threshold do COPRA
-		data_without_ego = nmi_copra(communities_without_singletons)																					# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(communities_without_singletons,data_without_ego)
-		
+		communities = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"	# Diretório para procurar pelos arquivos do Threshold do COPRA
+		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(communities,data)
 #######################################################################
 	else:
 		algorithm = ""

@@ -75,7 +75,7 @@ def save_ground_truth(ego,i,lists_ids):
 			if os.path.isfile(subs_lists_collected+str(list_id)+".dat"):
 				list_subs_users = read_arq_bin(subs_lists_collected+str(list_id)+".dat")	
 				if list_subs_users is not None:
-						list_ground_truth.update(list_subs_users) 
+						list_ground_truth.update(list_subs_users)
 		##################################################### Salvando Arquivo TXT #####################################################	
 			try:		
 				with open(output_ground_truth_txt+str(ego)+".txt", 'a+') as f:
@@ -132,8 +132,8 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 fonte = "/home/amaury/dataset/ground_truth/bin/"															#Lista de egos... qualquer rede no dataset serviria.
-output_ground_truth_txt = "/home/amaury/dataset/ground_truth/lists_users_TXT_of_bin/"			# Diretório que armazenará as comunidades em formato TXT
-output_ground_truth_json = "/home/amaury/dataset/ground_truth/lists_users_JSON_of_bin/"		# Diretório que armazenará as comunidades em formato JSON tudo misturado (as que o ego é o dono e as que ele está inscrito)
+output_ground_truth_txt = "/home/amaury/dataset/ground_truth/lists_users_TXT_of_bin/full/"			# Diretório que armazenará as comunidades em formato TXT
+output_ground_truth_json = "/home/amaury/dataset/ground_truth/lists_users_JSON_of_bin/full/"		# Diretório que armazenará as comunidades em formato JSON tudo misturado (as que o ego é o dono e as que ele está inscrito)
 error_dir = "/home/amaury/dataset/ground_truth/lists_users_JSON_of_bin_ERROR/"					# Diretório que armazenará erros na formatação das listas.
 ######################################################################################################################
 lists_set = "/home/amaury/coleta/users_lists/ego_lists_overview_full.json"							# Arquivo que contém o conjunto de listas de cada ego. 

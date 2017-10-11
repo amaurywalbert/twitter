@@ -75,7 +75,7 @@ def save_ground_truth(ego,i,lists_ids):
 			if os.path.isfile(subs_lists_collected+str(list_id)+".dat"):
 				list_subs_users = read_arq_bin(subs_lists_collected+str(list_id)+".dat")	
 				if list_subs_users is not None:
-						list_ground_truth.update(list_subs_users) 
+						list_ground_truth.update(list_subs_users)
 		##################################################### Salvando Arquivo TXT #####################################################	
 			try:		
 				with open(output_ground_truth_txt+str(ego)+".txt", 'a+') as f:

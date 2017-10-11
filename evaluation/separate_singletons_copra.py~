@@ -23,26 +23,23 @@ sys.setdefaultencoding('utf-8')
 def save_data(graph):
 	for net in range(10):
 		net+=1
-		source_dir="/home/amaury/communities/"+str(graph)+"/copra/full/n"+str(net)+"/"
-		output_singletons="/home/amaury/communities/"+str(graph)+"/copra/singletons/n"+str(net)+"/"
-		output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra/without_singletons/n"+str(net)+"/"
-		
-		if os.path.isdir(source_dir):		
-
+		print		
+		print ("Separando comunidades da rede: n"+str(net))
+		for threshold in range(20):
+			threshold+=1
+			source_dir="/home/amaury/communities/"+str(graph)+"/copra/full/n"+str(net)+"/"+str(threshold)+"/"
+			output_singletons="/home/amaury/communities/"+str(graph)+"/copra/singletons/n"+str(net)+"/"+str(threshold)+"/"
+			output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
+				
 			if not os.path.exists(output_singletons):		
 				os.makedirs(output_singletons)
 			if not os.path.exists(output_without_singletons):
-				os.makedirs(output_without_singletons)
-				
-			print		
-			print ("Separando comunidades da rede: n"+str(net))
-			 
-			for threshold in range(20):
-				threshold+=1
+				os.makedirs(output_without_singletons)	
+			if os.path.isdir(source_dir):						
 				i=0
-				for file in os.listdir(source_dir+str(threshold)+"/"):		
+				for file in os.listdir(source_dir):		
 					i+=1
-					with open(source_dir+str(threshold)+"/"+file, 'r') as f:
+					with open(source_dir+file, 'r') as f:
 						print (str(graph)+" - Verificando singletons para o threshold: "+str(threshold)+" - rede: "+str(net)+" - ego: "+str(i))
 						if os.path.isfile(output_without_singletons+file):
 							os.remove(output_without_singletons+file)
@@ -50,20 +47,22 @@ def save_data(graph):
 							os.remove(output_singletons+file)				
 						for line in f:
 							a = line.split(' ')
+							print a
 							if len(a) > 2:
 								with open(output_without_singletons+file, 'a+') as g:
 									for item in a:
-										if item != "\n": 
-											g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
-									g.write("\n")														# Passa para a próxima linha
+										if item != "\n":
+											print item											
+											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+									g.write("\n")															# Passa para a próxima linha
 							else:			
 								with open(output_singletons+file, 'a+') as g:
 									for item in a:
 										if item != "\n":
 											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-									g.write("\n")													
-		else:
-			print ("Diretório não encontrado! "+str(source_dir))
+									g.write("\n")														
+			else:
+				print ("Diretório não encontrado! "+str(source_dir))
 ######################################################################################################################################################################
 #
 # Método principal do programa.

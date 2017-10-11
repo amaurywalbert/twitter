@@ -183,9 +183,9 @@ def main():
 ################################### CONFIGURAR AS LINHAS A SEGUIR ####################################################
 ######################################################################################################################
 fonte = "/home/amaury/dataset/n2/egos/bin/"																	# Lista de egos... qualquer rede no dataset serviria.
-output_json = "/home/amaury/dataset/ground_truth/egos_lists_json/"									# Diretório com arquivos JSON com id das listas quem o ego é o dono ou está insctrito.
+output_json = "/home/amaury/dataset/ground_truth/egos_lists_json/full/"								# Diretório com arquivos JSON com id das listas quem o ego é o dono ou está insctrito.
 output_json_fail = "/home/amaury/dataset/ground_truth/egos_lists_json_fail/"						# Diretório com arquivos JSON com id das listas quem o ego é o dono ou está insctrito mas que contém menos de 02 listas.
-output_ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT_of_JSON/"				# Diretório que armazenará as comunidades
+output_ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT_of_JSON/full/"		# Diretório que armazenará as comunidades
 error_dir = "/home/amaury/dataset/ground_truth/lists_users_TXT_of_JSON_ERROR/"															# Diretório que armazenará erros na formatação das listas.
 ######################################################################################################################
 lists_set = "/home/amaury/coleta/users_lists/ego_lists_overview_full.json"							# Diretório que contém o conjunto de listas de cada ego. 
