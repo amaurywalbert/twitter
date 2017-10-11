@@ -29,8 +29,8 @@ def save_data(graph):
 		
 		if os.path.isdir(source_dir):		
 
-			if not os.path.exists(output_with_singletons):		
-				os.makedirs(output_with_singletons)
+			if not os.path.exists(output_singletons):		
+				os.makedirs(output_singletons)
 			if not os.path.exists(output_without_singletons):
 				os.makedirs(output_without_singletons)
 				

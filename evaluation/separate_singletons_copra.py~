@@ -24,8 +24,8 @@ def save_data(graph):
 	for net in range(10):
 		net+=1
 		source_dir="/home/amaury/communities/"+str(graph)+"/copra/n"+str(net)+"/"
-		output_singletons="/home/amaury/communities/"+str(graph)+"/copra/singletons/n"+str(net)+"/"
-		output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra/without_singletons/n"+str(net)+"/"
+		output_singletons="/home/amaury/communities/"+str(graph)+"/copra_singletons/n"+str(net)+"/"
+		output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra_without_singletons/n"+str(net)+"/"
 		
 		if os.path.isdir(source_dir):		
 
