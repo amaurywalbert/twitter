@@ -97,7 +97,7 @@ def nmi_copra(graph_type,metric,algorithm):
 		network = "n"+str(i)
 		print ("Recuperando dados da rede "+str(network))
 		nmi_data[network] = {'threshold':" ",'nmi':float(0)}
-		communities = str(source_dir)+str(graph_type)+"/"+str(metric)+"/n"+str(i)+"/"+algorithm+"/"	#Diretório para procurar pelos arquivos do Threshold do COPRA
+		communities = str(source_dir)+str(graph_type)+"/"+algorithm+"/"+str(metric)+"/n"+str(i)+"/"	#Diretório para procurar pelos arquivos do Threshold do COPRA
 		partial = {}																											#Armazena as informações do NMI para todos os trhesholds do diretório da rede i - Depois junta tudo no dictionary 
 		if os.path.isdir(communities):													
 			for file in os.listdir(communities):										# Para cada arquivo no diretório
@@ -119,7 +119,7 @@ def nmi_copra(graph_type,metric,algorithm):
 			print ("Diretório \""+str(communities)+"\" não encontrado. Continuando...")
 	
 		dictionary[network] = partial
-		print nmi_data[network]
+		print graph_type,nmi_data[network]
 	
 	return nmi_data
 		
@@ -132,23 +132,23 @@ def nmi_copra(graph_type,metric,algorithm):
 ######################################################################################################################################################################
 def main():
 	os.system('clear')
-	print
-	print ("#######################################################################")	
-	print	
-	print ("Tipo de grafo usado durante o processo de detecção de comunidades:")
-	print
-	print("01 - Communidades extraídas de grafos SEM o ego.")
-	print("02 - Communidades extraídas de grafos COM o ego.")
-	print
-	graph_type_op = int(raw_input("Escolha uma opção acima: "))
-	if graph_type_op == 01:
-		graph_type = "graphs_without_ego"
-	elif graph_type_op == 02:
-		graph_type = "graphs_with_ego"
-	else:
-		graph_type = 00
-		print("Opção inválida! Saindo...")
-		exit()
+#	print
+#	print ("#######################################################################")	
+#	print	
+#	print ("Tipo de grafo usado durante o processo de detecção de comunidades:")
+#	print
+#	print("01 - Communidades extraídas de grafos SEM o ego.")
+#	print("02 - Communidades extraídas de grafos COM o ego.")
+#	print
+#	graph_type_op = int(raw_input("Escolha uma opção acima: "))
+#	if graph_type_op == 01:
+#		graph_type = "graphs_without_ego"
+#	elif graph_type_op == 02:
+#		graph_type = "graphs_with_ego"
+#	else:
+#		graph_type = 00
+#		print("Opção inválida! Saindo...")
+#		exit()
 
 #######################################################################		
 	print	
@@ -185,8 +185,14 @@ def main():
 	algorithm_op = int(raw_input("Escolha uma opção acima: "))
 	if algorithm_op == 01 and metric_op == 01: 
 		algorithm = "copra"
-		data = nmi_copra(graph_type,metric,algorithm)			# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(data,graph_type,metric,algorithm )
+
+		graph_type = "graphs_with_ego"
+		data_with_ego = nmi_copra(graph_type,metric,algorithm)			# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(data_with_ego,graph_type,metric,algorithm)
+				
+		graph_type = "graphs_without_ego"		
+		data_without_ego = nmi_copra(graph_type,metric,algorithm)	# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(data_without_ego,graph_type,metric,algorithm)
 
 	else:
 		algorithm = ""

@@ -1,71 +1,19 @@
 	# -*- coding: latin1 -*-
 ################################################################################################
 import datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import matplotlib.pyplot as plt
-import matplotlib.mlab as mlab
-import pylab
-import numpy as np
-import powerlaw
-import seaborn as sns
-import plotly
-import plotly.plotly as py
-import plotly.graph_objs as go
-import pandas as pd
-import math
-from math import*
-
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-##		Status - Versão 1 - Gerar Resultados
+##		Status - Versão 1 - Receber o conjunto de conjunto de comunidades e o ground_truth e separar em conjunto completo e conjunto sem singletons.
 ##								
-## # INPUT: Arquivos com os resultado obtidos em cada métricas 
+## # INPUT:
+##		- Arquivos com as comunidades completas
 ## # OUTPUT:
-##		- Arquivos com estatísticas dos resultados
+##		- Arquivos com as comunidades sem singletons
 ######################################################################################################################################################################
-
-######################################################################################################################################################################
-#
-# Cálculos iniciais sobre o conjunto de dados lidos.
-#
-######################################################################################################################################################################
-def calcular(valores=None):
-	calculos = {}
-	if valores:
-		if valores.__class__.__name__ == 'list' and calculos.__class__.__name__ == 'dict':
-			def somar(valores):
-				soma = 0
-				for v in valores:
-					soma += v
-				return soma
- 
-			def media(valores):
-				soma = somar(valores)
-				qtd_elementos = len(valores)
-				media = soma / float(qtd_elementos)
-				return media
- 
- 			def variancia(valores):
- 				_media = media(valores)
- 				soma = 0
- 				_variancia = 0
- 
- 				for valor in valores:
- 					soma += math.pow( (valor - _media), 2)
- 					_variancia = soma / float( len(valores) )
- 					return _variancia
- 
- 			def desvio_padrao(valores):
- 				return math.sqrt( variancia(valores) )
-
-			calculos['soma'] = somar(valores)
-			calculos['media'] = media(valores)
-			calculos['variancia'] = variancia(valores)
-			calculos['desvio_padrao'] = desvio_padrao(valores)
-			return calculos
 
 ######################################################################################################################################################################
 #
@@ -131,68 +79,18 @@ def nmi_copra(graph_type,metric,algorithm):
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 def main():
-	os.system('clear')
-#	print
-#	print ("#######################################################################")	
-#	print	
-#	print ("Tipo de grafo usado durante o processo de detecção de comunidades:")
-#	print
-#	print("01 - Communidades extraídas de grafos SEM o ego.")
-#	print("02 - Communidades extraídas de grafos COM o ego.")
-#	print
-#	graph_type_op = int(raw_input("Escolha uma opção acima: "))
-#	if graph_type_op == 01:
-#		graph_type = "graphs_without_ego"
-#	elif graph_type_op == 02:
-#		graph_type = "graphs_with_ego"
-#	else:
-#		graph_type = 00
-#		print("Opção inválida! Saindo...")
-#		exit()
-
-#######################################################################		
+	os.system('clear')	
 	print	
 	print "#######################################################################"	
 	print
-	print ("Métrica a ser aplicada na geração dos resultados:")
+	print ("Algoritmo para separa singletons. Escolha um conjunto de arquivos para a separação:")
 	print
-	print("01 - NMI - Normalized Mutual Infomation. ")
-	print("02 - Ômega Index.")
-	print("03 - Jaccard Similarity.")
-	print
-	print
-	metric_op = int(raw_input("Escolha uma opção acima: "))
-	if metric_op == 01:
-		metric = "nmi"
-	elif metric_op == 02:
-		metric = "omega"
-	elif metric_op == 03:
-		metric = "jaccard"
-	else:
-		metric = ""
-		print("Opção inválida! Saindo...")
-		exit()	
-#######################################################################	
-	print	
-	print "#######################################################################"	
-	print
-	print ("Algoritmo usado no processo de deteção de comunidades:")
-	print
-	print("01 - COPRA. ")
-	print("02 - ")
+	print("01 - GROUND_TRUTH")
+	print("02 - COMMUNITIES BY COPRA")
 	print("03 - ")
 	print
-	algorithm_op = int(raw_input("Escolha uma opção acima: "))
-	if algorithm_op == 01 and metric_op == 01: 
-		algorithm = "copra"
-
-		graph_type = "graphs_with_ego"
-		data_with_ego = nmi_copra(graph_type,metric,algorithm)			# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(data_with_ego,graph_type,metric,algorithm)
-				
-		graph_type = "graphs_without_ego"		
-		data_without_ego = nmi_copra(graph_type,metric,algorithm)	# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(data_without_ego,graph_type,metric,algorithm)
+	op = int(raw_input("Escolha uma opção acima: "))
+	if op == 01  
 
 	else:
 		algorithm = ""
@@ -204,14 +102,5 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-
-######################################################################################################################
-#####Alterar as linhas para Dropbox quando executado em ambiente de produção
-#source_dir = "/home/amaury/Dropbox/evaluation/"
-#output_dir = "/home/amaury/Dropbox/statistics/"
-source_dir = "/home/amaury/evaluation/"
-output_dir = "/home/amaury/statistics/"
-######################################################################################################################
-
 
 if __name__ == "__main__": main()

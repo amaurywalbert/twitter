@@ -24,9 +24,10 @@ copra()
 	NET=$3
 	METRIC=$4
 	ALG=$5
+	SINGLETONS=$6
 	GROUND_TRUTH=/home/amaury/dataset/ground_truth/lists_users_TXT/
-	COMMUNITIES=/home/amaury/communities/$TYPE_GRAPH/$ALG/$NET/
-	OUTPUT_DIR=/home/amaury/Dropbox/evaluation/$TYPE_GRAPH/$ALG/$METRIC/$NET/
+	COMMUNITIES=/home/amaury/communities/$TYPE_GRAPH/$ALG/$SINGLETONS/$NET/
+	OUTPUT_DIR=/home/amaury/Dropbox/evaluation/$TYPE_GRAPH/$ALG/$METRIC/$SINGLETONS/$NET/
 	############################################################################################################
 	mkdir -p $OUTPUT_DIR
 	V=20	#Parâmetro do COPRA
@@ -160,21 +161,22 @@ case $op in
 esac
 
 echo "###############################################################"
-echo "Utilizar grafo:" 
-echo " 01 - SEM ego (Padrão)"
-echo " 02 - COM o ego"
+echo "Realizar o cálculo usando Singletons?" 
+echo " 01 - SIM (Padrão)"
+echo " 02 - NÃO"
 echo
 echo -n "Escolha uma opção: "
-read ego
+read op2
 
-if [ -z $ego ]; then
-	TYPE_GRAPH="graphs_without_ego"
-elif [ $ego == 02 ]; then
-	TYPE_GRAPH="graphs_with_ego"
+if [ -z $op2 ]; then
+	SINGLETONS="with_singletons"
+elif [ $op2 == 02 ]; then
+	SINGLETONS="without_singletons"
 else
-	TYPE_GRAPH="graphs_without_ego"
+	SINGLETONS="with_singletons"
 fi
 
 #Execução do algoritmo...
 ###############################################################
-instructions $DESCRIPTION $TYPE_GRAPH $NET $METRIC
+instructions $DESCRIPTION "graphs_without_ego" $NET $METRIC	$SINGLETONS		# Roda o script para a rede criada SEM o ego
+instructions $DESCRIPTION "graphs_without_ego" $NET $METRIC	$SINGLETONS		# Roda o script para a rede criada COM o ego
