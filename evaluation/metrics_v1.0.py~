@@ -206,10 +206,10 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-#source_dir = "/home/amaury/Dropbox/evaluation/"
-#output_dir = "/home/amaury/Dropbox/statistics/"
-source_dir = "/home/amaury/evaluation/"
-output_dir = "/home/amaury/statistics/"
+source_dir = "/home/amaury/Dropbox/evaluation/"
+output_dir = "/home/amaury/Dropbox/statistics/"
+#source_dir = "/home/amaury/evaluation/"
+#output_dir = "/home/amaury/statistics/"
 ######################################################################################################################
 
 
