@@ -29,7 +29,7 @@ copra()
 	OUTPUT_DIR=/home/amaury/Dropbox/evaluation/$TYPE_GRAPH/$ALG/$METRIC/$NET/
 	############################################################################################################
 	mkdir -p $OUTPUT_DIR
-	V=10	#Parâmetro do COPRA
+	V=20	#Parâmetro do COPRA
 	echo
 	echo "Calculando $METRIC para a rede $NET"
 	echo
