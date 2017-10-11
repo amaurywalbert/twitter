@@ -36,9 +36,7 @@ def main():
 	if os.path.isdir(source_dir):	
 		i=0												
 		for file in os.listdir(source_dir):									# Para cada arquivo no diretório
-			i+=1
-			ego = file.split(".txt")											# pegar o nome do arquivo que indica o threshold analisado
-			ego = int(ego[0])			
+			i+=1		
 			with open(source_dir+file, 'r') as f:
 				print ("Verificando singletons para o ego: "+str(i))
 				if os.path.isfile(output_without_singletons+file):		# Removendo arquivos antigos...
