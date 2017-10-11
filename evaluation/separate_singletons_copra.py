@@ -23,9 +23,9 @@ sys.setdefaultencoding('utf-8')
 def save_data(graph):
 	for net in range(10):
 		net+=1
-		source_dir="/home/amaury/communities/"+str(graph)+"/copra/n"+str(net)+"/"
-		output_singletons="/home/amaury/communities/"+str(graph)+"/copra_singletons/n"+str(net)+"/"
-		output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra_without_singletons/n"+str(net)+"/"
+		source_dir="/home/amaury/communities/"+str(graph)+"/copra/full/n"+str(net)+"/"
+		output_singletons="/home/amaury/communities/"+str(graph)+"/copra/singletons/n"+str(net)+"/"
+		output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra/without_singletons/n"+str(net)+"/"
 		
 		if os.path.isdir(source_dir):		
 
@@ -43,7 +43,7 @@ def save_data(graph):
 				for file in os.listdir(source_dir+str(threshold)+"/"):		
 					i+=1
 					with open(source_dir+str(threshold)+"/"+file, 'r') as f:
-						print (str(graph)+" - Verificando singletons para o threshold: "+str(threshold)+" - ego: "+str(i))
+						print (str(graph)+" - Verificando singletons para o threshold: "+str(threshold)+" - rede: "+str(net)+" - ego: "+str(i))
 						if os.path.isfile(output_without_singletons+file):
 							os.remove(output_without_singletons+file)
 						if os.path.isfile(output_singletons+file):

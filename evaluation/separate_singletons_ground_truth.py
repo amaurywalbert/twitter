@@ -62,9 +62,9 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/"
-output_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT_singletons/"
-output_without_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT_without_singletons/"
+source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/full/full/"
+output_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT/singletons/"
+output_without_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT/without_singletons/"
 
 if not os.path.exists(output_singletons):		
 	os.makedirs(output_singletons)

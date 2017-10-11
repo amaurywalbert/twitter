@@ -72,9 +72,12 @@ def calcular(valores=None):
 # Salva os dados de cada algoritmo em formato JSON
 #
 ######################################################################################################################################################################
-def save_data(data,graph_type,metric,algorithm):
+def save_data(communities,data):
 	print
 	print ("Salvando dados... FUNÇÃO EM DESENVOLVIMENTO!")
+	print communities
+	for k, v in data.iteritems():
+		print k,v
 	print
 	
 ######################################################################################################################################################################
@@ -83,13 +86,8 @@ def save_data(data,graph_type,metric,algorithm):
 #
 ######################################################################################################################################################################
 
-def nmi_copra(graph_type,metric,algorithm):
+def nmi_copra(communities_dir):
 	nmi_data = {}																				# Armazenar o nome da rede e o maior valor do trheshold do COPRA para o NMI - Formato {{'N1':0.012},...}
-	os.system('clear')
-	print ("##################################################")
-	print ("Recuperando dados da métrica "+str(metric)+" calculada nas comunidades detectadas pelo algoritmo "+str(algorithm))
-	print ("##################################################")
-	print
 	dictionary = {}																			# Armazenar todos os valores NMI para cada threshold do COPRA em cada rede - Formato {'n8': {1: {'soma': 6.059981138000007, 'media': 0.025787153778723433, 'desvio_padrao': 0.006377214443559922, 'variancia': 4.0668864059149294e-05}, 2: {'soma': 6.059981138000007...}}
 	for i in range(10):																		# para i variando de N1 a N10
 		print ("##################################################")
@@ -97,8 +95,8 @@ def nmi_copra(graph_type,metric,algorithm):
 		network = "n"+str(i)
 		print ("Recuperando dados da rede "+str(network))
 		nmi_data[network] = {'threshold':" ",'nmi':float(0)}
-		communities = str(source_dir)+str(graph_type)+"/"+algorithm+"/"+str(metric)+"/n"+str(i)+"/"	#Diretório para procurar pelos arquivos do Threshold do COPRA
-		partial = {}																											#Armazena as informações do NMI para todos os trhesholds do diretório da rede i - Depois junta tudo no dictionary 
+		communities = str(communities_dir)+"n"+str(i)+"/"								#Diretório para procurar pelos arquivos do Threshold do COPRA
+		partial = {}																			#Armazena as informações do NMI para todos os trhesholds do diretório da rede i - Depois junta tudo no dictionary 
 		if os.path.isdir(communities):													
 			for file in os.listdir(communities):										# Para cada arquivo no diretório
 				values = []																		# Valores de NMI para os 500 egos calculados com o threshold FILE
@@ -111,15 +109,14 @@ def nmi_copra(graph_type,metric,algorithm):
 						if not math.isnan(b):												# exclui calculo de NMI que retorna valor NaN
 							values.append(b)				
 				result = calcular(values)													# Calcula média e outros dados dos NMIs recuperados para o conjunto de egos usando o threshold FILE				 
-				#print threshold, result['media']
 				partial[threshold] = result												# Adiciona os caclulos feitos num dicionário com indice FILE (ou seja, o threshold usado pelo COPRA)
-				if	float(result['media']) > nmi_data[network]['nmi']:
-					nmi_data[network] = {'threshold':threshold,'nmi':float(result['media'])}
+				if result is not None:
+					if	float(result['media']) > nmi_data[network]['nmi']:
+						nmi_data[network] = {'threshold':threshold,'nmi':float(result['media'])}
 		else:
 			print ("Diretório \""+str(communities)+"\" não encontrado. Continuando...")
 	
 		dictionary[network] = partial
-		print graph_type,nmi_data[network]
 	
 	return nmi_data
 		
@@ -132,42 +129,23 @@ def nmi_copra(graph_type,metric,algorithm):
 ######################################################################################################################################################################
 def main():
 	os.system('clear')
-#	print
-#	print ("#######################################################################")	
-#	print	
-#	print ("Tipo de grafo usado durante o processo de detecção de comunidades:")
-#	print
-#	print("01 - Communidades extraídas de grafos SEM o ego.")
-#	print("02 - Communidades extraídas de grafos COM o ego.")
-#	print
-#	graph_type_op = int(raw_input("Escolha uma opção acima: "))
-#	if graph_type_op == 01:
-#		graph_type = "graphs_without_ego"
-#	elif graph_type_op == 02:
-#		graph_type = "graphs_with_ego"
-#	else:
-#		graph_type = 00
-#		print("Opção inválida! Saindo...")
-#		exit()
-
-#######################################################################		
 	print	
 	print "#######################################################################"	
 	print
 	print ("Métrica a ser aplicada na geração dos resultados:")
 	print
 	print("01 - NMI - Normalized Mutual Infomation. ")
-	print("02 - Ômega Index.")
-	print("03 - Jaccard Similarity.")
+#	print("02 - Ômega Index.")
+#	print("03 - Jaccard Similarity.")
 	print
 	print
 	metric_op = int(raw_input("Escolha uma opção acima: "))
 	if metric_op == 01:
 		metric = "nmi"
-	elif metric_op == 02:
-		metric = "omega"
-	elif metric_op == 03:
-		metric = "jaccard"
+#	elif metric_op == 02:
+#		metric = "omega"
+#	elif metric_op == 03:
+#		metric = "jaccard"
 	else:
 		metric = ""
 		print("Opção inválida! Saindo...")
@@ -185,20 +163,36 @@ def main():
 	algorithm_op = int(raw_input("Escolha uma opção acima: "))
 	if algorithm_op == 01 and metric_op == 01: 
 		algorithm = "copra"
+#######################################################################		
 
-		graph_type = "graphs_with_ego"
-		data_with_ego = nmi_copra(graph_type,metric,algorithm)			# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(data_with_ego,graph_type,metric,algorithm)
-				
-		graph_type = "graphs_without_ego"		
-		data_without_ego = nmi_copra(graph_type,metric,algorithm)	# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(data_without_ego,graph_type,metric,algorithm)
+		communities_full = str(source_dir)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"										# Diretório para procurar pelos arquivos do Threshold do COPRA
+		communities_with_singleton = str(source_dir)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/with_singleton/"			# Diretório para procurar pelos arquivos do Threshold do COPRA
+		
+		data_with_ego = nmi_copra(communities_full)																									# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		data_with_ego = nmi_copra(communities_with_singleton)																						# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		
+#######################################################################		
 
+		communities_full = str(source_dir)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"									# Diretório para procurar pelos arquivos do Threshold do COPRA
+		communities_with_singleton = str(source_dir)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/with_singleton/"		# Diretório para procurar pelos arquivos do Threshold do COPRA
+
+		data_without_ego = nmi_copra(communities_full)																								# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		data_without_ego = nmi_copra(communities_with_singleton)																					# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		
+#######################################################################
+		
+		save_data(communities_full,data_with_ego)
+		save_data(communities_with_singleton,data_with_ego)		
+		save_data(communities_full,data_without_ego)
+		save_data(communities_with_singleton,data_without_ego)
+		
+#######################################################################
 	else:
 		algorithm = ""
 		print("Opção inválida! Saindo...")
 		exit()
-	
+#######################################################################
+#######################################################################	
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA

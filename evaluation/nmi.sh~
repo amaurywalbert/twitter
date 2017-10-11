@@ -23,9 +23,9 @@ copra()
 	TYPE_GRAPH=$2
 	NET=$3
 	METRIC=$4
-	ALG=$5
-	SINGLETONS=$6
-	GROUND_TRUTH=/home/amaury/dataset/ground_truth/lists_users_TXT/
+	SINGLETONS=$5
+	ALG=$6
+	GROUND_TRUTH=/home/amaury/dataset/ground_truth/lists_users_TXT/$SINGLETONS/
 	COMMUNITIES=/home/amaury/communities/$TYPE_GRAPH/$ALG/$SINGLETONS/$NET/
 	OUTPUT_DIR=/home/amaury/Dropbox/evaluation/$TYPE_GRAPH/$ALG/$METRIC/$SINGLETONS/$NET/
 	############################################################################################################
@@ -78,7 +78,7 @@ instructions()
 	read op2
 	case $op2 in
 	01)ALG=copra
-		copra $1 $2 $3 $4 $ALG
+		copra $1 $2 $3 $4 $5 $ALG
 		;;
 
 	*) echo
@@ -169,9 +169,9 @@ echo -n "Escolha uma opção: "
 read op2
 
 if [ -z $op2 ]; then
-	SINGLETONS="with_singletons"
+	SINGLETONS="singletons"
 elif [ $op2 == 02 ]; then
-	SINGLETONS="without_singletons"
+	SINGLETONS="full"
 else
 	SINGLETONS="with_singletons"
 fi
@@ -179,4 +179,4 @@ fi
 #Execução do algoritmo...
 ###############################################################
 instructions $DESCRIPTION "graphs_without_ego" $NET $METRIC	$SINGLETONS		# Roda o script para a rede criada SEM o ego
-instructions $DESCRIPTION "graphs_without_ego" $NET $METRIC	$SINGLETONS		# Roda o script para a rede criada COM o ego
+instructions $DESCRIPTION "graphs_with_ego" $NET $METRIC	$SINGLETONS		# Roda o script para a rede criada COM o ego
