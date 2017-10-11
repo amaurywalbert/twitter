@@ -40,19 +40,17 @@ def save_data(graph):
 				for file in os.listdir(source_dir):		
 					i+=1
 					with open(source_dir+file, 'r') as f:
-						print (str(graph)+" - Verificando singletons para o threshold: "+str(threshold)+" - rede: "+str(net)+" - ego: "+str(i))
+						print (str(graph)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+"- ego: "+str(i))
 						if os.path.isfile(output_without_singletons+file):
 							os.remove(output_without_singletons+file)
 						if os.path.isfile(output_singletons+file):
 							os.remove(output_singletons+file)				
 						for line in f:
 							a = line.split(' ')
-							print a
 							if len(a) > 2:
 								with open(output_without_singletons+file, 'a+') as g:
 									for item in a:
-										if item != "\n":
-											print item											
+										if item != "\n":											
 											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 									g.write("\n")															# Passa para a próxima linha
 							else:			
