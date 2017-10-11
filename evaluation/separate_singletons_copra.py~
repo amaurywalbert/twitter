@@ -7,7 +7,7 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-##		Status - Versão 1 - Receber o conjunto de conjunto de comunidades e o ground_truth e separar em conjunto completo e conjunto sem singletons.
+##		Status - Versão 1 - Receber o conjunto de conjunto de comunidades e separar em conjunto sem singletons e conjunto de singletons.
 ##								
 ## # INPUT:
 ##		- Arquivos com as comunidades completas
@@ -17,13 +17,53 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 #
-# Salva os dados de cada algoritmo em formato JSON
+# Salva os dados nas respectivas pastas
 #
 ######################################################################################################################################################################
-def save_data(data,graph_type,metric,algorithm):
-	print
-	print ("Salvando dados... FUNÇÃO EM DESENVOLVIMENTO!")
-	print
+def save_data(graph):
+	for net in range(10):
+		source_dir="/home/amaury/communities/"+str(graph)+"/copra/"+str(net)+"/"
+		output_singletons="/home/amaury/communities/"+str(graph)+"/copra/singletons/"+str(net)+"/"
+		output_without_singletons="/home/amaury/communities/"+str(graph)+"/copra/without_singletons/"+str(net)+"/"
+		
+		if os.path.isdir(source_dir):		
+
+			if not os.path.exists(output_with_singletons):		
+				os.makedirs(output_with_singletons)
+			if not os.path.exists(output_without_singletons):
+				os.makedirs(output_without_singletons)
+				
+			print		
+			print ("Separando comunidades da rede: "+str(net))
+			 
+			for threshold in range(20):
+				i=0
+				for file in os.listdir(source_dir+str(threshold)):		
+					i+=1
+					ego = file.split(".txt")
+					ego = int(ego[0])			
+					with open(source_dir+str(threshold), 'r') as f:
+						print (str(graph)+" - Verificando singletons para o threshold: "+str(threshold)+" - ego: "+str(i))
+						if os.path.isfile(output_without_singletons+file):
+							os.remove(output_without_singletons+file)
+						if os.path.isfile(output_singletons+file):
+							os.remove(output_singletons+file)				
+						for line in f:
+							a = line.split(' ')
+							if len(a) > 2:
+								with open(output_without_singletons+file, 'a+') as g:
+									for item in a:
+										if item != "\n": 
+											g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
+									g.write("\n")														# Passa para a próxima linha
+							else:			
+								with open(output_singletons+file, 'a+') as g:
+									for item in a:
+										if item != "\n":
+											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+									g.write("\n")													
+		else:
+			print ("Diretório não encontrado! "+str(source_dir))
 ######################################################################################################################################################################
 #
 # Método principal do programa.
@@ -33,44 +73,17 @@ def save_data(data,graph_type,metric,algorithm):
 ######################################################################################################################################################################
 def main():
 	os.system('clear')	
-	if os.path.isdir(source_dir):	
-		i=0												
-		for file in os.listdir(source_dir):									# Para cada arquivo no diretório
-			i+=1
-			ego = file.split(".txt")											# pegar o nome do arquivo que indica o threshold analisado
-			ego = int(ego[0])			
-			with open(source_dir+file, 'r') as f:
-				print ("Verificando singletons para o ego: "+str(i))
-				if os.path.isfile(output_without_singletons+file):		# Removendo arquivos antigos...
-					os.remove(output_without_singletons+file)
-				if os.path.isfile(output_singletons+file):
-					os.remove(output_singletons+file)				
-				for line in f:
-					a = line.split(' ')
-					if len(a) > 2:
-						with open(output_without_singletons+file, 'a+') as g:
-							for item in a:
-								if item != "\n": 
-									g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-							g.write("\n")														# Passa para a próxima linha
-					else:			
-						with open(output_singletons+file, 'a+') as g:
-							for item in a:
-								if item != "\n":
-									g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-							g.write("\n")														# Passa para a próxima linha								
+	graph1 = "graphs_with_ego"
+	graph2 = "graphs_without_ego"
+	save_data(graph1)
+	save_data(graph2)
+
+				
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/"
-output_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT_singletons/"
-output_without_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT_without_singletons/"
 
-if not os.path.exists(output_singletons):		
-	os.makedirs(output_singletons)
-if not os.path.exists(output_without_singletons):
-	os.makedirs(output_without_singletons)
 	
 if __name__ == "__main__": main()

@@ -43,19 +43,21 @@ def main():
 				print ("Verificando singletons para o ego: "+str(i))
 				if os.path.isfile(output_without_singletons+file):		# Removendo arquivos antigos...
 					os.remove(output_without_singletons+file)
-				if os.path.isfile(output_with_singletons+file):
-					os.remove(output_with_singletons+file)				
+				if os.path.isfile(output_singletons+file):
+					os.remove(output_singletons+file)				
 				for line in f:
 					a = line.split(' ')
 					if len(a) > 2:
 						with open(output_without_singletons+file, 'a+') as g:
-							for item in a:														# 
-								g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+							for item in a:
+								if item != "\n": 
+									g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 							g.write("\n")														# Passa para a próxima linha
 					else:			
-						with open(output_with_singletons+file, 'a+') as g:
-							for item in a:														# 
-								g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+						with open(output_singletons+file, 'a+') as g:
+							for item in a:
+								if item != "\n":
+									g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 							g.write("\n")														# Passa para a próxima linha								
 ######################################################################################################################################################################
 #
@@ -63,11 +65,12 @@ def main():
 #
 ######################################################################################################################################################################
 source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/"
-output_with_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT_with_singletons/"
+output_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT_singletons/"
 output_without_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT_without_singletons/"
 
-if not os.path.exists(output_with_singletons):		
-	os.makedirs(output_with_singletons)
+if not os.path.exists(output_singletons):		
+	os.makedirs(output_singletons)
 if not os.path.exists(output_without_singletons):
-	os.makedirs(output_without_singletons)	
+	os.makedirs(output_without_singletons)
+	
 if __name__ == "__main__": main()
