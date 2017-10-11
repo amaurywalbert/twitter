@@ -98,7 +98,7 @@ copra()
 
 echo "###############################################################"
 echo "																					"
-	echo " Algoritmo de Detecção de Comunidades $algorithm - versão SINGLE"
+echo " Algoritmo de Detecção de Comunidades $algorithm - versão SINGLE"
 echo "																					"
 echo "###############################################################"
 echo
@@ -191,7 +191,7 @@ case $op in
 	;;
 esac
 INPUT_DIR=/home/amaury/graphs/$NET/$GRAPH/
-OUTPUT_DIR=/home/amaury/communities/$NET/$algorithm/$GRAPH/
+OUTPUT_DIR=/home/amaury/communities/$GRAPH/$NET//$algorithm/
 
 #Execução do algoritmo...
 ###############################################################

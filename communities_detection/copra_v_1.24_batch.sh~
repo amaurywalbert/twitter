@@ -50,7 +50,7 @@ instructions()
 		for file in `ls $2`
 			do
 				if [ -e $OUTPUT_DIR"clusters-"$file ]; then
-					echo ("Arquivo $OUTPUT_DIR"clusters-"$file já existe. Continuando...")
+					echo "Arquivo $OUTPUT_DIR"clusters-"$file já existe. Continuando..."
 				else	
 					let i=$i+1;
 					echo "Detectando comunidades para o ego: $i"
