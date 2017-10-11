@@ -96,8 +96,8 @@ def nmi_copra(graph_type,metric,algorithm):
 		i+=1
 		network = "n"+str(i)
 		print ("Recuperando dados da rede "+str(network))
-		nmi_data[network]= float(0) 				
-		communities = str(source_dir)+str(graph_type)+"/"+str(metric)+"/n"+str(i)+"/"+algorithm+"/"	#Diretório para procurar pelos arquivos do Threshold do COPRA
+		nmi_data[network] = {'threshold':" ",'nmi':float(0)}
+		communities = str(source_dir)+str(graph_type)+"/"+algorithm+"/"+str(metric)+"/n"+str(i)+"/"	#Diretório para procurar pelos arquivos do Threshold do COPRA
 		partial = {}																											#Armazena as informações do NMI para todos os trhesholds do diretório da rede i - Depois junta tudo no dictionary 
 		if os.path.isdir(communities):													
 			for file in os.listdir(communities):										# Para cada arquivo no diretório
@@ -111,16 +111,16 @@ def nmi_copra(graph_type,metric,algorithm):
 						if not math.isnan(b):												# exclui calculo de NMI que retorna valor NaN
 							values.append(b)				
 				result = calcular(values)													# Calcula média e outros dados dos NMIs recuperados para o conjunto de egos usando o threshold FILE				 
+				#print threshold, result['media']
 				partial[threshold] = result												# Adiciona os caclulos feitos num dicionário com indice FILE (ou seja, o threshold usado pelo COPRA)
-				if	float(result['media']) > nmi_data[network]:
-					nmi_data[network] = float(result['media'])
+				if	float(result['media']) > nmi_data[network]['nmi']:
+					nmi_data[network] = {'threshold':threshold,'nmi':float(result['media'])}
 		else:
 			print ("Diretório \""+str(communities)+"\" não encontrado. Continuando...")
-			print
 	
 		dictionary[network] = partial
-		print ("##################################################")
-	print nmi_data
+		print nmi_data[network]
+	
 	return nmi_data
 		
 ######################################################################################################################################################################
