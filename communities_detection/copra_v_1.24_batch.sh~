@@ -45,15 +45,19 @@ instructions()
 		i=0
 
 		OUTPUT_DIR=$3$THRESHOLD"/"
-		mkdir -p $OUTPUT_DIR"/"
+		mkdir -p $OUTPUT_DIR
 	
 		for file in `ls $2`
 			do
-				let i=$i+1;
-				echo "Detectando comunidades para o ego: $i"
-				INPUT_FILE=$2$file
-				TYPE_GRAPH=$4
-				copra $INPUT_FILE $OUTPUT_DIR $TYPE_GRAPH $THRESHOLD $file
+				if [ -e $OUTPUT_DIR"clusters-"$file ]; then
+					echo ("Arquivo $OUTPUT_DIR"clusters-"$file já existe. Continuando...")
+				else	
+					let i=$i+1;
+					echo "Detectando comunidades para o ego: $i"
+					INPUT_FILE=$2$file
+					TYPE_GRAPH=$4
+					copra $INPUT_FILE $OUTPUT_DIR $TYPE_GRAPH $THRESHOLD $file
+				fi
 			done
 		echo
 	done	
@@ -87,7 +91,7 @@ copra()
 	echo "THRESHOLD: $4"
 
 	java -cp /home/amaury/algoritmos/LabelPropagation/COPRA/copra.jar COPRA $1 -w -v $4 -extrasimplify
-	mv "clusters-"$5 $2$5
+	mv "clusters-"$5 $2
 #	mv "best-clusters-"$5 $2 ## Usar apenas se a opção -extrasimplify não for usada.
 	echo
 	echo		 

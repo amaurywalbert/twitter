@@ -45,15 +45,19 @@ instructions()
 		i=0
 
 		OUTPUT_DIR=$3$THRESHOLD"/"
-		mkdir -p $OUTPUT_DIR"/"
+		mkdir -p $OUTPUT_DIR
 	
 		for file in `ls $2`
 			do
-				let i=$i+1;
-				echo "Detectando comunidades para o ego: $i"
-				INPUT_FILE=$2$file
-				TYPE_GRAPH=$4
-				copra $INPUT_FILE $OUTPUT_DIR $TYPE_GRAPH $THRESHOLD $file
+				if [ -e $OUTPUT_DIR"clusters-"$file ]; then
+					echo ("Arquivo $OUTPUT_DIR"clusters-"$file já existe. Continuando...")
+				else	
+					let i=$i+1;
+					echo "Detectando comunidades para o ego: $i"
+					INPUT_FILE=$2$file
+					TYPE_GRAPH=$4
+					copra $INPUT_FILE $OUTPUT_DIR $TYPE_GRAPH $THRESHOLD $file
+				fi
 			done
 		echo
 	done	
