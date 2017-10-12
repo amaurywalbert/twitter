@@ -73,39 +73,23 @@ def calcular(valores=None):
 # Salva os dados de cada algoritmo em formato JSON
 #
 ######################################################################################################################################################################
-def save_data(communities,data):
-	if not os.path.exists(output_dir+communities):
-		os.makedirs(output_dir+communities)
+def save_data(output,data,dictionary):
+	if not os.path.exists(output):
+		os.makedirs(output)
 	print
 	print
-	print ("Salvando dados em: "+str(output_dir)+str(communities))
-	with open(output_dir+communities+"result.txt", 'w') as f:
+	print ("Salvando dados em: "+str(output))
+	
+	with open(output+"statistics_full.json", 'w') as f:
+		for k, v in dictionary.iteritems():
+			network = k,v	 
+			f.write(json.dumps(network)+"\n")	
+	with open(output+"statistics_overview.txt", 'w') as g:
 		for k, v in data.iteritems():	 
 			print k,v
-			f.write(str(k)+str(v)+"\n")
+			g.write(str(k)+str(v)+"\n")
 	print ("##################################################")
-
 	
-######################################################################################################################################################################
-#
-# Prepara apresentação dos resultados para o algoritmo COPRA - OMEGA
-#
-######################################################################################################################################################################
-def omega_copra():
-
-#communities = {
-#   "com1": ["item1", "item2"],
-#    "com2": ["item3", "item4"],
-#    "com3": ["item5", "item6", "item9"],
-#    "com4": ["item7", "item8"],
-#    "com5": ["item9", "item10", "item4"],
-#    "com6": ["item11", "item12"],
-#    "com7": ["item13", "item14"]
-#}
-
-#	omega = omega_index.Omega(communities, ground_truth_communities)
-#	print omega.omega_score
-
 ######################################################################################################################################################################
 #
 # Prepara apresentação dos resultados para o algoritmo COPRA - NMI
@@ -141,8 +125,7 @@ def nmi_copra(communities_dir):
 			print ("Diretório "+str(communities)+" não encontrado. Continuando...")
 	
 		dictionary[network] = partial
-	print nmi_data
-	return nmi_data
+	return nmi_data,dictionary
 	print ("##################################################")	
 ######################################################################################################################################################################
 #
@@ -189,23 +172,27 @@ def main():
 		algorithm = "copra"
 #######################################################################		
 		
-		communities = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"							# Diretório para procurar pelos arquivos do Threshold do COPRA
-		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(communities,data)	
+		communities = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"
+		output = output_dir+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"
+		data,dictionary = nmi_copra(communities)
+		save_data(output,data,dictionary)
 
 
-		communities = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"		# Diretório para procurar pelos arquivos do Threshold do COPRA
-		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(communities,data)
+		communities = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
+		output = output_dir+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
+		data,dictionary = nmi_copra(communities)
+		save_data(output,data,dictionary)
 #######################################################################		
 
-		communities = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"						# Diretório para procurar pelos arquivos do Threshold do COPRA
-		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(communities,data)
+		communities = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"
+		output = output_dir+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"
+		data,dictionary = nmi_copra(communities)
+		save_data(output,data,dictionary)
 
-		communities = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"	# Diretório para procurar pelos arquivos do Threshold do COPRA
-		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
-		save_data(communities,data)
+		communities = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
+		output = output_dir+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
+		data,dictionary = nmi_copra(communities)
+		save_data(output,data,dictionary)
 #######################################################################
 	else:
 		algorithm = ""
@@ -227,11 +214,8 @@ def main():
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-#source_dir = "/home/amaury/Dropbox/evaluation/"
-#output_dir = "/home/amaury/Dropbox/statistics/"
-source_dir = "/home/amaury/evaluation/"
-output_dir = "/home/amaury/statistics/"
-
+source_dir = "/home/amaury/Dropbox/evaluation/"
+output_dir = "/home/amaury/Dropbox/statistics/"
 ######################################################################################################################
 
 
