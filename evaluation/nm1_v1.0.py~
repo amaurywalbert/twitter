@@ -20,6 +20,17 @@ sys.setdefaultencoding('utf-8')
 #
 ######################################################################################################################################################################
 def nmi():
+	#!/bin/bash
+######################################################################################################################################################################
+##		Status - Versão 1 - Rodar o algoritmo de validação dos resultados - Nomalized Mutual Information
+##					- NMI - Andrea Lancichinetti et al 2009 New J. Phys. 11 033015
+##			 					
+## # INPUT:
+##		- Comunidades detectadas - Arquivos texto para cada ego em que cada linha contendo os ids do usuários representam uma comunidade do ego.
+##		- Comunidades Ground-Truth - Arquivo texto para cada ego em que cada linha contendo os ids do usuários representam uma Lista do ego.
+## # OUTPUT:
+##		- Comunidades
+######################################################################################################################################################################
 
 op=0
 clear
@@ -70,7 +81,18 @@ copra()
 }
 
 ############################################################################################################
-
+echo "###############################################################"
+echo "																					"
+echo " Algoritmo para cálculo da métrica $METRIC - versão BATCH"
+echo "																					"
+echo "###############################################################"
+echo
+echo "Realizar o cálculo usando Singletons?" 
+echo " 01 - SIM (Padrão)"
+echo " 02 - NÃO"
+echo
+echo -n "Escolha uma opção: "
+read op
 
 if [ -z $op ]; then
 	SINGLETONS="singletons"
@@ -116,38 +138,64 @@ esac
 ######################################################################################################################################################################
 def main():
 	os.system('clear')
-	print "###############################################################"
-	print"																					"
-	print" Algoritmo para cálculo da métrica NMI - versão BATCH"
-	print"																					"
-	print"###############################################################"
+	print	
+	print "#######################################################################"	
 	print
-	print"Realizar o cálculo usando Singletons?"
-	print 
-	print" 01 - SIM"
-	print" 02 - NÃO"
+	print ("Métrica a ser aplicada na geração dos resultados:")
 	print
-	op = int(raw_input("Escolha uma opção acima: "))
-	if op == 01:
-		singletons = "full"
-	elif op == 02:
-		singletons = "without_singletons"
+	print("01 - NMI - Normalized Mutual Infomation. ")
+	print("02 - Ômega Index.")
+	print("03 - Jaccard Similarity.")
+	print
+	print
+	metric_op = int(raw_input("Escolha uma opção acima: "))
+	if metric_op == 01:
+		metric = "nmi"
+#	elif metric_op == 02:
+#		metric = "omega"
+#	elif metric_op == 03:
+#		metric = "jaccard"
 	else:
-		singletons = ""
+		metric = ""
 		print("Opção inválida! Saindo...")
-		sys.exit()	
+		exit()	
+#######################################################################	
+	print	
+	print "#######################################################################"	
+	print
+	print ("Algoritmo usado no processo de deteção de comunidades:")
+	print
+	print("01 - COPRA. ")
+	print("02 - ")
+	print("03 - ")
+	print
+	algorithm_op = int(raw_input("Escolha uma opção acima: "))
+	if algorithm_op == 01 and metric_op == 01: 
+		algorithm = "copra"
+#######################################################################		
+		
+		communities = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"							# Diretório para procurar pelos arquivos do Threshold do COPRA
+		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(communities,data)	
+
+
+		communities = "graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"		# Diretório para procurar pelos arquivos do Threshold do COPRA
+		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(communities,data)
+#######################################################################		
+
+		communities = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"						# Diretório para procurar pelos arquivos do Threshold do COPRA
+		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(communities,data)
+
+		communities = "graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"	# Diretório para procurar pelos arquivos do Threshold do COPRA
+		data = nmi_copra(communities)																				# Chama função e passa o parâmetros para cálcular as estatísticas para os resultados obtidos pelo algoritmo em questão
+		save_data(communities,data)
 #######################################################################
-	print"###############################################################"
-	print 
-	print" 01 - COPRA"
-	print
-	op = int(raw_input("Informe o algoritmo que gerou as comunidades para que seja calculada a métrica: : "))
-	if op2 == 01:
-		alg = "copra"
 	else:
-		alg = ""
+		algorithm = ""
 		print("Opção inválida! Saindo...")
-		sys.exit()
+		exit()
 #######################################################################
 	print
 	print("######################################################################")
@@ -163,16 +211,10 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT/"
-communities1 = "/home/amaury/communities/graphs_with_ego/"
-communities2 = "/home/amaury/communities/graphs_without_ego/" 
-output1 = "/home/amaury/Dropbox/evaluation/graphs_with_ego/"
-output2 = "/home/amaury/Dropbox/evaluation/graphs_without_ego/"
-
-if not os.path.exists(output1):
-	os.makedirs(output1)
-if not os.path.exists(output2):
-	os.makedirs(output2)
+#source_dir = "/home/amaury/Dropbox/evaluation/"
+#output_dir = "/home/amaury/Dropbox/statistics/"
+source_dir = "/home/amaury/evaluation/"
+output_dir = "/home/amaury/statistics/"
 ######################################################################################################################
 
 

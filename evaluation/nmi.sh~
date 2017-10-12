@@ -36,7 +36,7 @@ copra()
 		i=0 		#Ponteiro para o ego
 		e=0		#Quantidade de arquivos compativeis... Alguns arquivos para algumas variações do parâmetro V não foram obtidos.
 		if [ -e $OUTPUT_DIR$THRESHOLD".txt" ] ; then
-			rm $OUTPUT_DIR$THRESHOLD".txt"				# Remover arquivos existentes na pasta de saída.
+			rm $OUTPUT_DIR$THRESHOLD".txt"				# Remover arquivos existentes na pasta de saída antes de começar a redirecionar novos resultados.
 		fi	
 		for file in `ls $COMMUNITIES$THRESHOLD`; do
 			let i=$i+1;
@@ -45,7 +45,6 @@ copra()
 			
 			if [ -e $GROUND_TRUTH${file_temp[1]}".txt" ] ; then
 				echo "Calculando $METRIC para o ego: $i - THRESHOLD $THRESHOLD"
-#				echo "Ground-Truth File: ${file_temp[1]}".txt" ----- Communitites Detected File: $file"
 				/home/amaury/algoritmos/Metricas/mutual3/mutual $COMMUNITIES$THRESHOLD/$file $GROUND_TRUTH${file_temp[1]}".txt" >> $OUTPUT_DIR$THRESHOLD".txt"
 				let e=$e+1;
 			else

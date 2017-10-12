@@ -84,6 +84,7 @@ def save_data(communities,data):
 			print k,v
 			f.write(str(k)+str(v)+"\n")
 	print ("##################################################")
+
 	
 ######################################################################################################################################################################
 #
@@ -104,7 +105,6 @@ def omega_copra():
 
 #	omega = omega_index.Omega(communities, ground_truth_communities)
 #	print omega.omega_score
-
 
 ######################################################################################################################################################################
 #
@@ -226,10 +226,12 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
+#####Alterar as linhas para Dropbox quando executado em ambiente de produção
 #source_dir = "/home/amaury/Dropbox/evaluation/"
 #output_dir = "/home/amaury/Dropbox/statistics/"
 source_dir = "/home/amaury/evaluation/"
 output_dir = "/home/amaury/statistics/"
+
 ######################################################################################################################
 
 
