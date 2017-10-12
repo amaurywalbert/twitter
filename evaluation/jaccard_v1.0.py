@@ -174,10 +174,10 @@ def jaccard_copra(communities,output,singletons,net,ground_truth):
 		for threshold in range(20):	#Parâmetro do COPRA
 			threshold+=1
 			i=0 		#Ponteiro para o ego
-			if os.path.isdir(str(communities)+str(threshold)):
+			if os.path.isdir(str(communities)+str(threshold)+"/"):
 				print("######################################################################")
 				score = []																				# Armazenar os indices de cada ego e salvar depois em uma linha para cada threshold do arquivo result.json
-				for file in os.listdir(str(communities)+str(threshold)):
+				for file in os.listdir(str(communities)+str(threshold)+"/"):
 					i+=1
 					ego_file = file.split(".edge_list")											# pegar o nome do arquivo que indica o threshold analisado
 					ego_file = ego_file[0]

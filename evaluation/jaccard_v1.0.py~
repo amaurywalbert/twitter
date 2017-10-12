@@ -3,7 +3,6 @@
 import datetime, sys, time, json, os, os.path, shutil, time, struct, random
 import subprocess
 import numpy as np
-from sklearn.metrics import jaccard_similarity_score
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
