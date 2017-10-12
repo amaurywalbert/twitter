@@ -119,8 +119,8 @@ def nmi_copra(communities_dir):
 		network = "n"+str(i)
 		print ("Recuperando dados da rede "+str(network))
 		nmi_data[network] = {'threshold':" ",'nmi':float(0)}
-		communities = str(source_dir)+str(communities_dir)+"n"+str(i)+"/"								#Diretório para procurar pelos arquivos do Threshold do COPRA
-		partial = {}																			#Armazena as informações do NMI para todos os trhesholds do diretório da rede i - Depois junta tudo no dictionary 
+		communities = str(source_dir)+str(communities_dir)+"n"+str(i)+"/"		# Diretório para procurar pelos arquivos do Threshold do COPRA
+		partial = {}																			# Armazena as informações do NMI para todos os trhesholds do diretório da rede i - Depois junta tudo no dictionary 
 		if os.path.isdir(communities):													
 			for file in os.listdir(communities):										# Para cada arquivo no diretório
 				values = []																		# Valores de NMI para os 500 egos calculados com o threshold FILE

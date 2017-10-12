@@ -18,13 +18,11 @@ METRIC="nmi"
 copra()
 {
 	clear
-	#PARÂMETROS $DESCRIPTION $TYPE_GRAPH $NET $METRIC $ALG
-	DESCRIPTION=$1
-	TYPE_GRAPH=$2
-	NET=$3
-	METRIC=$4
-	SINGLETONS=$5
-	ALG=$6
+	TYPE_GRAPH=$1
+	NET=$2
+	METRIC=$3
+	SINGLETONS=$4
+	ALG=$5
 	GROUND_TRUTH=/home/amaury/dataset/ground_truth/lists_users_TXT/$SINGLETONS/
 	COMMUNITIES=/home/amaury/communities/$TYPE_GRAPH/$ALG/$SINGLETONS/$NET/
 	OUTPUT_DIR=/home/amaury/Dropbox/evaluation/$TYPE_GRAPH/$ALG/$METRIC/$SINGLETONS/$NET/
@@ -32,7 +30,6 @@ copra()
 	mkdir -p $OUTPUT_DIR
 	V=20	#Parâmetro do COPRA
 	echo
-	echo "Calculando $METRIC para a rede $NET"
 	echo
 	echo "Os arquivos serão armazenados em: $OUTPUT_DIR"
 	for ((THRESHOLD=1; THRESHOLD<=$V; THRESHOLD++)); do
@@ -62,32 +59,6 @@ copra()
 	done
 }
 
-instructions()
-{
-	#PARÂMETROS $DESCRIPTION $TYPE_GRAPH $NET $METRIC
-	clear
-	echo "###############################################################"
-	echo "																					"
-	echo " Algoritmo para cálculo da métrica $METRIC - versão BATCH"
-	echo "																					"
-	echo "###############################################################"
-	echo
-	echo " 01 - COPRA"
-	echo	
-	echo -n "Informe o algoritmo que gerou as comunidades para que seja calculada a métrica: "
-	read op2
-	case $op2 in
-	01)ALG=copra
-		copra $1 $2 $3 $4 $5 $ALG
-		;;
-
-	*) echo
-		echo "Opção Inválida! Saindo do script..."
-		echo
-		exit
-		;;
-	esac
-}
 ############################################################################################################
 echo "###############################################################"
 echo "																					"
@@ -95,88 +66,40 @@ echo " Algoritmo para cálculo da métrica $METRIC - versão BATCH"
 echo "																					"
 echo "###############################################################"
 echo
-echo " 01) Rede N1 - Follow"
-echo " 02) Rede N2 - Retweets"
-echo " 03) Rede N3 - Likes"
-echo " 04) Rede N4 - Mentions"
-echo " 09) Rede N9 - Followers"
-echo
-echo " 05) Rede N5 - Co-Follow"
-echo " 06) Rede N6 - Co-Retweets"
-echo " 07) Rede N7 - Co-Likes"
-echo " 08) Rede N8 - Co-Mentions"
-echo " 10) Rede N10 - Co-Followers"
-echo
-echo -n "Escolha uma opção: "
-read op
-echo
-###############################################################  LINHAS A SEREM MODIFICADAS DE ACORDO COM A REDE-EGO
-case $op in
-
-01)DESCRIPTION="Follow"	
-	NET="n1"
-	;;
-
-02)DESCRIPTION="Retweets"
-	NET="n2"
-	;;
-
-03)DESCRIPTION="Likes"
-	NET="n3"
-	;;
-
-04)DESCRIPTION="Mentions"
-	NET="n4"
-	;;
-
-05)DESCRIPTION="Co-Follow"
-	NET="n5"
-	;;
-
-06)DESCRIPTION="Co-Retweets"
-	NET="n6"
-	;;
-
-07)DESCRIPTION="Co-Likes"
-	NET="n7"
-	;;
-
-08)DESCRIPTION="Co-Mentions"
-	NET="n8"
-	;;
-
-09)DESCRIPTION="Followers"
-	NET="n9"
-	;;
-
-10)DESCRIPTION="Co-Followers"
-	NET="n10"
-	;;
-
-*) echo
-	echo "Opção Inválida! Saindo do script..."
-	echo
-	exit
-	;;
-esac
-
-echo "###############################################################"
 echo "Realizar o cálculo usando Singletons?" 
 echo " 01 - SIM (Padrão)"
 echo " 02 - NÃO"
 echo
 echo -n "Escolha uma opção: "
-read op2
+read op
 
-if [ -z $op2 ]; then
+if [ -z $op ]; then
 	SINGLETONS="singletons"
-elif [ $op2 == 02 ]; then
+elif [ $op == 02 ]; then
 	SINGLETONS="full"
 else
-	SINGLETONS="with_singletons"
+	SINGLETONS="without_singletons"
 fi
 
-#Execução do algoritmo...
-###############################################################
-instructions $DESCRIPTION "graphs_without_ego" $NET $METRIC	$SINGLETONS		# Roda o script para a rede criada SEM o ego
-instructions $DESCRIPTION "graphs_with_ego" $NET $METRIC	$SINGLETONS		# Roda o script para a rede criada COM o ego
+echo "###############################################################"
+echo
+echo " 01 - COPRA"
+echo	
+echo -n "Informe o algoritmo que gerou as comunidades para que seja calculada a métrica: "
+read op2
+case $op2 in
+	01)ALG=copra
+		for ((i=1; i<=10; i++)); do
+			NET="n$i"
+			echo "Calculando $METRIC das comunidades detectadas pelo algoritmo $ALG na rede $NET"
+			copra "graphs_with_ego" $NET $METRIC $SINGLETONS $ALG
+			copra "graphs_without_ego" $NET $METRIC $SINGLETONS $ALG
+		done
+		;;
+
+	*) echo
+		echo "Opção Inválida! Saindo do script..."
+		echo
+		exit
+		;;
+esac
