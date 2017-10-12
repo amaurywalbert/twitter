@@ -1,36 +1,128 @@
 # -*- coding: latin1 -*-
 ################################################################################################
 import datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import omega_index
+import subprocess
+import numpy as np
+from sklearn.metrics import jaccard_similarity_score
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-##		Status - Versão 1 - Calcular Õmega Index
+##		Status - Versão 1 - Calcular Jaccard Index
 ##								
 ## # INPUT: Arquivos com as comunidades detectadas e o ground truth 
 ## # OUTPUT:
-##		- Arquivos com os índices Omega
+##		- Arquivos com os índices Jaccard
 ######################################################################################################################################################################
+
+################################################################################################
+# Função para calcular o csj entre dois conjuntos de dados
+################################################################################################         
+def csj(data1,data2):
+	a = set(data1)
+	b = set(data2)
+	intersection = len(a.intersection(b))
+	union = len(a.union(b))
+# Calcula o CSJ entre os dois conjuntos e atribui 0 caso a união dos conjuntos for 0	
+	if union != 0:
+		result = intersection/float(union)									# float(uniao) para resultado no intervalo [0,1]
+	else:
+		result = 0
+#	print ("União: "+str(union)+" --- Interseção: "+str(intersection)+" --- CSJ: "+str(result))	
+	return result
 
 ######################################################################################################################################################################
 #
-# Formata entrada e envia para calculo do Omega Index
+# Cálculos iniciais sobre o conjunto de dados lidos.
 #
 ######################################################################################################################################################################
-def omega_calc(communities_file, ground_truth_communities_file):
+def calcular(valores=None):
+	calculos = {}
+	if valores:
+		if valores.__class__.__name__ == 'list' and calculos.__class__.__name__ == 'dict':
+			def somar(valores):
+				soma = 0
+				for v in valores:
+					soma += v
+				return soma
+ 
+			def media(valores):
+				soma = somar(valores)
+				qtd_elementos = len(valores)
+				media = soma / float(qtd_elementos)
+				return media
 
-#communities = {
-#   "com1": ["item1", "item2"],
-#    "com2": ["item3", "item4"],
-#    "com3": ["item5", "item6", "item9"],
-#    "com4": ["item7", "item8"],
-#    "com5": ["item9", "item10", "item4"],
-#    "com6": ["item11", "item12"],
-#    "com7": ["item13", "item14"]
-#}
+			calculos['soma'] = somar(valores)
+			calculos['media'] = media(valores)
+			return calculos
+
+######################################################################################################################################################################
+#
+# Recebe todas as comunidades do ego e calcula o Jaccard Index, retornando um real [0,1] para o ego em questão
+#
+######################################################################################################################################################################
+def jaccard_index(communities, ground_truth_communities):
+#	print ("Comunidades detectadas: "+str(len(communities)))
+#	print ("Comunidades ground_truth: "+str(len(ground_truth_communities)))
+	performance_pred = []														# Armazenar os maiores indices Jaccard para cada comunidade detectada
+	performance_true = []														# Armazenar os maiores indices Jaccard para cada comunidade ground_truth	
+	performance = []																# Armazenar a média  dos maiores indices Jaccard das comunidades detectadas e do ground truth
+
+#	print ("detectadas")			
+	for key, values in communities.iteritems():
+		bigger = 0 
+		y_pred = values															# conjunto de ids do usuarios da comunidade detectada
+		for k, v in ground_truth_communities.iteritems():
+			y_true = v																# conjunto de ids do usuarios da comunidade ground_truth
+			jaccard = csj(y_true, y_pred)
+#			print jaccard
+			if jaccard > bigger:
+				bigger = jaccard
+#		print bigger
+#		print
+		performance_pred.append(bigger)		
+
+#	######################################################################################################################
+#	print ("ground_truth")				
+	for k, v in ground_truth_communities.iteritems():
+		bigger = 0 
+		y_true = v																	# conjunto de ids do usuarios da comunidade detectada
+		for key, values in communities.iteritems():
+			y_pred = values														# conjunto de ids do usuarios da comunidade ground_truth
+			jaccard = csj(y_pred,y_true)
+#			print jaccard
+			if jaccard > bigger:
+				bigger = jaccard		
+#		print bigger
+#		print		
+		performance_true.append(bigger)					
+				
+	######################################################################################################################			
+	result_pred = calcular(performance_pred)
+	result_true = calcular(performance_true)
+#	print performance_pred
+#	print performance_true
+
+#	print result_pred
+#	print result_true
+		
+#	time.sleep(20)
+	performance.append(result_pred['media'])
+	performance.append(result_true['media'])
+
+	result = calcular(performance)
+	
+	return result['media']
+
+######################################################################################################################################################################
+#
+# Formata entrada e envia para calculo do Índice Jaccard
+#
+######################################################################################################################################################################
+
+def jaccard_prepare_data(communities_file, ground_truth_communities_file):
 
 	with open(communities_file, 'r') as f:
 		i=0
@@ -58,16 +150,16 @@ def omega_calc(communities_file, ground_truth_communities_file):
 					comm.append(item)
 			ground_truth_communities[key] = comm									#dicionário communities recebe a lista de ids das comunidades tendo como chave o valor key				
 					
-	omega = omega_index.Omega(communities, ground_truth_communities)
-	return omega
+	jaccard = jaccard_index(communities, ground_truth_communities)
+	return jaccard
 
 
 ######################################################################################################################################################################
 #
-# Prepara apresentação dos resultados para o algoritmo COPRA - OMEGA
+# Prepara apresentação dos resultados para o algoritmo COPRA - Indice Jaccar
 #
 ######################################################################################################################################################################
-def omega_copra(communities,output,singletons,net,ground_truth):
+def jaccard_copra(communities,output,singletons,net,ground_truth):
 	
 	communities = communities+singletons+"/"+net+"/"
 	ground_truth = ground_truth+singletons+"/"
@@ -95,14 +187,14 @@ def omega_copra(communities,output,singletons,net,ground_truth):
 				
 					if os.path.isfile(str(ground_truth)+str(ego_file)+".txt"):
 						try:
-							omega = omega_calc(str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(ego_file)+".txt")
-							print ("Ômega Index para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego: "+str(i)+": "+str(omega.omega_score))
-							score.append(omega)
+							jaccard = jaccard_prepare_data(str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(ego_file)+".txt")						
+							print ("Jaccard Index para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" -  ego: "+str(i)+": "+str(jaccard))
+							score.append(jaccard)
 						except Exception as e:
-							print e	
+							print e
 					else:
 						print ("ERROR - EGO: "+str(i)+" - Arquivo de ground truth não encontrado!")						
-				print("######################################################################")					
+				print("######################################################################")
 				result[threshold] = score						
 			else:
 				print ("Diretório com as comunidades não encontrado: "+str(communities)+str(threshold))
@@ -111,7 +203,7 @@ def omega_copra(communities,output,singletons,net,ground_truth):
 				f.write(json.dumps(result))						
 	else:
 		print ("Arquivo de destino já existe: "+str(output)+str(net)+".json")			
-	print("######################################################################")		
+	print("######################################################################")			
 
 ######################################################################################################################################################################
 #
@@ -124,7 +216,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Algoritmo para cálculo da métrica Ômega Index para resultados do algoritmo COPRA"
+	print" Algoritmo para cálculo da métrica Jaccard Index para resultados do algoritmo COPRA"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -146,7 +238,7 @@ def main():
 #######################################################################
 	print("######################################################################")	
 	print
-	print "Algoritmo utilizado na detecção das comunidades:"
+	print "Algoritmo utilizado na detecção das comunidades"
 	print 
 	print" 01 - COPRA"
 	print" 02 - "
@@ -164,19 +256,19 @@ def main():
 	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT/"
 	communities1 = "/home/amaury/communities/graphs_with_ego/"+str(alg)+"/"
 	communities2 = "/home/amaury/communities/graphs_without_ego/"+str(alg)+"/" 
-	output1 = "/home/amaury/Dropbox/evaluation/graphs_with_ego/"+str(alg)+"/omega/"
-	output2 = "/home/amaury/Dropbox/evaluation/graphs_without_ego/"+str(alg)+"/omega/"
+	output1 = "/home/amaury/Dropbox/evaluation/graphs_with_ego/"+str(alg)+"/jaccard/"
+	output2 = "/home/amaury/Dropbox/evaluation/graphs_without_ego/"+str(alg)+"/jaccard/"
 
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
 		net = "n"+str(i)
 		if alg == "copra":
 			print
-			print ("Calculando Ômega Index nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-			omega_copra(communities1,output1,singletons,net,ground_truth)
+			print ("Calculando Jaccard Index nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+			jaccard_copra(communities1,output1,singletons,net,ground_truth)
 			print
-			print ("Calculando Ômega Index nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
-			omega_copra(communities2,output2,singletons,net,ground_truth)
+			print ("Calculando Jaccard Index nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
+			jaccard_copra(communities2,output2,singletons,net,ground_truth)
 	print("######################################################################")
 	print
 	print("######################################################################")

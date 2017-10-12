@@ -36,21 +36,24 @@ def nmi_copra(communities,output,singletons,net,ground_truth):
 		i=0 		#Ponteiro para o ego
 		if os.path.isdir(str(communities)+str(threshold)):
 			print("######################################################################")
-			with open(str(output)+"/"+str(threshold)+".txt", 'w') as f:
-				for file in os.listdir(str(communities)+str(threshold)):
-					i+=1
-					ego_file = file.split(".edge_list")											# pegar o nome do arquivo que indica o threshold analisado
-					ego_file = ego_file[0]
-					ego_file = ego_file.split("clusters-")			
-					ego_file = ego_file[1]
-				
-					if os.path.isfile(str(ground_truth)+str(ego_file)+".txt"):
-						print ("Calculando NMI para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" -  ego: "+str(i))
-						execute = subprocess.Popen(["/home/amaury/algoritmos/Metricas/mutual3/mutual", str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(ego_file)+".txt"], stdout=subprocess.PIPE)
-						f.write(execute.communicate()[0])
-					else:
-						print ("ERROR - EGO: "+str(i)+" - Arquivo não encontrado!")
-				print("######################################################################")
+			if not os.path.isfile(str(output)+"/"+str(threshold)+".txt"):
+				with open(str(output)+"/"+str(threshold)+".txt", 'w') as f:
+					for file in os.listdir(str(communities)+str(threshold)):
+						i+=1
+						ego_file = file.split(".edge_list")											# pegar o nome do arquivo que indica o threshold analisado
+						ego_file = ego_file[0]
+						ego_file = ego_file.split("clusters-")			
+						ego_file = ego_file[1]
+					
+						if os.path.isfile(str(ground_truth)+str(ego_file)+".txt"):
+							print ("Calculando NMI para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" -  ego: "+str(i))
+							execute = subprocess.Popen(["/home/amaury/algoritmos/Metricas/mutual3/mutual", str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(ego_file)+".txt"], stdout=subprocess.PIPE)
+							f.write(execute.communicate()[0])
+						else:
+							print ("ERROR - EGO: "+str(i)+" - Arquivo não encontrado!")
+					print("######################################################################")
+			else:
+			print ("Arquivo de destino já existe: "+str(output)+"/"+str(threshold)+".txt"))					
 		else:
 			print ("Diretório não encontrado: "+str(communities)+str(threshold))
 	print("######################################################################")
@@ -64,11 +67,11 @@ def nmi_copra(communities,output,singletons,net,ground_truth):
 ######################################################################################################################################################################
 def main():
 	os.system('clear')
-	print "##########################################################################"
-	print"																									"
-	print" Algoritmo para cálculo da métrica NMI para resultados do algoritmo COPRA	"
-	print"																									"
-	print"###########################################################################"
+	print "################################################################################"
+	print"																											"
+	print" Algoritmo para cálculo da métrica Ômega Index para resultados do algoritmo COPRA"
+	print"																											"
+	print"#################################################################################"
 	print
 	print"Realizar o cálculo usando Singletons?"
 	print 
@@ -87,13 +90,39 @@ def main():
 #######################################################################
 #######################################################################
 	print("######################################################################")	
-	for i in range(10):
+	print
+	print "Algoritmo utilizado na detecção das comunidades?"
+	print 
+	print" 01 - COPRA"
+	print" 02 - "
+	print
+	op2 = int(raw_input("Escolha uma opção acima: "))
+	if op == 01:
+		alg = "copra"
+	else:
+		alg = ""
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+
+	######################################################################################################################
+	#####Alterar as linhas para Dropbox quando executado em ambiente de produção
+	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT/"
+	communities1 = "/home/amaury/communities/graphs_with_ego/"+str(alg)+"/"
+	communities2 = "/home/amaury/communities/graphs_without_ego/"+str(alg)+"/" 
+	output1 = "/home/amaury/Dropbox/evaluation/graphs_with_ego/"+str(alg)+"/nmi/"
+	output2 = "/home/amaury/Dropbox/evaluation/graphs_without_ego/"+str(alg)+"/nmi/"
+
+
+	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
 		net = "n"+str(i)
-		print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - SEM o ego")
-		nmi_copra(communities1,output1,singletons,net,ground_truth)
-		print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - COM o ego")
-		nmi_copra(communities2,output2,singletons,net,ground_truth)
+		if alg == "copra":
+			print
+			print ("Calculando Ômega Index nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+			nmi_copra(communities1,output1,singletons,net,ground_truth)
+			print
+			print ("Calculando Ômega Index nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
+			nmi_copra(communities2,output2,singletons,net,ground_truth)
 	print("######################################################################")
 	print
 	print("######################################################################")
@@ -101,20 +130,4 @@ def main():
 	print("######################################################################\n")
 
 	
-######################################################################################################################################################################
-#
-# INÍCIO DO PROGRAMA
-#
-######################################################################################################################################################################
-
-######################################################################################################################
-#####Alterar as linhas para Dropbox quando executado em ambiente de produção
-ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT/"
-communities1 = "/home/amaury/communities/graphs_with_ego/copra/"
-communities2 = "/home/amaury/communities/graphs_without_ego/copra/" 
-output1 = "/home/amaury/Dropbox/evaluation/graphs_with_ego/copra/nmi/"
-output2 = "/home/amaury/Dropbox/evaluation/graphs_without_ego/copra/nmi/"
-######################################################################################################################
-
-
 if __name__ == "__main__": main()
