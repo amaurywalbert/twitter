@@ -94,7 +94,7 @@ def omega_copra(communities,output,singletons,net,ground_truth):
 					if os.path.isfile(str(ground_truth)+str(ego_file)+".txt"):
 						omega = omega_calc(str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(ego_file)+".txt")
 						print ("Ômega Index para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" -  ego: "+str(i)+": "+str(omega.omega_score))
-						f.write(json.dumps(omega))
+						f.write(str(omega.omega_score)+"\n")
 					else:
 						print ("ERROR - EGO: "+str(i)+" - Arquivo não encontrado!")
 				print("######################################################################")

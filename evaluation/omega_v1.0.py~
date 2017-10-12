@@ -59,7 +59,7 @@ def omega_calc(communities_file, ground_truth_communities_file):
 			ground_truth_communities[key] = comm									#dicionário communities recebe a lista de ids das comunidades tendo como chave o valor key				
 					
 	omega = omega_index.Omega(communities, ground_truth_communities)
-	return omega
+	return omega.omega_score
 
 
 ######################################################################################################################################################################
@@ -93,8 +93,8 @@ def omega_copra(communities,output,singletons,net,ground_truth):
 				
 					if os.path.isfile(str(ground_truth)+str(ego_file)+".txt"):
 						omega = omega_calc(str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(ego_file)+".txt")
-						print ("Ômega Index para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" -  ego: "+str(i)+": "+str(omega.omega_score))
-						f.write(json.dumps(omega))
+						print ("Ômega Index para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" -  ego: "+str(i)+": "+str(omega))
+						f.write(str(omega)+"\n")
 					else:
 						print ("ERROR - EGO: "+str(i)+" - Arquivo não encontrado!")
 				print("######################################################################")
