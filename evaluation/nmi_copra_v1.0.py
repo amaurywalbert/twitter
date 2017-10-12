@@ -110,10 +110,10 @@ def main():
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
 ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT/"
-communities1 = "/home/amaury/communities/with_ego/copra/"
-communities2 = "/home/amaury/communities/without_ego/copra/" 
-output1 = "/home/amaury/evaluation/with_ego/copra/nmi/"
-output2 = "/home/amaury/evaluation/without_ego/copra/nmi/"
+communities1 = "/home/amaury/communities/graphs_with_ego/copra/"
+communities2 = "/home/amaury/communities/graphs_without_ego/copra/" 
+output1 = "/home/amaury/Dropbox/evaluation/graphs_with_ego/copra/nmi/"
+output2 = "/home/amaury/Dropbox/evaluation/graphs_without_ego/copra/nmi/"
 ######################################################################################################################
 
 
