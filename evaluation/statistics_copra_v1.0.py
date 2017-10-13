@@ -29,7 +29,7 @@ sys.setdefaultencoding('utf-8')
 # Plota Gráficos dos dados...
 #
 ######################################################################################################################################################################
-def plot_single(output,data_overview,metric,title):
+def plot_single(output,data_overview,metric,alg,title):
 	print ("\n##################################################\n")
 	print ("Gerando Gráfico...")
 	interaction = []
@@ -111,7 +111,7 @@ def plot_single(output,data_overview,metric,title):
 	plt.ylabel(metric)
 	plt.legend(_chartBars, data[2])
 	
-	plt.savefig(output+str(title)+".png")
+	plt.savefig(output+str(title)+"_"+str(metric)+"_"+str(alg)+".png")
 	plt.close()
 
 ######################################################################################################################################################################
@@ -348,13 +348,15 @@ def copra(comm_data_dir,metric):
 #
 ######################################################################################################################################################################
 def instructions(metric):
-
+	alg = "copra"
+################################################################################################	
+	
 	comm_data_dir = str(source)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"
 	output_dir = str(output)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"
 		
 	data,data_overview = copra(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
-	plot_single(output,data_overview,metric,title='Graphs with ego - Communities with singletons')	
+	plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities with singletons')	
 	data1 = data_overview
 ################################################################################################
 
@@ -363,7 +365,7 @@ def instructions(metric):
 
 	data,data_overview = copra(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
-	plot_single(output,data_overview,metric,title='Graphs with ego - Communities without singletons')	
+	plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities without singletons')	
 	data2 = data_overview
 ################################################################################################
 
@@ -372,7 +374,7 @@ def instructions(metric):
 
 	data,data_overview = copra(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
-	plot_single(output,data_overview,metric,title='Graphs without ego - Communities with singletons')
+	plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities with singletons')
 	data3 = data_overview
 ################################################################################################
 
@@ -381,11 +383,10 @@ def instructions(metric):
 
 	data,data_overview = copra(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
-	plot_single(output,data_overview,metric,title='Graphs without ego - Communities without singletons')	
+	plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities without singletons')	
 	data4 = data_overview
 
 ################################################################################################
-	alg = "copra"
 	plot_full(data1,data2,data3,data4,metric,alg)		
 		
 ######################################################################################################################################################################
