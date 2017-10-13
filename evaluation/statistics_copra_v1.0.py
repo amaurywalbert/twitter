@@ -27,6 +27,71 @@ sys.setdefaultencoding('utf-8')
 ##		- Arquivos com estatísticas dos resultados
 ######################################################################################################################################################################
 
+
+######################################################################################################################################################################
+#
+# Plota Gráficos dos dados...
+#
+######################################################################################################################################################################
+def plot(output,data_overview,metric):
+	print ("\n##################################################\n")
+	print ("Gerando Gráfico...")
+	net = []
+	value = []
+	for k, v in data_overview.iteritems():
+		if k == 'n1':
+			key = 'follow'
+		elif k == 'n2':
+			key = 'retweets'			
+		elif k == 'n3':
+			key = 'likes'
+		elif k == 'n4':
+			key = 'mentions'
+		elif k == 'n5':
+			key = 'co-follow'
+		elif k == 'n6':
+			key = 'co-retweets'
+		elif k == 'n7':
+			key = 'co-likes'
+		elif k == 'n8':
+			key = 'co-mentions'
+		elif k == 'n9':
+			key = 'followers'
+		elif k == 'n10':
+			key = 'co-followers'
+		else:
+			key = ' '
+			print ("Valor incorreto para nome da rede-ego")
+			exit()																																						
+		net.append(key)
+		
+		value.append(round(v[metric], 3))
+
+	colors = ['lightblue', 'green', 'white', 'blue', 'red', 'lightblue', 'green', 'white', 'blue', 'red'] 	
+	data = [value,colors,net]
+	
+	print data 
+	
+	xPositions = np.arange(len(data[0]))
+	barWidth = 0.50  # Largura da barra
+
+	_ax = plt.axes()  # Cria axes
+	_chartBars = plt.bar(xPositions, data[0], barWidth, color=data[1],yerr=0.1, align='center')  # Gera barras
+
+	for bars in _chartBars:
+		# text(x, y, s, fontdict=None, withdash=False, **kwargs)
+		_ax.text(bars.get_x() + (bars.get_width() / 2.0), bars.get_height()+0.001, bars.get_height(), ha='center')  # Label acima das barras
+
+	_ax.set_xticks(xPositions)
+	_ax.set_xticklabels(data[2])
+
+	plt.xlabel('Rede-ego')
+	plt.ylabel(metric)
+	plt.legend(_chartBars, data[2])
+
+	plt.show()
+
+
 ######################################################################################################################################################################
 #
 # Cálculos iniciais sobre o conjunto de dados lidos.
@@ -85,23 +150,24 @@ def save_data(output,data,data_overview):
 	with open(output+"statistics_overview.json", 'w') as g:
 		for k, v in data_overview.iteritems():	 
 			network = k,v	 
-			g.write(json.dumps(network)+"\n")	
+			g.write(json.dumps(network)+"\n")
+				
 	print ("##################################################\n")
 	
 ######################################################################################################################################################################
 #
-# Prepara apresentação dos resultados para o algoritmo COPRA - NMI
+# Prepara apresentação dos resultados para o algoritmo COPRA - METRRICA
 #
 ######################################################################################################################################################################
-def nmi_copra(comm_data_dir):
-	nmi_data = {}																				# Armazenar todos os valores NMI para cada threshold do COPRA em cada rede - Formato {'n8': {1: {'soma': 6.059981138000007, 'media': 0.025787153778723433, 'desvio_padrao': 0.006377214443559922, 'variancia': 4.0668864059149294e-05}, 2: {'soma': 6.059981138000007...}}	
-	nmi_data_overview = {}																	# Armazenar o nome da rede e o maior valor do trheshold do COPRA para o NMI - Formato {{'N1':0.012},...}
+def copra(comm_data_dir,metric):
+	data = {}																				# Armazenar todos os valores da Metrica para cada threshold do COPRA em cada rede - Formato {'n8': {1: {'soma': 6.059981138000007, 'media': 0.025787153778723433, 'desvio_padrao': 0.006377214443559922, 'variancia': 4.0668864059149294e-05}, 2: {'soma': 6.059981138000007...}}	
+	data_overview = {}																	# Armazenar o nome da rede e o maior valor do trheshold do COPRA para a MetricaI - Formato {{'N1':0.012},...}
 	
 	if os.path.isdir(comm_data_dir):
 		for file in os.listdir(comm_data_dir):
 			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
 			network = network[0]
-			nmi_data_overview[network] = {'threshold':' ','nmi':float(0)}
+			data_overview[network] = {'threshold':' ',metric:float(0)}
 			print ("\n##################################################")
 			print ("Recuperando dados da rede "+str(network))	
 
@@ -114,53 +180,61 @@ def nmi_copra(comm_data_dir):
 						for k, v in comm_data.iteritems():
 							values = []
 							for item in v:
-								if not math.isnan(item):											# exclui calculo de NMI que retorna valor NaN
+								if not math.isnan(item):											# exclui calculo de da METRICA que retorna valor NaN
 									values.append(item)				
 
-							result = calcular(values)												# Calcula média e outros dados dos NMIs recuperados para o conjunto de egos usando o threshold k				 				
+							result = calcular(values)												# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
 							if result is not None:						
-								if	float(result['media']) > nmi_data_overview[network]['nmi']:
-									nmi_data_overview[network] = {'threshold':k,'nmi':float(result['media'])}
+								if	float(result['media']) > data_overview[network][metric]:
+									data_overview[network] = {'threshold':k,metric:float(result['media'])}
 								partial[k] = result														# Adiciona os caclulos feitos num dicionário com indice k (ou seja, o threshold usado pelo COPRA)
-								nmi_data[network] = partial				
+								data[network] = partial				
 			else:
 				print ("Arquivo não encontrado: "+str(comm_data_dir+file))
 		
-			print nmi_data_overview[network]														# Maior média para a rede [network]
+			print data_overview[network]														# Maior média para a rede [network]
 	else:
 		print ("Diretório não encontrado: "+str(comm_data_dir))					
 	print
 #	print
-#	print nmi_data_overview
+#	print data_overview
 	print ("##################################################\n")
-	return nmi_data,nmi_data_overview
+	return data,data_overview
 	print ("##################################################")	
 
 ######################################################################################################################################################################
 #
-# Realiza as configurações necessárias para os dados do NMI
+# Realiza as configurações necessárias para os dados do METRICA
 #
 ######################################################################################################################################################################
-def nmi(metric):
+def instructions(metric):
 		comm_data_dir = str(source)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"
 		output_dir = str(output)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"
-		nmi_data,nmi_data_overview = nmi_copra(comm_data_dir)
-		save_data(output_dir,nmi_data,nmi_data_overview)		
+		
+		data,data_overview = copra(comm_data_dir,metric)
+		save_data(output_dir,data,data_overview)		
+		plot(output,data_overview,metric)	
 
 		comm_data_dir = str(source)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
 		output_dir = str(output)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
-		nmi_data,nmi_data_overview = nmi_copra(comm_data_dir)
-		save_data(output_dir,nmi_data,nmi_data_overview)	
+
+		data,data_overview = copra(comm_data_dir,metric)
+		save_data(output_dir,data,data_overview)		
+		plot(output,data_overview,metric)	
 
 		comm_data_dir = str(source)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"
 		output_dir = str(output)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"
-		nmi_data,nmi_data_overview = nmi_copra(comm_data_dir)
-		save_data(output_dir,nmi_data,nmi_data_overview)		
+
+		data,data_overview = copra(comm_data_dir,metric)
+		save_data(output_dir,data,data_overview)		
+		plot(output,data_overview,metric)		
 
 		comm_data_dir = str(source)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
 		output_dir = str(output)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
-		nmi_data,nmi_data_overview = nmi_copra(comm_data_dir)
-		save_data(output_dir,nmi_data,nmi_data_overview)	
+
+		data,data_overview = copra(comm_data_dir,metric)
+		save_data(output_dir,data,data_overview)		
+		plot(output,data_overview,metric)	
 
 ######################################################################################################################################################################
 #
@@ -182,15 +256,15 @@ def main():
 #######################################################################
 	if metric_op == 01:
 		metric = "nmi"
-		nmi(metric)
+		instructions(metric)
 #######################################################################		
 	elif metric_op == 02:
 		metric = "omega"
-		nmi(metric)
+		instructions(metric)
 #######################################################################
 	elif metric_op == 03:
 		metric = "jaccard"
-		nmi(metric)
+		instructions(metric)
 #######################################################################
 	else:
 		metric = ""
