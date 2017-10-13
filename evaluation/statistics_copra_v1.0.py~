@@ -111,7 +111,7 @@ def plot_single(output,data_overview,metric,alg,title):
 	plt.ylabel(metric)
 	plt.legend(_chartBars, data[2])
 	
-	plt.savefig(output+str(title)+"_"+str(metric)+"_"+str(alg)+".png")
+	plt.savefig(output+str(title)+"_"+str(alg)+"_"+str(metric)+".png")
 	plt.close()
 
 ######################################################################################################################################################################
