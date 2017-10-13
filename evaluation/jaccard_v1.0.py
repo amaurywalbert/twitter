@@ -187,7 +187,7 @@ def jaccard_copra(communities,output,singletons,net,ground_truth):
 					if os.path.isfile(str(ground_truth)+str(ego_file)+".txt"):
 						try:
 							jaccard = jaccard_prepare_data(str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(ego_file)+".txt")						
-							print ("Jaccard Index para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" -  ego: "+str(i)+": "+str(jaccard))
+							print ("Jaccard Index para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego: "+str(i)+": "+str(jaccard))
 							score.append(jaccard)
 						except Exception as e:
 							print e
