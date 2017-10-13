@@ -105,8 +105,8 @@ oslom()
 	fi
 
 	mv $1"_oslo_files" $2$6
-	mv time_seed.dat $2$6
-	rm tp
+	mv time_seed.dat $2$6".time_seed.dat"
+	mv tp $OUTPUT_DIR".tp"
 	echo
 	echo		 
 }

@@ -1,7 +1,7 @@
 #!/bin/bash
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Rodar o algoritmo de detecção de comunidades COPRA
-##					para cada rede-ego usando parametros AUTOMATICOS de 1 ate 10
+##					para cada rede-ego usando parametros AUTOMATICOS de 1 ate 20
 ##								
 ## # INPUT:
 ##		- Redes-ego
@@ -192,7 +192,7 @@ case $op in
 	;;
 esac
 INPUT_DIR=/home/amaury/graphs/$NET/$GRAPH/
-OUTPUT_DIR=/home/amaury/communities/$GRAPH/$algorithm/$NET/
+OUTPUT_DIR=/home/amaury/communities/$GRAPH/$algorithm/full/$NET/
 
 #Execução do algoritmo...
 ###############################################################
