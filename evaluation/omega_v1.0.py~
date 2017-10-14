@@ -88,7 +88,6 @@ def omega_alg(communities,output,singletons,net,ground_truth):
 				score = []																				# Armazenar os indices de cada ego e salvar depois em uma linha para cada threshold do arquivo result.json
 				for file in os.listdir(str(communities)+str(threshold)+"/"):
 					i+=1
-				
 					if os.path.isfile(str(ground_truth)+str(file)):
 						try:
 							omega = omega_calc(str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(file))
@@ -97,7 +96,7 @@ def omega_alg(communities,output,singletons,net,ground_truth):
 						except Exception as e:
 							print e	
 					else:
-						print ("ERROR - EGO: "+str(i)+" - Arquivo de ground truth não encontrado!")						
+						print ("ERROR - EGO: "+str(i)+" - Arquivo de ground truth não encontrado! "+str(ground_truth)+str(file))						
 				print("######################################################################")					
 				result[threshold] = score						
 			else:

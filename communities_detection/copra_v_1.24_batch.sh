@@ -192,7 +192,7 @@ case $op in
 	;;
 esac
 INPUT_DIR=/home/amaury/graphs/$NET/$GRAPH/
-OUTPUT_DIR=/home/amaury/communities/$GRAPH/$algorithm/full/$NET/
+OUTPUT_DIR=/home/amaury/communities/$GRAPH/$algorithm/raw/$NET/
 
 #Execução do algoritmo...
 ###############################################################
