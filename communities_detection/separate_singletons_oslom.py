@@ -35,8 +35,7 @@ def save_data(graphs):
 			output_without_singletons="/home/amaury/communities/"+str(graphs)+"/copra/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
 			
 			if not os.path.isdir(source_dir):
-				#print ("\nDiretório não encontrado para o threshold "+str(threshold)+"\n"+str(source_dir))
-				print
+				print ("\nDiretório não encontrado para o threshold "+str(threshold)+"\n"+str(source_dir))
 			else:			
 				if not os.path.exists(output_full):		
 					os.makedirs(output_full)	
@@ -50,7 +49,7 @@ def save_data(graphs):
 					i+=1
 					print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i))
 
-					if os.path.isfile(output_full+file):									#Limpar diretórios
+					if os.path.isfile(output_full+file):											#Limpar diretórios
 						os.remove(output_full+file)	
 					if os.path.isfile(output_without_singletons+file):
 						os.remove(output_without_singletons+file)
