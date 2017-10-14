@@ -31,7 +31,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def plot_single(output,data_overview,metric,alg,title):
 	print ("\n##################################################\n")
-	print ("Gerando Gráfico...")
+	print ("Gerando Gráficos Individuais...")
 	interaction = []
 	value = []
 	co_interaction = []
@@ -122,7 +122,7 @@ def plot_single(output,data_overview,metric,alg,title):
 ######################################################################################################################################################################
 def plot_full(data1,data2,data3,data4,metric,alg):
 	print ("\n##################################################\n")
-	print ("Gerando Gráfico...")
+	print ("Gerando Gráfico Completo...")
 
 	data_overview_full = [data1,data2,data3,data4]
 	dataset = {}
@@ -424,24 +424,20 @@ def main():
 
 	print "\n#######################################################################\n"	
 	print ("Algoritmo usado na detecção das comunidades:\n")
-	print("01 - NMI - Normalized Mutual Infomation. ")
-	print("02 - Ômega Index.")
-	print("03 - Jaccard Similarity.")
+	print("01 - COPRA ")
+	print("02 - OSLOM")
 	print	
-	metric_op = int(raw_input("Escolha uma opção acima: "))
+	alg_op = int(raw_input("Escolha uma opção acima: "))
 	print ("\n##################################################\n")
 #######################################################################
-	if metric_op == 01:
-		metric = "nmi"
+	if alg_op == 01:
+		alg = "copra"
 #######################################################################		
-	elif metric_op == 02:
-		metric = "omega"
-#######################################################################
-	elif metric_op == 03:
-		metric = "jaccard"
+	elif alg_op == 02:
+		alg = "oslom"
 #######################################################################
 	else:
-		metric = ""
+		alg = ""
 		print("Opção inválida! Saindo...")
 		exit()	
 #######################################################################

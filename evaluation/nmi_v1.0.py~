@@ -21,7 +21,7 @@ sys.setdefaultencoding('utf-8')
 # Cálculos iniciais sobre o conjunto de dados lidos.
 #
 ######################################################################################################################################################################
-def nmi_copra(communities,output,singletons,net,ground_truth):
+def nmi_alg(communities,output,singletons,net,ground_truth):
 	
 	communities = communities+singletons+"/"+net+"/"
 	ground_truth = ground_truth+singletons+"/"
@@ -34,22 +34,17 @@ def nmi_copra(communities,output,singletons,net,ground_truth):
 	print("######################################################################")
 	if not os.path.isfile(str(output)+str(net)+".json"):
 		result={}
-		for threshold in range(20):	#Parâmetro do COPRA
+		for threshold in range(20):	#Parâmetro do algoritmo
 			threshold+=1
 			i=0 		#Ponteiro para o ego
-			if os.path.isdir(str(communities)+str(threshold)):
+			if os.path.isdir(str(communities)+str(threshold)+"/"):
 				print("######################################################################")
 				score = []																				# Armazenar os indices de cada ego e salvar depois em uma linha para cada threshold do arquivo result.json
-				for file in os.listdir(str(communities)+str(threshold)):
+				for file in os.listdir(str(communities)+str(threshold)+"/"):
 					i+=1
-					ego_file = file.split(".edge_list")											# pegar o nome do arquivo que indica o threshold analisado
-					ego_file = ego_file[0]
-					ego_file = ego_file.split("clusters-")			
-					ego_file = ego_file[1]
-				
-					if os.path.isfile(str(ground_truth)+str(ego_file)+".txt"):
+					if os.path.isfile(str(ground_truth)+str(file)):
 						try:
-							execute = subprocess.Popen(["/home/amaury/algoritmos/Metricas/mutual3/mutual", str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(ego_file)+".txt"], stdout=subprocess.PIPE)
+							execute = subprocess.Popen(["/home/amaury/algoritmos/Metricas/mutual3/mutual", str(communities)+str(threshold)+"/"+str(file),str(ground_truth)+str(file)], stdout=subprocess.PIPE)
 							value = execute.communicate()[0]
 							a = value.split('\t')
 							nmi = float(a[1])
@@ -81,7 +76,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Algoritmo para cálculo da métrica NMI para resultados do algoritmo COPRA"
+	print" Algoritmo para cálculo da métrica NMI 														"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -106,16 +101,22 @@ def main():
 	print "Algoritmo utilizado na detecção das comunidades"
 	print 
 	print" 01 - COPRA"
-	print" 02 - "
+	print" 02 - OSLOM"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:
 		alg = "copra"
+	elif op2 == 02:
+		alg = "oslom"	
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
-
+	print
+	print
+	print ("Opção escolhida: "+str(singletons)+" - "+str(alg))
+	print ("Aguarde...")
+	time.sleep(5)
 	######################################################################################################################
 	#####Alterar as linhas para Dropbox quando executado em ambiente de produção
 	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT/"
@@ -127,13 +128,12 @@ def main():
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
 		net = "n"+str(i)
-		if alg == "copra":
-			print
-			print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-			nmi_copra(communities1,output1,singletons,net,ground_truth)
-			print
-			print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
-			nmi_copra(communities2,output2,singletons,net,ground_truth)
+		print
+		print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+		nmi_alg(communities1,output1,singletons,net,ground_truth)
+		print
+		print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
+		nmi_alg(communities2,output2,singletons,net,ground_truth)
 	print("######################################################################")
 	print
 	print("######################################################################")
