@@ -20,7 +20,7 @@ sys.setdefaultencoding('utf-8')
 # Prepara e salva os dados
 #
 ######################################################################################################################################################################
-def save_data(graphs):
+def save_data(graphs,alg):
 	for net in range(10):
 		net+=1
 		print		
@@ -28,22 +28,35 @@ def save_data(graphs):
 		for threshold in range(20):
 			threshold+=1
 			
-			source_dir ="/home/amaury/communities/"+str(graphs)+"/oslom/raw/n"+str(net)+"/"+str(threshold)+"/"
+			source_dir ="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
 			
-			output_full="/home/amaury/communities/"+str(graphs)+"/oslom/full/n"+str(net)+"/"+str(threshold)+"/"			
-			output_singletons="/home/amaury/communities/"+str(graphs)+"/copra/singletons/n"+str(net)+"/"+str(threshold)+"/"
-			output_without_singletons="/home/amaury/communities/"+str(graphs)+"/copra/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
+			output_full="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/"+str(threshold)+"/"			
+			output_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/singletons/n"+str(net)+"/"+str(threshold)+"/"
+			output_without_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
 			
 			if not os.path.isdir(source_dir):
 				print ("\nDiretório não encontrado para o threshold "+str(threshold)+"\n"+str(source_dir))
-			else:			
-				if not os.path.exists(output_full):		
+				print
+			else:	
+				if os.path.exists(output_full):
+					shutil.rmtree(output_full)		
 					os.makedirs(output_full)	
-				if not os.path.exists(output_singletons):		
+				else:
+					os.makedirs(output_full)
+
+				if os.path.exists(output_singletons):
+					shutil.rmtree(output_singletons)		
 					os.makedirs(output_singletons)	
-				if not os.path.exists(output_without_singletons):
+				else:
+					os.makedirs(output_singletons)						
+
+				if os.path.exists(output_without_singletons):
+					shutil.rmtree(output_without_singletons)		
 					os.makedirs(output_without_singletons)	
-									
+				else:
+					os.makedirs(output_without_singletons)
+
+
 				i=0
 				for file in os.listdir(source_dir):					
 					i+=1
@@ -56,7 +69,7 @@ def save_data(graphs):
 					if os.path.isfile(output_singletons+file):
 						os.remove(output_singletons+file)	
 
-					with open(source_dir+str(file)+"/tp", 'r') as f:							# Abre o arquivo gerado pelo oslom para o usuário "file"
+					with open(source_dir+str(file)+"/tp", 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "file"
 						for line in f:
 							if not "#" in line:
 								a = line.split(' ')
@@ -65,19 +78,20 @@ def save_data(graphs):
 										if item != "\n":											
 											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 									g.write("\n")															# Passa para a próxima linha de g
-
 								if len(a) > 2:
 									with open(output_without_singletons+file+".txt", 'a+') as g:
 										for item in a:
 											if item != "\n":											
 												g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
 										g.write("\n")														# Passa para a próxima linha
-								else:			
+								else:
 									with open(output_singletons+file+".txt", 'a+') as g:
 										for item in a:
 											if item != "\n":
 												g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
 										g.write("\n")														
+										
+												
 #####################################################################################################################################################################
 #
 # Método principal do programa.
@@ -89,10 +103,9 @@ def main():
 	os.system('clear')	
 	graphs1 = "graphs_with_ego"
 	graphs2 = "graphs_without_ego"
-	save_data(graphs1)
-	save_data(graphs2)
-
-				
+	alg = "oslom"
+	save_data(graphs1,alg)
+	save_data(graphs2,alg)
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
