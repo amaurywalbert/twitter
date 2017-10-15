@@ -187,7 +187,7 @@ def jaccard_alg(communities,output,singletons,net,ground_truth):
 						except Exception as e:
 							print e
 					else:
-						print ("ERROR - EGO: "+str(i)+" - Arquivo de ground truth não encontrado!")						
+						print ("ERROR - EGO: "+str(i)+" - Arquivo de ground truth não encontrado:" +(str(ground_truth)+str(file)))						
 				print("######################################################################")
 				result[threshold] = score						
 			else:
@@ -234,8 +234,8 @@ def main():
 	print
 	print "Algoritmo utilizado na detecção das comunidades"
 	print 
-	print" 05 - COPRA"
-	print" 06 - OSLOM"
+	print" 01 - COPRA"
+	print" 02 - OSLOM"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:

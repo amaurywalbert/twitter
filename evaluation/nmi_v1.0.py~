@@ -53,7 +53,7 @@ def nmi_alg(communities,output,singletons,net,ground_truth):
 						except Exception as e:
 							print e	
 					else:
-						print ("ERROR - EGO: "+str(i)+" - Arquivo de ground truth não encontrado!")						
+						print ("ERROR - EGO: "+str(i)+" - Arquivo de ground truth não encontrado:" +(str(ground_truth)+str(file)))
 				print("######################################################################")					
 				result[threshold] = score						
 			else:
@@ -82,7 +82,7 @@ def main():
 	print
 	print"Realizar o cálculo usando Singletons?"
 	print 
-	print" 01 - SIM"
+	print" 01 - SIM - full"
 	print" 02 - NÃO"
 	print
 	op = int(raw_input("Escolha uma opção acima: "))
