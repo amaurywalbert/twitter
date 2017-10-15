@@ -21,10 +21,9 @@ sys.setdefaultencoding('utf-8')
 # Armazenar as propriedades do dataset
 #
 ######################################################################################################################################################################
-def statistics(dataset_dir,output_dir,net,isdir):
+def statistics(dataset_dir,output_dir,net,IsDir):
 	print("\n######################################################################\n")
 	print ("Dataset statistics - " +str(dataset_dir))
-	IsDir=isdir
 	n = []																										# Média dos nós por rede-ego
 	e = []																										# Média das arestas por rede-ego	
 	d = []																										# Média dos diametros por rede-ego
@@ -59,12 +58,26 @@ def statistics(dataset_dir,output_dir,net,isdir):
 
 
 #####################################################################################			
+	
 	N = calc.calcular_full(n)
 	E = calc.calcular_full(e)
 	D = calc.calcular_full(d)
 	BC_N = calc.calcular_full(bc_n)
 	BC_E = calc.calcular_full(bc_e)
 #	CC = calc.calcular_full(cc)
+
+	overview = {}
+	overview['Nodes'] = N
+	overview['Edges'] = E
+	overview['Diameter'] = D
+	overview['BetweennessCentrNodes'] = BC_N
+	overview['BetweennessCentrEdges'] = BC_E
+#	overview['ClusteringCoefficient'] = CC
+	
+	with open(output_dir+"properties.json") as f:
+		f.write(json.dumps(overview))
+		
+		
 	print("\n######################################################################\n")	
 	print ("NET: %s -- Egos-net: %d" % (net,len(n)))
 	print ("Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (N['media'],N['variancia'],N['desvio_padrao']))
