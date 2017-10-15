@@ -28,7 +28,7 @@ def save_data(graphs,alg):
 		for threshold in range(20):
 			threshold+=1
 			
-			source_dir ="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
+			source_dir="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
 			
 			output_full="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/"+str(threshold)+"/"			
 			output_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/singletons/n"+str(net)+"/"+str(threshold)+"/"

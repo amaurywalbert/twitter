@@ -20,7 +20,7 @@ sys.setdefaultencoding('utf-8')
 # Salva os dados nas respectivas pastas
 #
 ######################################################################################################################################################################
-def save_data(graph,alg):
+def save_data(graphs,alg):
 	for net in range(10):
 		net+=1
 		print		
@@ -28,14 +28,14 @@ def save_data(graph,alg):
 		for threshold in range(20):
 			threshold+=1
 
-			source_dir="/home/amaury/communities/"+str(graph)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
+			source_dir="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
 
-			output_full="/home/amaury/communities/"+str(graph)+"/"+str(alg)+"/full/n"+str(net)+"/"+str(threshold)+"/"
-			output_singletons="/home/amaury/communities/"+str(graph)+"/"+str(alg)+"/singletons/n"+str(net)+"/"+str(threshold)+"/"
-			output_without_singletons="/home/amaury/communities/"+str(graph)+"/"+str(alg)+"/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
+			output_full="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/"+str(threshold)+"/"
+			output_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/singletons/n"+str(net)+"/"+str(threshold)+"/"
+			output_without_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
 
 			if not os.path.isdir(source_dir):
-				#print ("\nDiretório não encontrado para o threshold "+str(threshold)+"\n"+str(source_dir))
+				print ("\nDiretório não encontrado para o threshold "+str(threshold)+"\n"+str(source_dir))
 				print
 			else:	
 				if os.path.exists(output_full):
@@ -60,9 +60,16 @@ def save_data(graph,alg):
 				i=0
 				for file in os.listdir(source_dir):		
 					i+=1
-					print (str(graph)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i))			
-						
-					with open(source_dir+file, 'r') as f:
+					print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i))			
+
+					if os.path.isfile(output_full+file):											#Limpar diretórios
+						os.remove(output_full+file)	
+					if os.path.isfile(output_without_singletons+file):
+						os.remove(output_without_singletons+file)
+					if os.path.isfile(output_singletons+file):
+						os.remove(output_singletons+file)	
+												
+					with open(source_dir+str(file), 'r') as f:
 						ego_id = file.split(".edge_list")											# pegar o nome do arquivo que indica o threshold analisado
 						ego_id = ego_id[0]
 						ego_id = ego_id.split("clusters-")			
@@ -70,14 +77,14 @@ def save_data(graph,alg):
 													
 						for line in f:
 							a = line.split(' ')
-							with open(output_full+ego_id+".txt", 'a+') as g:
+							with open(output_full+str(ego_id)+".txt", 'a+') as g:
 								for item in a:
 									if item != "\n":											
 										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 								g.write("\n")															# Passa para a próxima linha de g
 
 							if len(a) > 2:
-								with open(output_without_singletons+".txt", 'a+') as g:
+								with open(output_without_singletons+str(ego_id)+".txt", 'a+') as g:
 									for item in a:
 										if item != "\n":											
 											g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
@@ -97,11 +104,11 @@ def save_data(graph,alg):
 ######################################################################################################################################################################
 def main():
 	os.system('clear')
+	graphs1 = "graphs_with_ego"
+	graphs2 = "graphs_without_ego"
 	alg = "copra"
-	graph1 = "graphs_with_ego"
-	graph2 = "graphs_without_ego"
-	save_data(graph1,alg)
-	save_data(graph2,alg)
+	save_data(graphs1,alg)
+	save_data(graphs2,alg)
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
