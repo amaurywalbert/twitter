@@ -75,19 +75,19 @@ def save_data(graphs,alg):
 								a = line.split(' ')
 								with open(output_full+file+".txt", 'a+') as g:
 									for item in a:
-										if item != "\n":											
+										if item != "\n" or long(item) > 0:											
 											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 									g.write("\n")															# Passa para a próxima linha de g
 								if len(a) > 2:
 									with open(output_without_singletons+file+".txt", 'a+') as g:
 										for item in a:
-											if item != "\n":											
+											if item != "\n" or long(item) > 0:											
 												g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
 										g.write("\n")														# Passa para a próxima linha
 								else:
 									with open(output_singletons+file+".txt", 'a+') as g:
 										for item in a:
-											if item != "\n":
+											if item != "\n" or long(item) > 0:
 												g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
 										g.write("\n")														
 										
