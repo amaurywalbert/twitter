@@ -178,6 +178,7 @@ def jaccard_alg(communities,output,singletons,net,ground_truth):
 				print("######################################################################")
 				score = []																				# Armazenar os indices de cada ego e salvar depois em uma linha para cada threshold do arquivo result.json
 				for file in os.listdir(str(communities)+str(threshold)+"/"):
+					print str(communities)+str(threshold)+"/"str(file)
 					i+=1
 					if os.path.isfile(str(ground_truth)+str(file)):
 						try:
