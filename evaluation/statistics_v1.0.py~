@@ -111,6 +111,9 @@ def plot_single(output,data_overview,metric,alg,title):
 	plt.ylabel(metric)
 	plt.legend(_chartBars, data[2])
 
+	output = output+alg+"/"
+	if not os.path.exists(output):
+		os.makedirs(output)
 	
 	plt.savefig(output+str(title)+"_"+str(alg)+"_"+str(metric)+".png")
 	plt.close()
@@ -230,7 +233,11 @@ def plot_full(data1,data2,data3,data4,metric,alg):
 	layout = go.Layout(xaxis=dict(tickangle=-45),barmode='group',)
 	fig = go.Figure(data=data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output+str(alg)+"_"+str(metric)+".html")
+	output = output+alg+"/"
+	if not os.path.exists(output):
+		os.makedirs(output)
+		
+	plotly.offline.plot(fig, filename=output+str(metric)+".html")
 
 
 ######################################################################################################################################################################
