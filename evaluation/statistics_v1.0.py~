@@ -9,7 +9,7 @@ from math import*
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
-
+import calc
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -123,7 +123,7 @@ def plot_single(output,data_overview,metric,alg,title):
 # Plota Gráficos dos dados...
 #
 ######################################################################################################################################################################
-def plot_full(data1,data2,data3,data4,metric,alg):
+def plot_full(output,data1,data2,data3,data4,metric,alg):
 	print ("\n##################################################\n")
 	print ("Gerando Gráfico Completo...")
 
@@ -242,46 +242,6 @@ def plot_full(data1,data2,data3,data4,metric,alg):
 
 ######################################################################################################################################################################
 #
-# Cálculos iniciais sobre o conjunto de dados lidos.
-#
-######################################################################################################################################################################
-def calcular(valores=None):
-	calculos = {}
-	if valores:
-		if valores.__class__.__name__ == 'list' and calculos.__class__.__name__ == 'dict':
-			def somar(valores):
-				soma = 0
-				for v in valores:
-					soma += v
-				return soma
- 
-			def media(valores):
-				soma = somar(valores)
-				qtd_elementos = len(valores)
-				media = soma / float(qtd_elementos)
-				return media
- 
- 			def variancia(valores):
- 				_media = media(valores)
- 				soma = 0
- 				_variancia = 0
- 
- 				for valor in valores:
- 					soma += math.pow( (valor - _media), 2)
- 					_variancia = soma / float( len(valores) )
- 					return _variancia
- 
- 			def desvio_padrao(valores):
- 				return math.sqrt( variancia(valores) )
-
-			calculos['soma'] = somar(valores)
-			calculos['media'] = media(valores)
-			calculos['variancia'] = variancia(valores)
-			calculos['desvio_padrao'] = desvio_padrao(valores)
-			return calculos
-
-######################################################################################################################################################################
-#
 # Salva os dados de cada algoritmo em formato JSON
 #
 ######################################################################################################################################################################
@@ -331,7 +291,7 @@ def algorithm(comm_data_dir,metric):
 								if not math.isnan(item):											# exclui calculo de da METRICA que retorna valor NaN
 									values.append(item)				
 
-							result = calcular(values)												# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
+							result = calc.calcular_full(values)												# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
 							if result is not None:						
 								if	float(result['media']) > data_overview[network][metric]:
 									data_overview[network] = {'threshold':k,metric:float(result['media'])}
@@ -394,7 +354,7 @@ def instructions(metric,alg):
 	data4 = data_overview
 
 ################################################################################################
-	plot_full(data1,data2,data3,data4,metric,alg)		
+	plot_full(output,data1,data2,data3,data4,metric,alg)		
 		
 ######################################################################################################################################################################
 #
