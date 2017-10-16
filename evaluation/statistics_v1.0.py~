@@ -135,6 +135,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	#i = 4										#armazenar dados de plotagem para dataset SEM ego e comunidades SEM singletons
 	
 	i=0
+
 	for data_overview in data_overview_full:
 		i+=1
 		interaction = []

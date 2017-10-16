@@ -178,7 +178,6 @@ def jaccard_alg(communities,output,singletons,net,ground_truth):
 				print("######################################################################")
 				score = []																				# Armazenar os indices de cada ego e salvar depois em uma linha para cada threshold do arquivo result.json
 				for file in os.listdir(str(communities)+str(threshold)+"/"):
-					print (str(communities)+str(threshold)+"/"+str(file))
 					i+=1
 					if os.path.isfile(str(ground_truth)+str(file)):
 						try:
@@ -194,9 +193,9 @@ def jaccard_alg(communities,output,singletons,net,ground_truth):
 				result[threshold] = score						
 			else:
 				print ("Diretório com as comunidades não encontrado: "+str(communities)+str(threshold))
-		if len(result) > 0:
-			with open(str(output)+str(net)+".json", 'w') as f:
-				f.write(json.dumps(result))						
+		
+		with open(str(output)+str(net)+".json", 'w') as f:
+			f.write(json.dumps(result))						
 	else:
 		print ("Arquivo de destino já existe: "+str(output)+str(net)+".json")			
 	print("######################################################################")			

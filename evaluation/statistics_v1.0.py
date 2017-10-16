@@ -91,7 +91,6 @@ def plot_single(output,data_overview,metric,alg,title):
 	colors = ['lightblue', 'lightgreen', 'yellow', 'magenta', 'red', 'green', 'blue', 'cyan', 'magenta', 'black'] 	
 	data = [value,colors,interaction]
 	
-	print data 
 	
 	xPositions = np.arange(len(data[0]))
 	barWidth = 0.50  # Largura da barra
@@ -135,6 +134,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	#i = 4										#armazenar dados de plotagem para dataset SEM ego e comunidades SEM singletons
 	
 	i=0
+
 	for data_overview in data_overview_full:
 		i+=1
 		interaction = []
