@@ -297,12 +297,12 @@ def save_data(output,data,data_overview):
 	
 ######################################################################################################################################################################
 #
-# Prepara apresentação dos resultados para o algoritmo COPRA - METRICA
+# Prepara apresentação dos resultados para o algoritmo - METRICA
 #
 ######################################################################################################################################################################
-def copra(comm_data_dir,metric):
-	data = {}																				# Armazenar todos os valores da Metrica para cada threshold do COPRA em cada rede - Formato {'n8': {1: {'soma': 6.059981138000007, 'media': 0.025787153778723433, 'desvio_padrao': 0.006377214443559922, 'variancia': 4.0668864059149294e-05}, 2: {'soma': 6.059981138000007...}}	
-	data_overview = {}																	# Armazenar o nome da rede e o maior valor do trheshold do COPRA para a MetricaI - Formato {{'N1':0.012},...}
+def algorithm(comm_data_dir,metric):
+	data = {}																				# Armazenar todos os valores da Metrica para cada threshold do algoritmo em cada rede - Formato {'n8': {1: {'soma': 6.059981138000007, 'media': 0.025787153778723433, 'desvio_padrao': 0.006377214443559922, 'variancia': 4.0668864059149294e-05}, 2: {'soma': 6.059981138000007...}}	
+	data_overview = {}																	# Armazenar o nome da rede e o maior valor do trheshold do algoritmo para a MetricaI - Formato {{'N1':0.012},...}
 	
 	if os.path.isdir(comm_data_dir):
 		for file in os.listdir(comm_data_dir):
@@ -351,37 +351,37 @@ def copra(comm_data_dir,metric):
 def instructions(metric,alg):
 ################################################################################################	
 	
-	comm_data_dir = str(source)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"
-	output_dir = str(output)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/full/"
+	comm_data_dir = str(source)+"graphs_with_ego/"+alg+"/"+str(metric)+"/full/"
+	output_dir = str(output)+"graphs_with_ego/"+alg+"/"+str(metric)+"/full/"
 		
-	data,data_overview = copra(comm_data_dir,metric)
+	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
 	plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities with singletons')	
 	data1 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
-	output_dir = str(output)+"graphs_with_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
+	comm_data_dir = str(source)+"graphs_with_ego/"+alg+"/"+str(metric)+"/without_singletons/"
+	output_dir = str(output)+"graphs_with_ego/"+alg+"/"+str(metric)+"/without_singletons/"
 
-	data,data_overview = copra(comm_data_dir,metric)
+	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
 	plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities without singletons')	
 	data2 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"
-	output_dir = str(output)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/full/"
+	comm_data_dir = str(source)+"graphs_without_ego/"+alg+"/"+str(metric)+"/full/"
+	output_dir = str(output)+"graphs_without_ego/"+alg+"/"+str(metric)+"/full/"
 
-	data,data_overview = copra(comm_data_dir,metric)
+	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
 	plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities with singletons')
 	data3 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
-	output_dir = str(output)+"graphs_without_ego/"+algorithm+"/"+str(metric)+"/without_singletons/"
+	comm_data_dir = str(source)+"graphs_without_ego/"+alg+"/"+str(metric)+"/without_singletons/"
+	output_dir = str(output)+"graphs_without_ego/"+alg+"/"+str(metric)+"/without_singletons/"
 
-	data,data_overview = copra(comm_data_dir,metric)
+	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
 	plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities without singletons')	
 	data4 = data_overview
@@ -441,7 +441,7 @@ def main():
 		print("Opção inválida! Saindo...")
 		exit()	
 #######################################################################
-	
+
 	instructions(metric,alg)
 	
 #######################################################################
@@ -458,7 +458,6 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-algorithm = "copra"
 source = "/home/amaury/Dropbox/evaluation/"
 output = "/home/amaury/Dropbox/statistics/"
 ######################################################################################################################
