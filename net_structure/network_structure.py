@@ -7,6 +7,8 @@ import numpy as np
 from math import*
 # Script auxiliar para cálculos matemáticos que deve estar no mesmo diretório deste aqui.
 import calc
+# Script auxiliar para gerar histogramas
+import histogram
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -31,8 +33,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 	cf = []																										# Média dos coeficientes de clusterings por rede-ego
 	bc_n = []																									# média de betweenness centrality dos nós	
 	bc_e = []																									# média de betweenness centrality das arestas
-	m = []																										# Média das modularidades de cada grafo	
 	
+	degree = {}																									#chave-valor para armazenar "grau dos nós - numero de nós com este grau"
 	i = 0
 	for file in os.listdir(dataset_dir):
 		i+=1 
@@ -61,7 +63,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 
 #####################################################################################
 
-#		cf.append(snap.GetClustCf(G))																# clustering coefficient of G											
+#		cf.append(snap.GetClustCf(G,5))																# clustering coefficient of G											
 
 #####################################################################################
 
@@ -80,15 +82,23 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 		bc_e.append(result['media'])	
 
 #####################################################################################
-
-#		CmtyV = snap.TCnComV()
-#		m.append(snap.CommunityCNM(G, CmtyV))												# Roda o CNM e pega a modularidade- Desconsidera direção das arestas...
 		
+		DegToCntV = snap.TIntPrV()
+		snap.GetDegCnt(G, DegToCntV)																#Grau de cada nó em cada rede-ego
+		for item in DegToCntV:
+			k = item.GetVal1()
+			v = item.GetVal2()
+			if degree.has_key(k):
+				degree[k] = degree[k]+v 
+			else:
+				degree[k] = v
+			
 #####################################################################################
-	
-	N = calc.calcular_full(n)
 
+	N = calc.calcular_full(n)
 	E = calc.calcular_full(e)
+	
+	histogram.histogram(degree,output_dir+str(net)+"/", N['soma'])
 
 	D = calc.calcular_full(d)
 
@@ -98,8 +108,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 	
 	BC_N = calc.calcular_full(bc_n)
 	BC_E = calc.calcular_full(bc_e)
-	
-#	M = calc.calcular_full(m)
 
 
 	overview = {}
@@ -110,23 +118,21 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 #	overview['ClusteringCoefficient'] = CF
 	overview['BetweennessCentrNodes'] = BC_N
 	overview['BetweennessCentrEdges'] = BC_E
-#	overview['Modularity'] = M
 
 	
-	with open(str(output_dir)+str(net)+".json") as f:
+	with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
 		f.write(json.dumps(overview))
 		
 		
 	print("\n######################################################################\n")	
-	print ("NET: %s -- Egos-net: %d" % (net,len(n)))
+	print ("NET: %s -- Ego-nets: %d" % (net,len(n)))
 	print ("Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (N['media'],N['variancia'],N['desvio_padrao']))
 	print ("Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (E['media'],E['variancia'],E['desvio_padrao']))
 	print ("Diameter: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (D['media'],D['variancia'],D['desvio_padrao']))
 	print ("CloseCentr: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
-#	print ("Clustering Coefficient: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
+#	print ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
 	print ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
 	print ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
-#	print ("Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (M['media'],M['variancia'],M['desvio_padrao']))
 
 	print("\n######################################################################\n")
 
@@ -209,14 +215,14 @@ def main():
 		net_structure(dataset_dir,output_dir,net,isdir)														# Inicia os cálculos...				
 ######################################################################		
 ######################################################################
-#	dataset_dir2 = "/home/amaury/graphs/"+str(net)+"/graphs_without_ego/"						############### Arquivo contendo arquivos com a lista de arestas das redes-ego
-#	if not os.path.isdir(dataset_dir2):
-#		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
-#	else:
-#		output_dir = "/home/amaury/Dropbox/net_structure/graphs_without_ego/"
-#		if not os.path.exists(output_dir):
-#			os.makedirs(output_dir)
-#		net_structure(dataset_dir2,output_dir2,net,isdir)													# Inicia os cálculos...	
+	dataset_dir2 = "/home/amaury/graphs/"+str(net)+"/graphs_without_ego/"						############### Arquivo contendo arquivos com a lista de arestas das redes-ego
+	if not os.path.isdir(dataset_dir2):
+		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
+	else:
+		output_dir = "/home/amaury/Dropbox/net_structure/graphs_without_ego/"
+		if not os.path.exists(output_dir):
+			os.makedirs(output_dir)
+		net_structure(dataset_dir2,output_dir2,net,isdir)													# Inicia os cálculos...	
 ######################################################################
 ######################################################################		
 

@@ -21,9 +21,9 @@ sys.setdefaultencoding('utf-8')
 # Armazenar as propriedades do dataset
 #
 ######################################################################################################################################################################
-def statistics(dataset_dir,output_dir,net,IsDir):
+def net_structure(dataset_dir,output_dir,net,IsDir):
 	print("\n######################################################################\n")
-	print ("Dataset statistics - " +str(dataset_dir))
+	print ("Dataset network structure - " +str(dataset_dir))
 	n = []																										# Média dos nós por rede-ego
 	e = []																										# Média das arestas por rede-ego	
 	d = []																										# Média dos diametros por rede-ego
@@ -36,15 +36,25 @@ def statistics(dataset_dir,output_dir,net,IsDir):
 		i+=1 
 		print ("Calculando propriedades para o ego %d..." % (i))
 		
-		G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)							   # load from a text file
-		n.append(G.GetNodes())																				# Numero de vertices
-		e.append(G.GetEdges())																				# Numero de arestas
-		d.append(snap.GetBfsFullDiam(G, 100, IsDir))													# get diameter of G
-#		cc.append(snap.GetClustCf(G))																		# clustering coefficient of G											
+		G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file
+#####################################################################################		
+
+		n.append(G.GetNodes())																		# Numero de vertices
+		e.append(G.GetEdges())																		# Numero de arestas
+
+#####################################################################################
+
+		d.append(snap.GetBfsFullDiam(G, 100, IsDir))											# get diameter of G
+
+#####################################################################################
+
+#		cc.append(snap.GetClustCf(G))																# clustering coefficient of G											
+
+#####################################################################################
 
 		Nodes = snap.TIntFltH()
 		Edges = snap.TIntPrFltH()
-		snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)
+		snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
 		_bc_n = []
 		_bc_e = []
 		for node in Nodes:
@@ -56,8 +66,7 @@ def statistics(dataset_dir,output_dir,net,IsDir):
 		result = calc.calcular(_bc_e)
 		bc_e.append(result['media'])	
 
-
-#####################################################################################			
+#####################################################################################
 	
 	N = calc.calcular_full(n)
 	E = calc.calcular_full(e)
@@ -74,7 +83,7 @@ def statistics(dataset_dir,output_dir,net,IsDir):
 	overview['BetweennessCentrEdges'] = BC_E
 #	overview['ClusteringCoefficient'] = CC
 	
-	with open(output_dir+"properties.json") as f:
+	with open(str(output_dir)+str(net)+".json") as f:
 		f.write(json.dumps(overview))
 		
 		
@@ -157,20 +166,20 @@ def main():
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/properties/"+str(net)+"/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
-		statistics(dataset_dir,output_dir,net,isdir)														# Inicia os cálculos...				
+		net_structure(dataset_dir,output_dir,net,isdir)														# Inicia os cálculos...				
 ######################################################################		
 ######################################################################
 #	dataset_dir2 = "/home/amaury/graphs/"+str(net)+"/graphs_without_ego/"						############### Arquivo contendo arquivos com a lista de arestas das redes-ego
 #	if not os.path.isdir(dataset_dir2):
 #		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 #	else:
-#		output_dir2 = "/home/amaury/Dropbox/properties/"+str(net)+"/graphs_with_ego/"
+#		output_dir = "/home/amaury/Dropbox/net_structure/graphs_without_ego/"
 #		if not os.path.exists(output_dir):
 #			os.makedirs(output_dir)
-#		statistics(dataset_dir2,output_dir2,net,isdir)													# Inicia os cálculos...	
+#		net_structure(dataset_dir2,output_dir2,net,isdir)													# Inicia os cálculos...	
 ######################################################################
 ######################################################################		
 
