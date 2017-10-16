@@ -193,9 +193,9 @@ def jaccard_alg(communities,output,singletons,net,ground_truth):
 				result[threshold] = score						
 			else:
 				print ("Diretório com as comunidades não encontrado: "+str(communities)+str(threshold))
-		
-		with open(str(output)+str(net)+".json", 'w') as f:
-			f.write(json.dumps(result))						
+		if len(result) > 0:
+			with open(str(output)+str(net)+".json", 'w') as f:
+				f.write(json.dumps(result))						
 	else:
 		print ("Arquivo de destino já existe: "+str(output)+str(net)+".json")			
 	print("######################################################################")			
