@@ -9,6 +9,7 @@ from math import*
 import calc
 # Script auxiliar para gerar histogramas
 import histogram
+import networkx as nx
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -23,7 +24,7 @@ sys.setdefaultencoding('utf-8')
 # Armazenar as propriedades do dataset
 #
 ######################################################################################################################################################################
-def net_structure(dataset_dir,output_dir,net,IsDir):
+def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	print("\n######################################################################\n")
 	print ("Dataset network structure - " +str(dataset_dir))
 	n = []																										# Média dos nós por rede-ego
@@ -33,9 +34,11 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 	cf = []																										# Média dos coeficientes de clusterings por rede-ego
 	bc_n = []																									# média de betweenness centrality dos nós	
 	bc_e = []																									# média de betweenness centrality das arestas
-	
-	degree = {}																									#chave-valor para armazenar "grau dos nós - numero de nós com este grau"
+	m = []																										# média das modularidades
+	degree = {}																									# chave-valor para armazenar "grau dos nós - numero de nós com este grau"
 	i = 0
+
+
 	for file in os.listdir(dataset_dir):
 		i+=1 
 		print ("Calculando propriedades para o ego %d..." % (i))
@@ -47,19 +50,22 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 
 		n.append(G.GetNodes())																		# Numero de vertices
 		e.append(G.GetEdges())																		# Numero de arestas
-
+		n_nodes = G.GetNodes()	
+		n_edges = G.GetEdges()
 #####################################################################################
 
 		d.append(snap.GetBfsFullDiam(G, 100, IsDir))											# get diameter of G
 		
 #####################################################################################
-		_cc = []
+
+		_cc = []	
 		Normalized = True
 		for NI in G.Nodes():
-			_cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality	
+			_cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
 		result = calc.calcular(_cc)
 		cc.append(result['media'])
-
+		
+#####################################################################################
 
 #####################################################################################
 
@@ -92,7 +98,18 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 				degree[k] = degree[k]+v 
 			else:
 				degree[k] = v
-			
+
+#####################################################################################
+		
+		Nodes = snap.TIntV()				
+		if weight:
+			G_nx=nx.read_weighted_edgelist(dataset_dir+file)
+		else:
+			G_nx=nx.read_edgelist(dataset_dir+file)
+		
+		for NI in G_nx.nodes_iter():
+			Nodes.Add(long(NI))
+		m.append(snap.GetModularity(G, Nodes, n_edges))									#Passar o número de arestas do grafo como parâmetro para agilizar o processo				
 #####################################################################################
 
 	N = calc.calcular_full(n)
@@ -109,7 +126,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 	BC_N = calc.calcular_full(bc_n)
 	BC_E = calc.calcular_full(bc_e)
 
-
+	M = calc.calcular_full(m)
+	
 	overview = {}
 	overview['Nodes'] = N
 	overview['Edges'] = E
@@ -118,7 +136,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 #	overview['ClusteringCoefficient'] = CF
 	overview['BetweennessCentrNodes'] = BC_N
 	overview['BetweennessCentrEdges'] = BC_E
-
+	overview['Modularity'] = M
 	
 	with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
 		f.write(json.dumps(overview))
@@ -133,6 +151,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir):
 #	print ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
 	print ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
 	print ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
+	print ("Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (M['media'],M['variancia'],M['desvio_padrao']))
 
 	print("\n######################################################################\n")
 
@@ -198,6 +217,11 @@ def main():
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()
+
+	if op == 1 or op == 9:																						# Testar se é um grafo direcionado ou não
+		weight = False
+	else:
+		weight = True
 ######################################################################
 	
 	net = "n"+str(op)	
@@ -212,17 +236,17 @@ def main():
 		output_dir = "/home/amaury/Dropbox/net_structure/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
-		net_structure(dataset_dir,output_dir,net,isdir)														# Inicia os cálculos...				
+		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
 ######################################################################		
 ######################################################################
 	dataset_dir2 = "/home/amaury/graphs/"+str(net)+"/graphs_without_ego/"						############### Arquivo contendo arquivos com a lista de arestas das redes-ego
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir = "/home/amaury/Dropbox/net_structure/graphs_without_ego/"
-		if not os.path.exists(output_dir):
-			os.makedirs(output_dir)
-		net_structure(dataset_dir2,output_dir2,net,isdir)													# Inicia os cálculos...	
+		output_dir2 = "/home/amaury/Dropbox/net_structure/graphs_without_ego/"
+		if not os.path.exists(output_dir2):
+			os.makedirs(output_dir2)
+		net_structure(dataset_dir2,output_dir2,net,isdir,weight)												# Inicia os cálculos...	
 ######################################################################
 ######################################################################		
 

@@ -24,7 +24,7 @@ sys.setdefaultencoding('utf-8')
 def net_structure(graphs_dir,dataset_dir,output_dir,net):
 	os.system('clear')	
 	print("\n######################################################################\n")
-	print ("Dataset Modularity - " +str(dataset_dir)+"\n")
+	print("\nScript para calculo da modularidade das comunidades detectadas\n")
 		
 	if os.path.isfile(str(output_dir)+"overview.json"):
 		os.remove(str(output_dir)+"overview.json")	
@@ -99,7 +99,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Script para apresentação de propriedades do dataset (rede-ego)							"
+	print" Script para calculo da modularidade das comunidades detectadas						"
 	print"																											"
 	print"#################################################################################"
 	print
