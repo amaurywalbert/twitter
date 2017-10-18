@@ -60,7 +60,7 @@ def save_data(graphs,alg):
 				i=0
 				for file in os.listdir(source_dir):					
 					if not os.path.exists(source_dir+str(file)+"/tp"):
-						print ("Diretório não encontrado: "+str(source_dir)+str(file)+"/tp"): 
+						print ("Diretório não encontrado: "+str(source_dir)+str(file)+"/tp")
 					else:	
 						i+=1
 						print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i))
