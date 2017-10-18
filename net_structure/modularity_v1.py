@@ -7,6 +7,7 @@ import numpy as np
 from math import*
 # Script auxiliar para cálculos matemáticos que deve estar no mesmo diretório deste aqui.
 import calc
+import plot_statistics
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -21,8 +22,9 @@ sys.setdefaultencoding('utf-8')
 # Armazenar as propriedades do dataset
 #
 ######################################################################################################################################################################
-def net_structure(graphs_dir,dataset_dir,output_dir,net):
+def net_structure(graphs_dir,dataset_dir,output_dir,net,metric):
 	os.system('clear')	
+
 	print("\n######################################################################\n")
 	print("\nScript para calculo da modularidade das comunidades detectadas\n")
 		
@@ -85,7 +87,7 @@ def net_structure(graphs_dir,dataset_dir,output_dir,net):
 	print ("Threshold: %s   ---   Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (threshold,M['media'],M['variancia'],M['desvio_padrao']))
 	print("\n######################################################################\n")
 
-print("\n######################################################################\n")
+	print("\n######################################################################\n")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -139,20 +141,20 @@ def main():
 		sys.exit()		
 ######################################################################
 	
-	
+	metric = 'modularity'
 ######################################################################		
 ######################################################################
-	dataset_dir = "/home/amaury/communities/graphs_with_ego/"+str(alg)+"/full/"+str(net)+"/"	############### Arquivo contendo arquivos contendo as comunidades
-	graphs_dir = "/home/amaury/graphs/"+str(net)+"/graphs_with_ego/"
-	if not os.path.isdir(dataset_dir):
-		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
+	dataset_dir1 = "/home/amaury/communities/graphs_with_ego/"+str(alg)+"/full/"+str(net)+"/"	############### Arquivo contendo arquivos contendo as comunidades
+	graphs_dir1 = "/home/amaury/graphs/"+str(net)+"/graphs_with_ego/"
+	if not os.path.isdir(dataset_dir1):
+		print("Diretório dos grafos não encontrado: "+str(dataset_dir1))
 	else:
-		output_dir = "/home/amaury/Dropbox/communities/graphs_with_ego/"+str(alg)+"/full/"+str(net)+"/"
-		if not os.path.exists(output_dir):
-			os.makedirs(output_dir)
+		output_dir1 = "/home/amaury/Dropbox/communities/graphs_with_ego/"+str(alg)+"/full/"+str(net)+"/"
+		if not os.path.exists(output_dir1):
+			os.makedirs(output_dir1)
 
 		print ("\nCalcular modularidade... /home/amaury/communities/graphs_with_ego/"+str(alg)+"/full/"+str(net)+"/")
-		net_structure(graphs_dir,dataset_dir,output_dir,net)														# Inicia os cálculos...				
+		net_structure(graphs_dir1,dataset_dir1,output_dir1,net,metric)														# Inicia os cálculos...				
 ######################################################################				
 ######################################################################
 	dataset_dir2 = "/home/amaury/communities/graphs_with_ego/"+str(alg)+"/without_singletons/"+str(net)+"/"	############### Arquivo contendo arquivos contendo as comunidades
@@ -164,7 +166,7 @@ def main():
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		print ("\nCalcular modularidade... /home/amaury/communities/graphs_with_ego/"+str(alg)+"/without_singletons/"+str(net)+"/")
-		net_structure(graphs_dir2,dataset_dir2,output_dir2,net)														# Inicia os cálculos...			
+		net_structure(graphs_dir2,dataset_dir2,output_dir2,net,metric)														# Inicia os cálculos...			
 ######################################################################
 ######################################################################
 	dataset_dir3 = "/home/amaury/communities/graphs_without_ego/"+str(alg)+"/full/"+str(net)+"/"	############### Arquivo contendo arquivos contendo as comunidades
@@ -176,7 +178,7 @@ def main():
 		if not os.path.exists(output_dir3):
 			os.makedirs(output_dir3)
 		print ("\nCalcular modularidade... /home/amaury/communities/graphs_without_ego/"+str(alg)+"/full/"+str(net)+"/")
-		net_structure(graphs_dir3,dataset_dir3,output_dir3,net)													# Inicia os cálculos...	
+		net_structure(graphs_dir3,dataset_dir3,output_dir3,net,metric)													# Inicia os cálculos...	
 ######################################################################		
 ######################################################################
 	dataset_dir4 = "/home/amaury/communities/graphs_without_ego/"+str(alg)+"/without_singletons/"+str(net)+"/"	############### Arquivo contendo arquivos contendo as comunidades
@@ -188,7 +190,7 @@ def main():
 		if not os.path.exists(output_dir4):
 			os.makedirs(output_dir4)
 		print ("\nCalcular modularidade... /home/amaury/communities/graphs_without_ego/"+str(alg)+"/without_singletons/"+str(net)+"/")
-		net_structure(graphs_dir4,dataset_dir4,output_dir4,net)													# Inicia os cálculos...	
+		net_structure(graphs_dir4,dataset_dir4,output_dir4,net,metric)													# Inicia os cálculos...	
 ######################################################################
 ######################################################################		
 

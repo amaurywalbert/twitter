@@ -140,20 +140,19 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	
 	with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
 		f.write(json.dumps(overview))
-		
-		
-	print("\n######################################################################\n")	
-	print ("NET: %s -- Ego-nets: %d" % (net,len(n)))
-	print ("Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (N['media'],N['variancia'],N['desvio_padrao']))
-	print ("Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (E['media'],E['variancia'],E['desvio_padrao']))
-	print ("Diameter: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (D['media'],D['variancia'],D['desvio_padrao']))
-	print ("CloseCentr: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
-#	print ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
-	print ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
-	print ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
-	print ("Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (M['media'],M['variancia'],M['desvio_padrao']))
-
-	print("\n######################################################################\n")
+	
+	with open(str(output_dir)+str(net)+"_net_struct.txt", 'w') as f:
+		f.write("\n######################################################################\n")	
+		f.write ("NET: %s -- Ego-nets: %d \n" % (net,len(n)))
+		f.write ("Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N['media'],N['variancia'],N['desvio_padrao']))
+		f.write ("Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (E['media'],E['variancia'],E['desvio_padrao']))
+		f.write ("Diameter: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (D['media'],D['variancia'],D['desvio_padrao']))
+		f.write ("CloseCentr: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
+#		f.write ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
+		f.write ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
+		f.write ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
+		f.write ("Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (M['media'],M['variancia'],M['desvio_padrao']))
+		f.write("\n######################################################################\n")
 
 
 
