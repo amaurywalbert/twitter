@@ -44,7 +44,7 @@ def convert_label(net):
 		network = 'co-follow'
 					
 	elif net == 'n6':
-		v = 'co-retweets'
+		network = 'co-retweets'
 		
 	elif net == 'n7':
 		network = 'co-likes'
