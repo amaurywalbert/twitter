@@ -34,7 +34,7 @@ def save_data(data,graph_type,metric,algorithm):
 def main():
 	os.system('clear')	
 	if not os.path.isdir(source_dir):
-		print ("\nDiretório não encontrado: "+str(threshold)+"\n"+str(source_dir))
+		print ("\nDiretório não encontrado: "+str(source_dir)+"\n")
 		print
 	else:	
 
@@ -81,7 +81,7 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/full/full/"
+source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/full/"
 output_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT/singletons/"
 output_without_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT/without_singletons/"
 

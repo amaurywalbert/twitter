@@ -34,7 +34,7 @@ def save_data(data,graph_type,metric,algorithm):
 def main():
 	os.system('clear')	
 	if not os.path.isdir(source_dir):
-		print ("\nDiretório não encontrado: "+str(threshold)+"\n"+str(source_dir))
+		print ("\nDiretório não encontrado: "+str(source_dir)+"\n")
 		print
 	else:	
 
@@ -62,24 +62,26 @@ def main():
 					os.remove(output_singletons+file)				
 				for line in f:
 					a = line.split(' ')
-					if len(a) > 2:
-						with open(output_without_singletons+file, 'a+') as g:
-							for item in a:
-								if item != "\n": 
-									g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-							g.write("\n")														# Passa para a próxima linha
-					else:			
-						with open(output_singletons+file, 'a+') as g:
-							for item in a:
-								if item != "\n":
-									g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-							g.write("\n")														# Passa para a próxima linha								
+					if a is not None:
+						
+						if len(a) > 2:
+							with open(output_without_singletons+file, 'a+') as g:
+								for item in a:
+									if item != "\n": 
+										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+								g.write("\n")														# Passa para a próxima linha
+						else:			
+							with open(output_singletons+file, 'a+') as g:
+								for item in a:
+									if item != "\n":
+										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+								g.write("\n")														# Passa para a próxima linha								
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/full/full/"
+source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/full/"
 output_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT/singletons/"
 output_without_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT/without_singletons/"
 
