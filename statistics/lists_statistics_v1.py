@@ -137,10 +137,10 @@ def instructions(type_graphs,singletons):
 			histogram.histogram(lists_by_ego,output,title='Lists by Ego', xaxis='Lists', yaxis='Egos')
 			histogram.histogram(ego_jaccard,output,title='Jaccard Modified', xaxis='Jaccard Modified', yaxis='Egos')
 												
-			USERS_BY_LIST = calc.calcular(users_by_list)
-			USERS_BY_LIST_AVERAGE = calc.calcular(users_by_list_average)
-			LISTS_BY_EGO = calc.calcular(lists_by_ego)
-			JACCARD_AVG = calc.calcular(ego_jaccard)
+			USERS_BY_LIST = calc.calcular_full(users_by_list)
+			USERS_BY_LIST_AVERAGE = calc.calcular_full(users_by_list_average)
+			LISTS_BY_EGO = calc.calcular_full(lists_by_ego)
+			JACCARD_AVG = calc.calcular_full(ego_jaccard)
 	
 #			overview = {'users_by_list':USERS_BY_LIST,'users_by_list_avg':USERS_BY_LIST_AVERAGE,'lists_by_ego':LISTS_BY_EGO,'jaccard_avg':JACCARD_AVG,'ego_jaccard':ego_jaccard}
 			overview = {'users_by_list':USERS_BY_LIST,'users_by_list_avg':USERS_BY_LIST_AVERAGE,'lists_by_ego':LISTS_BY_EGO,'jaccard_avg':JACCARD_AVG}
