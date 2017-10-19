@@ -135,11 +135,14 @@ def instructions(type_graphs,singletons):
 	if not os.path.exists(source_dir):
 		print ("\nImpossível encontrar diretório com ground-truth communities: "+str(source_dir))
 	else:
+
+		users_by_list_average = []
+		users_by_list = []
+		lists_by_ego = []
+
+
 		for i in range(10):
 			
-			users_by_list_average = []
-			users_by_list = []
-			lists_by_ego = []
 			ego_jaccard = [] 
 			full_lists_jaccard = []		
 			i+=1

@@ -23,38 +23,41 @@ sys.setdefaultencoding('utf-8')
 # Função para converter nome da rede
 ################################################################################################
 def convert_label(net):
-		if net == 'n1':
-			network = 'follow'
+	network = ' '
+	
+	if net == 'n1':
+		network = 'follow'
 						
-		elif net == 'n2':
-			network = 'retweets'			
+	elif net == 'n2':
+		network = 'retweets'			
 			
-		elif net == 'n3':
-			network = 'likes'
+	elif net == 'n3':
+		network = 'likes'
 			
-		elif net == 'n4':
-			network = 'mentions'
+	elif net == 'n4':
+		network = 'mentions'
 			
-		elif net == 'n9':
-			network = 'followers'
-
+	elif net == 'n9':
+		network = 'followers'
 						
-		elif net == 'n5':
-			network = 'co-follow'
-						
-		elif net == 'n6':
-			v = 'co-retweets'
-			
-		elif net == 'n7':
-			network = 'co-likes'
-			
-		elif net == 'n8':
-			network = 'co-mentions'
+	elif net == 'n5':
+		network = 'co-follow'
 					
-		elif net == 'n10':
-			network = 'co-followers'
-		else:
-			network = ' '	
+	elif net == 'n6':
+		v = 'co-retweets'
+		
+	elif net == 'n7':
+		network = 'co-likes'
+		
+	elif net == 'n8':
+		network = 'co-mentions'
+				
+	elif net == 'n10':
+		network = 'co-followers'
+	
+	else:
+		network = ' '	
+
 	return network
 			
 ################################################################################################
@@ -72,15 +75,13 @@ def jaccard_modified(list_set,alters_set):
 # Recupera cada lista e compara com o conjunto de alters
 #
 ###############################################################
-def lists_verify(file,alters_set):
+def lists_verify(file):
 	with open(file, 'r') as f:
-		_ego_jaccard = []
 		_users_by_list	= []											#partial
-		_full_lists_jaccard = []
 		lists_by_ego = 0
 		users_total = 0
 			
-		for line in f:													# para cada Lista
+		for line in f:													# Users_by_list - users para cada Lista
 			ubl = 0														# usuários por lista
 			a = line.split(' ')
 			list_set = set()
@@ -91,22 +92,42 @@ def lists_verify(file,alters_set):
 					users_total = users_total+1				# necessário pois não dá pra usar o tamanho do conjunto porque há casos em que o mesmo alter aparece em diversas Listas
 					ubl+=1
 		
-			j_m = jaccard_modified(list_set,alters_set)
 			_users_by_list.append(ubl)
-			_ego_jaccard.append(j_m)
-			_full_lists_jaccard.append(j_m)
 			lists_by_ego = lists_by_ego+1
 
-		users_by_list_average = float(users_total/lists_by_ego)
+		users_by_list_avg = float(users_total/lists_by_ego)			
+		
+
+		return _users_by_list, users_by_list_avg, lists_by_ego
+	
+
+
+######################################################################################################################################################################
+#
+# Recupera cada lista e compara com o conjunto de alters
+#
+###############################################################
+def jaccard_verify(file,alters_set):
+	with open(file, 'r') as f:
+		_ego_jaccard = []
+		_full_lists_jaccard = []
+			
+		for line in f:													# para cada Lista
+			a = line.split(' ')
+			list_set = set()
+
+			for item in a:
+				if item != "\n":
+					list_set.add(long(item))
+		
+			j_m = jaccard_modified(list_set,alters_set)
+			_ego_jaccard.append(j_m)
+			_full_lists_jaccard.append(j_m)
+
 		ego_jaccard = calc.calcular_full(_ego_jaccard)			
 		
-#		print _users_by_list										#OK
-#		print users_by_list_average							#OK
-#		print lists_by_ego										#OK
-#		print ego_jaccard['media']								#OK
-#		time.sleep(10)												#OK
 
-		return _users_by_list, users_by_list_average, lists_by_ego, ego_jaccard['media'], _full_lists_jaccard
+		return ego_jaccard['media'], _full_lists_jaccard
 	
 ######################################################################################################################################################################
 #
@@ -135,11 +156,32 @@ def instructions(type_graphs,singletons):
 	if not os.path.exists(source_dir):
 		print ("\nImpossível encontrar diretório com ground-truth communities: "+str(source_dir))
 	else:
+		users_by_list_avg = []
+		users_by_list = []
+		lists_by_ego = []
+		
+		for file in os.listdir(source_dir):
+			_users_by_list, _users_by_list_avg, _lists_by_ego = lists_verify(source_dir+file)
+			users_by_list_avg.append(_users_by_list_avg) 													# Usuários por lista - média por ego
+			lists_by_ego.append(_lists_by_ego)
+			for item in _users_by_list:
+				users_by_list.append(item)
+								
+		graphics.histogram(users_by_list_avg,output_dir,title='Users by Lists - Average by Ego', xaxis='Users', yaxis='Lists')
+		graphics.histogram(users_by_list,output_dir,title='Users by Lists - Full Egos', xaxis='Users', yaxis='Lists')
+		graphics.histogram(lists_by_ego,output_dir,title='Lists by Ego', xaxis='Lists', yaxis='Egos')
+												
+		USERS_BY_LIST = calc.calcular_full(users_by_list)
+		USERS_BY_LIST_AVG = calc.calcular_full(users_by_list_avg)
+		LISTS_BY_EGO = calc.calcular_full(lists_by_ego)	
+		overview = {'users_by_list':USERS_BY_LIST,'users_by_list_avg':USERS_BY_LIST_AVG,'lists_by_ego':LISTS_BY_EGO}
+
+		with open (output_dir+"lists_overview.json", 'w') as f:
+			f.write(json.dumps(overview))
+			
+					
 		for i in range(10):
 			
-			users_by_list_average = []
-			users_by_list = []
-			lists_by_ego = []
 			ego_jaccard = [] 
 			full_lists_jaccard = []		
 			i+=1
@@ -166,35 +208,25 @@ def instructions(type_graphs,singletons):
 							print (str(graphs_dir)+" - recuperando alters para o ego: "+str(i))
 							alters_set = recovery_alters(str(graphs_dir)+str(file))											# Recupera os alters para o ego.
 						
-							_users_by_list,_users_by_list_average, _lists_by_ego, _ego_jaccard, _full_lits_jaccard = lists_verify(str(source_dir)+str(ego_id)+".txt", alters_set)
+							_ego_jaccard, _full_lists_jaccard = jaccard_verify(str(source_dir)+str(ego_id)+".txt", alters_set)
 
-							users_by_list_average.append(_users_by_list_average)
-							lists_by_ego.append(_lists_by_ego)
 							ego_jaccard.append(_ego_jaccard)
-							
-							for item in _users_by_list:
-								users_by_list.append(item)
+
 							for item in _full_lists_jaccard:
 								full_lists_jaccard.append(item)
-								
-			output = str(output_dir)+str(net)+"/"
+			output = str(output_dir)+str(network)+"/"
 			if not os.path.exists(output):
-				os.makedirs(output)			
-			graphics.histogram(users_by_list_average,output,title=str(network)+' - Users by Lists - Average', xaxis='Users', yaxis='Lists')
-			graphics.histogram(users_by_list,output,title=str(network)+' - Users by Lists - Full Egos', xaxis='Users', yaxis='Lists')
-			graphics.histogram(lists_by_ego,output,title=str(network)+' - Lists by Ego', xaxis='Lists', yaxis='Egos')
-			grapgics.histogram(ego_jaccard,output,title=str(network)+' - Jaccard Modified by Egos', xaxis='Jaccard Modified', yaxis='Egos')
-			grapgics.histogram(full_lists_jaccard,output,title=str(network)+' - Jaccard Modified by Lists', xaxis='Jaccard Modified', yaxis='Lists')
-												
-			USERS_BY_LIST = calc.calcular_full(users_by_list)
-			USERS_BY_LIST_AVERAGE = calc.calcular_full(users_by_list_average)
-			LISTS_BY_EGO = calc.calcular_full(lists_by_ego)
+				os.makedirs(output)
+
+			graphics.histogram(ego_jaccard,output,title=str(network)+' - Jaccard Modified by Egos', xaxis='Jaccard Modified', yaxis='Egos')
+			graphics.histogram(full_lists_jaccard,output,title=str(network)+' - Jaccard Modified by Lists', xaxis='Jaccard Modified', yaxis='Lists')
+
 			JACCARD_AVG = calc.calcular_full(ego_jaccard)
 			FULL_LISTS_JACCARD = calc.calcular_full(full_lists_jaccard)	
-#			overview = {'users_by_list':USERS_BY_LIST,'users_by_list_avg':USERS_BY_LIST_AVERAGE,'lists_by_ego':LISTS_BY_EGO,'jaccard_avg':JACCARD_AVG,'ego_jaccard':ego_jaccard}
-			overview = {'users_by_list':USERS_BY_LIST,'users_by_list_avg':USERS_BY_LIST_AVERAGE,'lists_by_ego':LISTS_BY_EGO,'jaccard_by_ego_avg':JACCARD_AVG, 'jaccard_by_lists':FULL_LISTS_JACCARD}
 
-			with open (output_dir+str(net)+".json", 'w') as f:
+			overview = {'jaccard_by_ego_avg':JACCARD_AVG, 'jaccard_by_lists':FULL_LISTS_JACCARD}
+
+			with open (output_dir+str(network)+".json", 'w') as f:
 				f.write(json.dumps(overview))
 													
 		
