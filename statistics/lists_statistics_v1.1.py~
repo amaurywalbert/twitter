@@ -4,7 +4,6 @@ import datetime, sys, time, json, os, os.path, shutil, time, struct, random, mat
 import numpy as np
 from math import*
 import calc
-import plot_statistics
 import graphics
 
 reload(sys)
@@ -253,9 +252,9 @@ def main():
 #######################################################################
 	
 	instructions(type_graphs1,singletons1)
-#	instructions(type_graphs1,singletons2)
-#	instructions(type_graphs2,singletons1)
-#	instructions(type_graphs2,singletons2)	
+	instructions(type_graphs1,singletons2)
+	instructions(type_graphs2,singletons1)
+	instructions(type_graphs2,singletons2)	
 	
 #######################################################################
 	print

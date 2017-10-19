@@ -4,7 +4,6 @@ import datetime, sys, time, json, os, os.path, shutil, time, struct, random, mat
 import numpy as np
 from math import*
 import calc
-import plot_statistics
 import graphics
 
 reload(sys)
