@@ -227,5 +227,6 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	if not os.path.exists(output):
 		os.makedirs(output)
 		
-	plotly.offline.plot(fig, filename=output+str(metric)+".html")
+	plotly.offline.plot(fig, filename=output+str(metric)+".html",auto_open=False)
+
 	
