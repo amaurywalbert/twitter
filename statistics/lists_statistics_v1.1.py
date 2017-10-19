@@ -253,9 +253,9 @@ def main():
 #######################################################################
 	
 	instructions(type_graphs1,singletons1)
-#	instructions(type_graphs1,singletons2)
-#	instructions(type_graphs2,singletons1)
-#	instructions(type_graphs2,singletons2)	
+	instructions(type_graphs1,singletons2)
+	instructions(type_graphs2,singletons1)
+	instructions(type_graphs2,singletons2)	
 	
 #######################################################################
 	print
