@@ -77,24 +77,25 @@ def save_data(graphs,alg):
 													
 						for line in f:
 							a = line.split(' ')
-							with open(output_full+str(ego_id)+".txt", 'a+') as g:
-								for item in a:
-									if item != "\n":											
-										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-								g.write("\n")															# Passa para a próxima linha de g
-
-							if len(a) > 2:
-								with open(output_without_singletons+str(ego_id)+".txt", 'a+') as g:
+							if a is not None:
+								with open(output_full+str(ego_id)+".txt", 'a+') as g:
 									for item in a:
 										if item != "\n":											
-											g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
-									g.write("\n")														# Passa para a próxima linha
-							else:			
-								with open(output_singletons+str(ego_id)+".txt", 'a+') as g:
-									for item in a:
-										if item != "\n":
-											g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
-									g.write("\n")														
+											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+									g.write("\n")															# Passa para a próxima linha de g
+
+								if len(a) > 2:	
+									with open(output_without_singletons+str(ego_id)+".txt", 'a+') as g:
+										for item in a:
+											if item != "\n":											
+												g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
+										g.write("\n")														# Passa para a próxima linha
+								else:			
+									with open(output_singletons+str(ego_id)+".txt", 'a+') as g:
+										for item in a:
+											if item != "\n":
+												g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
+										g.write("\n")														
 ######################################################################################################################################################################
 #
 # Método principal do programa.
