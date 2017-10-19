@@ -111,24 +111,27 @@ def instructions(type_graphs,singletons):
 			else:
 				i=0
 				for file in os.listdir(graphs_dir):																# Para cada ego da rede $net
-					ego_id = file.split(".edge_list")
-					ego_id = long(ego_id[0])
+					if not os.path.isfile(graphs_dir+file):
+						print ("\nImpossível encontrar arquivo com lista de arestas: "+str(graphs_dir)+str(file))
+					else:							
+						ego_id = file.split(".edge_list")
+						ego_id = long(ego_id[0])
 					
-					if not os.path.isfile(source_dir+str(ego_id)+".txt"):
-						print ("\nImpossível encontrar arquivo de ground truth: "+str(source_dir)+str(ego_id)+".txt")
-					else:
+						if not os.path.isfile(source_dir+str(ego_id)+".txt"):
+							print ("\nImpossível encontrar arquivo de ground truth: "+str(source_dir)+str(ego_id)+".txt")
+						else:
 						
-						i+=1
-						print (str(graphs_dir)+" - recuperando alters para o ego: "+str(i))
-						alters_set = recovery_alters(str(graphs_dir)+str(file))											# Recupera os alters para o ego.
+							i+=1
+							print (str(graphs_dir)+" - recuperando alters para o ego: "+str(i))
+							alters_set = recovery_alters(str(graphs_dir)+str(file))											# Recupera os alters para o ego.
 						
-						_users_by_list,_users_by_list_average, _lists_by_ego, _ego_jaccard = lists_verify(str(source_dir)+str(ego_id)+".txt", alters_set)
+							_users_by_list,_users_by_list_average, _lists_by_ego, _ego_jaccard = lists_verify(str(source_dir)+str(ego_id)+".txt", alters_set)
 
-						users_by_list_average.append(_users_by_list_average)
-						lists_by_ego.append(_lists_by_ego)
-						ego_jaccard.append(_ego_jaccard)
-						for item in _users_by_list:
-							users_by_list.append(item)
+							users_by_list_average.append(_users_by_list_average)
+							lists_by_ego.append(_lists_by_ego)
+							ego_jaccard.append(_ego_jaccard)
+							for item in _users_by_list:
+								users_by_list.append(item)
 			output = str(output_dir)+str(net)+"/"
 			if not os.path.exists(output):
 				os.makedirs(output)			
