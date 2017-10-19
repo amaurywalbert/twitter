@@ -80,6 +80,8 @@ def lists_verify(file):
 		_users_by_list	= []											#partial
 		lists_by_ego = 0
 		users_total = 0
+		n_lists = 0														# numero de listas
+		
 			
 		for line in f:													# Users_by_list - users para cada Lista
 			ubl = 0														# usuários por lista
@@ -94,7 +96,8 @@ def lists_verify(file):
 		
 			_users_by_list.append(ubl)
 			lists_by_ego = lists_by_ego+1
-
+			n_lists = n_lists+1
+			
 		users_by_list_avg = float(users_total/lists_by_ego)			
 		
 
@@ -175,10 +178,12 @@ def instructions(type_graphs,singletons):
 		USERS_BY_LIST_AVG = calc.calcular_full(users_by_list_avg)
 		LISTS_BY_EGO = calc.calcular_full(lists_by_ego)	
 		overview = {'users_by_list':USERS_BY_LIST,'users_by_list_avg':USERS_BY_LIST_AVG,'lists_by_ego':LISTS_BY_EGO}
+		lists_details = {'users_by_lists_avg': users_by_list_avg, 'number_of_lists':lists_by_ego}
 
 		with open (output_dir+"lists_overview.json", 'w') as f:
 			f.write(json.dumps(overview))
-			
+		with open (output_dir+"lists_details.json", 'w') as f:
+			f.write(json.dumps(lists_details))			
 					
 		for i in range(10):
 			
@@ -214,21 +219,21 @@ def instructions(type_graphs,singletons):
 
 							for item in _full_lists_jaccard:
 								full_lists_jaccard.append(item)
-				if network != ' ':
-					output = str(output_dir)+str(network)+"/"
-					if not os.path.exists(output):
-						os.makedirs(output)
+								
+				output = str(output_dir)+str(network)+"/"
+				if not os.path.exists(output):
+					os.makedirs(output)
 
-					graphics.histogram(ego_jaccard,output,title=str(network)+' - Jaccard Modified by Egos', xaxis='Jaccard Modified', yaxis='Egos')
-					graphics.histogram(full_lists_jaccard,output,title=str(network)+' - Jaccard Modified by Lists', xaxis='Jaccard Modified', yaxis='Lists')
+				graphics.histogram(ego_jaccard,output,title=str(network)+' - Jaccard Modified by Egos', xaxis='Jaccard Modified', yaxis='Egos')
+				graphics.histogram(full_lists_jaccard,output,title=str(network)+' - Jaccard Modified by Lists', xaxis='Jaccard Modified', yaxis='Lists')
 
-					JACCARD_AVG = calc.calcular_full(ego_jaccard)
-					FULL_LISTS_JACCARD = calc.calcular_full(full_lists_jaccard)	
+				JACCARD_AVG = calc.calcular_full(ego_jaccard)
+				FULL_LISTS_JACCARD = calc.calcular_full(full_lists_jaccard)	
 
-					overview = {'jaccard_by_ego_avg':JACCARD_AVG, 'jaccard_by_lists':FULL_LISTS_JACCARD}
+				overview = {'jaccard_by_ego_avg':JACCARD_AVG, 'jaccard_by_lists':FULL_LISTS_JACCARD}
 
-					with open (output+str(network)+".json", 'w') as f:
-						f.write(json.dumps(overview))
+				with open (output+str(network)+".json", 'w') as f:
+					f.write(json.dumps(overview))
 													
 		
 ######################################################################################################################################################################
