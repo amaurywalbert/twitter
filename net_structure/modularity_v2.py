@@ -7,7 +7,7 @@ import numpy as np
 from math import*
 # Script auxiliar para cálculos matemáticos que deve estar no mesmo diretório deste aqui.
 import calc
-import plot_statistics
+import plot_modularity
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -153,13 +153,13 @@ def main():
 	if not os.path.isdir(dataset_dir1):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir1))
 	else:
-		output_dir1 = "/home/amaury/Dropbox/communities/"+str(graph_type)+"/"+str(alg)+"/full/"
+		output_dir1 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/full/"
 		if not os.path.exists(output_dir1):
 			os.makedirs(output_dir1)
 
 		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/full/")
 		data1 = net_structure(dataset_dir1,output_dir1,graph_type,metric)														# Inicia os cálculos...
-		plot_statistics.plot_single(output_dir1,data1,metric,alg,title=str(graph_type)+" - Communities with singletons")				
+		plot_modularity.plot_single(output_dir1,data1,metric,alg,title=str(graph_type)+" - Communities with singletons")				
 ######################################################################				
 ######################################################################
 	graph_type = "graphs_with_ego"	
@@ -168,12 +168,12 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+		output_dir2 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
 		data2 = net_structure(dataset_dir2,output_dir2,graph_type,metric)														# Inicia os cálculos...
-		plot_statistics.plot_single(output_dir2,data2,metric,alg,title=str(graph_type)+" - Communities without singletons")			
+		plot_modularity.plot_single(output_dir2,data2,metric,alg,title=str(graph_type)+" - Communities without singletons")			
 
 
 ######################################################################
@@ -184,12 +184,12 @@ def main():
 	if not os.path.isdir(dataset_dir3):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir3))
 	else:
-		output_dir3 = "/home/amaury/Dropbox/communities/"+str(graph_type)+"/"+str(alg)+"/full/"
+		output_dir3 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/full/"
 		if not os.path.exists(output_dir3):
 			os.makedirs(output_dir3)
 		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/full/")
 		data3 = net_structure(dataset_dir3,output_dir3,graph_type,metric)													# Inicia os cálculos...
-		plot_statistics.plot_single(output_dir3,data3,metric,alg,title=str(graph_type)+" - Communities with singletons")	
+		plot_modularity.plot_single(output_dir3,data3,metric,alg,title=str(graph_type)+" - Communities with singletons")	
 ######################################################################		
 ######################################################################
 	graph_type = "graphs_without_ego"
@@ -198,17 +198,17 @@ def main():
 	if not os.path.isdir(dataset_dir4):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir4))
 	else:
-		output_dir4 = "/home/amaury/Dropbox/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+		output_dir4 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
 		if not os.path.exists(output_dir4):
 			os.makedirs(output_dir4)
 		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
 		data4 = net_structure(dataset_dir4,output_dir4,graph_type,metric)													# Inicia os cálculos...
-		plot_statistics.plot_single(output_dir4,data4,metric,alg,title=str(graph_type)+" - Communities without singletons")		
+		plot_modularity.plot_single(output_dir4,data4,metric,alg,title=str(graph_type)+" - Communities without singletons")		
 ######################################################################
 ######################################################################		
 	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-		output = "/home/amaury/Dropbox/communities/"+str(alg)+"/"
-		plot_statistics.plot_full(output,data1,data2,data3,data4,metric,alg)		
+		output = "/home/amaury/Dropbox/modularity/"+str(alg)+"/"
+		plot_modularity.plot_full(output,data1,data2,data3,data4,metric,alg)		
 ######################################################################
 ######################################################################	
 	
