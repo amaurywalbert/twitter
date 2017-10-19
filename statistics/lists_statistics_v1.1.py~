@@ -214,20 +214,21 @@ def instructions(type_graphs,singletons):
 
 							for item in _full_lists_jaccard:
 								full_lists_jaccard.append(item)
-				output = str(output_dir)+str(network)+"/"
-				if not os.path.exists(output):
-					os.makedirs(output)
+				if network != ' ':
+					output = str(output_dir)+str(network)+"/"
+					if not os.path.exists(output):
+						os.makedirs(output)
 
-				graphics.histogram(ego_jaccard,output,title=str(network)+' - Jaccard Modified by Egos', xaxis='Jaccard Modified', yaxis='Egos')
-				graphics.histogram(full_lists_jaccard,output,title=str(network)+' - Jaccard Modified by Lists', xaxis='Jaccard Modified', yaxis='Lists')
+					graphics.histogram(ego_jaccard,output,title=str(network)+' - Jaccard Modified by Egos', xaxis='Jaccard Modified', yaxis='Egos')
+					graphics.histogram(full_lists_jaccard,output,title=str(network)+' - Jaccard Modified by Lists', xaxis='Jaccard Modified', yaxis='Lists')
 
-				JACCARD_AVG = calc.calcular_full(ego_jaccard)
-				FULL_LISTS_JACCARD = calc.calcular_full(full_lists_jaccard)	
+					JACCARD_AVG = calc.calcular_full(ego_jaccard)
+					FULL_LISTS_JACCARD = calc.calcular_full(full_lists_jaccard)	
 
-				overview = {'jaccard_by_ego_avg':JACCARD_AVG, 'jaccard_by_lists':FULL_LISTS_JACCARD}
+					overview = {'jaccard_by_ego_avg':JACCARD_AVG, 'jaccard_by_lists':FULL_LISTS_JACCARD}
 
-				with open (output+str(network)+".json", 'w') as f:
-					f.write(json.dumps(overview))
+					with open (output+str(network)+".json", 'w') as f:
+						f.write(json.dumps(overview))
 													
 		
 ######################################################################################################################################################################
