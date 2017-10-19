@@ -118,14 +118,14 @@ def jaccard_verify(file,alters_set):
 		for line in f:													# para cada Lista
 			a = line.split(' ')
 			list_set = set()
-
-			for item in a:
-				if item != "\n":
-					list_set.add(long(item))
+			if a is not None:
+				for item in a:
+					if item != "\n":
+						list_set.add(long(item))
 		
-			j_m = jaccard_modified(list_set,alters_set)
-			_ego_jaccard.append(j_m)
-			_full_lists_jaccard.append(j_m)
+				j_m = jaccard_modified(list_set,alters_set)
+				_ego_jaccard.append(j_m)
+				_full_lists_jaccard.append(j_m)
 
 		ego_jaccard = calc.calcular_full(_ego_jaccard)			
 		
