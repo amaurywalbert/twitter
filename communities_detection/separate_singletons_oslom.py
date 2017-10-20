@@ -76,7 +76,7 @@ def save_data(graphs,alg):
 							for line in f:
 								if not "#" in line:
 									a = line.split(' ')
-									if a is not None:
+									if a is not None and a[0] != "\n":
 
 										with open(output_full+file+".txt", 'a+') as g:
 											for item in a:
@@ -98,7 +98,8 @@ def save_data(graphs,alg):
 														if long(item) > 0:
 															g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
 												g.write("\n")														
-										
+									else:
+										print ("Eliminei aqui..."+str(a))						
 												
 #####################################################################################################################################################################
 #

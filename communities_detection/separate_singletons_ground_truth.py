@@ -68,26 +68,29 @@ def main():
 					os.remove(output_singletons+file)				
 				for line in f:
 					a = line.split(' ')
-					if a is not None:
+					if a is not None and a[0] != "\n":
+						
 						with open(output_full+file+".txt", 'a+') as g:
 							for item in a:
-								if item != "\n":
+								if item != "\n" and item != " ":
 									if long(item) > 0:
 										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 							g.write("\n")															# Passa para a próxima linha de g						
 
 						if len(a) > 2:
 							with open(output_without_singletons+file, 'a+') as g:
-								for item in a:
-									if item != "\n": 
+								if item != "\n" and item != " ":
+									if long(item) > 0:
 										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 								g.write("\n")														# Passa para a próxima linha
 						else:			
 							with open(output_singletons+file, 'a+') as g:
-								for item in a:
-									if item != "\n":
+								if item != "\n" and item != " ":
+									if long(item) > 0:
 										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-								g.write("\n")														# Passa para a próxima linha								
+								g.write("\n")														# Passa para a próxima linha
+					else:
+						print ("Eliminei aqui..."+str(a))						
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
