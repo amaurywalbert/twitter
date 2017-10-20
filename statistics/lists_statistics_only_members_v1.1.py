@@ -118,7 +118,7 @@ def jaccard_verify(file,alters_set):
 		for line in f:													# para cada Lista
 			a = line.split(' ')
 			list_set = set()
-			if a is not None and a[0] != "\n":
+			if a is not None:
 				for item in a:
 					if item != "\n":
 						list_set.add(long(item))
