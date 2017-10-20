@@ -70,7 +70,7 @@ def main():
 					a = line.split(' ')
 					if a is not None and a[0] != "\n":
 						
-						with open(output_full+file+".txt", 'a+') as g:
+						with open(output_full+file, 'a+') as g:
 							for item in a:
 								if item != "\n" and item != " ":
 									if long(item) > 0:
