@@ -38,6 +38,12 @@ def main():
 		print
 	else:	
 
+		if os.path.exists(output_full):
+			shutil.rmtree(output_full)		
+			os.makedirs(output_full)	
+		else:
+			os.makedirs(output_full)
+
 		if os.path.exists(output_singletons):
 			shutil.rmtree(output_singletons)		
 			os.makedirs(output_singletons)	
@@ -63,7 +69,13 @@ def main():
 				for line in f:
 					a = line.split(' ')
 					if a is not None:
-						
+						with open(output_full+file+".txt", 'a+') as g:
+							for item in a:
+								if item != "\n":
+									if long(item) > 0:
+										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+							g.write("\n")															# Passa para a próxima linha de g						
+
 						if len(a) > 2:
 							with open(output_without_singletons+file, 'a+') as g:
 								for item in a:
@@ -81,7 +93,8 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/full/"
+source_dir="/home/amaury/dataset/ground_truth/lists_users_TXT/raw/"
+output_full="/home/amaury/dataset/ground_truth/lists_users_TXT/full/"
 output_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT/singletons/"
 output_without_singletons="/home/amaury/dataset/ground_truth/lists_users_TXT/without_singletons/"
 
