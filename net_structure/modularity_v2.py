@@ -83,7 +83,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 							if comm is not None:
 								Nodes = snap.TIntV()
 								for nodeId in comm:
-									if nodeId is not None and comm != ' ':						
+									if nodeId is not None:						
 										Nodes.Add(long(nodeId))			
 								m_file.append(snap.GetModularity(G, Nodes, n_edges))						#Passar o número de arestas do grafo como parâmetro para agilizar o processo
 

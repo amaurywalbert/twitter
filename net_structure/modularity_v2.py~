@@ -83,7 +83,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 							if comm is not None:
 								Nodes = snap.TIntV()
 								for nodeId in comm:
-									if nodeId is not None and comm != ' ':						
+									if nodeId is not None:						
 										Nodes.Add(long(nodeId))			
 								m_file.append(snap.GetModularity(G, Nodes, n_edges))						#Passar o número de arestas do grafo como parâmetro para agilizar o processo
 
@@ -153,7 +153,7 @@ def main():
 	if not os.path.isdir(dataset_dir1):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir1))
 	else:
-		output_dir1 = "/home/amaury/Dropbox/communities/"+str(graph_type)+"/"+str(alg)+"/full/"
+		output_dir1 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/full/"
 		if not os.path.exists(output_dir1):
 			os.makedirs(output_dir1)
 
@@ -168,7 +168,7 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+		output_dir2 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
@@ -184,7 +184,7 @@ def main():
 	if not os.path.isdir(dataset_dir3):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir3))
 	else:
-		output_dir3 = "/home/amaury/Dropbox/communities/"+str(graph_type)+"/"+str(alg)+"/full/"
+		output_dir3 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/full/"
 		if not os.path.exists(output_dir3):
 			os.makedirs(output_dir3)
 		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/full/")
@@ -193,7 +193,7 @@ def main():
 ######################################################################		
 ######################################################################
 	graph_type = "graphs_without_ego"
-	dataset_dir4 = "/home/amaury/modularity/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
+	dataset_dir4 = "/home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
 
 	if not os.path.isdir(dataset_dir4):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir4))
@@ -207,7 +207,7 @@ def main():
 ######################################################################
 ######################################################################		
 	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-		output = "/home/amaury/Dropbox/communities/"+str(alg)+"/"
+		output = "/home/amaury/Dropbox/modularity/"+str(alg)+"/"
 		plot_modularity.plot_full(output,data1,data2,data3,data4,metric,alg)		
 ######################################################################
 ######################################################################	
