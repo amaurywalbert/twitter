@@ -201,8 +201,8 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-source = "/home/amaury/Dropbox/evaluation/"
-output = "/home/amaury/Dropbox/evaluation/overview/"
+source = "/home/amaury/Dropbox/evaluation_only_members/"
+output = "/home/amaury/Dropbox/evaluation_only_members/overview/"
 ######################################################################################################################
 
 
