@@ -48,16 +48,16 @@ instructions()
 	
 	for file in `ls $2`
 		do
-			if [ -e $OUTPUT_DIR"clusters-"$file ]; then
-				echo "Arquivo $OUTPUT_DIR"clusters-"$file já existe. Continuando..."
+			IFS="." read -a file_temp <<<"$file"					# Renomear (temp) o arquivo "97197087.edge_list" para 97197087
+			FILE=${file_temp[0]}	
+						
+			if [ -e $OUTPUT_DIR$FILE"/tp" ]; then
+				echo "Arquivo $OUTPUT_DIR$FILE"/tp" já existe. Continuando..."
 			else	
 				let i=$i+1;
 				echo "Detectando comunidades para o ego: $i"
 				INPUT_FILE=$2$file
-				TYPE_GRAPH=$4
-																																	
-				IFS="." read -a file_temp <<<"$file"					# Renomear (temp) o arquivo "97197087.edge_list" para 97197087
-				FILE=${file_temp[0]}				
+				TYPE_GRAPH=$4			
 				
 				oslom $INPUT_FILE $OUTPUT_DIR $TYPE_GRAPH $THRESHOLD $file $FILE
 			fi
