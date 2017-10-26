@@ -49,11 +49,11 @@ def execute(data_dir):
 		alters_list = read_arq_bin_alters(data_dir+file) 			#Verificando número de alters
 #################################################################################### Testando número de AMIGOS			
 		if len(alters_list) <= 2500:
-				copy(file,data_dir,sub_2k_dir)				## Se menor ou igual que 2k, copia arquivo com amigos para o novo diretório
-				_2k+=1
-			else:
-				copy(file,data_dir,sub_5k_dir)				## Se menor ou igual que 2k, copia arquivo com amigos para o novo diretório
-				_5k+=1
+			copy(file,data_dir,sub_2k_dir)				## Se menor ou igual que 2k, copia arquivo com amigos para o novo diretório
+			_2k+=1
+		else:
+			copy(file,data_dir,sub_5k_dir)				## Se menor ou igual que 2k, copia arquivo com amigos para o novo diretório
+			_5k+=1
 
 	print ("Usuários com até 2k alters: "+str(_2k))
 	print ("Usuários com mais de 2k alters: "+str(_5k))
