@@ -33,7 +33,7 @@ def read_arq_bin_alters(file):
 ################################################################################################
 # Copia arquivo da origem para o destino...
 ################################################################################################
-def copy(user,origem,destino):
+def copy(file,origem,destino):
 	shutil.copy(origem+file,destino)
 
 
