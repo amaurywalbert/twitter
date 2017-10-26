@@ -25,7 +25,7 @@ def save_data(graphs,alg):
 		net+=1
 		print		
 		print ("Separando comunidades da rede: n"+str(net))
-		for threshold in range(20):
+		for threshold in range(51):
 			threshold+=1
 			
 			source_dir="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
