@@ -41,8 +41,8 @@ def copy(user,origem,destino):
 # Faz a seleção separando os conjuntos...
 ################################################################################################
 def execute(data_dir):
-	2k = 0
-	5k = 0
+	_2k = 0
+	_5k = 0
 	t = 0
 	for file in os.listdir(data_dir):
 		t+=1
@@ -50,13 +50,13 @@ def execute(data_dir):
 #################################################################################### Testando número de AMIGOS			
 		if len(alters_list) <= 2500:
 				copy(file,data_dir,sub_2k_dir)				## Se menor ou igual que 2k, copia arquivo com amigos para o novo diretório
-				2k+=1
+				_2k+=1
 			else:
 				copy(file,data_dir,sub_5k_dir)				## Se menor ou igual que 2k, copia arquivo com amigos para o novo diretório
-				5k+=1
+				_5k+=1
 
-	print ("Usuários com até 2k alters: "+str(2k))
-	print ("Usuários com mais de 2k alters: "+str(5k))
+	print ("Usuários com até 2k alters: "+str(_2k))
+	print ("Usuários com mais de 2k alters: "+str(_5k))
 	print ("Total de usuários no diretório: "+str(t))
 		
 		
