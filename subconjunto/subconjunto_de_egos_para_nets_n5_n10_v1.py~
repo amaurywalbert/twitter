@@ -40,7 +40,7 @@ def copy(file,origem,destino):
 ################################################################################################
 # Faz a seleção separando os conjuntos...
 ################################################################################################
-def execute(data_dir):
+def execute(data_dir,sub_2k_dir,sub_5k_dir):
 	_2k = 0
 	_5k = 0
 	t = 0
@@ -70,8 +70,8 @@ def execute(data_dir):
 ######################################################################################################################################################################
 def main():
 
-	execute(data_dir_n1)
-	execute(data_dir_n9)
+	execute(data_dir_n1,sub_2k_dir_n1,sub_5k_dir_n1)
+	execute(data_dir_n9,sub_2k_dir_n9,sub_5k_dir_n9)
 					
 ######################################################################################################################################################################
 	
@@ -90,19 +90,31 @@ def main():
 ######################################################################################################################
 
 data_dir_n1 = "/home/amaury/dataset/n1/egos_limited_5k/bin/" 					#################### Diretório contendo 500 egos aleatórios da rede n1
+
+sub_2k_dir_n1 = "/home/amaury/dataset/n1/egos_2k_alters/bin/"
+sub_5k_dir_n1 = "/home/amaury/dataset/n1/egos_2k_a_5k_alters/bin/"
+
+
 data_dir_n9 = "/home/amaury/dataset/n9/egos_limited_5k/bin/" 					#################### Diretório contendo 500 egos aleatórios da rede n9
 
-sub_2k_dir = "/home/amaury/dataset/n9/egos_2k_alters/bin/"
-sub_5k_dir = "/home/amaury/dataset/n9/egos_2k_a_5k_alters/bin/"
+sub_2k_dir_n9 = "/home/amaury/dataset/n9/egos_2k_alters/bin/"
+sub_5k_dir_n9 = "/home/amaury/dataset/n9/egos_2k_a_5k_alters/bin/"
+
 formato = 'l'				####################################################### Long para o código ('l') - id dos amigos de cada user
 user_struct = struct.Struct(formato) ########################################## Inicializa o objeto do tipo struct para poder armazenar o formato específico no arquivo binário
 
 #Cria os diretórios para armazenamento dos arquivos
-if not os.path.exists(sub_2k_dir):
-	os.makedirs(sub_2k_dir)
+if not os.path.exists(sub_2k_dir_n1):
+	os.makedirs(sub_2k_dir_n1)
 
-if not os.path.exists(sub_5k_dir):
-	os.makedirs(sub_5k_dir)			
+if not os.path.exists(sub_5k_dir_n1):
+	os.makedirs(sub_5k_dir_n1)			
 
+if not os.path.exists(sub_2k_dir_n9):
+	os.makedirs(sub_2k_dir_n9)
+
+if not os.path.exists(sub_5k_dir_n9):
+	os.makedirs(sub_5k_dir_n9)	
+	
 #Executa o método main
 if __name__ == "__main__": main()
