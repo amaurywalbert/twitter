@@ -158,7 +158,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 
 
-
+#Average Degree - Olhar no oslom pq parece que já tem....
 #Average clustering coefficient	0.5653
 #Number of triangles	13082506
 #Fraction of closed triangles	0.06415
