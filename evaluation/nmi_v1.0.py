@@ -35,7 +35,7 @@ def nmi_alg(communities,output,singletons,net,ground_truth):
 	print("######################################################################")
 	if not os.path.isfile(str(output)+str(net)+".json"):
 		result={}
-		for threshold in range(20):	#Parâmetro do algoritmo
+		for threshold in range(51):	#Parâmetro do algoritmo
 			threshold+=1
 			i=0 		#Ponteiro para o ego
 			if os.path.isdir(str(communities)+str(threshold)+"/"):

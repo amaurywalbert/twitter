@@ -120,11 +120,11 @@ def main():
 	time.sleep(5)
 	######################################################################################################################
 	#####Alterar as linhas para Dropbox quando executado em ambiente de produção
-	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT/"
+	ground_truth = "/home/amaury/dataset/ground_truth_only_members/lists_users_TXT/"
 	communities1 = "/home/amaury/communities/graphs_with_ego/"+str(alg)+"/"
 	communities2 = "/home/amaury/communities/graphs_without_ego/"+str(alg)+"/" 
-	output1 = "/home/amaury/Dropbox/evaluation/graphs_with_ego/"+str(alg)+"/nmi/"
-	output2 = "/home/amaury/Dropbox/evaluation/graphs_without_ego/"+str(alg)+"/nmi/"
+	output1 = "/home/amaury/Dropbox/evaluation_only_members/graphs_with_ego/"+str(alg)+"/nmi/"
+	output2 = "/home/amaury/Dropbox/evaluation_only_members/graphs_without_ego/"+str(alg)+"/nmi/"
 
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
