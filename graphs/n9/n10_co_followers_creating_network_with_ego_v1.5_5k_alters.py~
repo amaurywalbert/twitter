@@ -19,7 +19,7 @@ sys.setdefaultencoding('utf-8')
 ##									 Carregar dados dos alters em memória
 ##
 ##
-##					Versão 1.5 - Faz o procedimento apenas para egos de 2k a 5k altersalters
+##					Versão 1.5 - Faz o procedimento apenas para egos de 3.5k a 5k alters
 ##
 ##					ATENÇÃO - NECESSÁRIO PELO MENOS 8GB DE RAM
 ##								
@@ -170,7 +170,7 @@ def main():
 ######################################################################################################################################################################
 
 ######################################################################################################################
-egos_dir = "/home/amaury/dataset/n9/egos_2k_a_5k_alters/bin/"###### Diretório contendo os arquivos dos Egos
+egos_dir = "/home/amaury/dataset/n9/egos_3k_a_5k_alters/bin/"###### Diretório contendo os arquivos dos Egos
 alters_dir = "/home/amaury/dataset/n9/alters/bin/" # Diretório contendo os arquivos dos Alters
 output_dir = "/home/amaury/graphs/n10/graphs_with_ego/" ################# Diretório para armazenamento dos arquivos das listas de arestas 
 formato = 'l'				####################################### Long para o código ('l') e depois o array de chars de X posições:	
