@@ -228,7 +228,7 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	layout = go.Layout(xaxis=dict(tickangle=-45),barmode='group',)
 	fig = go.Figure(data=data, layout=layout)
 
-	output = output+alg+"/bars_full/"
+	output = output+alg+"/bars_full"
 	if not os.path.exists(output):
 		os.makedirs(output)
 		

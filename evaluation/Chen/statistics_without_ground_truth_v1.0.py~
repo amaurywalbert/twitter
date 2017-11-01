@@ -13,7 +13,6 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Gerar Estatísticas a partir dos dados Obtidos pelo CHEN
 ##				
-##							0.1 - Separa arquivos por métrica
 ##							0.2 - Calcula qual melhor threshold
 ##							0.3 - Plota gráficos comparando cada métrica
 ##												
@@ -22,54 +21,6 @@ sys.setdefaultencoding('utf-8')
 ##		- Arquivos com estatísticas dos resultados
 ######################################################################################################################################################################
 
-
-
-######################################################################################################################################################################
-#
-# Prepara arquivos para ficar no mesmo formato  que a versão anterior - separados por METRICA
-#
-######################################################################################################################################################################
-def prepare_data(data_dir,output_dir):
-	
-	if not os.path.isdir(data_dir):
-		print ("\n\n\nDIRETÓRIO NÃO ENCONTRADO: "+str(data_dir)+"\n\n\n")
-		
-	else:	
-		if os.path.isdir(output_dir):
-			shutil.rmtree(output_dir)
-			os.makedirs(output_dir)
-		else:
-			os.makedirs(output_dir)			
-			
-		for file in os.listdir(data_dir):
-			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
-			network = network[0]
-	
-			print ("\n##################################################")
-			print ("Recuperando dados da rede "+str(network)+" - "+str(data_dir)+"\n")	
-	
-	
-			with open(data_dir+file, 'r') as f:
-				partial = {}
-				for line in f:
-					comm_data = json.loads(line)
-					for k, v in comm_data.iteritems():											# Preparação para ler o arquivo JSON que tem o Formato  {"threshold": {metric": [values ---- {"5": {"VI": [0.542,...], "NMI": [0,214,0,36...],...}}
-						threshold = k
-						for _k,_v in v.iteritems():
-							dictionary = {}
-							values = _v
-							metric = _k
-
-							dictionary[threshold] = values
-							print ("Salvando dados em: "+str(output_dir)+str(metric)+"/"+str(network)+".json")
-
-							if not os.path.isdir(output_dir+str(metric)+"/"):
-								os.makedirs(output_dir+str(metric)+"/")			
-							
-							with open(output_dir+str(metric)+"/"+str(network)+".json", "a") as f:
-								f.write(json.dumps(dictionary, separators=(',', ':'))+"\n")
-
-	print ("##################################################")	
 
 ######################################################################################################################################################################
 #
@@ -119,8 +70,6 @@ def instructions(alg):
 	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/full/"
 	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/full/"
 	
-		
-	prepare_data(data_dir,output_dir)
 	data_print1 = {}
 
 	for metric in os.listdir(output_dir):													# Para cada Métrica...
@@ -133,7 +82,6 @@ def instructions(alg):
 	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/without_singletons/"
 	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/without_singletons/"
 	
-	prepare_data(data_dir,output_dir)
 	data_print2 = {}
 
 	for metric in os.listdir(output_dir):													# Para cada Métrica...
@@ -146,7 +94,6 @@ def instructions(alg):
 	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/full/"
 	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
 
-	prepare_data(data_dir,output_dir)
 	data_print3 = {}
 	
 	for metric in os.listdir(output_dir):													# Para cada Métrica...
@@ -159,7 +106,6 @@ def instructions(alg):
 	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/without_singletons/"
 	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
 	
-	prepare_data(data_dir,output_dir)
 	data_print4 = {}
 	
 	for metric in os.listdir(output_dir):													# Para cada Métrica...
@@ -173,7 +119,7 @@ def instructions(alg):
 
 	for k, v in data_print1.iteritems():
 		
-		plot_statistics_chen.plot_full(output_graphics,data_print1[k],data_print2[k],data_print3[k],data_print4[k],k,alg)		
+		plot_statistics_chen.plot_bars_full(output_graphics,data_print1[k],data_print2[k],data_print3[k],data_print4[k],k,alg)		
 		
 ######################################################################################################################################################################
 #
@@ -222,8 +168,8 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-source = "/home/amaury/Dropbox/Chen_software_results/with_ground_truth/"
-output = "/home/amaury/Dropbox/Chen_software_statistics/with_ground_truth/"
+source = "/home/amaury/Dropbox/Chen_software_results/without_ground_truth/"
+output = "/home/amaury/Dropbox/Chen_software_statistics/without_ground_truth/"
 ######################################################################################################################
 
 if __name__ == "__main__": main()

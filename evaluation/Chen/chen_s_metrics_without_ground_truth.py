@@ -14,7 +14,14 @@ sys.setdefaultencoding('utf-8')
 ## 
 ##	Mingming Chen, Sisi Liu, and Boleslaw Szymanski, “Parallel Toolkit for Measuring the Quality of Network Community Structure”, 
 ##		The First European Network Intelligence Conference (ENIC), Wroclaw, Poland, September, 2014, pp. 22-29.
-##								
+##	
+##	
+##			SALVA ARQUIVOS NOS DIRETÒRIOS:
+##				RAW: conforme calculado - 
+##				SEPARATE BY METRICS
+##
+##
+## 							
 ## # INPUT: Arquivos com as comunidades detectadas, rede e o ground truth
 ## 
 ## # OUTPUT:
@@ -27,13 +34,89 @@ sys.setdefaultencoding('utf-8')
 ##				numProcs modularity modularity_density #intra-edges intra-density contraction #inter-edges expansion conductance
 ##
 ######################################################################################################################################################################
+######################################################################################################################################################################
+#
+# Prepara arquivos para ficar no mesmo formato  que a versão anterior - separados por METRICA
+#
+######################################################################################################################################################################
+def prepare_data(data_dir,output_dir):
+	
+	if not os.path.isdir(data_dir):
+		print ("\n\n\nDIRETÓRIO NÃO ENCONTRADO: "+str(data_dir)+"\n\n\n")
+		
+	else:	
+		if os.path.isdir(output_dir):
+			shutil.rmtree(output_dir)
+			os.makedirs(output_dir)
+		else:
+			os.makedirs(output_dir)			
+			
+		for file in os.listdir(data_dir):
+			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
+			network = network[0]
+	
+			print ("\n##################################################")
+			print ("Separando por métrica - Recuperando dados da rede "+str(network)+" - "+str(data_dir)+"\n")	
+	
+	
+			with open(data_dir+file, 'r') as f:
+				partial = {}
+				for line in f:
+					comm_data = json.loads(line)
+					for k, v in comm_data.iteritems():											# Preparação para ler o arquivo JSON que tem o Formato  {"threshold": {metric": [values ---- {"5": {"VI": [0.542,...], "NMI": [0,214,0,36...],...}}
+						threshold = k
+						for _k,_v in v.iteritems():
+							dictionary = {}
+							values = _v
+							metric = _k
+
+							dictionary[threshold] = values
+							print ("Salvando dados em: "+str(output_dir)+str(metric)+"/"+str(network)+".json")
+
+							if not os.path.isdir(output_dir+str(metric)+"/"):
+								os.makedirs(output_dir+str(metric)+"/")			
+							
+							with open(output_dir+str(metric)+"/"+str(network)+".json", "a") as f:
+								f.write(json.dumps(dictionary, separators=(',', ':'))+"\n")
+
+	print ("##################################################")	
+
+######################################################################################################################################################################
+#
+# Realiza as configurações necessárias para separar os dados por métrica METRICA
+#
+######################################################################################################################################################################
+def instructions(alg):																												
+################################################################################################
+	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/full/"
+	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/full/"
+
+	prepare_data(data_dir,output_dir)
+
+################################################################################################
+	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/without_singletons/"
+	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/without_singletons/"
+
+	prepare_data(data_dir,output_dir)
+
+################################################################################################
+	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/full/"
+	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
+
+	prepare_data(data_dir,output_dir)
+
+################################################################################################
+	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/without_singletons/"
+	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
+	
+	prepare_data(data_dir,output_dir)	
 
 ######################################################################################################################################################################
 #
 # Cálculos iniciais sobre o conjunto de dados lidos.
 #
 ######################################################################################################################################################################
-def calculate_alg(communities,output,singletons,net,graphs,uw,ud):
+def calculate_alg(communities,output,singletons,net,graphs,uw,ud,g_type):
 	
 	communities = communities+singletons+"/"+net+"/"
 	output = output+singletons+"/"
@@ -85,7 +168,7 @@ def calculate_alg(communities,output,singletons,net,graphs,uw,ud):
 							t = b[0].split('\t')
 							a = b[1].split('\t')
 
-							print ("Metricas para a rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego("+str(i)+"): "+str(file)+" - "+str(a))
+							print (str(g_type)+" - "+str(singletons)+" - Rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego("+str(i)+"): "+str(file)+" - "+str(a))
 							
 							modularity.append(float(a[1]))
 							modularity_density.append(float(a[2]))
@@ -192,11 +275,18 @@ def main():
 		print
 
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
-		calculate_alg(communities1,output1,singletons,net,graphs1,uw,ud)
+		g_type = "graphs_with_ego"	
+		calculate_alg(communities1,output1,singletons,net,graphs1,uw,ud,g_type)
 		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+		g_type = "graphs_without_ego"	
+		calculate_alg(communities2,output2,singletons,net,graphs2,uw,ud,g_type)
+	
+	######################################################################################################################
+		
+	instructions(alg)									# Separa por Métricas...
 
-		calculate_alg(communities2,output2,singletons,net,graphs2,uw,ud)
+	######################################################################################################################
 
 	print("######################################################################")
 	print
@@ -210,6 +300,7 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-
+source = "/home/amaury/Dropbox/Chen_software_results/without_ground_truth/"
+output = "/home/amaury/Dropbox/Chen_software_statistics/without_ground_truth/"
 ######################################################################################################################
 if __name__ == "__main__": main()
