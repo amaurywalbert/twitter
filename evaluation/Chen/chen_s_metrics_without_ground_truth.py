@@ -173,8 +173,8 @@ def main():
 	#####Alterar as linhas para Dropbox quando executado em ambiente de produção
 	communities1 = "/home/amaury/communities/graphs_with_ego/"+str(alg)+"/"
 	communities2 = "/home/amaury/communities/graphs_without_ego/"+str(alg)+"/" 
-	output1 = "/home/amaury/Dropbox/Chen_software_results/without_ground_truth/graphs_with_ego/"+str(alg)+"/"
-	output2 = "/home/amaury/Dropbox/Chen_software_results/without_ground_truth/graphs_without_ego/"+str(alg)+"/"
+	output1 = "/home/amaury/Dropbox/Chen_software_results/without_ground_truth/graphs_with_ego/"+str(alg)+"/raw/"
+	output2 = "/home/amaury/Dropbox/Chen_software_results/without_ground_truth/graphs_without_ego/"+str(alg)+"/raw/"
 
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1

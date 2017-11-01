@@ -73,12 +73,12 @@ def calculate_alg(communities,output,singletons,net,graphs,uw,ud):
 					ego_id = long(ego_id[0])
 					i+=1
 
-					if not os.path.isfile(str(graph)+str(ego_id)+".edge_list"):
-						print ("ERROR - EGO: "+str(i)+" - Arquivo com lista de arestas não encontrado:" +(str(ground_truth)+str(file)))
+					if not os.path.isfile(str(graphs)+str(ego_id)+".edge_list"):
+						print ("ERROR - EGO: "+str(i)+" - Arquivo com lista de arestas não encontrado:" +str(graphs)+str(ego_id)+".edge_list")
 
 					else:	
 						try:
-							execute = subprocess.Popen(["mpirun","-np","4","/home/amaury/algoritmos/Metricas/ParallelComMetric-master/src/mpimetric","0",str(ground_truth)+str(file),str(communities)+str(threshold)+"/"+str(file),str(uw),str(ud)], stdout=subprocess.PIPE)
+							execute = subprocess.Popen(["mpirun","-np","4","/home/amaury/algoritmos/Metricas/ParallelComMetric-master/src/mpimetric","0",str(communities)+str(threshold)+"/"+str(file),str(graphs)+str(ego_id)+".edge_list",str(uw),str(ud)], stdout=subprocess.PIPE)
 							
 							value = execute.communicate()[0]
 							b = value.split('\n')							
