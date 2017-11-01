@@ -187,7 +187,9 @@ def main():
 		calculate_alg(communities1,output1,singletons,net,ground_truth)
 		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+
 		calculate_alg(communities2,output2,singletons,net,ground_truth)
+
 	print("######################################################################")
 	print
 	print("######################################################################")
