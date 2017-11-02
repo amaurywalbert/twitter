@@ -2,7 +2,7 @@
 ################################################################################################
 #	
 #
-import tweepy, datetime, sys, time, json, os, os.path, shutil, time, struct, random
+import datetime, sys, time, json, os, os.path, shutil, time, struct, random
 import random
 reload(sys)
 sys.setdefaultencoding('utf-8')
