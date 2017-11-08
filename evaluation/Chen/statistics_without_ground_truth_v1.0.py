@@ -70,7 +70,7 @@ def algorithm(data_source,output_dir,metric):
 			for k in data:
 				output_file = {}
 				output_file[k] = data[k]
-				f.write(json.dumps(output_file)+"\n"))
+				f.write(json.dumps(output_file)+"\n")
 	
 	return data_overview
 
