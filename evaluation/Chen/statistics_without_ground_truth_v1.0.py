@@ -37,7 +37,7 @@ def algorithm(data_source,output_dir,metric):
 		print ("\n\n##################################################\n")					
 	else:	
 
-		if not os.path.exists(ouput_dir):
+		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 
 	
