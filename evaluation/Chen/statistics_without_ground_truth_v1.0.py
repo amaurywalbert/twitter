@@ -67,8 +67,7 @@ def algorithm(data_source,output_dir,metric):
 		print ("##################################################")	
 	
 		with open(output_dir+metric+".json", 'w') as f:
-			for k,v in data:
-				f.write(json.dumps(k,v, separators=(',', ':'))+"\n")
+			f.write(json.dumps(data, separators=(',', ':'))+"\n")
 	return data_overview
 
 
