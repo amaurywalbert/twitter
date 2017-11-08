@@ -27,14 +27,20 @@ sys.setdefaultencoding('utf-8')
 # Prepara apresentação dos resultados para cada - METRICA
 #
 ######################################################################################################################################################################
-def algorithm(data_source,metric):
-	data_overview = {}																	# Armazenar o nome da rede e o maior valor do trheshold do algoritmo para a MetricaI - Formato {{'N1':0.012},...}
+def algorithm(data_source,output_dir,metric):
 	
+	data_overview = {}																	# Armazenar o nome da rede e o maior valor do trheshold do algoritmo para a MetricaI - Formato {{'N1':0.012},...	
+	data = {}
 	if not os.path.isdir(data_source):
 		print ("\n##################################################\n\n")
 		print ("Diretório não encontrado: "+str(data_source))
 		print ("\n\n##################################################\n")					
 	else:	
+
+		if not os.path.exists(data_output):
+			os.makedirs(data_output)
+
+	
 		for file in os.listdir(data_source):
 			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
 			network = network[0]
@@ -42,10 +48,9 @@ def algorithm(data_source,metric):
 			data_overview[network] = {'threshold':' ',metric:float(-100)}
 			print ("##################################################")
 			print ("Preparando resultados para a métrica: "+(metric)+" - Recuperando dados da rede "+str(network))	
-
-	
-			with open(data_source+file, 'r') as f:
-				for line in f:
+		
+			with open(data_source+file, 'r') as g:
+				for line in g:
 					comm_data = json.loads(line) 
 					for k, v in comm_data.iteritems():										# Para cada threshold
 						values = []
@@ -53,10 +58,17 @@ def algorithm(data_source,metric):
 							if not math.isnan(item):											# exclui calculo de da METRICA que retorna valor NaN
 								values.append(item)				
 						result = calc.calcular_full(values)									# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
-						if result is not None:						
+
+						if result is not None:	
+														
 							if	float(result['media']) > data_overview[network][metric]:
 								data_overview[network] = {'threshold':k,metric:float(result['media'])}
-			print ("##################################################")	
+								data[network] = {'threshold':k,metric:result}
+		print ("##################################################")	
+	
+	with open (output_dir+metric+".json", 'w') as f:
+		for k,v in data:
+			f.write(json.dump(k,v))
 	return data_overview
 
 
@@ -67,51 +79,53 @@ def algorithm(data_source,metric):
 ######################################################################################################################################################################
 def instructions(alg):
 ################################################################################################
-	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/full/"
-	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/full/"
+
+	source_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/full/"
+	output_dir = str(output)+"graphs_with_ego/"+alg+"/by_metrics/full/"
 	
 	data_print1 = {}
 
-	for metric in os.listdir(output_dir):													# Para cada Métrica...
-		if os.path.isdir(output_dir+metric):
-			data_source = output_dir+metric+"/"												# Diretório com os resultados de cada métrica
-			data_overview = algorithm(data_source,metric)	
+	for metric in os.listdir(source_dir):													# Para cada Métrica...
+		if os.path.isdir(source_dir+metric):
+			data_source = source_dir+metric+"/"												# Diretório com os resultados de cada métrica
+			data_overview = algorithm(data_source,output_dir,metric)	
 			data_print1[metric] = data_overview
+
 ################################################################################################
 
-	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/without_singletons/"
-	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/without_singletons/"
-	
+	source_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/without_singletons/"
+	output_dir = str(output)+"graphs_with_ego/"+alg+"/by_metrics/without_singletons/"
+		
 	data_print2 = {}
 
-	for metric in os.listdir(output_dir):													# Para cada Métrica...
-		if os.path.isdir(output_dir+metric):
-			data_source = output_dir+metric+"/"												# Diretório com os resultados de cada métrica
-			data_overview = algorithm(data_source,metric)	
+	for metric in os.listdir(source_dir):													# Para cada Métrica...
+		if os.path.isdir(source_dir+metric):
+			data_source = source_dir+metric+"/"												# Diretório com os resultados de cada métrica
+			data_overview = algorithm(data_source,output_dir,metric)	
 			data_print2[metric] = data_overview
 ################################################################################################
 
-	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/full/"
-	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
+	source_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
+	output_dir = str(output)+"graphs_without_ego/"+alg+"/by_metrics/full/"
 
 	data_print3 = {}
 	
-	for metric in os.listdir(output_dir):													# Para cada Métrica...
-		if os.path.isdir(output_dir+metric):
-			data_source = output_dir+metric+"/"												# Diretório com os resultados de cada métrica
-			data_overview = algorithm(data_source,metric)	
+	for metric in os.listdir(source_dir):													# Para cada Métrica...
+		if os.path.isdir(source_dir+metric):
+			data_source = source_dir+metric+"/"												# Diretório com os resultados de cada métrica
+			data_overview = algorithm(data_source,output_dir,metric)	
 			data_print3[metric] = data_overview
 ################################################################################################
 
-	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/without_singletons/"
-	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
-	
+	source_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
+	output_dir = str(output)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
+		
 	data_print4 = {}
 	
-	for metric in os.listdir(output_dir):													# Para cada Métrica...
-		if os.path.isdir(output_dir+metric):
-			data_source = output_dir+metric+"/"												# Diretório com os resultados de cada métrica
-			data_overview = algorithm(data_source,metric)	
+	for metric in os.listdir(source_dir):													# Para cada Métrica...
+		if os.path.isdir(source_dir+metric):
+			data_source = source_dir+metric+"/"												# Diretório com os resultados de cada métrica
+			data_overview = algorithm(data_source,output_dir,metric)	
 			data_print4[metric] = data_overview
 ################################################################################################
 # Salvando Gráficos

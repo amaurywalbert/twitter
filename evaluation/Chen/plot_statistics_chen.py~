@@ -213,8 +213,12 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	plt.xticks(ind+width/2,(x))
 	plt.legend(loc='best')	
 	plt.tight_layout()
+
+	output = output+alg+"/bars_full/"
+
 	if not os.path.exists(output):
-		os.makedirs(output)	
+		os.makedirs(output)
+		
 	plt.show()	
 #	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 	plt.close()
@@ -230,9 +234,6 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	layout = go.Layout(xaxis=dict(tickangle=-45),barmode='group',)
 	fig = go.Figure(data=data, layout=layout)
 
-	output = output+alg+"/bars_full/"
-	if not os.path.exists(output):
-		os.makedirs(output)
 		
 	plotly.offline.plot(fig, filename=output+str(metric)+".html",auto_open=False)
 
