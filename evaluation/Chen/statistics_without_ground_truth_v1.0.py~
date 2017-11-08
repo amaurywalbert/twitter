@@ -64,9 +64,11 @@ def algorithm(data_source,output_dir,metric):
 							if	float(result['media']) > data_overview[network][metric]:
 								data_overview[network] = {'threshold':k,metric:float(result['media'])}
 								data[network] = {'threshold':k,metric:result}
-			print ("##################################################")	
+		print ("##################################################")	
 	
-	with open (output_dir+metric+".json", 'w') as f:
+		with open(output_dir+metric+".json", 'w') as f:
+			for k,v in data:
+				f.write(json.dump(k,v))
 	return data_overview
 
 
