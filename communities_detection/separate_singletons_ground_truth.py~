@@ -79,15 +79,17 @@ def main():
 
 						if len(a) > 2:
 							with open(output_without_singletons+file, 'a+') as g:
-								if item != "\n" and item != " ":
-									if long(item) > 0:
-										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+								for item in a:
+									if item != "\n" and item != " ":
+										if long(item) > 0:
+											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 								g.write("\n")														# Passa para a próxima linha
 						else:			
 							with open(output_singletons+file, 'a+') as g:
-								if item != "\n" and item != " ":
-									if long(item) > 0:
-										g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+								for item in a:
+									if item != "\n" and item != " ":
+										if long(item) > 0:
+											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
 								g.write("\n")														# Passa para a próxima linha
 					else:
 						print ("Eliminei aqui..."+str(a))						
