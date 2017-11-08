@@ -45,7 +45,7 @@ def algorithm(data_source,output_dir,metric):
 			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
 			network = network[0]
 
-			data_overview[network] = {'threshold':' ',metric:float(-100)}
+			data_overview[network] = {'threshold':' ',metric:float("-inf")}
 			print ("##################################################")
 			print ("Preparando resultados para a métrica: "+(metric)+" - Recuperando dados da rede "+str(network))	
 		
@@ -55,8 +55,10 @@ def algorithm(data_source,output_dir,metric):
 					for k, v in comm_data.iteritems():										# Para cada threshold
 						values = []
 						for item in v:
-							if not math.isnan(item):											# exclui calculo de da METRICA que retorna valor NaN
-								values.append(item)				
+							if not math.isnan(item):
+								if item != float("inf") or item != float("-inf"): 											# exclui calculo de da METRICA que retorna valor NaN e Infinity
+									values.append(item)				
+
 						result = calc.calcular_full(values)									# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
 
 						if result is not None:	
@@ -70,7 +72,7 @@ def algorithm(data_source,output_dir,metric):
 			for k in data:
 				output_file = {}
 				output_file[k] = data[k]
-				f.write(json.dumps(output_file)+"\n"))
+				f.write(json.dumps(output_file)+"\n")
 	
 	return data_overview
 
