@@ -31,6 +31,7 @@ def algorithm(data_source,output_dir,metric):
 	
 	data_overview = {}																	# Armazenar o nome da rede e o maior valor do trheshold do algoritmo para a MetricaI - Formato {{'N1':0.012},...	
 	data = {}
+
 	if not os.path.isdir(data_source):
 		print ("\n##################################################\n\n")
 		print ("Diretório não encontrado: "+str(data_source))
@@ -39,7 +40,6 @@ def algorithm(data_source,output_dir,metric):
 
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
-
 	
 		for file in os.listdir(data_source):
 			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
@@ -68,6 +68,7 @@ def algorithm(data_source,output_dir,metric):
 	
 		with open(output_dir+metric+".json", 'w') as f:
 			f.write(json.dumps(data))
+	
 	return data_overview
 
 
