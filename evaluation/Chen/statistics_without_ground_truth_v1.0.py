@@ -64,11 +64,12 @@ def algorithm(data_source,output_dir,metric):
 						print
 													
 						result = calc.calcular_full(values)									# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
-
 						if result is not None:	
 														
 							if	float(result['media']) > data_overview[network][metric]:
 								data_overview[network] = {'threshold':k,metric:float(result['media'])}
+								result['n_egos'] = len(values)
+								result['t_egos'] = len(v)
 								data[network] = {'threshold':k,metric:result}
 		print ("##################################################")	
 	

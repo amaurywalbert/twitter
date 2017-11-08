@@ -65,6 +65,8 @@ def algorithm(data_source,output_dir,metric):
 														
 							if	float(result['media']) > data_overview[network][metric]:
 								data_overview[network] = {'threshold':k,metric:float(result['media'])}
+								result['n_egos'] = len(values)
+								result['t_egos'] = len(v)
 								data[network] = {'threshold':k,metric:result}
 		print ("##################################################")	
 	

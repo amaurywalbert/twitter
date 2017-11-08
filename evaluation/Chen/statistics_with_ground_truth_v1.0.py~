@@ -56,7 +56,7 @@ def algorithm(data_source,output_dir,metric):
 						values = []
 						for item in v:
 							if not math.isnan(item):
-								if item != float("inf") or item != float("-inf"): 											# exclui calculo de da METRICA que retorna valor NaN e Infinity
+								if item != float("inf") and item != float("-inf"): 											# exclui calculo de da METRICA que retorna valor NaN e Infinity
 									values.append(item)				
 
 						result = calc.calcular_full(values)									# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
