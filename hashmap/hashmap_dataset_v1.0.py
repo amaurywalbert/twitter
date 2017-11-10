@@ -30,6 +30,7 @@ def add_hashmap(i,hashmap,f):
 		for alter in alters:
 			if alter != "\n" and alter != " ":
 				i+=1
+				print alter
 				hashmap[long(alter)] = i
 	return (i,hashmap)	
 ######################################################################################################################################################################
