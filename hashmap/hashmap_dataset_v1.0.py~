@@ -123,9 +123,10 @@ def main():
 			for diretorio in os.listdir(egonet_source+net):
 				if diretorio in ("graphs_with_ego","graphs_without_ego"):
 					if os.path.isdir(egonet_source+net+"/"+diretorio):
+						if os.path.isfile(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list"):
 
-						with open(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'r') as f:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/
-							i,hashmap = add_hashmap_egonet(i,hashmap,f)
+							with open(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'r') as f:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/
+								i,hashmap = add_hashmap_egonet(i,hashmap,f)
 
 ################################################################## COMMUNITIES
 		for diretorio in os.listdir(communities_source):
@@ -169,14 +170,15 @@ def main():
 			for diretorio in os.listdir(egonet_source+net):
 				if diretorio in ("graphs_with_ego","graphs_without_ego"):
 					if os.path.isdir(egonet_source+net+"/"+diretorio):
-						
-						with open(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'r') as f:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/
+						if os.path.isfile(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list"):
+					
+							with open(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'r') as f:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/
 							
-							if not os.path.exists(egonet_output+net+"/"+diretorio+"/"):
-								os.makedirs(egonet_output+net+"/"+diretorio+"/")
+								if not os.path.exists(egonet_output+net+"/"+diretorio+"/"):
+									os.makedirs(egonet_output+net+"/"+diretorio+"/")
 
-							with open(egonet_output+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'w') as g:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/													
-								save_hashmap_egonet(i,hashmap,f,g,test)
+								with open(egonet_output+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'w') as g:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/													
+									save_hashmap_egonet(i,hashmap,f,g,test)
 
 
 ################################################################## COMMUNITIES
