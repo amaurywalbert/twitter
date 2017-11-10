@@ -82,7 +82,7 @@ def save_hashmap_egonet(i,hashmap,f,g,test):
 			if len(alters) > 2:
 				g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]])+" "+str(alters[2]))
 			else:
-			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]]))
+				g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]]))
 
 ######################################################################################################################################################################
 #
