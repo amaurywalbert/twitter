@@ -28,9 +28,9 @@ def add_hashmap(i,hashmap,f):
 	for line in f:
 		alters = line.split(' ')
 		for alter in alters:
-			if alter != "\n" and alter != " ":
+			if alter != "\n":
 				i+=1
-				hashmap[long(alter)] = i
+				hashmap[alter] = i
 	return (i,hashmap)	
 ######################################################################################################################################################################
 #
@@ -42,12 +42,12 @@ def add_hashmap(i,hashmap,f):
 def add_hashmap_egonet(i,hashmap,f):	
 	for line in f:
 		alters = line.split(' ')
-		if alters[0] != "\n" and alters[0] != " ":
+		if alters[0] != "\n":
 			i+=1
-			hashmap[long(alters[0])] = i
-		if alters[1] != "\n" and alters[1] != " ":
+			hashmap[alters[0]] = i
+		if alters[1] != "\n":
 			i+=1	
-			hashmap[long(alters[1])] = i
+			hashmap[alters[1]] = i
 	return (i,hashmap)	
 
 ######################################################################################################################################################################
@@ -61,9 +61,9 @@ def save_hashmap(i,hashmap,f,g,test):
 	for line in f:
 		alters = line.split(' ')
 		for alter in alters:
-			if alter != "\n" and alter != " ":
-				g.write(str(hashmap[long(alter)])+" ")									# Escreve os ids das Listas separadas por espaço
-				test.append(long(alter))
+			if alter != "\n":
+				g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
+				test.append(alter)
 		g.write("\n")
 
 ######################################################################################################################################################################
@@ -75,14 +75,13 @@ def save_hashmap(i,hashmap,f,g,test):
 ######################################################################################################################################################################
 def save_hashmap_egonet(i,hashmap,f,g,test):
 	for line in f:
-		alters = line.split(' ')
-		if alters[0] != "\n" and alters[0] != " " and alters[1] != "\n" and alters[1] != " ":			
-			alters[0] = long(alters[0])
-			alters[1] = long(alters[1])
-			if len(alters) > 2:
-				g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]])+" "+str(alters[2]))
-			else:
-				g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]]))
+		alters = line.split(' ')			
+		alters[0] = alters[0]
+		alters[1] = alters[1]
+		if len(alters) > 2:
+			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]])+" "+str(alters[2]))
+		else:
+			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]]))
 
 ######################################################################################################################################################################
 #
