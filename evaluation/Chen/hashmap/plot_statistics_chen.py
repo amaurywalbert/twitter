@@ -116,6 +116,7 @@ def plot_bars_single(output,data_overview,metric,alg,title):
 def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	print ("\n##################################################\n")
 	print ("Gerando Gráfico Completo - Algoritmo: "+str(alg)+" - Métrica: "+str(metric))
+
 	data_overview_full = [data1,data2,data3,data4]
 	dataset = {}
 	#i = 1										#armazenar dados de plotagem para dataset COM ego e comunidades COM singletons
