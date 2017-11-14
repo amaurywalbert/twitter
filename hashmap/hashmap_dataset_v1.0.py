@@ -156,13 +156,16 @@ def main():
 			if net_type in("full","without_singletons"):
 				if os.path.isdir(ground_truth_source+"/"+net_type):
 
-					with open(ground_truth_source+net_type+"/"+file, 'r') as f:		# SOURCE - Para arquivos no diretório ground_truth/...						
+					if os.path.isfile(ground_truth_output+net_type+"/"+file):
+						print ("Arquivo de destino já existe! - "+ground_truth_output+net_type+"/"+file)
+					else:		
+						with open(ground_truth_source+net_type+"/"+file, 'r') as f:		# SOURCE - Para arquivos no diretório ground_truth/...						
 
-						if not os.path.exists(ground_truth_output+net_type+"/"):
-							os.makedirs(ground_truth_output+net_type+"/")
+							if not os.path.exists(ground_truth_output+net_type+"/"):
+								os.makedirs(ground_truth_output+net_type+"/")
 
-						with open(ground_truth_output+net_type+"/"+file, 'w') as g:
-							save_hashmap(i,hashmap,f,g,test)
+							with open(ground_truth_output+net_type+"/"+file, 'w') as g:
+								save_hashmap(i,hashmap,f,g,test)
 
 
 ################################################################## EGONETS
@@ -171,14 +174,17 @@ def main():
 				if diretorio in ("graphs_with_ego","graphs_without_ego"):
 					if os.path.isdir(egonet_source+net+"/"+diretorio):
 						if os.path.isfile(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list"):
-					
-							with open(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'r') as f:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/
-							
-								if not os.path.exists(egonet_output+net+"/"+diretorio+"/"):
-									os.makedirs(egonet_output+net+"/"+diretorio+"/")
 
-								with open(egonet_output+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'w') as g:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/													
-									save_hashmap_egonet(i,hashmap,f,g,test)
+							if os.path.isfile(egonet_output+net+"/"+diretorio+"/"+str(ego)+".edge_list"):
+								print ("Arquivo de destino já existe! - "+egonet_output+net+"/"+diretorio+"/"+str(ego)+".edge_list")
+							else:					
+								with open(egonet_source+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'r') as f:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/
+							
+									if not os.path.exists(egonet_output+net+"/"+diretorio+"/"):
+										os.makedirs(egonet_output+net+"/"+diretorio+"/")
+
+									with open(egonet_output+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'w') as g:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/													
+										save_hashmap_egonet(i,hashmap,f,g,test)
 
 
 ################################################################## COMMUNITIES
@@ -196,13 +202,16 @@ def main():
 													if os.path.isdir(communities_source+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold):
 														if os.path.isfile(communities_source+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file):
 															
-															with open(communities_source+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file, 'r') as f:		# SOURCE - Para arquivos no communities_source/graphs_withX_ego/"alg"/"net_type"/"net"
+															if os.path.isfile(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file):
+																print ("Arquivo de destino já existe! - "+communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file)
+															else:
+																with open(communities_source+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file, 'r') as f:		# SOURCE - Para arquivos no communities_source/graphs_withX_ego/"alg"/"net_type"/"net"
 
-																if not os.path.exists(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"):
-																	os.makedirs(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/")
+																	if not os.path.exists(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"):
+																		os.makedirs(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/")
 
-																with open(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file, 'w') as g:
-																	save_hashmap(i,hashmap,f,g,test)																
+																	with open(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file, 'w') as g:
+																		save_hashmap(i,hashmap,f,g,test)																
 ######################################################################################################################		
 
 		print ("Convertendo arquivos do ego "+str(j)+": "+str(ego)) 						
@@ -229,11 +238,6 @@ egonet_output = "/home/amaury/graphs_hashmap/"
 communities_source = "/home/amaury/communities/"
 communities_output = "/home/amaury/communities_hashmap/"
 
-if os.path.exists(ground_truth_output):
-	shutil.rmtree(ground_truth_output)
-if os.path.exists(egonet_output):
-	shutil.rmtree(egonet_output)	
-if os.path.exists(communities_output):
-	shutil.rmtree(communities_output)				
+
 ######################################################################################################################
 if __name__ == "__main__": main()

@@ -135,7 +135,7 @@ def calculate_alg(communities,output,singletons,net,ground_truth,g_type):
 				print ("Arquivo de destino já existe: "+str(output)+str(threshold)+".json")
 			else:	
 				print("######################################################################")
-				_result = {}					
+				result = {}					
 				VI = []
 				NMI = []
 				F_measure = []
@@ -180,16 +180,13 @@ def calculate_alg(communities,output,singletons,net,ground_truth,g_type):
 							print e
 
 				print("######################################################################")
-				_result['VI'] = VI
-				_result['NMI'] = NMI
-				_result['F_measure'] = F_measure
-				_result['NVD'] = NVD
-				_result['RI'] = RI
-				_result['ARI'] = ARI
-				_result['JI'] = JI					
-
-				result={}
-				result[threshold] = _result
+				result['VI'] = VI
+				result['NMI'] = NMI
+				result['F_measure'] = F_measure
+				result['NVD'] = NVD
+				result['RI'] = RI
+				result['ARI'] = ARI
+				result['JI'] = JI					
 
 				with open(str(output)+str(threshold)+".json", 'w') as f:
 					f.write(json.dumps(result))
@@ -260,14 +257,16 @@ def main():
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
 		net = "n"+str(i)
+
 		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
 		g_type = "graphs_with_ego"
 		calculate_alg(communities1,output1,singletons,net,ground_truth,g_type)
-		print
-		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-		g_type = "graphs_without_ego"
-		calculate_alg(communities2,output2,singletons,net,ground_truth,g_type)
+
+#		print
+#		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+#		g_type = "graphs_without_ego"
+#		calculate_alg(communities2,output2,singletons,net,ground_truth,g_type)
 	######################################################################################################################
 		
 	instructions(alg)									# Separar por métrica

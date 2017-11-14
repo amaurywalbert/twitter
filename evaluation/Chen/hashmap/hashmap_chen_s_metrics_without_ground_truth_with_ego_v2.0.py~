@@ -114,7 +114,7 @@ def instructions(alg):
 def calculate_alg(communities,output,singletons,net,graphs,uw,ud,g_type):
 	
 	communities = communities+singletons+"/"+net+"/"
-	output = output+singletons+"/"
+	output = output+singletons+"/"+net+"/"
 	if not os.path.exists(output):
 		os.makedirs(output)
 	print	
@@ -122,21 +122,19 @@ def calculate_alg(communities,output,singletons,net,graphs,uw,ud,g_type):
 	print ("Os arquivos serão armazenados em: "+str(output))
 	print("######################################################################")
 
-	if os.path.isfile(str(output)+str(net)+".json"):
-		print ("Arquivo de destino já existe: "+str(output)+str(net)+".json")
+	for threshold in range(51):	#Parâmetro do algoritmo de detecção
+		threshold+=1
+		i=0 		#Ponteiro para o ego
 
-	else:			
-		result={}
-		for threshold in range(51):	#Parâmetro do algoritmo de detecção
-			threshold+=1
-			i=0 		#Ponteiro para o ego
+		if not os.path.isdir(str(communities)+str(threshold)+"/"):
+			print ("Diretório com as comunidades não encontrado: "+str(communities)+str(threshold))
 
-			if not os.path.isdir(str(communities)+str(threshold)+"/"):
-				print ("Diretório com as comunidades não encontrado: "+str(communities)+str(threshold))
-
+		else:	
+			if os.path.isfile(str(output)+str(threshold)+".json"):
+				print ("Arquivo de destino já existe: "+str(output)+str(threshold)+".json")
 			else:	
 				print("######################################################################")
-				_result = {}					
+				result = {}					
 				modularity = []
 				modularity_density = []
 				intra_edges = []
@@ -178,20 +176,18 @@ def calculate_alg(communities,output,singletons,net,graphs,uw,ud,g_type):
 							print e
 
 				print("######################################################################")
-				_result['modularity'] = modularity
-				_result['modularity_density'] = modularity_density
-				_result['intra_edges'] = intra_edges
-				_result['intra_density'] = intra_density
-				_result['contraction'] = contraction
-				_result['inter_edges'] = inter_edges
-				_result['expansion'] = expansion
-				_result['conductance'] = conductance														
+				result['modularity'] = modularity
+				result['modularity_density'] = modularity_density
+				result['intra_edges'] = intra_edges
+				result['intra_density'] = intra_density
+				result['contraction'] = contraction
+				result['inter_edges'] = inter_edges
+				result['expansion'] = expansion
+				result['conductance'] = conductance														
 
-				result={}
-				result[threshold] = _result
 
-				with open(str(output)+str(net)+".json", 'a+') as f:
-					f.write(json.dumps(result)+"\n")
+				with open(str(output)+str(threshold)+".json", 'w') as f:
+					f.write(json.dumps(result))
 
 	print("######################################################################")		
 
@@ -267,15 +263,16 @@ def main():
 		net = "n"+str(i)
 		graphs1 = "/home/amaury/graphs/"+str(net)+"/graphs_with_ego/"
 		graphs2 = "/home/amaury/graphs/"+str(net)+"/graphs_without_ego/"
-		print
 
+		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
 		g_type = "graphs_with_ego"	
 		calculate_alg(communities1,output1,singletons,net,graphs1,uw,ud,g_type)
-		print
-		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-		g_type = "graphs_without_ego"	
-		calculate_alg(communities2,output2,singletons,net,graphs2,uw,ud,g_type)
+
+#		print
+#		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+#		g_type = "graphs_without_ego"	
+#		calculate_alg(communities2,output2,singletons,net,graphs2,uw,ud,g_type)
 	
 	######################################################################################################################
 		

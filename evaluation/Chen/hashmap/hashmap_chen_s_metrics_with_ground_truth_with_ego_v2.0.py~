@@ -260,14 +260,16 @@ def main():
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
 		net = "n"+str(i)
+
 		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
 		g_type = "graphs_with_ego"
 		calculate_alg(communities1,output1,singletons,net,ground_truth,g_type)
-		print
-		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-		g_type = "graphs_without_ego"
-		calculate_alg(communities2,output2,singletons,net,ground_truth,g_type)
+
+#		print
+#		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+#		g_type = "graphs_without_ego"
+#		calculate_alg(communities2,output2,singletons,net,ground_truth,g_type)
 	######################################################################################################################
 		
 	instructions(alg)									# Separar por métrica

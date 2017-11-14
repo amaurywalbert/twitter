@@ -115,7 +115,7 @@ def calculate_alg(communities,output,singletons,net,ground_truth,g_type):
 	
 	communities = communities+singletons+"/"+net+"/"
 	ground_truth = ground_truth+singletons+"/"
-	output = output+singletons+"/"
+	output = output+singletons+"/"+net+"/"
 	if not os.path.exists(output):
 		os.makedirs(output)
 	print	
@@ -123,17 +123,16 @@ def calculate_alg(communities,output,singletons,net,ground_truth,g_type):
 	print ("Os arquivos serão armazenados em: "+str(output))
 	print("######################################################################")
 
-	if os.path.isfile(str(output)+str(net)+".json"):
-		print ("Arquivo de destino já existe: "+str(output)+str(net)+".json")
+	for threshold in range(51):	#Parâmetro do algoritmo de detecção
+		threshold+=1
+		i=0 		#Ponteiro para o ego
 
-	else:			
-		for threshold in range(51):	#Parâmetro do algoritmo de detecção
-			threshold+=1
-			i=0 		#Ponteiro para o ego
+		if not os.path.isdir(str(communities)+str(threshold)+"/"):
+			print ("Diretório com as comunidades não encontrado: "+str(communities)+str(threshold))
 
-			if not os.path.isdir(str(communities)+str(threshold)+"/"):
-				print ("Diretório com as comunidades não encontrado: "+str(communities)+str(threshold))
-
+		else:	
+			if os.path.isfile(str(output)+str(threshold)+".json"):
+				print ("Arquivo de destino já existe: "+str(output)+str(threshold)+".json")
 			else:	
 				print("######################################################################")
 				_result = {}					
@@ -192,8 +191,8 @@ def calculate_alg(communities,output,singletons,net,ground_truth,g_type):
 				result={}
 				result[threshold] = _result
 
-				with open(str(output)+str(net)+".json", 'a+') as f:
-					f.write(json.dumps(result)+"\n")
+				with open(str(output)+str(threshold)+".json", 'w') as f:
+					f.write(json.dumps(result))
 
 	print("######################################################################")		
 
@@ -261,10 +260,12 @@ def main():
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
 		net = "n"+str(i)
-		print
-		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
-		g_type = "graphs_with_ego"
-		calculate_alg(communities1,output1,singletons,net,ground_truth,g_type)
+
+#		print
+#		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
+#		g_type = "graphs_with_ego"
+#		calculate_alg(communities1,output1,singletons,net,ground_truth,g_type)
+
 		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
 		g_type = "graphs_without_ego"
