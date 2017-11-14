@@ -79,9 +79,9 @@ def save_hashmap_egonet(i,hashmap,f,g,test):
 		alters[0] = alters[0]
 		alters[1] = alters[1]
 		if len(alters) > 2:
-			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]])+" "+str(alters[2]))
+			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]])+" "+str(alters[2])) 	# Já tem a quebra (\n) no último elemento alters[2]
 		else:
-			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]]))
+			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]]+"\n"))
 
 ######################################################################################################################################################################
 #
