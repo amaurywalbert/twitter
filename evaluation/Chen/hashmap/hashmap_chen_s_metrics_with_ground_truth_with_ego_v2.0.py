@@ -95,17 +95,17 @@ def instructions(alg):
 	prepare_data(data_dir,output_dir)
 
 ################################################################################################
-	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/full/"
-	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
-
-	prepare_data(data_dir,output_dir)
-
+#	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/full/"
+#	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
+#
+#	prepare_data(data_dir,output_dir)
+#
 ################################################################################################
-	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/without_singletons/"
-	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
-
-	prepare_data(data_dir,output_dir)
-	
+#	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/without_singletons/"
+#	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
+#
+#	prepare_data(data_dir,output_dir)
+#	
 ######################################################################################################################################################################
 #
 # Cálculos iniciais sobre o conjunto de dados lidos.

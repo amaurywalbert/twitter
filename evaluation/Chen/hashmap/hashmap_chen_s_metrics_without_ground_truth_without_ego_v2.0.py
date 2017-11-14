@@ -83,17 +83,17 @@ def prepare_data(data_dir,output_dir):
 ######################################################################################################################################################################
 def instructions(alg):																												
 ################################################################################################
-	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/full/"
-	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/full/"
-
-	prepare_data(data_dir,output_dir)
-
+#	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/full/"
+#	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/full/"
+#
+#	prepare_data(data_dir,output_dir)
+#
 ################################################################################################
-	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/without_singletons/"
-	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/without_singletons/"
-
-	prepare_data(data_dir,output_dir)
-
+#	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/without_singletons/"
+#	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/without_singletons/"
+#
+#	prepare_data(data_dir,output_dir)
+#
 ################################################################################################
 	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/full/"
 	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
@@ -261,8 +261,8 @@ def main():
 		else:
 			ud=0	 
 		net = "n"+str(i)
-		graphs1 = "/home/amaury/graphs/"+str(net)+"/graphs_with_ego/"
-		graphs2 = "/home/amaury/graphs/"+str(net)+"/graphs_without_ego/"
+		graphs1 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"
+		graphs2 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_without_ego/"
 
 #		print
 #		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
