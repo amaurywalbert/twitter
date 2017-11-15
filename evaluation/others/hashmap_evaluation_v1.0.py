@@ -99,7 +99,7 @@ def instructions(metric,alg):
 		
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
-	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities with singletons')	
+#	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities with singletons')	
 	data1 = data_overview
 ################################################################################################
 
@@ -108,7 +108,7 @@ def instructions(metric,alg):
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
-	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities without singletons')	
+#	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities without singletons')	
 	data2 = data_overview
 ################################################################################################
 
@@ -117,7 +117,7 @@ def instructions(metric,alg):
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
-	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities with singletons')
+#	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities with singletons')
 	data3 = data_overview
 ################################################################################################
 
@@ -126,7 +126,7 @@ def instructions(metric,alg):
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
-	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities without singletons')	
+#	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities without singletons')	
 	data4 = data_overview
 
 ################################################################################################
