@@ -261,8 +261,8 @@ def main():
 		else:
 			ud=0	 
 		net = "n"+str(i)
-		graphs1 = "/home/amaury/graphs/"+str(net)+"/graphs_with_ego/"
-		graphs2 = "/home/amaury/graphs/"+str(net)+"/graphs_without_ego/"
+		graphs1 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"
+		graphs2 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_without_ego/"
 
 		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
