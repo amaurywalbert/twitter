@@ -97,6 +97,7 @@ def plot_bars_full(output,data1,data2,metric):
 	y = np.array(dataset[1][0])								# recebe os valores para COM
 	z = np.array(dataset[2][0])								# recebe os valores para SEM
 
+	print x
 	print y
 	print z
 		
@@ -104,7 +105,7 @@ def plot_bars_full(output,data1,data2,metric):
 	width=0.35
 
 	p1=plt.bar(ind-0.1,y,width,color="blue", label='Grafo COM ego')
-	p2=plt.bar(ind,k,width,color="lightblue", label='Grafo SEM ego')
+	p2=plt.bar(ind,z,width,color="lightblue", label='Grafo SEM ego')
 	
 	plt.ylabel(metric)
 	plt.title("Avaliação das redes usando a métrica "+str(metric))
@@ -124,7 +125,7 @@ def plot_bars_full(output,data1,data2,metric):
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
 
 	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], name="Grafo COM ego", marker=dict(color='blue'))
-	trace2 = go.Bar(x = dataset[1][1], y = dataset[3][0], name="Grafo SEM ego", marker=dict(color='lightblue'))
+	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], name="Grafo SEM ego", marker=dict(color='lightblue'))
 	
 	data = [trace1,trace2]																						## Invertido pra ficar mais facil a visualização no grafo
 

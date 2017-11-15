@@ -6,7 +6,7 @@ import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
 # Script auxiliar para cálculos matemáticos que deve estar no mesmo diretório deste aqui.
-import calc
+import plot_metrics
 # Script auxiliar para gerar histogramas
 import histogram
 import networkx as nx
@@ -40,13 +40,13 @@ def prepare(source_dir,output_dir):
 		if os.path.isfile(source_dir+net+"_net_struct.json"):
 			with open(source_dir+net+"_net_struct.json", 'r') as f:
 				overview = json.load(f)
-				nodes[net] = {overview['Nodes']['media']}
-				edges[net] = {overview['Edges']['media']}
-				diameter[net] = {overview['Diameter']['media']}
-				closecentr[net] = {overview['CloseCentr']['media']}
-				bet_centr_nodes[net] = {overview['BetweennessCentrNodes']['media']}
-				bet_centr_edges[net] = {overview['BetweennessCentrEdges']['media']}
-				modularity[net] = {overview['Modularity']['media']}
+				nodes[net] = overview['Nodes']['media']
+				edges[net] = overview['Edges']['media']
+				diameter[net] = overview['Diameter']['media']
+				closecentr[net] = overview['CloseCentr']['media']
+				bet_centr_nodes[net] = overview['BetweennessCentrNodes']['media']
+				bet_centr_edges[net] = overview['BetweennessCentrEdges']['media']
+				modularity[net] = overview['Modularity']['media']
 
 	data = {}
 	data['Nodes'] = nodes
@@ -86,17 +86,11 @@ def main():
 	
 	data2 = prepare(source_dir2,output_dir2)
 	
-	for k,v in data1.iteritems():
-		for x,y in data1[k].iteritems():
-			print k, x, data1[k][x] 
 			
-	for k,v in data2.iteritems():
-		for x,y in data2[k].iteritems():
-			print k, x, data2[k][x]
-			
-#	if data1 is not None and data2 is not None:
-#		alg = 'net_struct'
-#		plot_metrics.plot_full(output,data1,data2,metric)		
+	if data1 is not None and data2 is not None:
+		for k,v in data1.iteritems():		
+			metric = k
+			plot_metrics.plot_bars_full(output,data1[k],data2[k],metric)		
 				
 ######################################################################
 ######################################################################		

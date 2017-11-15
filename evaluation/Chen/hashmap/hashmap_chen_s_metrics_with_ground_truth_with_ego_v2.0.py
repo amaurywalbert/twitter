@@ -152,7 +152,7 @@ def calculate_alg(communities,output,singletons,net,ground_truth,g_type):
 
 					else:	
 						try:
-							execute = subprocess.Popen(["mpirun","-np","4","/home/amaury/algoritmos/Metricas/ParallelComMetric-master/src/mpimetric","1",str(ground_truth)+str(file),str(communities)+str(threshold)+"/"+str(file)], stdout=subprocess.PIPE)
+							execute = subprocess.Popen(["mpirun","-np","1","/home/amaury/algoritmos/Metricas/ParallelComMetric-master/src/mpimetric","1",str(ground_truth)+str(file),str(communities)+str(threshold)+"/"+str(file)], stdout=subprocess.PIPE)
 							value = execute.communicate()[0]
 							b = value.split('\n')							
 							t = b[0].split('\t')
