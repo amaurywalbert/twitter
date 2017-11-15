@@ -155,8 +155,8 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 						
 			elif k == 'n5':
 				key = 'co-follow'
-#				co_interaction.append(key)
-#				co_value.append(round(v[metric], 3))			
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))			
 			elif k == 'n6':
 				key = 'co-retweets'
 				co_interaction.append(key)
@@ -171,8 +171,8 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 				co_value.append(round(v[metric], 3))			
 			elif k == 'n10':
 				key = 'co-followers'
-#				co_interaction.append(key)
-#				co_value.append(round(v[metric], 3))
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
 			
 			else:
 				print ("Valor incorreto para nome da rede-ego")
