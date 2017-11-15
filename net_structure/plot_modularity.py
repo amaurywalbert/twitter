@@ -19,9 +19,10 @@ sys.setdefaultencoding('utf-8')
 # Plota Gráficos dos dados...
 #
 ######################################################################################################################################################################
-def plot_single(output,data_overview,metric,alg,title):
+def plot_bars_single(output,data_overview,metric,alg,title):
 	print ("\n##################################################\n")
-	print ("Gerando Gráficos Individuais...")
+	print ("Gerando Gráficos Individuais - Algoritmo: "+str(alg)+" - Métrica: "+str(metric))
+
 	interaction = []
 	value = []
 	co_interaction = []
@@ -100,7 +101,7 @@ def plot_single(output,data_overview,metric,alg,title):
 	plt.ylabel(metric)
 	plt.legend(_chartBars, data[2])
 
-	output = output+alg+"/"
+	output = output+alg+"/bars_single/"
 	if not os.path.exists(output):
 		os.makedirs(output)
 	
@@ -112,9 +113,9 @@ def plot_single(output,data_overview,metric,alg,title):
 # Plota Gráficos dos dados...
 #
 ######################################################################################################################################################################
-def plot_full(output,data1,data2,data3,data4,metric,alg):
+def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	print ("\n##################################################\n")
-	print ("Gerando Gráfico Completo...")
+	print ("Gerando Gráfico Completo - Algoritmo: "+str(alg)+" - Métrica: "+str(metric))
 
 	data_overview_full = [data1,data2,data3,data4]
 	dataset = {}
@@ -194,6 +195,11 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	k = np.array(dataset[3][0])								# recebe os valores para SEM ego e comunidades COM singletons
 	w = np.array(dataset[4][0])								# recebe os valores para SEM ego e comunidades SEM singletons
 
+	print y
+	print z
+	print k
+	print w
+		
 	ind=np.arange(n)
 	width=0.35
 
@@ -208,6 +214,12 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	plt.xticks(ind+width/2,(x))
 	plt.legend(loc='best')	
 	plt.tight_layout()
+
+	output = output+alg+"/bars_full/"
+
+	if not os.path.exists(output):
+		os.makedirs(output)
+		
 	plt.show()	
 #	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 	plt.close()
@@ -223,9 +235,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	layout = go.Layout(xaxis=dict(tickangle=-45),barmode='group',)
 	fig = go.Figure(data=data, layout=layout)
 
-	output = output+alg+"/"
-	if not os.path.exists(output):
-		os.makedirs(output)
 		
 	plotly.offline.plot(fig, filename=output+str(metric)+".html",auto_open=False)
+
 	

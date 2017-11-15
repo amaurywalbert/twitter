@@ -7,7 +7,7 @@ import numpy as np
 from math import*
 # Script auxiliar para cálculos matemáticos que deve estar no mesmo diretório deste aqui.
 import calc
-import plot_modularity
+import plot_metrics
 reload(sys)
 sys.setdefaultencoding('utf-8')
 

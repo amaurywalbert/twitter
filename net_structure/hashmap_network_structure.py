@@ -158,7 +158,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 
 
-#Average Degree
+#Average Degree - Olhar no oslom pq parece que já tem....
 #Average clustering coefficient	0.5653
 #Number of triangles	13082506
 #Fraction of closed triangles	0.06415
@@ -197,7 +197,7 @@ def main():
 	print"  9 - Follwowers"
 	print"  2 - Retweets"
 	print"  3 - Likes"
-	print"  3 - Mentions"
+	print"  4 - Mentions"
 	
 	print " "
 	print"  5 - Co-Follow"
@@ -228,22 +228,22 @@ def main():
 
 ######################################################################		
 ######################################################################
-	dataset_dir = "/home/amaury/graphs/"+str(net)+"/graphs_with_ego/"								############### Arquivo contendo arquivos com a lista de arestas das redes-ego
+	dataset_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"								############### Arquivo contendo arquivos com a lista de arestas das redes-ego
 
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/net_structure/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
 ######################################################################		
 ######################################################################
-	dataset_dir2 = "/home/amaury/graphs/"+str(net)+"/graphs_without_ego/"						############### Arquivo contendo arquivos com a lista de arestas das redes-ego
+	dataset_dir2 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_without_ego/"						############### Arquivo contendo arquivos com a lista de arestas das redes-ego
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/net_structure/graphs_without_ego/"
+		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_without_ego/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		net_structure(dataset_dir2,output_dir2,net,isdir,weight)												# Inicia os cálculos...	
