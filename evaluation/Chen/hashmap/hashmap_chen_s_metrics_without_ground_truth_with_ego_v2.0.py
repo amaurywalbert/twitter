@@ -253,11 +253,11 @@ def main():
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
 		if i == 1 or i == 9:
-			uw=1											# Rede não ponderada - weighted
+			uw=1											# Rede não ponderada - unweighted
 		else:
 			uw=0
 		if i in (5,6,7,8,10):
-			ud=1											# Rede não direcionada - directed
+			ud=1											# Rede não direcionada - undirected
 		else:
 			ud=0	 
 		net = "n"+str(i)
