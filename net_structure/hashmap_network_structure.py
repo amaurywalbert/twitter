@@ -46,75 +46,71 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 		for file in os.listdir(dataset_dir):
 			i+=1 
-			print (str(output_dir)+str(net)+"/"+str(file)+" - Calculando propriedades para o ego %d..." % (i))
+			print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)"+: "+str(file))
 			if IsDir is True:
 				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			else:
 				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+
+			if G is not None:
 #####################################################################################		
 
-			n.append(G.GetNodes())																		# Numero de vertices
-			e.append(G.GetEdges())																		# Numero de arestas
-			n_nodes = G.GetNodes()	
-			n_edges = G.GetEdges()
+				n.append(G.GetNodes())																		# Numero de vertices
+				e.append(G.GetEdges())																		# Numero de arestas
+				n_nodes = G.GetNodes()	
+				n_edges = G.GetEdges()
 #####################################################################################
 
-			d.append(snap.GetBfsFullDiam(G, 100, IsDir))											# get diameter of G
+				d.append(snap.GetBfsFullDiam(G, 100, IsDir))											# get diameter of G
 		
 #####################################################################################
 
-			_cc = []	
-			Normalized = True
-			for NI in G.Nodes():
-				_cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
-			result = calc.calcular(_cc)
-			cc.append(result['media'])
+				_cc = []	
+				Normalized = True
+				for NI in G.Nodes():
+					_cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
+				result = calc.calcular(_cc)
+				cc.append(result['media'])
 		
 #####################################################################################
 
-#####################################################################################
-
-#			cf.append(snap.GetClustCf(G,5))																# clustering coefficient of G											
-
-#####################################################################################
-
-			Nodes = snap.TIntFltH()
-			Edges = snap.TIntPrFltH()
-			snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
-			_bc_n = []
-			_bc_e = []
-			for node in Nodes:
-				_bc_n.append(Nodes[node])
-			for edge in Edges:
-				_bc_e.append(Edges[edge])
-			result = calc.calcular(_bc_n)
-			bc_n.append(result['media'])
-			result = calc.calcular(_bc_e)
-			bc_e.append(result['media'])	
+				Nodes = snap.TIntFltH()
+				Edges = snap.TIntPrFltH()
+				snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
+				_bc_n = []
+				_bc_e = []
+				for node in Nodes:
+					_bc_n.append(Nodes[node])
+				for edge in Edges:
+					_bc_e.append(Edges[edge])
+				result = calc.calcular(_bc_n)
+				bc_n.append(result['media'])
+				result = calc.calcular(_bc_e)
+				bc_e.append(result['media'])	
 
 #####################################################################################
 		
-			DegToCntV = snap.TIntPrV()
-			snap.GetDegCnt(G, DegToCntV)																#Grau de cada nó em cada rede-ego
-			for item in DegToCntV:
-				k = item.GetVal1()
-				v = item.GetVal2()
-				if degree.has_key(k):
-					degree[k] = degree[k]+v 
+				DegToCntV = snap.TIntPrV()
+				snap.GetDegCnt(G, DegToCntV)																#Grau de cada nó em cada rede-ego
+				for item in DegToCntV:
+					k = item.GetVal1()
+					v = item.GetVal2()
+					if degree.has_key(k):
+						degree[k] = degree[k]+v 
+					else:
+						degree[k] = v
+
+#####################################################################################
+		
+				Nodes = snap.TIntV()				
+				if weight:
+					G_nx=nx.read_weighted_edgelist(dataset_dir+file)
 				else:
-					degree[k] = v
-
-#####################################################################################
-		
-			Nodes = snap.TIntV()				
-			if weight:
-				G_nx=nx.read_weighted_edgelist(dataset_dir+file)
-			else:
-				G_nx=nx.read_edgelist(dataset_dir+file)
+					G_nx=nx.read_edgelist(dataset_dir+file)
 			
-			for NI in G_nx.nodes_iter():
-				Nodes.Add(long(NI))
-			m.append(snap.GetModularity(G, Nodes, n_edges))									#Passar o número de arestas do grafo como parâmetro para agilizar o processo				
+				for NI in G_nx.nodes_iter():
+					Nodes.Add(long(NI))
+				m.append(snap.GetModularity(G, Nodes, n_edges))									#Passar o número de arestas do grafo como parâmetro para agilizar o processo				
 #####################################################################################
 
 		N = calc.calcular_full(n)

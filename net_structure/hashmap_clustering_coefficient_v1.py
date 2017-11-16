@@ -41,28 +41,31 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		for file in os.listdir(dataset_dir):
 
 			i+=1 
-			print (str(output_dir)+str(net)+"/"+str(file)+" - Calculando propriedades para o ego %d..." % (i))
+			print (str(output_dir)+str(net)+"/"+str(file)+" - Calculando propriedades para o ego "+str(i)"+: "+str(file))
 			if IsDir is True:
 				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			else:
 				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+			
+			if G is not None:
+
 #####################################################################################		
 
-			n.append(G.GetNodes())																		# Numero de vertices
-			e.append(G.GetEdges())																		# Numero de arestas
-			n_nodes = G.GetNodes()	
-			n_edges = G.GetEdges()
+				n.append(G.GetNodes())																		# Numero de vertices
+				e.append(G.GetEdges())																		# Numero de arestas
+				n_nodes = G.GetNodes()	
+				n_edges = G.GetEdges()
 		
 #####################################################################################
 
-			NIdCCfH = snap.TIntFltH()
-			snap.GetNodeClustCf(G, NIdCCfH)
-			_cf = []
-			for item in NIdCCfH:
-				print item, NIdCCfH[item]
-				_cf.append(NIdCCfH[item])																# Clusterinf Coefficient
-			result = calc.calcular(_cf)
-			cf.append(result['media'])
+				NIdCCfH = snap.TIntFltH()
+				snap.GetNodeClustCf(G, NIdCCfH)
+				_cf = []
+				for item in NIdCCfH:
+					print item, NIdCCfH[item]
+					_cf.append(NIdCCfH[item])																# Clusterinf Coefficient
+				result = calc.calcular(_cf)
+				cf.append(result['media'])
 #####################################################################################
 	
 		CF = calc.calcular_full(cf)

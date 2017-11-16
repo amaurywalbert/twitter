@@ -62,29 +62,31 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 						
 						try:
 							G = snap.LoadEdgeList(snap.PNGraph, str(graphs_dir)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-							n_edges = G.GetEdges()																										# Número de arestas do grafo
+							
+							if G is not None:							
+								n_edges = G.GetEdges()																										# Número de arestas do grafo
 
-							try:
-								with open(dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file), 'r') as f:
-									for line in f:
-										comm = []																					#Lista para armazenar as comunidades			
-										a = line.split(' ')
-										for item in a:
-											if item != "\n":
-												comm.append(item)
-										communities.append(comm)						
-							except Exception as e:
-								print ("\nERRO - Impossível carregar as comunidades: "+dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)+"\n")
-								print e
+								try:
+									with open(dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file), 'r') as f:
+										for line in f:
+											comm = []																					#Lista para armazenar as comunidades			
+											a = line.split(' ')
+											for item in a:
+												if item != "\n":
+													comm.append(item)
+											communities.append(comm)						
+								except Exception as e:
+									print ("\nERRO - Impossível carregar as comunidades: "+dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)+"\n")
+									print e
 				
 						
-							for comm in communities:
-								if comm is not None:
-									Nodes = snap.TIntV()
-									for nodeId in comm:
-										if nodeId is not None:						
-											Nodes.Add(long(nodeId))			
-									m_file.append(snap.GetModularity(G, Nodes, n_edges))						#Passar o número de arestas do grafo como parâmetro para agilizar o processo
+								for comm in communities:
+									if comm is not None:
+										Nodes = snap.TIntV()
+										for nodeId in comm:
+											if nodeId is not None:						
+												Nodes.Add(long(nodeId))			
+										m_file.append(snap.GetModularity(G, Nodes, n_edges))						#Passar o número de arestas do grafo como parâmetro para agilizar o processo
 
 						except Exception as e:
 							print ("\nERRO - Impossível carregar o grafo para o ego: "+str(ego_id)+"  --  "+str(graphs_dir)+str(ego_id)+".edge_list\n")
@@ -95,7 +97,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 						if _m_file is not None:
 							modularity.append(_m_file['media'])
 	
-							print (str(graph_type)+" - Rede "+str(net)+"/"+str(file)+" - Modularidade para o ego %d: %5.3f" % (i,_m_file['media']))
+							print (str(graph_type)+" - Rede "+str(net)+" - Modularidade para o ego "+str(i)+" ("+str(file)+"): %5.3f" % (_m_file['media']))
 							print("######################################################################")	
 		
 					M = calc.calcular_full(modularity)
