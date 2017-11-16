@@ -50,13 +50,14 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			else:
 				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-
+			
 #####################################################################################		
 
 			n.append(G.GetNodes())																		# Numero de vertices
 			e.append(G.GetEdges())																		# Numero de arestas
 			n_nodes = G.GetNodes()	
 			n_edges = G.GetEdges()
+	
 #####################################################################################
 			if n_edges == 0:
 				a = 0

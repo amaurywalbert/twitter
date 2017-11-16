@@ -55,7 +55,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			n_edges = G.GetEdges()
 		
 #####################################################################################
-			if n_edges = 0:
+			if n_edges == 0:
 				a = 0
 				cf.append(a)
 			else:	
@@ -63,7 +63,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				snap.GetNodeClustCf(G, NIdCCfH)
 				_cf = []
 				for item in NIdCCfH:
-					print item, NIdCCfH[item]
 					_cf.append(NIdCCfH[item])																# Clusterinf Coefficient
 				result = calc.calcular(_cf)
 				cf.append(result['media'])
