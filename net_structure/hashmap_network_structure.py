@@ -45,7 +45,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 		for file in os.listdir(dataset_dir):
 			i+=1 
-			print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)"+: "+str(file))
+			print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))
 			if IsDir is True:
 				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			else:
