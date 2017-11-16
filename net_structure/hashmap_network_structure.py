@@ -115,9 +115,14 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			
 				for NI in G_nx.nodes_iter():
 					Nodes.Add(long(NI))
-				m.append(snap.GetModularity(G, Nodes, n_edges))									#Passar o número de arestas do grafo como parâmetro para agilizar o processo				
+				m.append(snap.GetModularity(G, Nodes, n_edges))									#Passar o número de arestas do grafo como parâmetro para agilizar o processo
 #####################################################################################
 
+			print	n[i-1], e[i-1], d[i-1], cc[i-1], bc_n[i-1], bc_e[i-1], m[i-1]
+			print 
+#####################################################################################		
+		
+		
 		N = calc.calcular_full(n)
 		E = calc.calcular_full(e)
 	

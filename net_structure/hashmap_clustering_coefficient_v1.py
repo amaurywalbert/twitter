@@ -67,6 +67,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 					_cf.append(NIdCCfH[item])																# Clusterinf Coefficient
 				result = calc.calcular(_cf)
 				cf.append(result['media'])
+			print ("Clustering Coef para o ego "+str(i)+" ("+str(file)+"): "+str(result['media']))
+			print  				
 #####################################################################################
 	
 		CF = calc.calcular_full(cf)
