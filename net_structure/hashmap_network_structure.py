@@ -36,7 +36,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		e = []																										# Média das arestas por rede-ego	
 		d = []																										# Média dos diametros por rede-ego
 		cc = []																										# Média dos Close Centrality																				
-		cf = []																										# Média dos coeficientes de clusterings por rede-ego
 		bc_n = []																									# média de betweenness centrality dos nós	
 		bc_e = []																									# média de betweenness centrality das arestas
 		m = []																										# média das modularidades
@@ -52,15 +51,21 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			else:
 				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 
-			if G is not None:
 #####################################################################################		
 
-				n.append(G.GetNodes())																		# Numero de vertices
-				e.append(G.GetEdges())																		# Numero de arestas
-				n_nodes = G.GetNodes()	
-				n_edges = G.GetEdges()
+			n.append(G.GetNodes())																		# Numero de vertices
+			e.append(G.GetEdges())																		# Numero de arestas
+			n_nodes = G.GetNodes()	
+			n_edges = G.GetEdges()
 #####################################################################################
-
+			if G is None:
+				a = 0
+				d.append(a)
+				cc.append(a)
+				bc_n.append(a)
+				bc_e.append(a)	
+				m.append(a)
+			else:
 				d.append(snap.GetBfsFullDiam(G, 100, IsDir))											# get diameter of G
 		
 #####################################################################################
@@ -122,7 +127,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 		CC = calc.calcular_full(cc)
 	
-#		CF = calc.calcular_full(cf)
 	
 		BC_N = calc.calcular_full(bc_n)
 		BC_E = calc.calcular_full(bc_e)
@@ -134,7 +138,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		overview['Edges'] = E
 		overview['Diameter'] = D
 		overview['CloseCentr'] = CC
-#		overview['ClusteringCoefficient'] = CF
 		overview['BetweennessCentrNodes'] = BC_N
 		overview['BetweennessCentrEdges'] = BC_E
 		overview['Modularity'] = M
@@ -149,7 +152,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			f.write ("Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (E['media'],E['variancia'],E['desvio_padrao']))
 			f.write ("Diameter: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (D['media'],D['variancia'],D['desvio_padrao']))
 			f.write ("CloseCentr: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
-#			f.write ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
 			f.write ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
 			f.write ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
 			f.write ("Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (M['media'],M['variancia'],M['desvio_padrao']))
