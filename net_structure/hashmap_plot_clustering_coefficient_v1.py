@@ -14,50 +14,29 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para plotar  propriedades estruturais das redes-ego
+##		Status - Versão 1 - Script para gerar coeficiente de clustering de cada rede e a média de todas as redes por ego
 ## 
-##												ERRRO DE ALOCAÇÃO DE MEMÓRIA!!!!!
 ######################################################################################################################################################################
-
 
 ######################################################################################################################################################################
 #
-# Armazenar as propriedades do dataset
+# Carregar os dados as propriedades do dataset
 #
 ######################################################################################################################################################################
 def prepare(source_dir):
 	print("\n######################################################################\n")
-	
-	nodes = {}
-	edges = {}
-	diameter = {}
-	closecentr = {}
-	bet_centr_nodes = {}
-	bet_centr_edges = {}
-	modularity = {}
+
+	cc = {}
 	for i in range(1,11):
 		net="n"+str(i)
-		if os.path.isfile(source_dir+net+"_net_struct.json"):
-			with open(source_dir+net+"_net_struct.json", 'r') as f:
+		if os.path.isfile(source_dir+net+"_clustering_coef.json"):
+			with open(source_dir+net+"_clustering_coef.json", 'r') as f:
 				overview = json.load(f)
-				nodes[net] = overview['Nodes']['media']
-				edges[net] = overview['Edges']['media']
-				diameter[net] = overview['Diameter']['media']
-				closecentr[net] = overview['CloseCentr']['media']
-				bet_centr_nodes[net] = overview['BetweennessCentrNodes']['media']
-				bet_centr_edges[net] = overview['BetweennessCentrEdges']['media']
-				modularity[net] = overview['Modularity']['media']
-
+				cc[net] = overview['ClusteringCoefficient']['media']
 	data = {}
-	data['Nodes'] = nodes
-	data['Edges'] = edges
-	data['Diameter'] = diameter
-	data['Close Centrality'] = closecentr
-	data['Betweenness Centrality Nodes'] = bet_centr_nodes
-	data['Betweenness Centrality Edges'] = bet_centr_edges
-	data['Modularity'] = modularity
+	data['Clustering Coefficient'] = cc
 	return data
-
+print("\n######################################################################\n")
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -66,7 +45,6 @@ def prepare(source_dir):
 #
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-
 def main():
 	os.system('clear')
 	print "################################################################################"
@@ -76,11 +54,11 @@ def main():
 	print"#################################################################################"
 	print
 	
-	source_dir1 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_with_ego/"
+	source_dir1 = "/home/amaury/Dropbox/clustering_coefficient_hashmap/graphs_with_ego/"
 	
 	data1 = prepare(source_dir1)
 	
-	source_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_without_ego/"
+	source_dir2 = "/home/amaury/Dropbox/clustering_coefficient_hashmap/graphs_without_ego/"
 	
 	data2 = prepare(source_dir2)
 	
@@ -103,8 +81,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-source = "/home/amaury/Dropbox/net_structure_hashmap/"
-output = "/home/amaury/Dropbox/net_statistics_hashmap/"
+output = "/home/amaury/Dropbox/clustering_coefficient_statistics_hashmap/"
 
 #Executa o método main
 if __name__ == "__main__": main()

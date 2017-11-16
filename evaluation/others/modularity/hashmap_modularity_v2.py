@@ -7,7 +7,7 @@ import numpy as np
 from math import*
 # Script auxiliar para cálculos matemáticos que deve estar no mesmo diretório deste aqui.
 import calc
-import plot_metrics
+import plot_modularity
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -36,7 +36,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 		net = "n"+str(_net)
 		
 		modularity_plot[net] = {'threshold':' ',metric:float(0)}
-		graphs_dir = "/home/amaury/graphs/"+str(net)+"/"+str(graph_type)+"/"
+		graphs_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(graph_type)+"/"
 		
 		if not os.path.exists(graphs_dir):
 			print ("Diretório não encontrado: "+str(graphs_dir))
@@ -57,42 +57,46 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 						ego_id = file.split(".txt")
 						ego_id = long(ego_id[0])
 						communities = []																													# Armazenar as comunidades da rede-ego
+						m_file = []																					# vetor de modularidade das comunidades do ego i
+						
 						
 						try:
 							G = snap.LoadEdgeList(snap.PNGraph, str(graphs_dir)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 							n_edges = G.GetEdges()																										# Número de arestas do grafo
-						except IOError:
+
+							try:
+								with open(dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file), 'r') as f:
+									for line in f:
+										comm = []																					#Lista para armazenar as comunidades			
+										a = line.split(' ')
+										for item in a:
+											if item != "\n":
+												comm.append(item)
+										communities.append(comm)						
+							except Exception as e:
+								print ("\nERRO - Impossível carregar as comunidades: "+dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)+"\n")
+								print e
+				
+						
+							for comm in communities:
+								if comm is not None:
+									Nodes = snap.TIntV()
+									for nodeId in comm:
+										if nodeId is not None:						
+											Nodes.Add(long(nodeId))			
+									m_file.append(snap.GetModularity(G, Nodes, n_edges))						#Passar o número de arestas do grafo como parâmetro para agilizar o processo
+
+						except Exception as e:
 							print ("\nERRO - Impossível carregar o grafo para o ego: "+str(ego_id)+"  --  "+str(graphs_dir)+str(ego_id)+".edge_list\n")
 				
 
-						try:
-							with open(dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file), 'r') as f:
-								for line in f:
-									comm = []																					#Lista para armazenar as comunidades			
-									a = line.split(' ')
-									for item in a:
-										if item != "\n":
-											comm.append(item)
-									communities.append(comm)						
-						except Exception as e:
-							print ("\nERRO - Impossível carregar as comunidades: "+dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)+"\n")
-							print e
-				
-						m_file = []																					# vetor de modularidade das comunidades do ego i
-						for comm in communities:
-							if comm is not None:
-								Nodes = snap.TIntV()
-								for nodeId in comm:
-									if nodeId is not None:						
-										Nodes.Add(long(nodeId))			
-								m_file.append(snap.GetModularity(G, Nodes, n_edges))						#Passar o número de arestas do grafo como parâmetro para agilizar o processo
-
 
 						_m_file = calc.calcular(m_file)
-						modularity.append(_m_file['media'])
+						if _m_file is not None:
+							modularity.append(_m_file['media'])
 	
-						print (str(graph_type)+" - Rede "+str(net)+" - Modularidade para o ego %d: %5.3f" % (i,_m_file['media']))
-						print("######################################################################")	
+							print (str(graph_type)+" - Rede "+str(net)+" - Modularidade para o ego %d: %5.3f" % (i,_m_file['media']))
+							print("######################################################################")	
 		
 					M = calc.calcular_full(modularity)
 					overview = {'threshold': threshold, 'modularity':M}
@@ -102,9 +106,10 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 					with open(str(output_dir)+str(net)+"_overview.json", 'a+') as f:
 						f.write(json.dumps(overview)+"\n")		
 			
-				print("\n######################################################################\n")	
-				print ("Rede: %s   ---   Threshold: %s   ---   Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (net,threshold,M['media'],M['variancia'],M['desvio_padrao']))
-				print("\n######################################################################\n")
+				if M is not None:			
+					print("\n######################################################################\n")	
+					print ("Rede: %s   ---   Threshold: %s   ---   Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (net,threshold,M['media'],M['variancia'],M['desvio_padrao']))
+					print("\n######################################################################\n")
 
 
 	return modularity_plot
@@ -148,67 +153,67 @@ def main():
 ######################################################################		
 ######################################################################
 	graph_type = "graphs_with_ego"
-	dataset_dir1 = "/home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/full/"	############### Arquivo contendo arquivos contendo as comunidades
+	dataset_dir1 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/"	############### Arquivo contendo arquivos contendo as comunidades
 	
 	if not os.path.isdir(dataset_dir1):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir1))
 	else:
-		output_dir1 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/full/"
+		output_dir1 = "/home/amaury/Dropbox/modularity_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/"
 		if not os.path.exists(output_dir1):
 			os.makedirs(output_dir1)
 
-		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/full/")
+		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/")
 		data1 = net_structure(dataset_dir1,output_dir1,graph_type,metric)														# Inicia os cálculos...
-		plot_metrics.plot_single(output_dir1,data1,metric,alg,title=str(graph_type)+" - Communities with singletons")				
+		plot_modularity.plot_bars_single(output_dir1,data1,metric,alg,title=str(graph_type)+" - Communities with singletons")				
 ######################################################################				
 ######################################################################
 	graph_type = "graphs_with_ego"	
-	dataset_dir2 = "/home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
+	dataset_dir2 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
 	
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+		output_dir2 = "/home/amaury/Dropbox/modularity_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
-		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
+		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
 		data2 = net_structure(dataset_dir2,output_dir2,graph_type,metric)														# Inicia os cálculos...
-		plot_metrics.plot_single(output_dir2,data2,metric,alg,title=str(graph_type)+" - Communities without singletons")			
+		plot_modularity.plot_bars_single(output_dir2,data2,metric,alg,title=str(graph_type)+" - Communities without singletons")			
 
 
 ######################################################################
 ######################################################################
 	graph_type = "graphs_without_ego"
-	dataset_dir3 = "/home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/full/"	############### Arquivo contendo arquivos contendo as comunidades
+	dataset_dir3 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/"	############### Arquivo contendo arquivos contendo as comunidades
 	
 	if not os.path.isdir(dataset_dir3):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir3))
 	else:
-		output_dir3 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/full/"
+		output_dir3 = "/home/amaury/Dropbox/modularity_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/"
 		if not os.path.exists(output_dir3):
 			os.makedirs(output_dir3)
-		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/full/")
+		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/")
 		data3 = net_structure(dataset_dir3,output_dir3,graph_type,metric)													# Inicia os cálculos...
-		plot_metrics.plot_single(output_dir3,data3,metric,alg,title=str(graph_type)+" - Communities with singletons")	
+		plot_modularity.plot_bars_single(output_dir3,data3,metric,alg,title=str(graph_type)+" - Communities with singletons")	
 ######################################################################		
 ######################################################################
 	graph_type = "graphs_without_ego"
-	dataset_dir4 = "/home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
+	dataset_dir4 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
 
 	if not os.path.isdir(dataset_dir4):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir4))
 	else:
-		output_dir4 = "/home/amaury/Dropbox/modularity/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+		output_dir4 = "/home/amaury/Dropbox/modularity_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
 		if not os.path.exists(output_dir4):
 			os.makedirs(output_dir4)
-		print ("\nCalcular modularidade... /home/amaury/communities/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
+		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
 		data4 = net_structure(dataset_dir4,output_dir4,graph_type,metric)													# Inicia os cálculos...
-		plot_metrics.plot_single(output_dir4,data4,metric,alg,title=str(graph_type)+" - Communities without singletons")		
+		plot_modularity.plot_bars_single(output_dir4,data4,metric,alg,title=str(graph_type)+" - Communities without singletons")		
 ######################################################################
 ######################################################################		
 	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-		output = "/home/amaury/Dropbox/modularity/"+str(alg)+"/"
-		plot_metrics.plot_full(output,data1,data2,data3,data4,metric,alg)		
+		output = "/home/amaury/Dropbox/modularity_hashmap/"+str(alg)+"/"
+		plot_modularity.plot_bars_full(output,data1,data2,data3,data4,metric,alg)		
 ######################################################################
 ######################################################################	
 	
