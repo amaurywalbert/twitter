@@ -27,8 +27,8 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	print("\n######################################################################\n")
-	if os.path.isfile(str(output_dir)+str(net)+"_net_struct.json"):
-		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_net_struct.json")
+	if os.path.isfile(str(output_dir)+str(net)+"_clustering_coef.json"):
+		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_clustering_coef.json")
 	else:
 
 		print ("Dataset network structure - " +str(dataset_dir))

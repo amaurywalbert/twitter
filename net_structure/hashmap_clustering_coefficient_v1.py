@@ -27,57 +27,62 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	print("\n######################################################################\n")
-	print ("Dataset clustering coefficient - " +str(dataset_dir))
+	if os.path.isfile(str(output_dir)+str(net)+"_clustering_coef.json"):
+		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_clustering_coef.json")
+	else:
+
+		print ("Dataset clustering coefficient - " +str(dataset_dir))
 											
-	cf = []																										# Média dos coeficientes de clusterings por rede-ego
-	n = []																										# vetor com número de vértices para cada rede-ego																									
-	e = []																										# vetor com número de arestas para cada rede-ego
-	i = 0
+		cf = []																										# Média dos coeficientes de clusterings por rede-ego
+		n = []																										# vetor com número de vértices para cada rede-ego																									
+		e = []																										# vetor com número de arestas para cada rede-ego
+		i = 0
 
+		for file in os.listdir(dataset_dir):
 
-	for file in os.listdir(dataset_dir):
-		i+=1 
-		print ("Calculando propriedades para o ego %d..." % (i))
-		if IsDir is True:
-			G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-		else:
-			G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+			i+=1 
+			print ("Calculando propriedades para o ego %d..." % (i))
+			if IsDir is True:
+				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+			else:
+				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 #####################################################################################		
 
-		n.append(G.GetNodes())																		# Numero de vertices
-		e.append(G.GetEdges())																		# Numero de arestas
-		n_nodes = G.GetNodes()	
-		n_edges = G.GetEdges()
+			n.append(G.GetNodes())																		# Numero de vertices
+			e.append(G.GetEdges())																		# Numero de arestas
+			n_nodes = G.GetNodes()	
+			n_edges = G.GetEdges()
 		
 #####################################################################################
 
-		NIdCCfH = snap.TIntFltH()
-		snap.GetNodeClustCf(G, NIdCCfH)
-		print ("OK. Estou aqui...")
-		_cf = []
-		for item in NIdCCfH:
-			print item, NIdCCfH[item]
-			_cf.append(NIdCCfH[item])																# Clusterinf Coefficient
-		result = calc.calcular(_cf)
-		cf.append(result['media'])
+			NIdCCfH = snap.TIntFltH()
+			snap.GetNodeClustCf(G, NIdCCfH)
+			_cf = []
+			for item in NIdCCfH:
+				print item, NIdCCfH[item]
+				_cf.append(NIdCCfH[item])																# Clusterinf Coefficient
+			result = calc.calcular(_cf)
+			cf.append(result['media'])
 #####################################################################################
 	
-	CF = calc.calcular_full(cf)
+		CF = calc.calcular_full(cf)
 	
-	overview = {}
-	overview['ClusteringCoefficient'] = CF
-	
-	with open(str(output_dir)+str(net)+"_clustering_coef.json", 'w') as f:
-		f.write(json.dumps(overview))
-	
-	with open(str(output_dir)+str(net)+"_net_struct.txt", 'w') as f:
-		f.write("\n######################################################################\n")	
-		f.write ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
-		f.write("\n######################################################################\n")
+		overview = {}
+		overview['ClusteringCoefficient'] = CF
 
-	print ("\n######################################################################\n")	
-	print ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
-	print ("\n######################################################################\n")
+
+		
+		with open(str(output_dir)+str(net)+"_clustering_coef.json", 'w') as f:
+			f.write(json.dumps(overview))
+	
+		with open(str(output_dir)+str(net)+"_clustering_coef.txt", 'w') as f:
+			f.write("\n######################################################################\n")	
+			f.write ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
+			f.write("\n######################################################################\n")
+
+		print ("\n######################################################################\n")	
+		print ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
+		print ("\n######################################################################\n")
 
 print("\n######################################################################\n")
 
