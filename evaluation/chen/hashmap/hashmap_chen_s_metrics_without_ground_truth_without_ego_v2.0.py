@@ -11,14 +11,14 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Calcular métricas usando o software desenvolvido por Chen: - Usando arquivos de entrada convertidos pelo HASHMAP
 ##					Versão 2 - Salva os dados no arquivo a cada threshold e não a cada rede como na versão anterior.
-##
+## 
 ##			SALVA ARQUIVOS NOS DIRETÒRIOS:
 ##				RAW: conforme calculado - 
 ##				SEPARATE BY METRICS
 ## 
 ##	Mingming Chen, Sisi Liu, and Boleslaw Szymanski, “Parallel Toolkit for Measuring the Quality of Network Community Structure”, 
 ##		The First European Network Intelligence Conference (ENIC), Wroclaw, Poland, September, 2014, pp. 22-29.
-##								
+## 							
 ## # INPUT: Arquivos com as comunidades detectadas, rede e o ground truth
 ## 
 ## # OUTPUT:
@@ -43,58 +43,43 @@ def prepare_data(data_dir,output_dir):
 		print ("\n\n\nDIRETÓRIO NÃO ENCONTRADO: "+str(data_dir)+"\n\n\n")
 		
 	else:	
-		if not os.path.isdir(output_dir):
-			os.makedirs(output_dir)			
+		if os.path.isdir(output_dir):
+			shutil.rmtree(output_dir)			
 			
-		for file in os.listdir(data_dir):
-			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
-			network = network[0]
-	
-			print ("\n##################################################")
-			print ("Separando por métrica - Recuperando dados da rede "+str(network)+" - "+str(data_dir)+"\n")	
-	
-	
-			with open(data_dir+file, 'r') as f:
-				partial = {}
-				for line in f:
-					comm_data = json.loads(line)
-					for k, v in comm_data.iteritems():											# Preparação para ler o arquivo JSON que tem o Formato  {"threshold": {metric": [values ---- {"5": {"VI": [0.542,...], "NMI": [0,214,0,36...],...}}
-						threshold = k
-						for _k,_v in v.iteritems():
+		for net in os.listdir(data_dir):
+			if os.path.isdir(data_dir+net):
+				print ("\n##################################################")
+				print ("Separando por métrica - Recuperando dados da rede "+str(net)+" - "+str(data_dir)+"\n")
+			
+				for file in os.listdir(data_dir+net):	
+					threshold = file.split(".json")											# pegar o nome do arquivo que indica o a rede analisada
+					threshold = threshold[0]
+				
+					with open(data_dir+net+"/"+file, 'r') as f:
+						data = json.load(f)
+						for k, v in data.iteritems():											# Preparação para ler o arquivo JSON que tem o Formato  {metric": [values ---- {"VI": [0.542,...], "NMI": [0,214,0,36...],...}
 							dictionary = {}
-							values = _v
-							metric = _k
+							values = v
+							metric = k
 
 							dictionary[threshold] = values
-							print ("Salvando dados em: "+str(output_dir)+str(metric)+"/"+str(network)+".json")
-
+							print ("Salvando dados em: "+str(output_dir)+str(metric)+"/"+str(net)+".json")
+	
 							if not os.path.isdir(output_dir+str(metric)+"/"):
 								os.makedirs(output_dir+str(metric)+"/")			
-							
-							with open(output_dir+str(metric)+"/"+str(network)+".json", "a") as f:
+								
+							with open(output_dir+str(metric)+"/"+str(net)+".json", "a+") as f:
 								f.write(json.dumps(dictionary, separators=(',', ':'))+"\n")
 
 	print ("##################################################")	
 
 ######################################################################################################################################################################
 #
-# Realiza as configurações necessárias para os dados do METRICA
+# Realiza as configurações necessárias para separar os dados por métrica METRICA
 #
 ######################################################################################################################################################################
-def instructions(alg):
-################################################################################################
-	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/full/"
-	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/full/"
+def instructions(alg):																												
 
-	prepare_data(data_dir,output_dir)
-
-################################################################################################
-	data_dir = str(source)+"graphs_with_ego/"+alg+"/raw/without_singletons/"
-	output_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/without_singletons/"
-
-	prepare_data(data_dir,output_dir)
-
-################################################################################################
 	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/full/"
 	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
 
@@ -103,18 +88,17 @@ def instructions(alg):
 ################################################################################################
 	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/without_singletons/"
 	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
-
-	prepare_data(data_dir,output_dir)
 	
+	prepare_data(data_dir,output_dir)	
+
 ######################################################################################################################################################################
 #
 # Cálculos iniciais sobre o conjunto de dados lidos.
 #
 ######################################################################################################################################################################
-def calculate_alg(communities,output,singletons,net,ground_truth,g_type):
+def calculate_alg(communities,output,singletons,net,graphs,uw,ud,g_type):
 	
 	communities = communities+singletons+"/"+net+"/"
-	ground_truth = ground_truth+singletons+"/"
 	output = output+singletons+"/"+net+"/"
 	if not os.path.exists(output):
 		os.makedirs(output)
@@ -135,67 +119,62 @@ def calculate_alg(communities,output,singletons,net,ground_truth,g_type):
 				print ("Arquivo de destino já existe: "+str(output)+str(threshold)+".json")
 			else:	
 				print("######################################################################")
-				_result = {}					
-				VI = []
-				NMI = []
-				F_measure = []
-				NVD = []
-				RI = []
-				ARI = []
-				JI = []																				# Armazenar os indices de cada ego e salvar depois em uma linha para cada threshold do arquivo result.json
-				for file in os.listdir(str(communities)+str(threshold)+"/"):
+				result = {}					
+				modularity = []
+				modularity_density = []
+				intra_edges = []
+				intra_density = []
+				contraction = []
+				inter_edges = []
+				expansion = []
+				conductance = []
 
+				for file in os.listdir(str(communities)+str(threshold)+"/"):
+					ego_id = file.split(".txt")
+					ego_id = long(ego_id[0])
 					i+=1
 
-					if not os.path.isfile(str(ground_truth)+str(file)):
-						print ("ERROR - EGO: "+str(i)+" - Arquivo de ground truth não encontrado:" +(str(ground_truth)+str(file)))
+					if not os.path.isfile(str(graphs)+str(ego_id)+".edge_list"):
+						print ("ERROR - EGO: "+str(i)+" - Arquivo com lista de arestas não encontrado:" +str(graphs)+str(ego_id)+".edge_list")
 
 					else:	
 						try:
-							execute = subprocess.Popen(["mpirun","-np","4","/home/amaury/algoritmos/Metricas/ParallelComMetric-master/src/mpimetric","1",str(ground_truth)+str(file),str(communities)+str(threshold)+"/"+str(file)], stdout=subprocess.PIPE)
+							execute = subprocess.Popen(["/home/amaury/algoritmos/Metricas/ParallelComMetric-master/src/pthreadmetric","4","0",str(communities)+str(threshold)+"/"+str(file),str(graphs)+str(ego_id)+".edge_list",str(uw),str(ud)], stdout=subprocess.PIPE)
+							
 							value = execute.communicate()[0]
 							b = value.split('\n')							
 							t = b[0].split('\t')
 							a = b[1].split('\t')
 
-							vi = float(a[1])
-							nmi = float(a[2])
-							f_measure = float(a[3])
-							nvd = float(a[4])
-							ri = float(a[5])
-							ari = float(a[6])
-							ji = float(a[7])
-
 							print (str(g_type)+" - "+str(singletons)+" - Rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego("+str(i)+"): "+str(file)+" - "+str(a))
-
-							VI.append(vi)
-							NMI.append(nmi)
-							F_measure.append(f_measure)
-							NVD.append(nvd)
-							RI.append(ri)
-							ARI.append(ari)
-							JI.append(ji)																																				
+							
+							modularity.append(float(a[1]))
+							modularity_density.append(float(a[2]))
+							intra_edges.append(float(a[3]))
+							intra_density.append(float(a[4]))
+							contraction.append(float(a[5]))
+							inter_edges.append(float(a[6]))
+							expansion.append(float(a[7]))
+							conductance.append(float(a[8]))
 
 						except Exception as e:
 							print e
 
 				print("######################################################################")
-				_result['VI'] = VI
-				_result['NMI'] = NMI
-				_result['F_measure'] = F_measure
-				_result['NVD'] = NVD
-				_result['RI'] = RI
-				_result['ARI'] = ARI
-				_result['JI'] = JI					
+				result['modularity'] = modularity
+				result['modularity_density'] = modularity_density
+				result['intra_edges'] = intra_edges
+				result['intra_density'] = intra_density
+				result['contraction'] = contraction
+				result['inter_edges'] = inter_edges
+				result['expansion'] = expansion
+				result['conductance'] = conductance
 
-				result={}
-				result[threshold] = _result
 
 				with open(str(output)+str(threshold)+".json", 'w') as f:
 					f.write(json.dumps(result))
 
 	print("######################################################################")		
-
 
 ######################################################################################################################################################################
 #
@@ -251,28 +230,41 @@ def main():
 	time.sleep(5)
 	######################################################################################################################
 	#####Alterar as linhas para Dropbox quando executado em ambiente de produção
-	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT_hashmap/"
 	communities1 = "/home/amaury/communities_hashmap/graphs_with_ego/"+str(alg)+"/"
 	communities2 = "/home/amaury/communities_hashmap/graphs_without_ego/"+str(alg)+"/" 
-	output1 = "/home/amaury/Dropbox/Chen_software_results_hashmap/with_ground_truth/graphs_with_ego/"+str(alg)+"/raw/"
-	output2 = "/home/amaury/Dropbox/Chen_software_results_hashmap/with_ground_truth/graphs_without_ego/"+str(alg)+"/raw/"
+	output1 = "/home/amaury/Dropbox/Chen_software_results_hashmap/without_ground_truth/graphs_with_ego/"+str(alg)+"/raw/"
+	output2 = "/home/amaury/Dropbox/Chen_software_results_hashmap/without_ground_truth/graphs_without_ego/"+str(alg)+"/raw/"
 
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1
+		if i == 1 or i == 9:
+			uw=1											# Rede não ponderada - weighted
+		else:
+			uw=0
+		if i in (5,6,7,8,10):
+			ud=1											# Rede não direcionada - directed
+		else:
+			ud=0	 
 		net = "n"+str(i)
-		print
-		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
-		g_type = "graphs_with_ego"
-		calculate_alg(communities1,output1,singletons,net,ground_truth,g_type)
+		graphs1 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"
+		graphs2 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_without_ego/"
+
+#		print
+#		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
+#		g_type = "graphs_with_ego"	
+#		calculate_alg(communities1,output1,singletons,net,graphs1,uw,ud,g_type)
+
 		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-		g_type = "graphs_without_ego"
-		calculate_alg(communities2,output2,singletons,net,ground_truth,g_type)
+		g_type = "graphs_without_ego"	
+		calculate_alg(communities2,output2,singletons,net,graphs2,uw,ud,g_type)
+	
 	######################################################################################################################
 		
-	instructions(alg)									# Separar por métrica
+	instructions(alg)									# Separa por Métricas...
 
 	######################################################################################################################
+
 	print("######################################################################")
 	print
 	print("######################################################################")
@@ -285,8 +277,7 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-source = "/home/amaury/Dropbox/Chen_software_results_hashmap/with_ground_truth/"
-output = "/home/amaury/Dropbox/Chen_software_statistics_hashmap/with_ground_truth/"
-
+source = "/home/amaury/Dropbox/Chen_software_results_hashmap/without_ground_truth/"
+output = "/home/amaury/Dropbox/Chen_software_statistics_hashmap/without_ground_truth/"
 ######################################################################################################################
 if __name__ == "__main__": main()

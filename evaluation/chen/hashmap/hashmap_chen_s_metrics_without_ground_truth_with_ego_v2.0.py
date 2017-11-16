@@ -43,35 +43,32 @@ def prepare_data(data_dir,output_dir):
 		print ("\n\n\nDIRETÓRIO NÃO ENCONTRADO: "+str(data_dir)+"\n\n\n")
 		
 	else:	
-		if not os.path.isdir(output_dir):
-			os.makedirs(output_dir)			
+		if os.path.isdir(output_dir):
+			shutil.rmtree(output_dir)			
 			
-		for file in os.listdir(data_dir):
-			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
-			network = network[0]
-	
-			print ("\n##################################################")
-			print ("Separando por métrica - Recuperando dados da rede "+str(network)+" - "+str(data_dir)+"\n")	
-	
-	
-			with open(data_dir+file, 'r') as f:
-				partial = {}
-				for line in f:
-					comm_data = json.loads(line)
-					for k, v in comm_data.iteritems():											# Preparação para ler o arquivo JSON que tem o Formato  {"threshold": {metric": [values ---- {"5": {"VI": [0.542,...], "NMI": [0,214,0,36...],...}}
-						threshold = k
-						for _k,_v in v.iteritems():
+		for net in os.listdir(data_dir):
+			if os.path.isdir(data_dir+net):
+				print ("\n##################################################")
+				print ("Separando por métrica - Recuperando dados da rede "+str(net)+" - "+str(data_dir)+"\n")
+			
+				for file in os.listdir(data_dir+net):	
+					threshold = file.split(".json")											# pegar o nome do arquivo que indica o a rede analisada
+					threshold = threshold[0]
+				
+					with open(data_dir+net+"/"+file, 'r') as f:
+						data = json.load(f)
+						for k, v in data.iteritems():											# Preparação para ler o arquivo JSON que tem o Formato  {metric": [values ---- {"VI": [0.542,...], "NMI": [0,214,0,36...],...}
 							dictionary = {}
-							values = _v
-							metric = _k
+							values = v
+							metric = k
 
 							dictionary[threshold] = values
-							print ("Salvando dados em: "+str(output_dir)+str(metric)+"/"+str(network)+".json")
-
+							print ("Salvando dados em: "+str(output_dir)+str(metric)+"/"+str(net)+".json")
+	
 							if not os.path.isdir(output_dir+str(metric)+"/"):
 								os.makedirs(output_dir+str(metric)+"/")			
-							
-							with open(output_dir+str(metric)+"/"+str(network)+".json", "a") as f:
+								
+							with open(output_dir+str(metric)+"/"+str(net)+".json", "a+") as f:
 								f.write(json.dumps(dictionary, separators=(',', ':'))+"\n")
 
 	print ("##################################################")	
@@ -94,18 +91,7 @@ def instructions(alg):
 
 	prepare_data(data_dir,output_dir)
 
-################################################################################################
-#	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/full/"
-#	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
-#
-#	prepare_data(data_dir,output_dir)
-#
-################################################################################################
-#	data_dir = str(source)+"graphs_without_ego/"+alg+"/raw/without_singletons/"
-#	output_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
-#	
-#	prepare_data(data_dir,output_dir)	
-#
+
 ######################################################################################################################################################################
 #
 # Cálculos iniciais sobre o conjunto de dados lidos.
@@ -154,7 +140,7 @@ def calculate_alg(communities,output,singletons,net,graphs,uw,ud,g_type):
 
 					else:	
 						try:
-							execute = subprocess.Popen(["mpirun","-np","2","/home/amaury/algoritmos/Metricas/ParallelComMetric-master/src/mpimetric","0",str(communities)+str(threshold)+"/"+str(file),str(graphs)+str(ego_id)+".edge_list",str(uw),str(ud)], stdout=subprocess.PIPE)
+							execute = subprocess.Popen(["/home/amaury/algoritmos/Metricas/ParallelComMetric-master/src/pthreadmetric","4","0",str(communities)+str(threshold)+"/"+str(file),str(graphs)+str(ego_id)+".edge_list",str(uw),str(ud)], stdout=subprocess.PIPE)
 							
 							value = execute.communicate()[0]
 							b = value.split('\n')							
