@@ -55,7 +55,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			n_edges = G.GetEdges()
 		
 #####################################################################################
-			if n_edges = 0:
+			if n_edges == 0:
 				a = 0
 				cf.append(a)
 			else:	

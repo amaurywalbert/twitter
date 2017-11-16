@@ -64,7 +64,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 							G = snap.LoadEdgeList(snap.PNGraph, str(graphs_dir)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 							n_edges = G.GetEdges()																										# Número de arestas do grafo
 							
-							if n_edges = 0:
+							if n_edges == 0:
 								a = 0							
 								m_file.append(a)
 							else:
