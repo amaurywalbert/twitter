@@ -95,7 +95,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric):
 						if _m_file is not None:
 							modularity.append(_m_file['media'])
 	
-							print (str(graph_type)+" - Rede "+str(net)+" - Modularidade para o ego %d: %5.3f" % (i,_m_file['media']))
+							print (str(graph_type)+" - Rede "+str(net)+"/"+str(file)+" - Modularidade para o ego %d: %5.3f" % (i,_m_file['media']))
 							print("######################################################################")	
 		
 					M = calc.calcular_full(modularity)

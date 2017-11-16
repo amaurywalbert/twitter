@@ -25,96 +25,94 @@ sys.setdefaultencoding('utf-8')
 def net_structure(dataset_dir,output_dir,graph_type,metric):
 	os.system('clear')	
 	if os.path.isfile(str(output_dir)+"overview.json"):
-		print ("Arquivo de destino já existe: "+str(output_dir)+"overview.json")
-	else:	
+		os.remove(str(output_dir)+"overview.json")	
 		
-		print("\n######################################################################\n")
-		print("\nScript para cálculo da modularidade das comunidades detectadas\n")
-			
-		modularity_plot = {}																	# Armazenar o nome da rede e o maior valor do da modularidade - Formato {{'N1':0.012},...}
-		for network in range(10):
-			_net = network+1
-			net = "n"+str(_net)
-			
-			modularity_plot[net] = {'threshold':' ',metric:float(0)}
-			graphs_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(graph_type)+"/"
-			
-			if not os.path.exists(graphs_dir):
-				print ("Diretório não encontrado: "+str(graphs_dir))
+	print("\n######################################################################\n")
+	print("\nScript para cálculo da modularidade das comunidades detectadas\n")
 		
-			else:
-				print("\n######################################################################\n")
-				print("\nScript para cálculo da modularidade das comunidades detectadas - Rede "+str(net)+"\n")			
+	modularity_plot = {}																	# Armazenar o nome da rede e o maior valor do da modularidade - Formato {{'N1':0.012},...}
+	for network in range(10):
+		_net = network+1
+		net = "n"+str(_net)
+		
+		modularity_plot[net] = {'threshold':' ',metric:float(0)}
+		graphs_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(graph_type)+"/"
+		
+		if not os.path.exists(graphs_dir):
+			print ("Diretório não encontrado: "+str(graphs_dir))
+		
+		else:
+			print("\n######################################################################\n")
+			print("\nScript para cálculo da modularidade das comunidades detectadas - Rede "+str(net)+"\n")	
 
-				if not os.path.isdir(dataset_dir+str(net)+"/"):
-					print ("Diretório com avaliações da rede "+str(net)+" não encontrado: "+str(dataset_dir+str(net)+"/"))
-				else:	
-					for threshold in os.listdir(dataset_dir+str(net)+"/"):
-						modularity = []																										# Vetor com a Média das modularidades de cada grafo	
-						i = 0
+			if not os.path.isdir(dataset_dir+str(net)+"/"):
+				print ("Diretório com avaliações da rede "+str(net)+" não encontrado: "+str(dataset_dir+str(net)+"/"))
+			else:	
+				for threshold in os.listdir(dataset_dir+str(net)+"/"):
+					modularity = []																										# Vetor com a Média das modularidades de cada grafo	
+					i = 0
 			
-						for file in os.listdir(dataset_dir+str(net)+"/"+str(threshold)+"/"):
-							i+=1
-							ego_id = file.split(".txt")
-							ego_id = long(ego_id[0])
-							communities = []																													# Armazenar as comunidades da rede-ego
-							m_file = []																					# vetor de modularidade das comunidades do ego i
+					for file in os.listdir(dataset_dir+str(net)+"/"+str(threshold)+"/"):
+						i+=1
+						ego_id = file.split(".txt")
+						ego_id = long(ego_id[0])
+						communities = []																													# Armazenar as comunidades da rede-ego
+						m_file = []																					# vetor de modularidade das comunidades do ego i
 						
 						
+						try:
+							G = snap.LoadEdgeList(snap.PNGraph, str(graphs_dir)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+							n_edges = G.GetEdges()																										# Número de arestas do grafo
+
 							try:
-								G = snap.LoadEdgeList(snap.PNGraph, str(graphs_dir)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-								n_edges = G.GetEdges()																										# Número de arestas do grafo
-
-								try:
-									with open(dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file), 'r') as f:
-										for line in f:
-											comm = []																					#Lista para armazenar as comunidades			
-											a = line.split(' ')
-											for item in a:
-												if item != "\n":
-													comm.append(item)
-											communities.append(comm)						
-								except Exception as e:
-									print ("\nERRO - Impossível carregar as comunidades: "+dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)+"\n")
-									print e
-				
-							
-								for comm in communities:
-									if comm is not None:
-										Nodes = snap.TIntV()
-										for nodeId in comm:
-											if nodeId is not None:						
-												Nodes.Add(long(nodeId))			
-										m_file.append(snap.GetModularity(G, Nodes, n_edges))						#Passar o número de arestas do grafo como parâmetro para agilizar o processo
-
+								with open(dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file), 'r') as f:
+									for line in f:
+										comm = []																					#Lista para armazenar as comunidades			
+										a = line.split(' ')
+										for item in a:
+											if item != "\n":
+												comm.append(item)
+										communities.append(comm)						
 							except Exception as e:
-								print ("\nERRO - Impossível carregar o grafo para o ego: "+str(ego_id)+"  --  "+str(graphs_dir)+str(ego_id)+".edge_list\n")
+								print ("\nERRO - Impossível carregar as comunidades: "+dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)+"\n")
+								print e
+				
+						
+							for comm in communities:
+								if comm is not None:
+									Nodes = snap.TIntV()
+									for nodeId in comm:
+										if nodeId is not None:						
+											Nodes.Add(long(nodeId))			
+									m_file.append(snap.GetModularity(G, Nodes, n_edges))						#Passar o número de arestas do grafo como parâmetro para agilizar o processo
+
+						except Exception as e:
+							print ("\nERRO - Impossível carregar o grafo para o ego: "+str(ego_id)+"  --  "+str(graphs_dir)+str(ego_id)+".edge_list\n")
 				
 
 
-							_m_file = calc.calcular(m_file)
-							if _m_file is not None:
-								modularity.append(_m_file['media'])
+						_m_file = calc.calcular(m_file)
+						if _m_file is not None:
+							modularity.append(_m_file['media'])
 	
-								print (str(graph_type)+" - Rede "+str(net)+" - Modularidade para o ego %d: %5.3f" % (i,_m_file['media']))
-								print("######################################################################")	
+							print (str(graph_type)+" - Rede "+str(net)+" - Modularidade para o ego %d: %5.3f" % (i,_m_file['media']))
+							print("######################################################################")	
 		
-						M = calc.calcular_full(modularity)
-						overview = {'threshold': threshold, 'modularity':M}
-						if M is not None:						
-							if	float(M['media']) > modularity_plot[net][metric]:
-								modularity_plot[net] = {'threshold': threshold, metric:float(M['media'])}
-						with open(str(output_dir)+str(net)+"_overview.json", 'a+') as f:
-							f.write(json.dumps(overview)+"\n")		
+					M = calc.calcular_full(modularity)
+					overview = {'threshold': threshold, 'modularity':M}
+					if M is not None:						
+						if	float(M['media']) > modularity_plot[net][metric]:
+							modularity_plot[net] = {'threshold': threshold, metric:float(M['media'])}
+					with open(str(output_dir)+str(net)+"_overview.json", 'a+') as f:
+						f.write(json.dumps(overview)+"\n")		
 			
-					if M is not None:			
-						print("\n######################################################################\n")	
-						print ("Rede: %s   ---   Threshold: %s   ---   Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (net,threshold,M['media'],M['variancia'],M['desvio_padrao']))
-						print("\n######################################################################\n")
+				if M is not None:			
+					print("\n######################################################################\n")	
+					print ("Rede: %s   ---   Threshold: %s   ---   Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (net,threshold,M['media'],M['variancia'],M['desvio_padrao']))
+					print("\n######################################################################\n")
 
-		return modularity_plot
-		
-		
+
+	return modularity_plot
 	print("\n######################################################################\n")
 
 ######################################################################################################################################################################
