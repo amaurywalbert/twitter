@@ -1,0 +1,120 @@
+# -*- coding: latin1 -*-
+################################################################################################
+#	
+#
+import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
+import numpy as np
+from math import*
+import plot_modularity
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+######################################################################################################################################################################
+##		Status - Versão 1 - Script para plotar a modularidade
+## 
+######################################################################################################################################################################
+def prepare(dataset):
+	if not os.path.isdir(dataset):
+		print ("Diretório com modularidades não encontrado: "+str(dataset))
+	else:	
+		modularity_plot = {}																	# Armazenar o nome da rede e o maior valor do da modularidade - Formato {{'N1':0.012},...}
+
+		for file in os.listdir(dataset):
+			net = file.split(".json")
+			net = net[0]
+			modularity_plot[net] = {'threshold':' ','modularity':float(0)}
+	
+			with open(dataset+file, 'r') as f:
+				for line in f:
+					data = json.loads(line)
+					threshold = data['threshold']
+					M = data['modularity']
+					if M is not None:						
+						if	float(M['media']) > modularity_plot[net]['modularity']:
+							modularity_plot[net] = {'threshold': threshold, 'modularity':float(M['media'])}
+ 
+		return modularity_plot
+
+######################################################################################################################################################################
+######################################################################################################################################################################
+#
+# Método principal do programa. 
+#
+######################################################################################################################################################################
+######################################################################################################################################################################
+
+def main():
+	os.system('clear')
+	print "################################################################################"
+	print"																											"
+	print" 					Impressão de Gráficos da Modularidade										"
+	print"																											"
+	print" Escolha o algoritmo usado na detecção das comunidades									"
+	print"																											"
+	print"#################################################################################"
+	print
+	print"  1 - Copra"
+	print"  2 - Oslom"		
+	print
+	op2 = int(raw_input("Escolha uma opção acima: "))
+
+	if op2 == 1:
+		alg = "copra"
+	elif op2 == 2:
+		alg = "oslom"
+	else:
+		print("Opção inválida! Saindo...")
+		sys.exit()		
+######################################################################
+	
+	metric = 'modularity'
+	data1 = {}
+	data2 = {}
+	data3 = {}
+	data4 = {}
+######################################################################		
+######################################################################
+
+	dataset1 = "/home/amaury/Dropbox/modularity_hashmap/graphs_with_ego/"+str(alg)+"/full/"
+	data1 = prepare(dataset1)
+	
+######################################################################				
+######################################################################
+
+	dataset2 = "/home/amaury/Dropbox/modularity_hashmap/graphs_with_ego/"+str(alg)+"/without_singletons/"
+	data2 = prepare(dataset2)
+
+######################################################################
+######################################################################
+
+	dataset3 = "/home/amaury/Dropbox/modularity_hashmap/graphs_without_ego/"+str(alg)+"/full/"
+	data3 = prepare(dataset3)
+
+######################################################################		
+######################################################################
+
+	dataset4 = "/home/amaury/Dropbox/modularity_hashmap/graphs_without_ego/"+str(alg)+"/without_singletons/"
+	data4 = prepare(dataset4)
+	
+######################################################################
+######################################################################		
+
+	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
+		output = "/home/amaury/Dropbox/modularity_hashmap_statistics/"
+		metric = 'modularity'
+		plot_modularity.plot_bars_full(output,data1,data2,data3,data4,metric,alg)		
+######################################################################
+######################################################################	
+	
+	print("\n######################################################################\n")
+	print("Script finalizado!")
+	print("\n######################################################################\n")
+
+######################################################################################################################################################################
+#
+# INÍCIO DO PROGRAMA
+#
+######################################################################################################################################################################
+
+#Executa o método main
+if __name__ == "__main__": main()

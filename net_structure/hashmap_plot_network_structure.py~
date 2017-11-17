@@ -104,7 +104,7 @@ def main():
 ######################################################################################################################################################################
 
 source = "/home/amaury/Dropbox/net_structure_hashmap/"
-output = "/home/amaury/Dropbox/net_statistics_hashmap/"
+output = "/home/amaury/Dropbox/net_structure_hashmap_statistics/"
 
 #Executa o método main
 if __name__ == "__main__": main()

@@ -81,7 +81,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-output = "/home/amaury/Dropbox/clustering_coefficient_statistics_hashmap/"
+output = "/home/amaury/Dropbox/clustering_coefficient_hashmap_statistics/"
 
 #Executa o método main
 if __name__ == "__main__": main()
