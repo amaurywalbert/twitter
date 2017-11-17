@@ -34,6 +34,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		print ("Dataset clustering coefficient - " +str(dataset_dir))
 											
 		cf = []																										# Média dos coeficientes de clusterings por rede-ego
+		gcf = []																										# Média usando opção global
 		n = []																										# vetor com número de vértices para cada rede-ego																									
 		e = []																										# vetor com número de arestas para cada rede-ego
 		i = 0
@@ -55,6 +56,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			n_edges = G.GetEdges()
 		
 #####################################################################################
+#Usando opção local - Retorna o mesmo resultado do global
 			if n_edges == 0:
 				a = 0
 				cf.append(a)
@@ -68,8 +70,20 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				cf.append(result['media'])
 			print ("Clustering Coef para o ego "+str(i)+" ("+str(file)+"): "+str(result['media']))
 			print  				
+
 #####################################################################################
-	
+#Usando opção global   - Retorna o mesmo resultado do local
+
+#			if n_edges == 0:
+#				a = 0
+#				gcf.append(a)
+#			else:	
+#				GraphClustCoeff = snap.GetClustCf (G)
+#				gcf.append(GraphClustCoeff)
+#			print "Clustering coefficient: %f" % GraphClustCoeff
+#			print 				
+
+#####################################################################################
 		CF = calc.calcular_full(cf)
 	
 		overview = {}
