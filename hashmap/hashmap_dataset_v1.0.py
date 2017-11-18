@@ -38,11 +38,10 @@ def add_hashmap_communities(i,hashmap,f):
 		alters = line.split(' ')
 		for alter in alters:
 			if alter != "\n":
+				if not hashmap.has_key(alter):
+					print "deu ruim... "+alter+" "+str(f)								
 				i+=1
 				hashmap[alter] = i
-
-				if not hashmap.has_key(alter):
-					print "deu ruim... "+alter+" "+str(f)				
 
 	return (i,hashmap)		
 ######################################################################################################################################################################
