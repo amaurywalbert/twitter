@@ -11,7 +11,6 @@ import plotly.plotly as py
 import plotly.graph_objs as go
 from plotly.graph_objs import *
 
-
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -115,7 +114,7 @@ def plot_bars_single(output,data_overview,metric,alg,title):
 
 	data = [trace1]
 	title_plot = title
-	layout = go.Layout(xaxis=dict(tickangle=-45),barmode='stack',)
+	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='stack')
 	fig = go.Figure(data=data, layout=layout)
 
 		
@@ -224,7 +223,7 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	p4=plt.bar(ind+0.2,w,width,color="lightgreen", label='Grafo SEM ego - Comunidade SEM singletons')
 
 	plt.ylabel(metric)
-	plt.title(title)
+	plt.title(str(title))
 	
 	plt.xticks(ind+width/2,(x))
 	plt.legend(loc='best')	
@@ -247,10 +246,9 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	
 	data = [trace1, trace3,trace2,trace4]																						## Invertido pra ficar mais facil a visualização no grafo
 	title_plot = title
-	layout = go.Layout(xaxis=dict(tickangle=-45),barmode='group',)
+	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
 	fig = go.Figure(data=data, layout=layout)
 
 		
 	plotly.offline.plot(fig, filename=output+str(metric)+".html",auto_open=False)
-
 	
