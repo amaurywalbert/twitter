@@ -30,7 +30,7 @@ def add_hashmap(i,hashmap,f):
 		for alter in alters:
 			if alter != "\n":
 				i+=1
-				hashmap[alter] = i
+				hashmap[alter] = i				
 	return (i,hashmap)
 
 def add_hashmap_communities(i,hashmap,f):		
@@ -38,10 +38,12 @@ def add_hashmap_communities(i,hashmap,f):
 		alters = line.split(' ')
 		for alter in alters:
 			if alter != "\n":
-				if not hashmap.has_key(alter):
-					print "deu ruim... "+alter+" "+str(f)
 				i+=1
 				hashmap[alter] = i
+
+#				if not hashmap.has_key(alter):
+#					print "deu ruim... "+alter+" "+str(f)				
+
 	return (i,hashmap)		
 ######################################################################################################################################################################
 #
@@ -53,12 +55,23 @@ def add_hashmap_communities(i,hashmap,f):
 def add_hashmap_egonet(i,hashmap,f):	
 	for line in f:
 		alters = line.split(' ')
+		
 		if alters[0] != "\n":
 			i+=1
 			hashmap[alters[0]] = i
+		else:
+			print 
+			print "deu ruim... alters 1 "
+			time.sleep(5)
+			print
 		if alters[1] != "\n":
 			i+=1	
 			hashmap[alters[1]] = i
+		else:
+			print 
+			print "deu ruim...alters 2 "
+			time.sleep(5)
+			print			
 	return (i,hashmap)	
 
 ######################################################################################################################################################################
