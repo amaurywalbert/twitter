@@ -54,8 +54,8 @@ def add_hashmap_communities(i,hashmap,f):
 ######################################################################################################################################################################
 def add_hashmap_egonet(i,hashmap,f):	
 	for line in f:
-		print line
 		alters = line.split(' ')
+		
 		if alters[0] != "\n":
 			i+=1
 			hashmap[alters[0]] = i
