@@ -47,6 +47,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			else:
 				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+			G.Dump()
+			time.sleep(5)
 
 #####################################################################################		
 
@@ -60,6 +62,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			if n_edges == 0:
 				a = 0
 				cf.append(a)
+				print ("Nenhuma aresta encontrada para a rede-ego "+str(i)+" - ("+str(file))				
 			else:	
 				NIdCCfH = snap.TIntFltH()
 				snap.GetNodeClustCf(G, NIdCCfH)
@@ -68,20 +71,20 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 					_cf.append(NIdCCfH[item])																# Clusterinf Coefficient
 				result = calc.calcular(_cf)
 				cf.append(result['media'])
-			print ("Clustering Coef para o ego "+str(i)+" ("+str(file)+"): "+str(result['media']))
-			print  				
+				print ("Clustering Coef para o ego "+str(i)+" ("+str(file)+"): "+str(result['media']))
+				print  				
 
 #####################################################################################
 #Usando opção global   - Retorna o mesmo resultado do local
-
+#
 #			if n_edges == 0:
 #				a = 0
 #				gcf.append(a)
 #			else:	
 #				GraphClustCoeff = snap.GetClustCf (G)
 #				gcf.append(GraphClustCoeff)
-#			print "Clustering coefficient: %f" % GraphClustCoeff
-#			print 				
+#				print "Clustering coefficient: %f" % GraphClustCoeff
+#				print 				
 
 #####################################################################################
 		CF = calc.calcular_full(cf)
