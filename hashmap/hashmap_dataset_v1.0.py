@@ -30,6 +30,7 @@ def add_hashmap(i,hashmap,f):
 		for alter in alters:
 			if alter != "\n":
 				i+=1
+				alter = long(alter)
 				hashmap[alter] = i				
 	return (i,hashmap)
 
@@ -38,9 +39,10 @@ def add_hashmap_communities(i,hashmap,f):
 		alters = line.split(' ')
 		for alter in alters:
 			if alter != "\n":
-				if not hashmap.has_key(alter):
-					print "deu ruim... "+alter+" "+str(f)								
 				i+=1
+				alter = long(alter)
+				if not hashmap.has_key(alter):
+					print "deu ruim... "+alter+" "+str(f)												
 				hashmap[alter] = i
 
 	return (i,hashmap)		
@@ -54,23 +56,16 @@ def add_hashmap_communities(i,hashmap,f):
 def add_hashmap_egonet(i,hashmap,f):	
 	for line in f:
 		alters = line.split(' ')
-		
 		if alters[0] != "\n":
 			i+=1
-			hashmap[alters[0]] = i
-		else:
-			print 
-			print "deu ruim... alters 1 "
-			time.sleep(5)
-			print
+			alter0 = long(alters[0])
+			hashmap[alter0] = i
+
 		if alters[1] != "\n":
-			i+=1	
-			hashmap[alters[1]] = i
-		else:
-			print 
-			print "deu ruim...alters 2 "
-			time.sleep(5)
-			print			
+			i+=1
+			alter1 = long(alters[1])
+			hashmap[alter1] = i
+
 	return (i,hashmap)	
 
 ######################################################################################################################################################################
@@ -85,6 +80,7 @@ def save_hashmap(i,hashmap,f,g,test):
 		alters = line.split(' ')
 		for alter in alters:
 			if alter != "\n":
+				alter = long(alter)
 				g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
 				test.append(alter)
 		g.write("\n")
@@ -99,12 +95,12 @@ def save_hashmap(i,hashmap,f,g,test):
 def save_hashmap_egonet(i,hashmap,f,g,test):
 	for line in f:
 		alters = line.split(' ')			
-		alters[0] = alters[0]
-		alters[1] = alters[1]
+		alter0 = long(alters[0])
+		alter1 = long(alters[1])
 		if len(alters) > 2:
-			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]])+" "+str(alters[2])) 	# Já tem a quebra (\n) no último elemento alters[2]
+			g.write(str(hashmap[alter0])+" "+str(hashmap[alter1])+" "+str(alters[2])) 	# Já tem a quebra (\n) no último elemento alters[2]
 		else:
-			g.write(str(hashmap[alters[0]])+" "+str(hashmap[alters[1]])+"\n")
+			g.write(str(hashmap[alter0])+" "+str(hashmap[alter1])+"\n")
 
 ######################################################################################################################################################################
 #
@@ -121,7 +117,7 @@ def main():
 	print"																											"
 	print"#################################################################################"	
 	j = 0
-	for file in os.listdir(ground_truth_source+str("full/")):				# Iniciar o ego
+	for file in os.listdir(ground_truth_source+"full/"):				# Iniciar o ego
 		j+=1
 		ego = file.split(".txt")
 		ego = ego[0]
