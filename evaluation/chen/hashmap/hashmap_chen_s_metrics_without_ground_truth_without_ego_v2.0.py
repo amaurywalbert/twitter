@@ -249,11 +249,6 @@ def main():
 		graphs1 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"
 		graphs2 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_without_ego/"
 
-#		print
-#		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
-#		g_type = "graphs_with_ego"	
-#		calculate_alg(communities1,output1,singletons,net,graphs1,uw,ud,g_type)
-
 		print
 		print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
 		g_type = "graphs_without_ego"	

@@ -57,10 +57,13 @@ def algorithm(data_source,output_dir,metric):
 						for item in v:
 							if not math.isnan(item):
 								if item != float("inf") and item != float("-inf"): 											# exclui calculo de da METRICA que retorna valor NaN e Infinity
-									values.append(item)				
-
+									values.append(item)
+						print 						
+						print metric
+						print values
+						print
+													
 						result = calc.calcular_full(values)									# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
-
 						if result is not None:	
 														
 							if	float(result['media']) > data_overview[network][metric]:
@@ -86,6 +89,11 @@ def algorithm(data_source,output_dir,metric):
 ######################################################################################################################################################################
 def instructions(alg):
 ################################################################################################
+################################################################################################
+
+	output_graphics_single = output+"/graphics/bars_single/"
+
+################################################################################################
 
 	source_dir = str(source)+"graphs_with_ego/"+alg+"/by_metrics/full/"
 	output_dir = str(output)+"graphs_with_ego/"+alg+"/by_metrics/full/"
@@ -97,6 +105,12 @@ def instructions(alg):
 			data_source = source_dir+metric+"/"												# Diretório com os resultados de cada métrica
 			data_overview = algorithm(data_source,output_dir,metric)	
 			data_print1[metric] = data_overview
+	
+	for k, v in data_print1.iteritems():
+		if data_print1[k] is not None:
+			print data_print1[k]
+			title = "Avaliação das redes usando a métrica "+str(k)+" e algoritmo "+str(alg)+"\nREDE COM EGO - COMUNIDADES COM SINGLETONS"	
+			plot_statistics_chen.plot_bars_single(output_graphics_single,data_print1[k],k,alg,title)		
 
 ################################################################################################
 
@@ -110,6 +124,11 @@ def instructions(alg):
 			data_source = source_dir+metric+"/"												# Diretório com os resultados de cada métrica
 			data_overview = algorithm(data_source,output_dir,metric)	
 			data_print2[metric] = data_overview
+	
+	for k, v in data_print2.iteritems():
+		if data_print2[k] is not None:
+			title = "Avaliação das redes usando a métrica "+str(k)+" e algoritmo "+str(alg)+"\nREDE COM EGO - COMUNIDADES SEM SINGLETONS"	
+			plot_statistics_chen.plot_bars_single(output_graphics_single,data_print2[k],k,alg,title)			
 ################################################################################################
 
 	source_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/full/"
@@ -122,6 +141,11 @@ def instructions(alg):
 			data_source = source_dir+metric+"/"												# Diretório com os resultados de cada métrica
 			data_overview = algorithm(data_source,output_dir,metric)	
 			data_print3[metric] = data_overview
+
+	for k, v in data_print3.iteritems():
+		if data_print3[k] is not None:
+			title = "Avaliação das redes usando a métrica "+str(k)+" e algoritmo "+str(alg)+"\nREDE SEM EGO - COMUNIDADES COM SINGLETONS"	
+			plot_statistics_chen.plot_bars_single(output_graphics_single,data_print3[k],k,alg,title)			
 ################################################################################################
 
 	source_dir = str(source)+"graphs_without_ego/"+alg+"/by_metrics/without_singletons/"
@@ -134,13 +158,19 @@ def instructions(alg):
 			data_source = source_dir+metric+"/"												# Diretório com os resultados de cada métrica
 			data_overview = algorithm(data_source,output_dir,metric)	
 			data_print4[metric] = data_overview
+	
+	for k, v in data_print4.iteritems():
+		if data_print4[k] is not None:
+			title = "Avaliação das redes usando a métrica "+str(k)+" e algoritmo "+str(alg)+"\nREDE SEM EGO - COMUNIDADES SEM SINGLETONS"	
+			plot_statistics_chen.plot_bars_single(output_graphics_single,data_print4[k],k,alg,title)			
 ################################################################################################
-# Salvando Gráficos
-	output_graphics = output+"/graphics/"
+# Salvando Gráficos Completos
 
-	for k, v in data_print1.iteritems():
+	if data_print1 is not None and data_print2 is not None and data_print3 is not None and data_print4 is not None:
+		output_graphics_full = output+"/graphics/bars_full/"
+		for k, v in data_print1.iteritems():
 		
-		plot_statistics_chen.plot_bars_full(output_graphics,data_print1[k],data_print2[k],data_print3[k],data_print4[k],k,alg)		
+			plot_statistics_chen.plot_bars_full(output_graphics_full,data_print1[k],data_print2[k],data_print3[k],data_print4[k],k,alg)		
 		
 ######################################################################################################################################################################
 #
@@ -189,8 +219,8 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-source = "/home/amaury/Dropbox/Chen_software_results_hashmap/with_ground_truth/"
-output = "/home/amaury/Dropbox/Chen_software_statistics_hashmap/with_ground_truth/"
+source = "/home/amaury/Dropbox/Chen_software_results_hashmap/without_ground_truth/"
+output = "/home/amaury/Dropbox/Chen_software_hashmap_statistics/without_ground_truth/"
 ######################################################################################################################
 
 if __name__ == "__main__": main()

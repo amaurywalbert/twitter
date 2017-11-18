@@ -23,7 +23,6 @@ sys.setdefaultencoding('utf-8')
 def plot_bars_single(output,data_overview,metric,alg,title):
 	print ("\n##################################################\n")
 	print ("Gerando Gráficos Individuais - Algoritmo: "+str(alg)+" - Métrica: "+str(metric))
-	name = str(alg)+"_"+str(metric)
 
 	interaction = []
 	value = []
