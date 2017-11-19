@@ -34,18 +34,6 @@ def add_hashmap(i,hashmap,f):
 				hashmap[alter] = i				
 	return (i,hashmap)
 
-def add_hashmap_communities(i,hashmap,f):		
-	for line in f:
-		alters = line.split(' ')
-		for alter in alters:
-			if alter != "\n":
-				i+=1
-				alter = long(alter)
-				if not hashmap.has_key(alter):
-					print "deu ruim... "+alter+" "+str(f)												
-				hashmap[alter] = i
-
-	return (i,hashmap)		
 ######################################################################################################################################################################
 #
 # ADD egonet ao hashmap 
@@ -81,10 +69,26 @@ def save_hashmap(i,hashmap,f,g,test):
 		for alter in alters:
 			if alter != "\n":
 				alter = long(alter)
+				
 				g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
 				test.append(alter)
 		g.write("\n")
 
+def save_hashmap_communities(i,hashmap,f,g,test):
+	for line in f:
+		alters = line.split(' ')
+		for alter in alters:
+			if alter != "\n":
+				alter = long(alter)
+
+				if not hashmap.has_key(alter):
+					print "deu ruim... "+str(alter)+" "+str(f)	
+					
+				g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
+				test.append(alter)
+		g.write("\n")		
+	return (i,hashmap)
+	
 ######################################################################################################################################################################
 #
 # SAVE egonet - hashmap 
@@ -221,7 +225,7 @@ def main():
 																	os.makedirs(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/")
 
 																with open(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file, 'w') as g:
-																	save_hashmap(i,hashmap,f,g,test)																
+																	save_hashmap_communities(i,hashmap,f,g,test)																
 #######################################################################################################################		
 
 		print ("Convertendo arquivos do ego "+str(j)+": "+str(ego)) 						
