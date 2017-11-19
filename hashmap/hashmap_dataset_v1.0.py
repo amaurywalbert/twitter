@@ -73,7 +73,7 @@ def save_hashmap(i,hashmap,f,g):
 				g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
 		g.write("\n")
 
-def save_hashmap_communities(i,hashmap,f,g):
+def save_hashmap_communities(i,hashmap,f,g,ego):
 	for line in f:
 		alters = line.split(' ')
 		for alter in alters:
@@ -83,8 +83,8 @@ def save_hashmap_communities(i,hashmap,f,g):
 				if not hashmap.has_key(alter):
 					error = "deu ruim... "+str(alter)+" "+str(f)
 					print error
-					with open(error_file, 'a+') as f:
-						f.write(error+"\n")
+					with open(error_dir+ego+".txt", "a+") as err_file:
+						err_file.write(error+"\n")
 				else:
 					g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
 		
@@ -225,7 +225,7 @@ def main():
 																	os.makedirs(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/")
 
 																with open(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file, 'w') as g:
-																	save_hashmap_communities(i,hashmap,f,g)																
+																	save_hashmap_communities(i,hashmap,f,g,ego)																
 #######################################################################################################################		
 
 		print ("Convertendo arquivos do ego "+str(j)+": "+str(ego)) 						
@@ -252,7 +252,7 @@ egonet_output = "/home/amaury/graphs_hashmap/"
 communities_source = "/home/amaury/communities/"
 communities_output = "/home/amaury/communities_hashmap/"
 
-error_file = "/home/amaury/hashmap.errors"
+error_dir = "/home/amaury/hashmap_errors/"
 
 print ("Atenção! Este script apagará os seguintes diretórios:")
 print ground_truth_output
@@ -266,6 +266,12 @@ if op != 's' and op != 'sim':
 	sys.exit()
 
 else:
+	if os.path.exists(error_dir):
+		shutil.rmtree(error_dir)
+		os.makedirs(error_dir)
+	else:
+		os.makedirs(error_dir)
+		
 	if os.path.exists(ground_truth_output):
 		shutil.rmtree(ground_truth_output)
 	if os.path.exists(egonet_output):
