@@ -63,7 +63,7 @@ def add_hashmap_egonet(i,hashmap,f):
 #		Percorre o arquivo e verifica o valor vinculado a ele consultando o HashMAP. Escreve o novo valor no mesmo formato do arquivo de entrada.
 #
 ######################################################################################################################################################################
-def save_hashmap(i,hashmap,f,g,test):
+def save_hashmap(i,hashmap,f,g):
 	for line in f:
 		alters = line.split(' ')
 		for alter in alters:
@@ -71,10 +71,9 @@ def save_hashmap(i,hashmap,f,g,test):
 				alter = long(alter)
 				
 				g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
-				test.append(alter)
 		g.write("\n")
 
-def save_hashmap_communities(i,hashmap,f,g,test):
+def save_hashmap_communities(i,hashmap,f,g):
 	for line in f:
 		alters = line.split(' ')
 		for alter in alters:
@@ -82,10 +81,13 @@ def save_hashmap_communities(i,hashmap,f,g,test):
 				alter = long(alter)
 
 				if not hashmap.has_key(alter):
-					print "deu ruim... "+str(alter)+" "+str(f)	
-					
-				g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
-				test.append(alter)
+					error = "deu ruim... "+str(alter)+" "+str(f)
+					print error
+					with open(error_file, 'a+') as f:
+						f.write(error+"\n")
+				else:
+					g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
+		
 		g.write("\n")		
 	return (i,hashmap)
 	
@@ -96,7 +98,7 @@ def save_hashmap_communities(i,hashmap,f,g,test):
 ##		Percorre o arquivo e verifica o valor vinculado a ele consultando o HashMAP. Escreve o novo valor no mesmo formato do arquivo de entrada, mantendo o valor do peso da aresta inalterado, caso houver.
 #
 ######################################################################################################################################################################
-def save_hashmap_egonet(i,hashmap,f,g,test):
+def save_hashmap_egonet(i,hashmap,f,g):
 	for line in f:
 		alters = line.split(' ')			
 		alter0 = long(alters[0])
@@ -173,8 +175,6 @@ def main():
 #######################################################################################################################								
 ####################################################### SALVAR DADOS CONVERTIDOS
 #######################################################################################################################
-		test = []				
-#######################################################################################################################
 ################################################################### GROUND TRUTH
 		for net_type in os.listdir(ground_truth_source):
 			if net_type in("full","without_singletons"):
@@ -186,7 +186,7 @@ def main():
 							os.makedirs(ground_truth_output+net_type+"/")
 
 						with open(ground_truth_output+net_type+"/"+file, 'w') as g:
-							save_hashmap(i,hashmap,f,g,test)
+							save_hashmap(i,hashmap,f,g)
 
 
 ################################################################### EGONETS
@@ -202,7 +202,7 @@ def main():
 									os.makedirs(egonet_output+net+"/"+diretorio+"/")
 
 								with open(egonet_output+net+"/"+diretorio+"/"+str(ego)+".edge_list", 'w') as g:		# SOURCE - Para arquivos no diretório ego/net/nx/graphs_with_ego/													
-									save_hashmap_egonet(i,hashmap,f,g,test)
+									save_hashmap_egonet(i,hashmap,f,g)
 
 
 ################################################################### COMMUNITIES
@@ -225,7 +225,7 @@ def main():
 																	os.makedirs(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/")
 
 																with open(communities_output+diretorio+"/"+alg+"/"+net_type+"/"+net+"/"+threshold+"/"+file, 'w') as g:
-																	save_hashmap_communities(i,hashmap,f,g,test)																
+																	save_hashmap_communities(i,hashmap,f,g)																
 #######################################################################################################################		
 
 		print ("Convertendo arquivos do ego "+str(j)+": "+str(ego)) 						
@@ -251,6 +251,8 @@ egonet_output = "/home/amaury/graphs_hashmap/"
 
 communities_source = "/home/amaury/communities/"
 communities_output = "/home/amaury/communities_hashmap/"
+
+error_file = "/home/amaury/hashmap.errors"
 
 print ("Atenção! Este script apagará os seguintes diretórios:")
 print ground_truth_output
