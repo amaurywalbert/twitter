@@ -79,18 +79,18 @@ def save_hashmap_communities(i,hashmap,f,g,ego):
 		for alter in alters:
 			if alter != "\n" and alter != " ":
 				try:
-					alter = long(alter)
+					lalter = long(alter)								# Coloquei lalter pra separar na hora de logar os erros... se deixar só alter ele dá erro nessa conversão pra long e não salva.
 
-					if not hashmap.has_key(alter):
-						error = "deu ruim... "+str(alter)+" "+str(f)
+					if not hashmap.has_key(lalter):
+						error = "deu ruim... "+str(lalter)+" "+str(f)
 						print error
 						with open(error_dir+ego+".txt", "a+") as err_file:
 							err_file.write(error+"\n")
 					else:
-						g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
+						g.write(str(hashmap[lalter])+" ")									# Escreve os ids das Listas separadas por espaço - 
 				except Exception as e:		
 					with open(error_dir+ego+".txt", "a+") as err_file:
-						print "\n"+str(e)+" - alter: "+str(alter)+"\n"
+						print +str(e)+" - alter: "+str(alter)
 						err_file.write("\n"+str(e)+" - alter: "+str(alter)+"\n")
 		g.write("\n")		
 	return (i,hashmap)
