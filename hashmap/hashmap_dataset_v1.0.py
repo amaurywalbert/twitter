@@ -77,7 +77,7 @@ def save_hashmap_communities(i,hashmap,f,g,ego):
 	for line in f:
 		alters = line.split(' ')
 		for alter in alters:
-			if alter != "\n":
+			if alter != "\n" and alter != " ":
 				try:
 					alter = long(alter)
 
