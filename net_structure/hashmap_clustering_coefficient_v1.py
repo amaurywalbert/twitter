@@ -47,8 +47,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			else:
 				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-			G.Dump()
-			time.sleep(5)
+#			G.Dump()
+#			time.sleep(5)
 
 #####################################################################################		
 
