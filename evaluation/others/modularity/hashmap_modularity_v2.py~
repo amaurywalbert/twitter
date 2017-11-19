@@ -82,6 +82,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net):
 
 					except Exception as e:	
 						print ("\nERRO - Impossível carregar o grafo para o ego: "+str(ego_id)+"  --  "+str(graphs_dir)+str(ego_id)+".edge_list\n")
+						print e
 			
 
 					_m_file = calc.calcular(m_file)
