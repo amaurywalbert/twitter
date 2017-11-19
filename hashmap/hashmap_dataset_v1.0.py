@@ -90,6 +90,7 @@ def save_hashmap_communities(i,hashmap,f,g,ego):
 						g.write(str(hashmap[alter])+" ")									# Escreve os ids das Listas separadas por espaço
 				except Exception as e:		
 					with open(error_dir+ego+".txt", "a+") as err_file:
+						print +str(e)+" - alter: "+str(alter)
 						err_file.write("\n"+str(e)+" - alter: "+str(alter)+"\n")
 		g.write("\n")		
 	return (i,hashmap)
