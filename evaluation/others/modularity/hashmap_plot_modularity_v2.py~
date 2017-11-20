@@ -31,7 +31,7 @@ def prepare(dataset):
 					M = data['modularity']
 					if M is not None:						
 						if	float(M['media']) > modularity_plot[net]['modularity']:
-							modularity_plot[net] = {'threshold': threshold, 'modularity':float(M['media'])}
+							modularity_plot[net] = {'threshold': threshold, 'modularity':float(M['media']),'std':float(M['desvio_padrao'])}
  
 		return modularity_plot
 
@@ -100,7 +100,7 @@ def main():
 ######################################################################		
 
 	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-		output = "/home/amaury/Dropbox/modularity_hashmap/"
+		output = "/home/amaury/Dropbox/modularity_hashmap_statistics/"
 		metric = 'modularity'
 		plot_modularity.plot_bars_full(output,data1,data2,data3,data4,metric,alg)		
 ######################################################################

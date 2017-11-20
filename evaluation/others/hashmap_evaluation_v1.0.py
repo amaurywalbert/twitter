@@ -53,7 +53,7 @@ def algorithm(comm_data_dir,metric):
 		for file in os.listdir(comm_data_dir):
 			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
 			network = network[0]
-			data_overview[network] = {'threshold':' ',metric:float(0)}
+			data_overview[network] = {'threshold':' ',metric:float(0),'std':float(0)}
 			print ("\n##################################################")
 			print ("Recuperando dados da rede "+str(network))	
 
@@ -72,7 +72,7 @@ def algorithm(comm_data_dir,metric):
 							result = calc.calcular_full(values)									# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
 							if result is not None:						
 								if	float(result['media']) > data_overview[network][metric]:
-									data_overview[network] = {'threshold':k,metric:float(result['media'])}
+									data_overview[network] = {'threshold':k,metric:float(result['media']),'std':float(result['desvio_padrao'])}
 								partial[k] = result													# Adiciona os caclulos feitos num dicionário com indice k (ou seja, o threshold usado pelo algoritmo)
 								data[network] = partial				
 			else:

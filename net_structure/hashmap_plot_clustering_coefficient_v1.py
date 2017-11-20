@@ -32,7 +32,7 @@ def prepare(source_dir):
 		if os.path.isfile(source_dir+net+"_clustering_coef.json"):
 			with open(source_dir+net+"_clustering_coef.json", 'r') as f:
 				overview = json.load(f)
-				cc[net] = overview['ClusteringCoefficient']['media']
+				cc[net] = {'media':overview['ClusteringCoefficient']['media'],'std':overview['ClusteringCoefficient']['desvio_padrao']}
 	data = {}
 	data['Clustering Coefficient'] = cc
 	return data

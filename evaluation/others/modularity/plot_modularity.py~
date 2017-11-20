@@ -145,8 +145,10 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 		interaction = []
 		value = []
 		co_interaction = []
-		co_value = []	
+		co_value = []
+		std = []	
 		for k, v in data_overview.iteritems():
+			std.append(round(v['std'], 3))
 			if k == 'n1':
 				key = 'follow'
 				interaction.append(key)
@@ -198,7 +200,7 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 		for item in co_interaction:
 			interaction.append(item)
 		 	
-		data = [value,interaction]
+		data = [value,interaction,std]
 		dataset[i] = data
 
 	x = dataset[1][1]								# recebe os nomes das redes ego
@@ -209,10 +211,15 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	k = np.array(dataset[3][0])								# recebe os valores para SEM ego e comunidades COM singletons
 	w = np.array(dataset[4][0])								# recebe os valores para SEM ego e comunidades SEM singletons
 
-	print y
-	print z
-	print k
-	print w
+	y_std = np.array(dataset[1][2])								# recebe os valores para COM ego e comunidades COM singletons
+	z_std = np.array(dataset[2][2])								# recebe os valores para COM ego e comunidades SEM singletons
+	k_std = np.array(dataset[3][2])								# recebe os valores para SEM ego e comunidades COM singletons
+	w_std = np.array(dataset[4][2])								# recebe os valores para SEM ego e comunidades SEM singletons
+	
+	print y, y_std
+	print z, z_std
+	print k, k_std
+	print w, w_std
 		
 	ind=np.arange(n)
 	width=0.35
@@ -239,15 +246,16 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	plt.close()
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
 
-	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], name="Grafo COM ego", marker=dict(color='blue'))
-	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], name="Grafo COM ego - Comunidade SEM singletons", marker=dict(color='green'))
-	trace3 = go.Bar(x = dataset[1][1], y = dataset[3][0], name="Grafo SEM ego", marker=dict(color='lightblue'))
-	trace4 = go.Bar(x = dataset[1][1], y = dataset[4][0], name="Grafo SEM ego - Comunidade SEM singletons", marker=dict(color='lightgreen'))
+	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego", marker=dict(color='blue'))
+	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo COM ego - Comunidade SEM singletons", marker=dict(color='green'))
+	trace3 = go.Bar(x = dataset[1][1], y = dataset[3][0], error_y=dict(type='data',array=dataset[3][2], color='#E6842A', visible=True), name="Grafo SEM ego", marker=dict(color='lightblue'))
+	trace4 = go.Bar(x = dataset[1][1], y = dataset[4][0], error_y=dict(type='data',array=dataset[4][2], color='#E6842A', visible=True), name="Grafo SEM ego - Comunidade SEM singletons", marker=dict(color='lightgreen'))
+	
 	
 	data = [trace1, trace3,trace2,trace4]																						## Invertido pra ficar mais facil a visualização no grafo
+	
 	title_plot = title
 	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
 	fig = go.Figure(data=data, layout=layout)
 
-		
 	plotly.offline.plot(fig, filename=output+str(metric)+".html",auto_open=False)

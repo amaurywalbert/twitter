@@ -22,7 +22,7 @@ def prepare(dataset):
 		for file in os.listdir(dataset):
 			net = file.split(".json")
 			net = net[0]
-			modularity_plot[net] = {'threshold':' ','modularity':float(0)}
+			modularity_plot[net] = {'threshold':' ','modularity':float(0),'std':float(0)}
 	
 			with open(dataset+file, 'r') as f:
 				for line in f:
@@ -31,7 +31,7 @@ def prepare(dataset):
 					M = data['modularity']
 					if M is not None:						
 						if	float(M['media']) > modularity_plot[net]['modularity']:
-							modularity_plot[net] = {'threshold': threshold, 'modularity':float(M['media'])}
+							modularity_plot[net] = {'threshold': threshold, 'modularity':float(M['media']),'std':float(M['desvio_padrao'])}
  
 		return modularity_plot
 

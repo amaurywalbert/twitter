@@ -40,13 +40,14 @@ def prepare(source_dir):
 		if os.path.isfile(source_dir+net+"_net_struct.json"):
 			with open(source_dir+net+"_net_struct.json", 'r') as f:
 				overview = json.load(f)
-				nodes[net] = overview['Nodes']['media']
-				edges[net] = overview['Edges']['media']
-				diameter[net] = overview['Diameter']['media']
-				closecentr[net] = overview['CloseCentr']['media']
-				bet_centr_nodes[net] = overview['BetweennessCentrNodes']['media']
-				bet_centr_edges[net] = overview['BetweennessCentrEdges']['media']
-				modularity[net] = overview['Modularity']['media']
+				
+				nodes[net] = {'media':overview['Nodes']['media'],'std':overview['Nodes']['desvio_padrao']}
+				edges[net] = {'media':overview['Edges']['media'],'std':overview['Edges']['desvio_padrao']}
+				diameter[net] = {'media':overview['Diameter']['media'],'std':overview['Nodes']['desvio_padrao']}
+				closecentr[net] = {'media':overview['CloseCentr']['media'],'std':overview['CloseCentr']['desvio_padrao']}
+				bet_centr_nodes[net] = {'media':overview['BetweennessCentrNodes']['media'],'std':overview['BetweennessCentrNodes']['desvio_padrao']}
+				bet_centr_edges[net] = {'media':overview['BetweennessCentrEdges']['media'],'std':overview['BetweennessCentrEdges']['desvio_padrao']}
+				modularity[net] = {'media':overview['Modularity']['media'],'std':overview['Modularity']['desvio_padrao']}
 
 	data = {}
 	data['Nodes'] = nodes
