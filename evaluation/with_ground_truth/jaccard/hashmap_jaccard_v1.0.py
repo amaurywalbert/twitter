@@ -258,8 +258,8 @@ def main():
 	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT_hashmap/"
 	communities1 = "/home/amaury/communities_hashmap/graphs_with_ego/"+str(alg)+"/"
 	communities2 = "/home/amaury/communities_hashmap/graphs_without_ego/"+str(alg)+"/" 
-	output1 = "/home/amaury/Dropbox/evaluation_hashmap/graphs_with_ego/"+str(alg)+"/jaccard/"
-	output2 = "/home/amaury/Dropbox/evaluation_hashmap/graphs_without_ego/"+str(alg)+"/jaccard/"
+	output1 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/jaccard/graphs_with_ego/"+str(alg)+"/"
+	output2 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/jaccard/graphs_without_ego/"+str(alg)+"/"
 
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1

@@ -54,11 +54,11 @@ def main():
 	print"#################################################################################"
 	print
 	
-	source_dir1 = "/home/amaury/Dropbox/clustering_coefficient_hashmap/graphs_with_ego/"
+	source_dir1 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_with_ego/clustering_coefficient/"
 	
 	data1 = prepare(source_dir1)
 	
-	source_dir2 = "/home/amaury/Dropbox/clustering_coefficient_hashmap/graphs_without_ego/"
+	source_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_without_ego/clustering_coefficient/"
 	
 	data2 = prepare(source_dir2)
 	
@@ -81,7 +81,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-output = "/home/amaury/Dropbox/clustering_coefficient_hashmap_statistics/"
+output = "/home/amaury/Dropbox/net_structure_hashmap_statistics/clustering_coefficient/"
 
 #Executa o método main
 if __name__ == "__main__": main()

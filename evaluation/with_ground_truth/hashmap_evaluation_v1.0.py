@@ -94,8 +94,8 @@ def algorithm(comm_data_dir,metric):
 def instructions(metric,alg):
 ################################################################################################	
 	
-	comm_data_dir = str(source)+"graphs_with_ego/"+alg+"/"+str(metric)+"/full/"
-	output_dir = str(output)+"graphs_with_ego/"+alg+"/"+str(metric)+"/full/"
+	comm_data_dir = str(source)+alg+"/graphs_with_ego/"+str(metric)+"/full/"
+	output_dir = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/full/"
 		
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -103,8 +103,8 @@ def instructions(metric,alg):
 	data1 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_with_ego/"+alg+"/"+str(metric)+"/without_singletons/"
-	output_dir = str(output)+"graphs_with_ego/"+alg+"/"+str(metric)+"/without_singletons/"
+	comm_data_dir = str(source)+alg+"/graphs_with_ego/"+str(metric)+"/without_singletons/"
+	output_dir = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/without_singletons/"
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -112,8 +112,8 @@ def instructions(metric,alg):
 	data2 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_without_ego/"+alg+"/"+str(metric)+"/full/"
-	output_dir = str(output)+"graphs_without_ego/"+alg+"/"+str(metric)+"/full/"
+	comm_data_dir = str(source)+alg+"/graphs_without_ego/"+str(metric)+"/full/"
+	output_dir = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/full/"
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -121,8 +121,8 @@ def instructions(metric,alg):
 	data3 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_without_ego/"+alg+"/"+str(metric)+"/without_singletons/"
-	output_dir = str(output)+"graphs_without_ego/"+alg+"/"+str(metric)+"/without_singletons/"
+	comm_data_dir = str(source)+alg+"/graphs_without_ego/"+str(metric)+"/without_singletons/"
+	output_dir = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/without_singletons/"
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -201,8 +201,8 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-source = "/home/amaury/Dropbox/evaluation_hashmap/"
-output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/"
+source = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/"
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/with_ground_truth/"
 ######################################################################################################################
 
 

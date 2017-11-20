@@ -173,7 +173,7 @@ def main():
 	if not os.path.isdir(dataset_dir1):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir1))
 	else:
-		output_dir1 = "/home/amaury/Dropbox/modularity_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/"
+		output_dir3 = str(output)+alg+"/"+str(graph_type)+"/modularity/full/"
 		if not os.path.exists(output_dir1):
 			os.makedirs(output_dir1)
 
@@ -191,7 +191,7 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/modularity_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+		output_dir2 = str(output)+alg+"/"+str(graph_type)+"/modularity/without_singletons/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
@@ -209,7 +209,7 @@ def main():
 	if not os.path.isdir(dataset_dir3):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir3))
 	else:
-		output_dir3 = "/home/amaury/Dropbox/modularity_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/"
+		output_dir3 = str(output)+alg+"/"+str(graph_type)+"/modularity/full/"
 		if not os.path.exists(output_dir3):
 			os.makedirs(output_dir3)
 		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/")
@@ -226,7 +226,7 @@ def main():
 	if not os.path.isdir(dataset_dir4):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir4))
 	else:
-		output_dir4 = "/home/amaury/Dropbox/modularity_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+		output_dir4 = str(output)+alg+"/"+str(graph_type)+"/modularity/without_singletons/"
 		if not os.path.exists(output_dir4):
 			os.makedirs(output_dir4)
 		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
@@ -247,6 +247,8 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
+
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth/"
 
 #Executa o método main
 if __name__ == "__main__": main()

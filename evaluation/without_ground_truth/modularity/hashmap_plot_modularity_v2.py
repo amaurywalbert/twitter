@@ -22,7 +22,7 @@ def prepare(dataset):
 		for file in os.listdir(dataset):
 			net = file.split(".json")
 			net = net[0]
-			modularity_plot[net] = {'threshold':' ','modularity':float(0)}
+			modularity_plot[net] = {'threshold':' ','modularity':float(0),'std':float(0)}
 	
 			with open(dataset+file, 'r') as f:
 				for line in f:
@@ -75,34 +75,33 @@ def main():
 ######################################################################		
 ######################################################################
 
-	dataset1 = "/home/amaury/Dropbox/modularity_hashmap/graphs_with_ego/"+str(alg)+"/full/"
+	dataset3 = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/full/"	
 	data1 = prepare(dataset1)
 	
 ######################################################################				
 ######################################################################
 
-	dataset2 = "/home/amaury/Dropbox/modularity_hashmap/graphs_with_ego/"+str(alg)+"/without_singletons/"
+	dataset2 = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/without_singletons/"	
 	data2 = prepare(dataset2)
 
 ######################################################################
 ######################################################################
 
-	dataset3 = "/home/amaury/Dropbox/modularity_hashmap/graphs_without_ego/"+str(alg)+"/full/"
+	dataset3 = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/full/"	
 	data3 = prepare(dataset3)
 
 ######################################################################		
 ######################################################################
 
-	dataset4 = "/home/amaury/Dropbox/modularity_hashmap/graphs_without_ego/"+str(alg)+"/without_singletons/"
+	dataset4 = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/without_singletons/"
 	data4 = prepare(dataset4)
 	
 ######################################################################
 ######################################################################		
 
 	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-		output = "/home/amaury/Dropbox/modularity_hashmap_statistics/"
-		metric = 'modularity'
 		plot_modularity.plot_bars_full(output,data1,data2,data3,data4,metric,alg)		
+
 ######################################################################
 ######################################################################	
 	
@@ -115,6 +114,8 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
+
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth/"
 
 #Executa o método main
 if __name__ == "__main__": main()

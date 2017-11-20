@@ -57,7 +57,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			e.append(G.GetEdges())																		# Numero de arestas
 			n_nodes = G.GetNodes()	
 			n_edges = G.GetEdges()
-			print n_nodes, n_edges
+	
 #####################################################################################
 			if n_edges == 0:
 				a = 0

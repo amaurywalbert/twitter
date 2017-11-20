@@ -53,7 +53,7 @@ def algorithm(comm_data_dir,metric):
 		for file in os.listdir(comm_data_dir):
 			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
 			network = network[0]
-			data_overview[network] = {'threshold':' ',metric:float(0)}
+			data_overview[network] = {'threshold':' ',metric:float(0),'std':float(0)}
 			print ("\n##################################################")
 			print ("Recuperando dados da rede "+str(network))	
 
@@ -72,7 +72,7 @@ def algorithm(comm_data_dir,metric):
 							result = calc.calcular_full(values)									# Calcula média e outros dados da METRICA recuperados para o conjunto de egos usando o threshold k				 				
 							if result is not None:						
 								if	float(result['media']) > data_overview[network][metric]:
-									data_overview[network] = {'threshold':k,metric:float(result['media'])}
+									data_overview[network] = {'threshold':k,metric:float(result['media']),'std':float(result['desvio_padrao'])}
 								partial[k] = result													# Adiciona os caclulos feitos num dicionário com indice k (ou seja, o threshold usado pelo algoritmo)
 								data[network] = partial				
 			else:
@@ -94,8 +94,8 @@ def algorithm(comm_data_dir,metric):
 def instructions(metric,alg):
 ################################################################################################	
 	
-	comm_data_dir = str(source)+"graphs_with_ego/"+alg+"/"+str(metric)+"/full/"
-	output_dir = str(output)+"graphs_with_ego/"+alg+"/"+str(metric)+"/full/"
+	comm_data_dir = str(source)+alg+"/graphs_with_ego/"+str(metric)+"/full/"
+	output_dir = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/full/"
 		
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -103,8 +103,8 @@ def instructions(metric,alg):
 	data1 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_with_ego/"+alg+"/"+str(metric)+"/without_singletons/"
-	output_dir = str(output)+"graphs_with_ego/"+alg+"/"+str(metric)+"/without_singletons/"
+	comm_data_dir = str(source)+alg+"/graphs_with_ego/"+str(metric)+"/without_singletons/"
+	output_dir = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/without_singletons/"
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -112,8 +112,8 @@ def instructions(metric,alg):
 	data2 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_without_ego/"+alg+"/"+str(metric)+"/full/"
-	output_dir = str(output)+"graphs_without_ego/"+alg+"/"+str(metric)+"/full/"
+	comm_data_dir = str(source)+alg+"/graphs_without_ego/"+str(metric)+"/full/"
+	output_dir = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/full/"
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -121,8 +121,8 @@ def instructions(metric,alg):
 	data3 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+"graphs_without_ego/"+alg+"/"+str(metric)+"/without_singletons/"
-	output_dir = str(output)+"graphs_without_ego/"+alg+"/"+str(metric)+"/without_singletons/"
+	comm_data_dir = str(source)+alg+"/graphs_without_ego/"+str(metric)+"/without_singletons/"
+	output_dir = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/without_singletons/"
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -201,8 +201,8 @@ def main():
 
 ######################################################################################################################
 #####Alterar as linhas para Dropbox quando executado em ambiente de produção
-source = "/home/amaury/Dropbox/evaluation_hashmap/"
-output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/"
+source = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/"
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/with_ground_truth/"
 ######################################################################################################################
 
 
