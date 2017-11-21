@@ -114,8 +114,8 @@ def plot_bars_full(output,data1,data2,metric):
 	z = np.array(dataset[2][0])								# recebe os valores para SEM
 
 	print x
-	print y
-	print z
+	print y, dataset[1][2]
+	print z, dataset[2][2]
 		
 	ind=np.arange(n)
 	width=0.35
