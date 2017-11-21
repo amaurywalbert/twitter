@@ -213,7 +213,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	plt.tight_layout()
 	plt.show()	
 
-	output = output+alg+"/"
+	output = output+metric+"/"
 	if not os.path.exists(output):
 		os.makedirs(output)
 
@@ -232,4 +232,4 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
 	fig = go.Figure(data=data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output+str(alg)+"_"+str(metric)+".html",auto_open=False)
+	plotly.offline.plot(fig, filename=output+str(metric)+"_"+str(alg)+".html",auto_open=False)
