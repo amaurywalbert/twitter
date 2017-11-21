@@ -206,7 +206,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	p4=plt.bar(ind+0.2,w,width,color="lightgreen", label='Grafo SEM ego - Comunidade SEM singletons')
 
 	plt.ylabel(metric)
-	plt.title(title)
+	plt.title(str(title))
 	
 	plt.xticks(ind+width/2,(x))
 	plt.legend(loc='best')	
