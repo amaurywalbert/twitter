@@ -152,53 +152,53 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 			if k == 'n1':
 				key = 'follow'
 				interaction.append(key)
-				value.append(round(v['media'], 3))
+				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))			
 			elif k == 'n2':
 				key = 'retweets'			
 				interaction.append(key)
-				value.append(round(v['media'], 3))	
+				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
 			elif k == 'n3':
 				key = 'likes'
 				interaction.append(key)
-				value.append(round(v['media'], 3))
+				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
 			elif k == 'n4':
 				key = 'mentions'
 				interaction.append(key)
-				value.append(round(v['media'], 3))
+				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
 			elif k == 'n9':
 				key = 'followers'
 				interaction.append(key)
-				value.append(round(v['media'], 3))
+				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
 						
 			elif k == 'n5':
 				key = 'co-follow'
 				co_interaction.append(key)
-				co_value.append(round(v['media'], 3))
+				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
 			elif k == 'n6':
 				key = 'co-retweets'
 				co_interaction.append(key)
-				co_value.append(round(v['media'], 3))	
+				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
 			elif k == 'n7':
 				key = 'co-likes'
 				co_interaction.append(key)
-				co_value.append(round(v['media'], 3))
+				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
 			elif k == 'n8':
 				key = 'co-mentions'
 				co_interaction.append(key)
-				co_value.append(round(v['media'], 3))
+				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
 			elif k == 'n10':
 				key = 'co-followers'
 				co_interaction.append(key)
-				co_value.append(round(v['media'], 3))
+				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
 			
 			else:
