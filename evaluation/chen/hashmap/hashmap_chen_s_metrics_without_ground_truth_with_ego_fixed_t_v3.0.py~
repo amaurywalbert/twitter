@@ -110,11 +110,11 @@ def calculate_alg(communities,output,singletons,net,graphs,uw,ud,g_type,alg):
 
 	if alg == "oslom":
 		threshold = 50
-	elif alg == "copra"
+	elif alg == "copra":
 		threshold = 51
 		print ("Threshold para COPRA ainda não definido")
 		sys.exit()
-	else	
+	else:
 		threshold = 51
 		print ("Algoritmo não reconhecido: "+str(alg))
 		sys.exit()		

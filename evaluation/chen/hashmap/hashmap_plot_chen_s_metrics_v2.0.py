@@ -45,7 +45,7 @@ def algorithm(data_source,output_dir,metric):
 			network = file.split(".json")														# pegar o nome do arquivo que indica o a rede analisada
 			network = network[0]
 
-			data_overview[network] = {'threshold':' ',metric:float("-inf")}
+			data_overview[network] = {'threshold':' ',metric:float("-inf"),'std':float(0)}
 			print ("##################################################")
 			print ("Preparando resultados para a métrica: "+(metric)+" - Recuperando dados da rede "+str(network))	
 		
@@ -67,13 +67,13 @@ def algorithm(data_source,output_dir,metric):
 						if result is not None:	
 														
 							if	float(result['media']) > data_overview[network][metric]:
-								data_overview[network] = {'threshold':k,metric:float(result['media'])}
+								data_overview[network] = {'threshold':k,metric:float(result['media']),'std':float(result['desvio_padrao'])}
 								result['n_egos'] = len(values)
 								result['t_egos'] = len(v)
 								data[network] = {'threshold':k,metric:result}
 		print ("##################################################")	
 	
-		with open(output_dir+metric+".json", 'w') as f:
+		with open(output_dir+metric+".json", 'w') as f:												#Pra ver quantos egos foram calculados...
 			for k in data:
 				output_file = {}
 				output_file[k] = data[k]
