@@ -117,13 +117,13 @@ def plot_bars_full(output,data1,data2,metric):
 	plt.legend(loc='best')	
 	plt.tight_layout()
 
-	output = output+"/bars_full/"
+	output = output+"/bars/"
 
 	if not os.path.exists(output):
 		os.makedirs(output)
 		
 	plt.show()	
-#	plt.savefig(output+"_"+str(metric)+".png")
+#	plt.savefig(output+str(metric)+".png")
 	plt.close()
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
 

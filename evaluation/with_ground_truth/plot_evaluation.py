@@ -206,12 +206,16 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	p4=plt.bar(ind+0.2,w,width,color="lightgreen", label='Grafo SEM ego - Comunidade SEM singletons')
 
 	plt.ylabel(metric)
-	plt.title("Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg))
+	plt.title(str(title))
 	
 	plt.xticks(ind+width/2,(x))
 	plt.legend(loc='best')	
 	plt.tight_layout()
 	plt.show()	
+
+	if not os.path.exists(output):
+		os.makedirs(output)
+
 #	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 	plt.close()
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
@@ -221,16 +225,10 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	trace3 = go.Bar(x = dataset[1][1], y = dataset[3][0], error_y=dict(type='data',array=dataset[3][2], color='#E6842A', visible=True), name="Grafo SEM ego", marker=dict(color='lightblue'))
 	trace4 = go.Bar(x = dataset[1][1], y = dataset[4][0], error_y=dict(type='data',array=dataset[4][2], color='#E6842A', visible=True), name="Grafo SEM ego - Comunidade SEM singletons", marker=dict(color='lightgreen'))
 	
-	
 	data = [trace1, trace3,trace2,trace4]																						## Invertido pra ficar mais facil a visualização no grafo
 
 	title_plot = title
 	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
 	fig = go.Figure(data=data, layout=layout)
 
-	
-	output = output+alg+"/"
-	if not os.path.exists(output):
-		os.makedirs(output)
-		
-	plotly.offline.plot(fig, filename=output+str(metric)+".html",auto_open=False)
+	plotly.offline.plot(fig, filename=output+str(alg)+"_"+str(metric)+".html",auto_open=False)
