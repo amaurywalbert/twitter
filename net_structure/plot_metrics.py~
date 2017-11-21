@@ -141,7 +141,7 @@ def plot_bars_full(output,data1,data2,metric):
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
 
 	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego", marker=dict(color='blue'))
-	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo SEM ego", marker=dict(color='lightblue'))
+	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego", marker=dict(color='lightblue'))
 	
 	data = [trace1,trace2]																						## Invertido pra ficar mais facil a visualização no grafo
 

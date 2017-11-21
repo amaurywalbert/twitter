@@ -78,24 +78,7 @@ def main():
 	print "################################################################################"
 	print"																											"
 	print" 					Impressão de Gráficos da Modularidade										"
-	print"																											"
-	print" Escolha o algoritmo usado na detecção das comunidades									"
-	print"																											"
-	print"#################################################################################"
-	print
-	print"  1 - Copra"
-	print"  2 - Oslom"		
-	print
-	op2 = int(raw_input("Escolha uma opção acima: "))
-
-	if op2 == 1:
-		alg = "copra"
-	elif op2 == 2:
-		alg = "oslom"
-	else:
-		print("Opção inválida! Saindo...")
-		sys.exit()		
-######################################################################
+	print"																											"	
 	
 	metric = 'modularity'
 
