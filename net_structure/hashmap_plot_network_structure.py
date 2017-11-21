@@ -43,7 +43,7 @@ def prepare(source_dir):
 				
 				nodes[net] = {'media':overview['Nodes']['media'],'std':overview['Nodes']['desvio_padrao']}
 				edges[net] = {'media':overview['Edges']['media'],'std':overview['Edges']['desvio_padrao']}
-				diameter[net] = {'media':overview['Diameter']['media'],'std':overview['Nodes']['desvio_padrao']}
+				diameter[net] = {'media':overview['Diameter']['media'],'std':overview['Diameter']['desvio_padrao']}
 				closecentr[net] = {'media':overview['CloseCentr']['media'],'std':overview['CloseCentr']['desvio_padrao']}
 				bet_centr_nodes[net] = {'media':overview['BetweennessCentrNodes']['media'],'std':overview['BetweennessCentrNodes']['desvio_padrao']}
 				bet_centr_edges[net] = {'media':overview['BetweennessCentrEdges']['media'],'std':overview['BetweennessCentrEdges']['desvio_padrao']}
