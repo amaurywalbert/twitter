@@ -75,25 +75,25 @@ def main():
 ######################################################################		
 ######################################################################
 
-	dataset3 = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/full/"	
+	dataset1 = str(output)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
 	data1 = prepare(dataset1)
 	
 ######################################################################				
 ######################################################################
 
-	dataset2 = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/without_singletons/"	
+	dataset2 = str(output)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"	
 	data2 = prepare(dataset2)
 
 ######################################################################
 ######################################################################
 
-	dataset3 = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/full/"	
+	dataset3 = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
 	data3 = prepare(dataset3)
 
 ######################################################################		
 ######################################################################
 
-	dataset4 = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/without_singletons/"
+	dataset4 = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
 	data4 = prepare(dataset4)
 	
 ######################################################################
@@ -115,7 +115,11 @@ def main():
 #
 ######################################################################################################################################################################
 
+source = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/"
 output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth/"
+
+if not os.path.exists(output):
+	os.makedirs(output)
 
 #Executa o método main
 if __name__ == "__main__": main()

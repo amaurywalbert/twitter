@@ -239,13 +239,13 @@ def main():
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/snap/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
 ######################################################################		
 ######################################################################
-	dataset_dir2 = "/home/amaury/graphs_hashmap/"+str(net)+"/snap/graphs_without_ego/"						############### Arquivo contendo arquivos com a lista de arestas das redes-ego
+	dataset_dir2 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_without_ego/"						############### Arquivo contendo arquivos com a lista de arestas das redes-ego
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:

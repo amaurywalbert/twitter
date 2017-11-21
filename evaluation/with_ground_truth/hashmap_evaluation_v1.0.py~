@@ -94,8 +94,8 @@ def algorithm(comm_data_dir,metric):
 def instructions(metric,alg):
 ################################################################################################	
 	
-	comm_data_dir = str(source)+alg+"/graphs_with_ego/"+str(metric)+"/full/"
-	output_dir = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/full/"
+	comm_data_dir = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"
+	output_dir = str(output)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"
 		
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -103,8 +103,8 @@ def instructions(metric,alg):
 	data1 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+alg+"/graphs_with_ego/"+str(metric)+"/without_singletons/"
-	output_dir = str(output)+alg+"/graphs_with_ego/"+str(metric)+"/without_singletons/"
+	comm_data_dir = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
+	output_dir = str(output)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -112,17 +112,17 @@ def instructions(metric,alg):
 	data2 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+alg+"/graphs_without_ego/"+str(metric)+"/full/"
-	output_dir = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/full/"
+	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"
+	output_dir = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
 #	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities with singletons')
 	data3 = data_overview
 ################################################################################################
-
-	comm_data_dir = str(source)+alg+"/graphs_without_ego/"+str(metric)+"/without_singletons/"
-	output_dir = str(output)+alg+"/graphs_without_ego/"+str(metric)+"/without_singletons/"
+	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
+	output_dir = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
+	
 
 	data,data_overview = algorithm(comm_data_dir,metric)
 	save_data(output_dir,data,data_overview)		
@@ -144,19 +144,15 @@ def main():
 	print "\n#######################################################################\n"	
 	print ("Métrica a ser aplicada na geração dos resultados:\n")
 	print("01 - NMI - Normalized Mutual Infomation. ")
-	print("02 - Ômega Index.")
-	print("03 - Jaccard Similarity.")
+	print("02 - Jaccard Similarity.")
 	print	
 	metric_op = int(raw_input("Escolha uma opção acima: "))
 	print ("\n##################################################\n")
 #######################################################################
 	if metric_op == 01:
 		metric = "nmi"
-#######################################################################		
-	elif metric_op == 02:
-		metric = "omega"
 #######################################################################
-	elif metric_op == 03:
+	elif metric_op == 02:
 		metric = "jaccard"
 #######################################################################
 	else:

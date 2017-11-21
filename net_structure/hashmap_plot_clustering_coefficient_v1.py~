@@ -54,11 +54,11 @@ def main():
 	print"#################################################################################"
 	print
 	
-	source_dir1 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_with_ego/clustering_coefficient/"
-	
+	source_dir1 = "/home/amaury/Dropbox/net_structure_hashmap/clustering_coefficient/graphs_with_ego/"
+					
 	data1 = prepare(source_dir1)
 	
-	source_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_without_ego/clustering_coefficient/"
+	source_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/clustering_coefficient/graphs_without_ego/"
 	
 	data2 = prepare(source_dir2)
 	

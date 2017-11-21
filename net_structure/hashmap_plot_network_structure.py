@@ -77,11 +77,11 @@ def main():
 	print"#################################################################################"
 	print
 	
-	source_dir1 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_with_ego/"
+	source_dir1 = source+"graphs_with_ego/"
 	
 	data1 = prepare(source_dir1)
 	
-	source_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/graphs_without_ego/"
+	source_dir2 = source+"graphs_without_ego/"
 	
 	data2 = prepare(source_dir2)
 	
