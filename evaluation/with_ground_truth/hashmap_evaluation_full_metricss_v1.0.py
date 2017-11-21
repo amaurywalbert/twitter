@@ -130,7 +130,9 @@ def instructions(metric,alg):
 	data4 = data_overview
 
 ################################################################################################
-	plot_evaluation.plot_full(output,data1,data2,data3,data4,metric,alg)		
+	data_full = [data1,data2,data3,data4]
+
+	return data_full
 		
 ######################################################################################################################################################################
 #
@@ -170,7 +172,6 @@ def main():
 	data_full2 = instructions(metric,alg)
 	
 	plot_evaluation.plot_full_metrics(output,data_full1,data_full2,alg)			
-	instructions(metric)
 	
 #######################################################################
 	print
