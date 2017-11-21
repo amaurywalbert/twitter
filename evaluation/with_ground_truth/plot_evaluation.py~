@@ -341,7 +341,7 @@ def plot_full_algs(output,dataset1,dataset2,metric):
 		data1 = [value,interaction,std]
 		dataset[i] = data1
 
-	for array in dataset1:
+	for array in dataset2:
 		i+=1
 		interaction = []
 		value = []
