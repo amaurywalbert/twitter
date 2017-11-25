@@ -118,7 +118,7 @@ def instructions(alg):
 		if data_print2[k] is not None:
 			print data_print2[k]
 			title = "Avaliação das redes usando a métrica "+str(k)+" e algoritmo "+str(alg)+"\nREDE COM EGO - COMUNIDADES SEM SINGLETONS"	
-			plot_metrics_statistics.plot_single(output_graphics_single,data_print2[k],k,alg,title		
+			plot_metrics_statistics.plot_single(output_graphics_single,data_print2[k],k,alg,title)
 			
 ################################################################################################
 

@@ -26,43 +26,37 @@ sys.setdefaultencoding('utf-8')
 # Prepara arquivos para ficar no mesmo formato  que a versão anterior - separados por METRICA
 #
 ######################################################################################################################################################################
-def by_metrics(alg,g_type,singletons):
+def by_metrics(alg,g_type,singletons,net):
 	
 	data_dir = str(output)+"raw/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"
 	
-	if not os.path.isdir(data_dir):
-		print ("\n\n\nDIRETÓRIO NÃO ENCONTRADO: "+str(data_dir)+"\n\n\n")
+	if not os.path.isdir(data_dir+net):
+		print ("\n\n\nDIRETÓRIO NÃO ENCONTRADO: "+str(data_dir+net)+"\n\n\n")
 		
-	else:
-		for net in os.listdir(data_dir):
-			if os.path.isdir(data_dir+net):
-				print ("\n##################################################")
-				print ("Separando por métrica - Recuperando dados da rede "+str(net)+" - "+str(data_dir)+"\n")
+	else:			
+		print ("\n##################################################")
+		print ("Separando por métrica - Recuperando dados da rede "+str(net)+" - "+str(data_dir)+"\n")
 			
-				for file in os.listdir(data_dir+net):	
-					threshold = file.split(".json")											# pegar o nome do arquivo que indica o a rede analisada
-					threshold = threshold[0]
+		for file in os.listdir(data_dir+net):	
+			threshold = file.split(".json")											# pegar o nome do arquivo que indica o a rede analisada
+			threshold = threshold[0]
 				
-					with open(data_dir+net+"/"+file, 'r') as f:
-						data = json.load(f)
-						for k, v in data.iteritems():											# Preparação para ler o arquivo JSON que tem o Formato  {metric": [values ---- {"VI": [0.542,...], "NMI": [0,214,0,36...],...}
-							dictionary = {}
-							values = v
-							metric = k
+			with open(data_dir+net+"/"+file, 'r') as f:
+				data = json.load(f)
+				for k, v in data.iteritems():											# Preparação para ler o arquivo JSON que tem o Formato  {metric": [values ---- {"VI": [0.542,...], "NMI": [0,214,0,36...],...}
+					dictionary = {}
+					values = v
+					metric = k
 
-							dictionary[threshold] = values
+					dictionary[threshold] = values
 
-							if os.path.exists(output+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+".json"):
-								print ("Arquivo de destino já existe: "+output+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+".json")
-							else:
-								print ("Salvando dados em: "+str(output)+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+".json")
+					print ("Salvando dados em: "+str(output)+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+".json")
 	
-								if not os.path.isdir(output+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"):
-									os.makedirs(output+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/")			
-								
-								with open(output+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+".json", "a+") as f:
-									f.write(json.dumps(dictionary, separators=(',', ':'))+"\n")
-
+					if not os.path.isdir(output+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"):
+						os.makedirs(output+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/")			
+						
+					with open(output+"by_metrics/"+str(metric)+"/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+".json", "a+") as f:
+						f.write(json.dumps(dictionary, separators=(',', ':'))+"\n")
 	print ("##################################################")
 		
 ######################################################################################################################################################################
@@ -184,7 +178,7 @@ def main():
 	print"  9 - Follwowers"
 	print"  2 - Retweets"
 	print"  3 - Likes"
-	print"  3 - Mentions"
+	print"  4 - Mentions"
 	
 	print " "
 	print"  5 - Co-Follow"
@@ -294,10 +288,11 @@ def main():
 
 #	 Separa por Métricas...
 
-	by_metrics(alg,g_type1,singletons1)
-	by_metrics(alg,g_type2,singletons2)
-	by_metrics(alg,g_type3,singletons3)
-	by_metrics(alg,g_type4,singletons4)
+	
+	by_metrics(alg,g_type1,singletons1,net)
+	by_metrics(alg,g_type2,singletons2,net)
+	by_metrics(alg,g_type3,singletons3,net)
+	by_metrics(alg,g_type4,singletons4,net)
 
 	######################################################################################################################
 
