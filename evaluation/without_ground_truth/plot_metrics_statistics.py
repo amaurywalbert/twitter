@@ -226,7 +226,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 	plt.tight_layout()
 	plt.show()	
 
-	output = output+metric+"/"
+	output = output
 	if not os.path.exists(output):
 		os.makedirs(output)
 

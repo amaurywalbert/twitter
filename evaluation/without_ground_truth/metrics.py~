@@ -78,7 +78,7 @@ def calc_metrics(communities,G,ud):
 #		print total_edges_community,community_degree
 		
 		
-		if internal_edges == n_edges or internal_nodes ==0 :													#Penalizar algoritmo que retorna apenas uma comunidade como sendo toda a rede-ego
+		if internal_edges == n_edges or internal_nodes == 0 :												# Penalizar algoritmo que retorna apenas uma comunidade como sendo toda a rede-ego ou retorna valor para id que não corresponde a um vértice da rede
 			result_s = 0
 			result_d = 0
 			result_c = 0
@@ -93,7 +93,7 @@ def calc_metrics(communities,G,ud):
 ########################################################################################################### DENSITY
 
 			if ud is False:
-				if internal_nodes != 0 and internal_nodes-1 != 0:
+				if internal_nodes-1 != 0:
 					result_d = float(internal_edges)/(float(internal_nodes)*(float(internal_nodes)-1))
 				else:
 					result_d = 0					
@@ -112,10 +112,9 @@ def calc_metrics(communities,G,ud):
 				result_c = 0
 
 ########################################################################################################### EXPANSION
-			if internal_nodes != 0:
-				result_e = float(external_edges)/float(internal_nodes)
-			else:
-				result_e = 0
+
+			result_e = float(external_edges)/float(internal_nodes)
+
 			
 ########################################################################################################### 			 
 		_separability.append(result_s)				
