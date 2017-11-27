@@ -1,0 +1,165 @@
+# -*- coding: latin1 -*-
+################################################################################################
+import snap,datetime, sys, time, json, os, os.path, shutil, time, struct, random
+import subprocess
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+######################################################################################################################################################################
+######################################################################################################################################################################
+##		Status - Versão 1 - Converte arquivos de grafos para formato PAJEK
+## 
+## 							
+## # INPUT: Grafos em formato networkX
+## 
+## # OUTPUT:
+##			Grafos em formato PAJEK
+######################################################################################################################################################################
+
+
+######################################################################################################################################################################
+#
+# Salvar arquivos em formato pajek
+#
+######################################################################################################################################################################
+def save_pajek(i,graphs,file,graphs_pajek,ego_id,uw,ud):
+	if not os.path.exists(graphs_pajek):
+		os.makedirs(graphs_pajek)
+	
+	if os.path.isfile(str(graphs_pajek)+str(ego_id)+".pajek"):
+		print (str(i)+" - Arquivo PAJEK já existe: "+str(graphs_pajek)+str(ego_id)+".pajek")
+	else:
+		print ("Convertendo grafo do ego: "+str(i)+" para formato PAJEK: "+str(ego_id)+".pajek")
+	
+		if ud is False and uw is False:																				# Direcionado e ponderado
+			G = nx.read_weighted_edgelist(graphs+file, nodetype=int,create_using=nx.DiGraph())
+
+		elif ud is False and uw is True:																				# Direcionado e Não ponderado
+			G = nx.read_edgelist(graphs+file, nodetype=int, create_using=nx.DiGraph())
+			
+		elif ud is True and uw is False:																				# Não direcionado e ponderado
+			G = nx.read_weighted_edgelist(graphs+file, nodetype=int, create_using=nx.Graph())
+				
+		else:																													# Não direcionado e Não Ponderado
+			G = nx.read_edgelist(graphs+file, nodetype=int, create_using=nx.Graph())
+				
+		nx.write_pajek(G, str(graphs_pajek)+str(ego_id)+".pajek")		
+			
+######################################################################################################################################################################
+#
+# Cálculos iniciais sobre o conjunto de dados lidos.
+#
+######################################################################################################################################################################
+def prepare(net,graphs,uw,ud,g_type,alg,graphs_pajek):
+
+	if not os.path.exists(graphs):
+		print ("\nDiretório com grafos não encontrado: "+str(graphs)+"\n")
+	else:					
+		
+		print	
+		print("######################################################################")
+		print ("Os arquivos serão armazenados em: "+str(graphs_pajek))
+		print("######################################################################")					
+		i=0
+		for file in os.listdir(graphs):
+			ego_id = file.split(".edge_list")
+			ego_id = long(ego_id[0])
+			i+=1
+			save_pajek(i,graphs,file,graphs_pajek,ego_id,uw,ud)
+
+	print("######################################################################")		
+
+######################################################################################################################################################################
+#
+# Método principal do programa.
+# Realiza teste e coleta dos dados de cada user especificado no arquivo. 
+#
+######################################################################################################################################################################
+######################################################################################################################################################################
+def main():
+	os.system('clear')
+	print "################################################################################"
+	print"																											"
+	print" 			Conversão de grafos para formato Pajek										"
+	print"																											"
+	print"#################################################################################"
+	print
+	print
+	print"  1 - Follow"
+	print"  9 - Follwowers"
+	print"  2 - Retweets"
+	print"  3 - Likes"
+	print"  4 - Mentions"
+	
+	print " "
+	print"  5 - Co-Follow"
+	print" 10 - Co-Followers"				
+	print"  6 - Co-Retweets"
+	print"  7 - Co-Likes"
+	print"  8 - Co-Mentions"
+			
+	print
+	op = int(raw_input("Escolha uma opção acima: "))
+
+	if op in (5,6,7,8,10):																						# Testar se é um grafo direcionado ou não
+		ud = True
+	elif op in (1,2,3,4,9):
+		ud = False 
+	else:
+		print("Opção inválida! Saindo...")
+		sys.exit()
+
+	if op == 1 or op == 9:																						# Testar se é um grafo direcionado ou não
+		uw = True
+	else:
+		uw = False
+######################################################################
+	
+	net = "n"+str(op)	
+	
+######################################################################################################################
+	g_type1 = "graphs_with_ego"
+	g_type2 = "graphs_without_ego"
+	
+	alg = "gn"
+######################################################################################################################
+ 
+	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type1)+"/"
+	graphs_pajek = "/home/amaury/graphs_hashmap_pajek/"+str(net)+"/"+str(g_type1)+"/"
+
+	print ("Calculando Comunidades para a rede: "+str(net)+" - COM o ego")
+
+	prepare(net,graphs,uw,ud,g_type1,alg,graphs_pajek)
+	
+######################################################################################################################
+######################################################################################################################
+
+	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type2)+"/"
+	graphs_pajek = "/home/amaury/graphs_hashmap_pajek/"+str(net)+"/"+str(g_type2)+"/"
+
+	print ("Calculando Comunidades para a rede: "+str(net)+" - SEM o ego")
+
+	prepare(net,graphs,uw,ud,g_type2,alg,graphs_pajek)
+	
+#######################################################################################################################
+######################################################################################################################
+
+	print("######################################################################")
+	print
+	print("######################################################################")
+	print("Script finalizado!")
+	print("######################################################################\n")
+
+	
+######################################################################################################################################################################
+#
+# INÍCIO DO PROGRAMA
+#
+######################################################################################################################################################################
+
+######################################################################################################################
+if __name__ == "__main__": main()

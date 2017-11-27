@@ -1,0 +1,204 @@
+# -*- coding: latin1 -*-
+################################################################################################
+import snap,datetime, sys, time, json, os, os.path, shutil, time, struct, random
+import community
+import networkx as nx
+import matplotlib.pyplot as plt
+
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+######################################################################################################################################################################
+######################################################################################################################################################################
+##		Status - Versão 1 - Calcular Louvain Method
+## 
+## 							
+## # INPUT: Grafos
+## 
+## # OUTPUT:
+##			Communities
+######################################################################################################################################################################
+
+
+######################################################################################################################################################################
+#
+# Calcula as comunidades
+#
+######################################################################################################################################################################
+def plot_louvain_method(partition):
+	size = float(len(set(partition.values())))
+	pos = nx.spring_layout(G)
+	count = 0
+	for com in set(partition.values()):
+		count = count + 1
+		list_nodes = [nodes for nodes in partition.keys() if partition[nodes] == com]
+		nx.draw_networkx_nodes(G, pos, list_nodes, node_size = 20, node_color = str(count / size))
+
+	nx.draw_networkx_edges(G,pos, alpha=0.5)
+	plt.show()
+######################################################################################################################################################################
+#
+# Cálculos iniciais sobre o conjunto de dados lidos.
+#
+######################################################################################################################################################################
+def calculate_alg(output,singletons,net,graphs,uw,ud,g_type,alg):
+
+	if not os.path.exists(graphs):
+		print ("\nDiretório com grafos não encontrado: "+str(graphs)+"\n")
+	else:
+					
+		if not os.path.exists(output):
+			os.makedirs(output)
+		
+		print	
+		print("######################################################################")
+		print ("Os arquivos serão armazenados em: "+str(output))
+		print("######################################################################")
+		i=0
+		for file in os.listdir(graphs):
+			ego_id = file.split(".edge_list")
+			ego_id = long(ego_id[0])
+			i+=1
+	
+			if ud is False and uw is False:																				# Direcionado e ponderado
+				G = nx.read_weighted_edgelist(graphs+file, nodetype=int,create_using=nx.DiGraph())
+
+			elif ud is False and uw is True:																				# Direcionado e Não ponderado
+				G = nx.read_edgelist(graphs+file, nodetype=int, create_using=nx.DiGraph())
+			
+			elif ud is True and uw is False:																				# Não direcionado e ponderado
+				G = nx.read_weighted_edgelist(graphs+file, nodetype=int, create_using=nx.Graph())
+				
+			else:																													# Não direcionado e Não Ponderado
+				G = nx.read_edgelist(graphs+file, nodetype=int, create_using=nx.Graph())
+				
+			print("Detectando comunidades: "+str(g_type)+" - "+str(alg)+" - "+str(singletons)+" - Rede: "+str(net)+" - ego("+str(i)+"): "+str(file))
+									
+			#first compute the best partition
+			partition = community.best_partition(G)
+			print patition
+			time.sleep(5)
+									
+									
+#			with open(str(output)+str(ego)".txt", 'w') as f:
+#				f.write(json.dumps(partition))
+
+	print("######################################################################")		
+
+######################################################################################################################################################################
+#
+# Método principal do programa.
+# Realiza teste e coleta dos dados de cada user especificado no arquivo. 
+#
+######################################################################################################################################################################
+######################################################################################################################################################################
+def main():
+	os.system('clear')
+	print "################################################################################"
+	print"																											"
+	print" 			Detecção de Comunidades - Louvain Method										"
+	print"																											"
+	print"#################################################################################"
+	print
+	print
+	print"  1 - Follow"
+	print"  9 - Follwowers"
+	print"  2 - Retweets"
+	print"  3 - Likes"
+	print"  4 - Mentions"
+	
+	print " "
+	print"  5 - Co-Follow"
+	print" 10 - Co-Followers"				
+	print"  6 - Co-Retweets"
+	print"  7 - Co-Likes"
+	print"  8 - Co-Mentions"
+			
+	print
+	op = int(raw_input("Escolha uma opção acima: "))
+
+	if op in (5,6,7,8,10):																						# Testar se é um grafo direcionado ou não
+		ud = True
+	elif op in (1,2,3,4,9):
+		ud = False 
+	else:
+		print("Opção inválida! Saindo...")
+		sys.exit()
+
+	if op == 1 or op == 9:																						# Testar se é um grafo direcionado ou não
+		uw = True
+	else:
+		uw = False
+######################################################################
+	
+	net = "n"+str(op)	
+	
+######################################################################################################################
+	g_type1 = "graphs_with_ego"
+	g_type2 = "graphs_with_ego"
+	g_type3 = "graphs_without_ego"
+	g_type4 = "graphs_without_ego"
+	
+	singletons1 = "full"
+	singletons2 = "without_singletons"
+	singletons3 = "full"
+	singletons4 = "without_singletons"
+	
+	alg = "louvain"
+######################################################################################################################
+ 
+	output = "/home/amaury/communities_hashmap/"+str(g_type1)+"/"+str(alg)+"/"+str(singletons1)+"/"+str(net)+"/"
+	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type1)+"/"
+
+	print ("Calculando Comunidades para a rede: "+str(net)+" - COM o ego")
+
+	calculate_alg(output,singletons1,net,graphs,uw,ud,g_type1,alg)
+	
+######################################################################################################################
+######################################################################################################################
+
+	output = "/home/amaury/communities_hashmap/"+str(g_type2)+"/"+str(alg)+"/"+str(singletons2)+"/"+str(net)+"/"
+	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type2)+"/"
+
+	print ("Calculando Comunidades para a rede: "+str(net)+" - COM o ego")
+
+	calculate_alg(output,singletons2,net,graphs,uw,ud,g_type2,alg)
+	
+#######################################################################################################################
+#######################################################################################################################
+	
+	output = "/home/amaury/communities_hashmap/"+str(g_type3)+"/"+str(alg)+"/"+str(singletons3)+"/"+str(net)+"/"
+	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type3)+"/"
+
+	print ("Calculando Comunidades para a rede: "+str(net)+" - COM o ego")
+
+	calculate_alg(output,singletons3,net,graphs,uw,ud,g_type3,alg)
+	
+#######################################################################################################################
+#######################################################################################################################
+
+	output = "/home/amaury/communities_hashmap/"+str(g_type4)+"/"+str(alg)+"/"+str(singletons4)+"/"+str(net)+"/"
+	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type4)+"/"
+
+	print ("Calculando Comunidades para a rede: "+str(net)+" - COM o ego")
+
+	calculate_alg(output,singletons4,net,graphs,uw,ud,g_type4,alg)
+	
+######################################################################################################################
+
+	print("######################################################################")
+	print
+	print("######################################################################")
+	print("Script finalizado!")
+	print("######################################################################\n")
+
+	
+######################################################################################################################################################################
+#
+# INÍCIO DO PROGRAMA
+#
+######################################################################################################################################################################
+
+######################################################################################################################
+if __name__ == "__main__": main()
