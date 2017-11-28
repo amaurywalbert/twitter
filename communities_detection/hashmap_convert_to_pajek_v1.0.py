@@ -33,7 +33,7 @@ def save_pajek(i,graphs,file,graphs_pajek,ego_id,uw,ud,net):
 	if os.path.isfile(str(graphs_pajek)+str(ego_id)+".pajek"):
 		print (str(i)+" - Arquivo PAJEK já existe: "+str(graphs_pajek)+str(ego_id)+".pajek")
 	else:
-		print (str(net)" - Convertendo grafo do ego: "+str(i)+" para formato PAJEK: "+str(ego_id)+".pajek")
+		print (str(net)+" - Convertendo grafo do ego: "+str(i)+" para formato PAJEK: "+str(ego_id)+".pajek")
 	
 		if ud is False and uw is False:																				# Direcionado e ponderado
 			G = nx.read_weighted_edgelist(graphs+file, nodetype=int,create_using=nx.DiGraph())
