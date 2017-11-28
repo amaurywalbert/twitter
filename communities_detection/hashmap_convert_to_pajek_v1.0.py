@@ -26,14 +26,14 @@ sys.setdefaultencoding('utf-8')
 # Salvar arquivos em formato pajek
 #
 ######################################################################################################################################################################
-def save_pajek(i,graphs,file,graphs_pajek,ego_id,uw,ud):
+def save_pajek(i,graphs,file,graphs_pajek,ego_id,uw,ud,net):
 	if not os.path.exists(graphs_pajek):
 		os.makedirs(graphs_pajek)
 	
 	if os.path.isfile(str(graphs_pajek)+str(ego_id)+".pajek"):
 		print (str(i)+" - Arquivo PAJEK já existe: "+str(graphs_pajek)+str(ego_id)+".pajek")
 	else:
-		print ("Convertendo grafo do ego: "+str(i)+" para formato PAJEK: "+str(ego_id)+".pajek")
+		print (str(net)" - Convertendo grafo do ego: "+str(i)+" para formato PAJEK: "+str(ego_id)+".pajek")
 	
 		if ud is False and uw is False:																				# Direcionado e ponderado
 			G = nx.read_weighted_edgelist(graphs+file, nodetype=int,create_using=nx.DiGraph())
@@ -69,7 +69,7 @@ def prepare(net,graphs,uw,ud,g_type,alg,graphs_pajek):
 			ego_id = file.split(".edge_list")
 			ego_id = long(ego_id[0])
 			i+=1
-			save_pajek(i,graphs,file,graphs_pajek,ego_id,uw,ud)
+			save_pajek(i,graphs,file,graphs_pajek,ego_id,uw,ud,net)
 
 	print("######################################################################")		
 
