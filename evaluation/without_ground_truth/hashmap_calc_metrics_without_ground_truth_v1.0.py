@@ -207,8 +207,9 @@ def main():
 	print ("\n")
 
 	print
-	print ("Opção escolhida: "+str(net)+" - "+str(metric)+" - "+str(alg))
+	print ("Opção escolhida: "+str(net)+" - "+str(alg)+" - "+str(metric))
 	print ("Aguarde...")
+	time.sleep(5)
 	
 ######################################################################################################################
 	g_type1 = "graphs_with_ego"
@@ -221,7 +222,6 @@ def main():
 	singletons3 = "full"
 	singletons4 = "without_singletons"
 	
-	metric="density"
 ######################################################################################################################
 	os.system('clear')
 	
