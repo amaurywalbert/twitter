@@ -11,7 +11,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para plotar as métricas de avaliação sem ground_truth
+##		Status - Versão 1 - Script para plotar a modularidade
 ## 
 ######################################################################################################################################################################
 def prepare(dataset,metric):
@@ -58,39 +58,18 @@ def main():
 	print"  1 - Copra"
 	print"  2 - Oslom"		
 	print
-	op1 = int(raw_input("Escolha uma opção acima: "))
-
-	if op1 == 1:
-		alg = "copra"
-	elif op1 == 2:
-		alg = "oslom"
-	else:
-		print("Opção inválida! Saindo...")
-		sys.exit()
-	print ("\n")
-	print"#################################################################################"
-	print
-	print"  1 - Separability"
-	print"  2 - Density"		
-	print"  3 - Cohesiveness"
-	print"  4 - Expansion"		
-	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
 	if op2 == 1:
-		metric = "separability"
+		alg = "copra"
 	elif op2 == 2:
-		metric = "density"
-	elif op2 == 3:
-		metric = "cohesiveness"
-	elif op2 == 4:
-		metric = "expansion"
+		alg = "oslom"
 	else:
 		print("Opção inválida! Saindo...")
-		sys.exit()
-	print ("\n")
-				
+		sys.exit()		
 ######################################################################
+	
+	metric="separability"
 	
 	data1 = {}
 	data2 = {}
@@ -101,41 +80,29 @@ def main():
 
 	dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
 	data1 = prepare(dataset1,metric)
-	title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
-	if data1 is not None:
-		plot_metrics.plot_single(output,data1,metric,alg,title)
-	else:
-		print ("Impossível gerar gráfico simples para: "+str(title))
+	title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"
+	plot_metrics.plot_single(output,data1,metric,alg,title)
 ######################################################################				
 ######################################################################
 
 	dataset2 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"	
 	data2 = prepare(dataset2,metric)
-	title = str(metric)+"_graphs_with_ego_"+str(alg)+"_without_singletons"	
-	if data2 is not None:	
-		plot_metrics.plot_single(output,data2,metric,alg,title)
-	else:
-		print ("Impossível gerar gráfico simples para: "+str(title))
+	title = str(metric)+"_graphs_with_ego_"+str(alg)+"_without_singletons"
+	plot_metrics.plot_single(output,data2,metric,alg,title)
 ######################################################################
 ######################################################################
 
 	dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
 	data3 = prepare(dataset3,metric)
-	title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
-	if data3 is not None:				
-		plot_metrics.plot_single(output,data3,metric,alg,title)
-	else:
-		print ("Impossível gerar gráfico simples para: "+str(title))
+	title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"
+	plot_metrics.plot_single(output,data3,metric,alg,title)
 ######################################################################		
 ######################################################################
 
 	dataset4 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
 	data4 = prepare(dataset4,metric)
-	title = str(metric)+"_graphs_without_ego_"+str(alg)+"_without_singletons"	
-	if data4 is not None:	
-		plot_metrics.plot_single(output,data4,metric,alg,title)
-	else:
-		print ("Impossível gerar gráfico simples para: "+str(title))
+	title = str(metric)+"_graphs_without_ego_"+str(alg)+"_without_singletons"
+	plot_metrics.plot_single(output,data4,metric,alg,title)
 ######################################################################
 ######################################################################		
 	

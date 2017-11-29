@@ -10,15 +10,66 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Script com funções para cálculo de métricas de avaliação sem ground truth
 ## 
 ######################################################################################################################################################################
-def calc_metrics(communities,G,ud):
+def calc_metrics(communities,G,ud,metric):
 
+######################################################################################################################################################################
+######################################################################################################################################################################	
+	def calc_separability(n_edges,internal_edges,external_edges,internal_nodes): 
+		if internal_edges == n_edges or internal_nodes == 0 :												# Penalizar algoritmo que retorna apenas uma comunidade como sendo toda a rede-ego ou retorna valor para id que não corresponde a um vértice da rede
+			result = 0
+		else:
+			if internal_edges != 0 and external_edges != 0:
+				result = float(internal_edges)/float(external_edges)					# FALTA VERIFICAR A DIVISÃO POR ZERO!
+			else:
+				result = 0				
+		return result
+######################################################################################################################################################################
+######################################################################################################################################################################	
+	def calc_density(n_edges,internal_edges,internal_nodes):
+		if internal_edges == n_edges or internal_nodes == 0 :												# Penalizar algoritmo que retorna apenas uma comunidade como sendo toda a rede-ego ou retorna valor para id que não corresponde a um vértice da rede
+			result = 0
+		else:
+			if ud is False:
+				if internal_nodes-1 != 0:
+					result = float(internal_edges)/(float(internal_nodes)*(float(internal_nodes)-1))
+				else:
+					result = 0					
+			else:
+				_result = (float(internal_nodes)*float(internal_nodes)-1)/2
+				if _result != 0:
+					result = float(internal_edges)/float(_result)
+				else:
+					result = 0				
+		return result
+		
+######################################################################################################################################################################
+######################################################################################################################################################################			
+	def calc_cohesiveness(n_edges,internal_edges,external_edges,internal_nodes,external_nodes):			
+		if internal_edges == n_edges or internal_nodes == 0 :												# Penalizar algoritmo que retorna apenas uma comunidade como sendo toda a rede-ego ou retorna valor para id que não corresponde a um vértice da rede
+			result = 0
+		else:
+			if internal_edges != 0 and external_edges != 0:															# Provavelmente vamos excluir esse cálculo
+				result = float(external_edges)/(2*(float(internal_edges))+float(external_edges))			# Ver pq que tem um 2 no denominador nos artigos  "Metrics for community analisys"
+			else:																													# Cálculo tá confuso... parece que o calculo correto cresce exponencialmente no numero de vértices da comunidade...
+				result = 0
+		return result	
+		
+######################################################################################################################################################################
+######################################################################################################################################################################			
+	def calc_expansion(n_edges,internal_edges,external_edges,internal_nodes):			
+		if internal_edges == n_edges or internal_nodes == 0 :												# Penalizar algoritmo que retorna apenas uma comunidade como sendo toda a rede-ego ou retorna valor para id que não corresponde a um vértice da rede
+			result = 0
+		else:
+			result = float(external_edges)/float(internal_nodes)
+		return result	
+		
+######################################################################################################################################################################
+######################################################################################################################################################################						
+	
 	n_nodes = (G.GetNodes())														# Numero de vértices
 	n_edges = (G.GetEdges())														# Numero de arestas
 
-	_separability = []
-	_density = []
-	_cohesiveness = []
-	_expansion = []
+	_metric_vet = []
 #	print ("Número de vértices: "+str(n_nodes)+" - Número de Arestas: "+str(n_edges))			
 
 	for k,community in communities.iteritems():
@@ -73,63 +124,22 @@ def calc_metrics(communities,G,ud):
 			external_edges = float(external_edges)/2
 			total_edges_community = float(internal_edges)+float(external_edges)						#Essas duas linhas devem retornar os mesmos resultados, embora os operandos sejam diferentes...			
 			community_degree = float(in_degree)/2																#Essas duas linhas devem retornar os mesmos resultados, embora os operandos sejam diferentes...
-		
 
-#		print total_edges_community,community_degree
-		
-		
-		if internal_edges == n_edges or internal_nodes == 0 :												# Penalizar algoritmo que retorna apenas uma comunidade como sendo toda a rede-ego ou retorna valor para id que não corresponde a um vértice da rede
-			result_s = 0
-			result_d = 0
-			result_c = 0
-			result_e = 0
-		else:
-########################################################################################################### Separability			
-			if internal_edges != 0 and external_edges != 0:
-				result_s = float(internal_edges)/float(external_edges)+float(internal_edges)				# Acrescentei internal edges no denominador... discutir isso. Como fazer com a divisão por zero??
-			else:
-				result_s = 0				
-			
-########################################################################################################### DENSITY
-
-			if ud is False:
-				if internal_nodes-1 != 0:
-					result_d = float(internal_edges)/(float(internal_nodes)*(float(internal_nodes)-1))
-				else:
-					result_d = 0					
-			else:
-				result = (float(internal_nodes)*float(internal_nodes)-1)/2
-				if result != 0:
-					result_d = float(internal_edges)/float(result)
-				else:
-					result_d = 0	
-
-########################################################################################################### COHESIVENESS = Conductância
-
-			if internal_edges != 0 and external_edges != 0:
-				result_c = float(external_edges)/(2*(float(internal_edges))+float(external_edges))			# Ver pq que tem um 2 no denominador nos artigos  "Metrics for community analisys"
-			else:
-				result_c = 0
-
-########################################################################################################### EXPANSION
-
-			result_e = float(external_edges)/float(internal_nodes)
-
-			
-########################################################################################################### 			 
-		_separability.append(result_s)				
-		_density.append(result_d)
-		_cohesiveness.append(result_c)
-		_expansion.append(result_e)
-#		print ("community_degree: %d --- internal_nodes: %d --- internal_edges: %d --- external_edges: %d" % (community_degree, internal_nodes, internal_edges,external_edges))
-#		print ("separability: %f --- density: %f --- cohesiveness: %f --- expansion: %f" % (result_s,result_d,result_c,result_e))		
-#		print
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-	separability = calc.calcular(_separability)
-	density = calc.calcular(_density)
-	cohesiveness = calc.calcular(_cohesiveness)
-	expansion = calc.calcular(_expansion)	
-
-	return separability,density,cohesiveness,expansion
-	
+		
+		if metric == "separability":
+			_result = calc_separability(n_edges,internal_edges,external_edges,internal_nodes)
+ 		elif metric == "density":
+ 			_result = calc_density(n_edges,internal_edges,internal_nodes) 			
+ 		elif metric == "cohesiveness":
+ 			_result = calc_cohesiveness(n_edges,internal_edges,external_edges,internal_nodes,external_nodes)
+ 		elif metric == "expansion":
+ 			_result = calc_expansion(n_edges,internal_edges,external_edges,internal_nodes)
+ 		else:
+ 			print ("\nMétrica não encontrada: "+str(metric)+"\n")
+ 			sys.exit()			
+		
+		_metric_vet.append(_result)
+	metric_result = calc.calcular(_metric_vet)		
+	return metric_result
