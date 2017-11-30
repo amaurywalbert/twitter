@@ -188,7 +188,7 @@ def main():
 	print
 	print"  1 - Separability"
 	print"  2 - Density"		
-	print"  3 - Cohesiveness"
+	print"  3 - Conductance"
 	print"  4 - Expansion"		
 	print
 	op3 = int(raw_input("Escolha uma opção acima: "))
@@ -198,7 +198,7 @@ def main():
 	elif op3 == 2:
 		metric = "density"
 	elif op3 == 3:
-		metric = "cohesiveness"
+		metric = "conductance"
 	elif op3 == 4:
 		metric = "expansion"
 	else:

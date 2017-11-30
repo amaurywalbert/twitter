@@ -132,8 +132,8 @@ def calc_metrics(communities,G,ud,metric):
 			_result = calc_separability(n_edges,internal_edges,external_edges,internal_nodes)
  		elif metric == "density":
  			_result = calc_density(n_edges,internal_edges,internal_nodes) 			
- 		elif metric == "conductance":
- 			_result = calc_conductance(n_edges,internal_edges,external_edges,internal_nodes,external_nodes)
+ 		elif metric == "cohesiveness":
+ 			_result = calc_cohesiveness(n_edges,internal_edges,external_edges,internal_nodes,external_nodes)
  		elif metric == "expansion":
  			_result = calc_expansion(n_edges,internal_edges,external_edges,internal_nodes)
  		else:
