@@ -49,7 +49,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 					Impressão de Gráficos - Separability										"
+	print" 					Impressão de Gráficos - Métricas de Avaliação Sem Ground - Truth	"
 	print"																											"
 	print" Escolha o algoritmo usado na detecção das comunidades									"
 	print"																											"
@@ -92,7 +92,7 @@ def main():
 		metric = "expansion"
 	elif op2 == 6:
 		metric = "normalized_cut"
-	if op2 == 7:
+	elif op2 == 7:
 		metric = "separability"		
 	else:
 		print("Opção inválida! Saindo...")
