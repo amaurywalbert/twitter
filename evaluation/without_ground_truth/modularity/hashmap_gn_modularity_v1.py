@@ -35,12 +35,8 @@ def save_data(graphs,alg):
 			print ("\nDiretório não encontrado "+str(source_dir))
 			print
 		else:	
-			if os.path.exists(output):
-				shutil.rmtree(output)		
-				os.makedirs(output)	
-			else:
+			if not os.path.exists(output):
 				os.makedirs(output)
-
 			i=0
 			modularity=[]
 			for file in os.listdir(source_dir):					
@@ -58,9 +54,6 @@ def save_data(graphs,alg):
 								m = float(a[1])
 								modularity.append(m)
 			with open(str(output)+"n"+str(net)+".json", 'w') as f:
-				print "#########################################################################################"				
-				print "\nSalvando\n!!!"
-				print "#########################################################################################"
 				f.write(json.dumps(modularity)+"\n")		
 									
 #####################################################################################################################################################################
