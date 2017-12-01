@@ -147,7 +147,7 @@ def main():
 	print ("Algoritmo usado na detecção das comunidades:\n")
 	print("01 - COPRA ")
 	print("02 - OSLOM")
-	print" 02 - GN"
+	print("03 - GN")
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:
