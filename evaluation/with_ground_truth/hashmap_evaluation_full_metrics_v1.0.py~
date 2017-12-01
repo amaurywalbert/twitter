@@ -130,7 +130,9 @@ def instructions(metric,alg):
 	data4 = data_overview
 
 ################################################################################################
-	plot_evaluation.plot_full(output,data1,data2,data3,data4,metric,alg)		
+	data_full = [data1,data2,data3,data4]
+
+	return data_full
 		
 ######################################################################################################################################################################
 #
@@ -141,26 +143,6 @@ def instructions(metric,alg):
 ######################################################################################################################################################################
 def main():
 	os.system('clear')
-	print "\n#######################################################################\n"	
-	print ("Métrica a ser aplicada na geração dos resultados:\n")
-	print("01 - NMI - Normalized Mutual Infomation. ")
-	print("02 - Jaccard Similarity.")
-	print	
-	metric_op = int(raw_input("Escolha uma opção acima: "))
-	print ("\n##################################################\n")
-#######################################################################
-	if metric_op == 01:
-		metric = "nmi"
-#######################################################################
-	elif metric_op == 02:
-		metric = "jaccard"
-#######################################################################
-	else:
-		metric = ""
-		print("Opção inválida! Saindo...")
-		exit()	
-#######################################################################
-
 	print "\n#######################################################################\n"	
 	print ("Algoritmo usado na detecção das comunidades:\n")
 	print("01 - COPRA ")
@@ -174,14 +156,20 @@ def main():
 		alg = "oslom"
 	elif op2 == 03:
 		alg = "gn"
-#######################################################################
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		exit()	
 #######################################################################
 
-	instructions(metric,alg)
+
+	metric = "nmi"
+	data_full1 = instructions(metric,alg)
+		
+	metric = "jaccard"
+	data_full2 = instructions(metric,alg)
+	
+	plot_evaluation.plot_full_metrics(output,data_full1,data_full2,alg)			
 	
 #######################################################################
 	print

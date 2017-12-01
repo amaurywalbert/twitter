@@ -237,12 +237,15 @@ def main():
 	print 
 	print" 01 - COPRA"
 	print" 02 - OSLOM"
+	print" 03 - GN"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:
 		alg = "copra"
 	elif op2 == 02:
 		alg = "oslom"
+	elif op2 == 03:
+		alg = "gn"
 	else:
 		alg = ""
 		print("Algoritmo - Opção inválida! Saindo...")

@@ -237,12 +237,15 @@ def main():
 	print 
 	print" 01 - COPRA"
 	print" 02 - OSLOM"
+	print" 02 - GN"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:
 		alg = "copra"
 	elif op2 == 02:
 		alg = "oslom"
+	elif op2 == 03:
+		alg = "gn"
 	else:
 		alg = ""
 		print("Algoritmo - Opção inválida! Saindo...")
@@ -258,8 +261,8 @@ def main():
 	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT_hashmap/"
 	communities1 = "/home/amaury/communities_hashmap/graphs_with_ego/"+str(alg)+"/"
 	communities2 = "/home/amaury/communities_hashmap/graphs_without_ego/"+str(alg)+"/" 
-	output1 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/"+str(alg)+"/graphs_with_ego/jaccard"
-	output2 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/"+str(alg)+"/graphs_without_ego/jaccard"
+	output1 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/jaccard/graphs_with_ego/"+str(alg)+"/"
+	output2 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/jaccard/graphs_without_ego/"+str(alg)+"/"
 
 	for i in range(10):								# Para cada rede-ego gerada
 		i+=1

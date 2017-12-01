@@ -147,17 +147,15 @@ def main():
 	print ("Algoritmo usado na detecção das comunidades:\n")
 	print("01 - COPRA ")
 	print("02 - OSLOM")
-	print	
-	alg_op = int(raw_input("Escolha uma opção acima: "))
-	print ("\n##################################################\n")
-
-#######################################################################
-	if alg_op == 01:
+	print" 02 - GN"
+	print
+	op2 = int(raw_input("Escolha uma opção acima: "))
+	if op2 == 01:
 		alg = "copra"
-#######################################################################		
-	elif alg_op == 02:
+	elif op2 == 02:
 		alg = "oslom"
-#######################################################################
+	elif op2 == 03:
+		alg = "gn"
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
