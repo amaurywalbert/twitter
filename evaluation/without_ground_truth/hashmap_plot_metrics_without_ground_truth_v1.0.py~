@@ -70,21 +70,30 @@ def main():
 	print ("\n")
 	print"#################################################################################"
 	print
-	print"  1 - Separability"
-	print"  2 - Density"		
-	print"  3 - Conductance"
-	print"  4 - Expansion"		
+	print"  1 - Average Degree"
+	print"  2 - Conductance"
+	print"  3 - Cut Ratio"
+	print"  4 - Density"	
+	print"  5 - Expansion"
+	print"  6 - Normalized Cut"
+	print"  7 - Separability"	
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
 	if op2 == 1:
-		metric = "separability"
+		metric = "average_degree"
 	elif op2 == 2:
-		metric = "density"
-	elif op2 == 3:
 		metric = "conductance"
+	elif op2 == 3:
+		metric = "cut_ratio"
 	elif op2 == 4:
+		metric = "density"
+	elif op2 == 5:
 		metric = "expansion"
+	elif op2 == 6:
+		metric = "normalized_cut"
+	if op2 == 7:
+		metric = "separability"		
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()
