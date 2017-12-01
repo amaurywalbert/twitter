@@ -28,9 +28,9 @@ def save_data(graphs,alg):
 
 		source_dir="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"
 			
-		output_full="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/"			
-		output_singletons="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/singletons/n"+str(net)+"/"
-		output_without_singletons="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/without_singletons/n"+str(net)+"/"
+		output_full="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/1/"			
+		output_singletons="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/singletons/n"+str(net)+"/1/"
+		output_without_singletons="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/without_singletons/n"+str(net)+"/1/"
 			
 		if not os.path.isdir(source_dir):
 			print ("\nDiretório não encontrado "+str(source_dir))
@@ -59,22 +59,18 @@ def save_data(graphs,alg):
 				else:	
 					i+=1
 					print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - ego: "+str(i)+": "+str(file))
-
-					if os.path.isfile(output_full+file):											#Limpar diretórios
-						os.remove(output_full+file)	
-					if os.path.isfile(output_without_singletons+file):
-						os.remove(output_without_singletons+file)
-					if os.path.isfile(output_singletons+file):
-						os.remove(output_singletons+file)
 					
 					j=0	
 					with open(source_dir+str(file), 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "file"
+						ego_id = file.split(".pajek")											# pegar o nome do arquivo que indica o threshold analisado
+						ego_id = str(ego_id[0])
+										
 						for line in f:
 							j+=1
 							if j > 7:
 								b = line.split(': ')
 								a = b[1].split(' ')
-								with open(output_full+file+".txt", 'a+') as g:
+								with open(output_full+ego_id+".txt", 'a+') as g:
 									for item in a:
 										if item != "\n":
 											if long(item) > 0:
@@ -85,7 +81,7 @@ def save_data(graphs,alg):
 									g.write("\n")															# Passa para a próxima linha de g
 	
 								if len(a) > 1:
-									with open(output_without_singletons+file+".txt", 'a+') as g:
+									with open(output_without_singletons+ego_id+".txt", 'a+') as g:
 										for item in a:
 											if item != "\n":
 												if long(item) > 0:
@@ -93,7 +89,7 @@ def save_data(graphs,alg):
 													g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
 										g.write("\n")														# Passa para a próxima linha
 								else:
-									with open(output_singletons+file+".txt", 'a+') as g:
+									with open(output_singletons+ego_id+".txt", 'a+') as g:
 										for item in a:
 											if item != "\n":
 												if long(item) > 0:
