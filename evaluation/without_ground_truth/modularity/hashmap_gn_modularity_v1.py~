@@ -7,7 +7,7 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-##		Status - Versão 1 - Coletar a modularidade da rede calculada durante o processo de detecçao de comunidades com o software radatools-4.1-linux64
+##		Status - Versão 1 - Coletar a modularidade da rede calculada durante o processo de detecçao de comunidades com o software 	
 ##					http://deim.urv.cat/~sergio.gomez/radatools.php#download
 ##								
 ## # INPUT:
@@ -57,8 +57,8 @@ def save_data(graphs,alg):
 								a = line.split('= ')
 								m = float(a[1])
 								modularity.append(m)
-			with open(str(output)+"n"+str(net)+".json", 'w') as f:
-				f.write(json.dumps(modularity)+"\n")		
+				with open(str(output)+"n"+str(net)+".json", 'w') as f:
+					f.write(json.dumps(modularity)+"\n")		
 									
 #####################################################################################################################################################################
 #
