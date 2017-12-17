@@ -14,9 +14,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para gerar coeficiente de clustering de cada rede e a média de todas as redes por ego
+##		Status - Versão 1 - Script para gerar propriedades estruturais das redes-ego
 ## 
-##												ERRRO DE ALOCAÇÃO DE MEMÓRIA!!!!!
+##												v2 - Normalizei a centralidade de intermediação;
 ######################################################################################################################################################################
 
 
@@ -27,88 +27,85 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	print("\n######################################################################\n")
-	if os.path.isfile(str(output_dir)+str(net)+"_clustering_coef.json"):
-		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_clustering_coef.json")
+	if os.path.isfile(str(output_dir)+str(net)+"_net_struct.json"):
+		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_net_struct.json")
 	else:
 
-		print ("Dataset clustering coefficient - " +str(dataset_dir))
-											
-		cf = []																										# Média dos coeficientes de clusterings por rede-ego
-		gcf = []																										# Média usando opção global
-		n = []																										# vetor com número de vértices para cada rede-ego																									
-		e = []																										# vetor com número de arestas para cada rede-ego
+		print ("Dataset network structure - " +str(dataset_dir))
+		n = []																										# Média dos nós por rede-ego
+		e = []																										# Média das arestas por rede-ego	
+
+		bc_n = []																									# média de betweenness centrality dos nós	
+		bc_e = []																									# média de betweenness centrality das arestas
+
 		i = 0
 
+
 		for file in os.listdir(dataset_dir):
-
 			i+=1 
-			print (str(output_dir)+str(net)+"/"+str(file)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))
-#			if IsDir is True:
-#				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-#			else:
-#				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-
-
-			G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')				
-
-#			G.Dump()
-#			time.sleep(5)
-
+			print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))
+			if IsDir is True:
+				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+			else:
+				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+			
 #####################################################################################		
 
 			n.append(G.GetNodes())																		# Numero de vertices
 			e.append(G.GetEdges())																		# Numero de arestas
 			n_nodes = G.GetNodes()	
 			n_edges = G.GetEdges()
-		
+	
 #####################################################################################
-#Usando opção local - Retorna o mesmo resultado do global
-			if n_edges == 0:
-				a = 0
-				cf.append(a)
-				print ("Nenhuma aresta encontrada para a rede-ego "+str(i)+" - ("+str(file))				
-			else:	
-				NIdCCfH = snap.TIntFltH()
-				snap.GetNodeClustCf(G, NIdCCfH)
-				_cf = []
-				for item in NIdCCfH:
-					_cf.append(NIdCCfH[item])																# Clusterinf Coefficient
-				result = calc.calcular(_cf)
-				cf.append(result['media'])
-				print ("Clustering Coef para o ego "+str(i)+" ("+str(file)+"): "+str(result['media']))
-				print  				
+			if n_edges == 0 or n_nodes < 3:
+				cc.append(n_edges)
+				bc_n.append(n_edges)
+				bc_e.append(n_edges)	
+			else:
+				Nodes = snap.TIntFltH()
+				Edges = snap.TIntPrFltH()
+				snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
+				_bc_n = []
+				_bc_e = []
+				if IsDir is True:
+					max_betweenneess = (n_nodes-1)*(n_nodes-2)
+				else:
+					max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
+			
+				for node in Nodes:
+					bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
+					_bc_n.append(bc_n_normalized)
+
+				for edge in Edges:
+					bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
+					_bc_e.append(bc_e_normalized)
+				result = calc.calcular(_bc_n)
+				bc_n.append(result['media'])
+				result = calc.calcular(_bc_e)
+				bc_e.append(result['media'])	
 
 #####################################################################################
-#Usando opção global   - Retorna o mesmo resultado do local
-#
-#			if n_edges == 0:
-#				a = 0
-#				gcf.append(a)
-#			else:	
-#				GraphClustCoeff = snap.GetClustCf (G)
-#				gcf.append(GraphClustCoeff)
-#				print "Clustering coefficient: %f" % GraphClustCoeff
-#				print 				
 
-#####################################################################################
-		CF = calc.calcular_full(cf)
+	
+		BC_N = calc.calcular_full(bc_n)
+		BC_E = calc.calcular_full(bc_e)
+
 	
 		overview = {}
-		overview['ClusteringCoefficient'] = CF
+	
+		overview['BetweennessCentrNodes'] = BC_N
+		overview['BetweennessCentrEdges'] = BC_E
 
-
-		
-		with open(str(output_dir)+str(net)+"_clustering_coef.json", 'w') as f:
+	
+		with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
 			f.write(json.dumps(overview))
 	
-		with open(str(output_dir)+str(net)+"_clustering_coef.txt", 'w') as f:
-			f.write("\n######################################################################\n")	
-			f.write ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
+		with open(str(output_dir)+str(net)+"_net_struct.txt", 'w') as f:
+			f.write("\n######################################################################\n")
+			f.write ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
+			f.write ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
 			f.write("\n######################################################################\n")
 
-		print ("\n######################################################################\n")	
-		print ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
-		print ("\n######################################################################\n")
 
 print("\n######################################################################\n")
 
@@ -124,7 +121,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Script para cálculo do coeficiente de agrupamento do dataset (rede-ego)							"
+	print" Script para apresentação de propriedades do dataset (rede-ego)							"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -132,7 +129,7 @@ def main():
 	print"  9 - Follwowers"
 	print"  2 - Retweets"
 	print"  3 - Likes"
-	print"  3 - Mentions"
+	print"  4 - Mentions"
 	
 	print " "
 	print"  5 - Co-Follow"
@@ -168,7 +165,7 @@ def main():
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/clustering_coefficient_hashmap/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/snap_v2/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
@@ -178,14 +175,13 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/clustering_coefficient_hashmap/graphs_without_ego/"
+		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/snap_v2/graphs_without_ego/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		net_structure(dataset_dir2,output_dir2,net,isdir,weight)												# Inicia os cálculos...	
-		
+######################################################################
+######################################################################		
 
-######################################################################
-######################################################################
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
