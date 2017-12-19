@@ -25,7 +25,7 @@ sys.setdefaultencoding('utf-8')
 # Armazenar as propriedades do dataset
 #
 ######################################################################################################################################################################
-def prepare(source_dir):
+def prepare(source_dir,source2_dir):
 	print("\n######################################################################\n")
 	
 	nodes = {}
@@ -39,15 +39,16 @@ def prepare(source_dir):
 		net="n"+str(i)
 		if os.path.isfile(source_dir+net+"_net_struct.json"):
 			with open(source_dir+net+"_net_struct.json", 'r') as f:
-				overview = json.load(f)
-				
-				nodes[net] = {'media':overview['Nodes']['media'],'std':overview['Nodes']['desvio_padrao']}
-				edges[net] = {'media':overview['Edges']['media'],'std':overview['Edges']['desvio_padrao']}
-				diameter[net] = {'media':overview['Diameter']['media'],'std':overview['Diameter']['desvio_padrao']}
-				closecentr[net] = {'media':overview['CloseCentr']['media'],'std':overview['CloseCentr']['desvio_padrao']}
-				bet_centr_nodes[net] = {'media':overview['BetweennessCentrNodes']['media'],'std':overview['BetweennessCentrNodes']['desvio_padrao']}
-				bet_centr_edges[net] = {'media':overview['BetweennessCentrEdges']['media'],'std':overview['BetweennessCentrEdges']['desvio_padrao']}
-				modularity[net] = {'media':overview['Modularity']['media'],'std':overview['Modularity']['desvio_padrao']}
+				with open(source2_dir+net+"_net_struct.json", 'r') as g:
+					overview = json.load(f)
+					overview2 = json.load(f)
+					nodes[net] = {'media':overview['Nodes']['media'],'std':overview['Nodes']['desvio_padrao']}
+					edges[net] = {'media':overview['Edges']['media'],'std':overview['Edges']['desvio_padrao']}
+					diameter[net] = {'media':overview['Diameter']['media'],'std':overview['Diameter']['desvio_padrao']}
+					closecentr[net] = {'media':overview['CloseCentr']['media'],'std':overview['CloseCentr']['desvio_padrao']}
+					bet_centr_nodes[net] = {'media':overview2['BetweennessCentrNodes']['media'],'std':overview2['BetweennessCentrNodes']['desvio_padrao']}
+					bet_centr_edges[net] = {'media':overview2['BetweennessCentrEdges']['media'],'std':overview2['BetweennessCentrEdges']['desvio_padrao']}
+					modularity[net] = {'media':overview['Modularity']['media'],'std':overview['Modularity']['desvio_padrao']}
 
 	data = {}
 	data['Nodes'] = nodes
@@ -78,12 +79,14 @@ def main():
 	print
 	
 	source_dir1 = source+"graphs_with_ego/"
+	source2_dir1 = source2+"graphs_with_ego/"
 	
-	data1 = prepare(source_dir1)
+	data1 = prepare(source_dir1,source2_dir1)
 	
 	source_dir2 = source+"graphs_without_ego/"
+	source2_dir2 = source2+"graphs_without_ego/"
 	
-	data2 = prepare(source_dir2)
+	data2 = prepare(source_dir2,source2_dir2)
 	
 			
 	if data1 is not None and data2 is not None:
@@ -105,6 +108,7 @@ def main():
 ######################################################################################################################################################################
 
 source = "/home/amaury/Dropbox/net_structure_hashmap/snap/"
+source2 = "/home/amaury/Dropbox/net_structure_hashmap/snap_v2/"
 output = "/home/amaury/Dropbox/net_structure_hashmap_statistics/snap/"
 
 #Executa o método main
