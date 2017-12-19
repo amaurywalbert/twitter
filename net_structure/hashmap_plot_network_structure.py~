@@ -39,7 +39,7 @@ def prepare(source_dir):
 		net="n"+str(i)
 		if os.path.isfile(source_dir+net+"_net_struct.json"):
 			with open(source_dir+net+"_net_struct.json", 'r') as f:
-				overview = json.loads(f)
+				overview = json.load(f)
 				
 				nodes[net] = {'media':overview['Nodes']['media'],'std':overview['Nodes']['desvio_padrao']}
 				edges[net] = {'media':overview['Edges']['media'],'std':overview['Edges']['desvio_padrao']}
