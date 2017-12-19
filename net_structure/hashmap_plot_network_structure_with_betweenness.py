@@ -41,7 +41,7 @@ def prepare(source_dir,source2_dir):
 			with open(source_dir+net+"_net_struct.json", 'r') as f:
 				with open(source2_dir+net+"_net_struct.json", 'r') as g:
 					overview = json.load(f)
-					overview2 = json.load(f)
+					overview2 = json.load(g)
 					nodes[net] = {'media':overview['Nodes']['media'],'std':overview['Nodes']['desvio_padrao']}
 					edges[net] = {'media':overview['Edges']['media'],'std':overview['Edges']['desvio_padrao']}
 					diameter[net] = {'media':overview['Diameter']['media'],'std':overview['Diameter']['desvio_padrao']}
