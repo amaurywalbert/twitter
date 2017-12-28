@@ -148,21 +148,13 @@ def calc_metrics(communities,G,ud):
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-		_result_ad = 0 
-		_result_c = 0		
-		_result_cut_r = 0
-		_result_d = 0
-		_result_e = 0
-		_result_normal_cut = 0
-		_result_s = 0
-		if internal_edges != n_edges and internal_nodes != 0 :												# Penalizar algoritmo que retorna apenas uma comunidade como sendo toda a rede-ego ou retorna valor para id que não corresponde a um vértice da rede
-#			_result_ad = calc_average_degree(n_edges,internal_edges,internal_nodes) 
-#			_result_c = calc_conductance(n_edges,internal_edges,external_edges,internal_nodes,external_nodes)		
-# 			_result_cut_r = calc_cut_r(n_edges,internal_edges,external_edges,n_nodes,internal_nodes)
- 			_result_d = calc_density(n_edges,internal_edges,internal_nodes)
-# 			_result_e = calc_expansion(n_edges,internal_edges,external_edges,internal_nodes)
-# 			_result_normal_cut = calc_normal_cut(n_edges,internal_edges,external_edges)
-#			_result_s = calc_separability(n_edges,internal_edges,external_edges,internal_nodes)
+		_result_ad = calc_average_degree(n_edges,internal_edges,internal_nodes) 
+		_result_c = calc_conductance(n_edges,internal_edges,external_edges,internal_nodes,external_nodes)		
+		_result_cut_r = calc_cut_r(n_edges,internal_edges,external_edges,n_nodes,internal_nodes)
+		_result_d = calc_density(n_edges,internal_edges,internal_nodes)
+		_result_e = calc_expansion(n_edges,internal_edges,external_edges,internal_nodes)
+		_result_normal_cut = calc_normal_cut(n_edges,internal_edges,external_edges)
+		_result_s = calc_separability(n_edges,internal_edges,external_edges,internal_nodes)
 
 		_metric_ad.append(_result_ad)																			#Armazena os resultados para cada partição para depois fazer a média do ego. 		
 		_metric_c.append(_result_c)																			#Armazena os resultados para cada partição para depois fazer a média do ego.
