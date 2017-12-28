@@ -119,6 +119,7 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 					print
 					print lenght
 					print len(lenght)
+					print g_type,singletons,alg,net
 					statistics = {'size':size,'lenght':lenght}													 
 					print("######################################################################")
 					print	
