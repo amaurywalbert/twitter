@@ -76,53 +76,55 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 	else:
 		print("\n######################################################################")
 
-		if not os.path.isdir(str(communities)+str(threshold)+"/"):
-			print ("Threshold para a rede "+str(net)+" não encontrado: "+str(threshold))
+		for threshold in os.listdir(communities):
+			if not os.path.isdir(str(communities)+str(threshold)+"/"):
+				print ("Threshold para a rede "+str(net)+" não encontrado: "+str(threshold))
 
-		else:
-			create_dirs(out_dir)
+			else:
 
-			if os.path.exists(str(out_dir)+str(threshold)+".json"):
-				print ("Arquivo de destino já existe: "+str(threshold)+".json")
+				create_dirs(out_dir)
+
+				if os.path.exists(str(out_dir)+str(threshold)+".json"):
+					print ("Arquivo de destino já existe: "+str(threshold)+".json")
 					
-			else:	
-				print("######################################################################")
+				else:	
+					print("######################################################################")
 							
-				statistics = {}
-				size = []
-				lenght = []
-				i=0 		#Ponteiro para o ego
-				for file in os.listdir(str(communities)+str(threshold)+"/"):
-					if os.path.isfile(str(communities)+str(threshold)+"/"+file):
-						ego_id = file.split(".txt")
-						ego_id = long(ego_id[0])
-						i+=1
-						if not os.path.isfile(str(graphs)+str(ego_id)+".edge_list"):
-							print ("ERROR - EGO: "+str(i)+" - Arquivo com lista de arestas não encontrado:" +str(graphs)+str(ego_id)+".edge_list")
+					statistics = {}
+					size = []
+					lenght = []
+					i=0 		#Ponteiro para o ego
+					for file in os.listdir(str(communities)+str(threshold)+"/"):
+						if os.path.isfile(str(communities)+str(threshold)+"/"+file):
+							ego_id = file.split(".txt")
+							ego_id = long(ego_id[0])
+							i+=1
+							if not os.path.isfile(str(graphs)+str(ego_id)+".edge_list"):
+								print ("ERROR - EGO: "+str(i)+" - Arquivo com lista de arestas não encontrado:" +str(graphs)+str(ego_id)+".edge_list")
 
-						else:
+							else:
 
-							with open(str(communities)+str(threshold)+"/"+file, 'r') as community_file:
-								if ud is False:
-									G = snap.LoadEdgeList(snap.PNGraph, str(graphs)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-								else:
-									G = snap.LoadEdgeList(snap.PUNGraph, str(graphs)+str(ego_id)+".edge_list", 0, 1)						# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+								with open(str(communities)+str(threshold)+"/"+file, 'r') as community_file:
+									if ud is False:
+										G = snap.LoadEdgeList(snap.PNGraph, str(graphs)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+									else:
+										G = snap.LoadEdgeList(snap.PUNGraph, str(graphs)+str(ego_id)+".edge_list", 0, 1)						# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 									
-								n_nodes = (G.GetNodes())														# Numero de vértices
-								communities_dict = prepare_communities(community_file,n_nodes,size)							#Função para devolver um dicionário com as comunidades
-								lenght.append(len(communities_dict))
+									n_nodes = (G.GetNodes())														# Numero de vértices
+									communities_dict = prepare_communities(community_file,n_nodes,size)							#Função para devolver um dicionário com as comunidades
+									lenght.append(len(communities_dict))
 									
-				print size
-				print len(size)
-				print
-				print lenght
-				print len(lenght)
-				statistics = {'size':size,'lenght':lenght}													 
-				print("######################################################################")
-				print	
+					print size
+					print len(size)
+					print
+					print lenght
+					print len(lenght)
+					statistics = {'size':size,'lenght':lenght}													 
+					print("######################################################################")
+					print	
 
-#				with open(str(out_dir)+str(threshold)+".json", "w") as f:
-#					f.write(json.dumps(statistics, separators=(',', ':'))+"\n")
+					with open(str(out_dir)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(statistics, separators=(',', ':'))+"\n")
 
 	print("######################################################################")		
 
