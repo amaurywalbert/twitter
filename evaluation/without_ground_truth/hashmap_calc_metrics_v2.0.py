@@ -289,7 +289,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-output_dir = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/"
+output_dir = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/density_v2/"
 
 ######################################################################################################################
 if __name__ == "__main__": main()

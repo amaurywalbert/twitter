@@ -132,39 +132,39 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 									
 									avg_ad,avg_c,avg_cut_r,avg_d,avg_e,avg_normal_cut,avg_s = metrics.calc_metrics(communities_dict,G,ud)		# Calcular as métricas
 									
-									result_ad.append(avg_ad['media'])  									# Salvar Métrica									
-									result_c.append(avg_c['media'])  									# Salvar Métrica
-									result_cut_r.append(avg_cut_r['media'])  									# Salvar Métrica
+#									result_ad.append(avg_ad['media'])  									# Salvar Métrica									
+#									result_c.append(avg_c['media'])  									# Salvar Métrica
+#									result_cut_r.append(avg_cut_r['media'])  									# Salvar Métrica
 									result_d.append(avg_d['media'])  									# Salvar Métrica
-									result_e.append(avg_e['media'])  									# Salvar Métrica
-									result_normal_cut.append(avg_normal_cut['media'])  									# Salvar Métrica									
-									result_s.append(avg_s['media'])  									# Salvar Métrica
-
-									print ("Average Degree: "+str(result_ad[i-1])+" - Conductance: "+str(result_c[i-1])+" - Cut Ratio: "+str(result_cut_r[i-1])+" - Density: "+str(result_d[i-1]))
-									print ("Expansion: "+str(result_e[i-1])+" - Normalized Cut: "+str(result_normal_cut[i-1])+" - Separability: "+str(result_s[i-1]))
-									print 
-					print("######################################################################")	
-
-					with open(str(out_ad)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(result_ad, separators=(',', ':'))+"\n")
-						
-					with open(str(out_c)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(result_c, separators=(',', ':'))+"\n")
-
-					with open(str(out_cut_r)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(result_cut_r, separators=(',', ':'))+"\n")
-											
+#									result_e.append(avg_e['media'])  									# Salvar Métrica
+#									result_normal_cut.append(avg_normal_cut['media'])  									# Salvar Métrica									
+#									result_s.append(avg_s['media'])  									# Salvar Métrica
+#
+#									print ("Average Degree: "+str(result_ad[i-1])+" - Conductance: "+str(result_c[i-1])+" - Cut Ratio: "+str(result_cut_r[i-1])+" - Density: "+str(result_d[i-1]))
+#									print ("Expansion: "+str(result_e[i-1])+" - Normalized Cut: "+str(result_normal_cut[i-1])+" - Separability: "+str(result_s[i-1]))
+#									print 
+#					print("######################################################################")	
+#
+#					with open(str(out_ad)+str(threshold)+".json", "w") as f:
+#						f.write(json.dumps(result_ad, separators=(',', ':'))+"\n")
+#						
+#					with open(str(out_c)+str(threshold)+".json", "w") as f:
+#						f.write(json.dumps(result_c, separators=(',', ':'))+"\n")
+#
+#					with open(str(out_cut_r)+str(threshold)+".json", "w") as f:
+#						f.write(json.dumps(result_cut_r, separators=(',', ':'))+"\n")
+#											
 					with open(str(out_d)+str(threshold)+".json", "w") as f:
 						f.write(json.dumps(result_d, separators=(',', ':'))+"\n")
-
-					with open(str(out_e)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(result_e, separators=(',', ':'))+"\n")
-
-					with open(str(out_normal_cut)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(result_normal_cut, separators=(',', ':'))+"\n")
-
-					with open(str(out_s)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(result_s, separators=(',', ':'))+"\n")						
+#
+#					with open(str(out_e)+str(threshold)+".json", "w") as f:
+#						f.write(json.dumps(result_e, separators=(',', ':'))+"\n")
+#
+#					with open(str(out_normal_cut)+str(threshold)+".json", "w") as f:
+#						f.write(json.dumps(result_normal_cut, separators=(',', ':'))+"\n")
+#
+#					with open(str(out_s)+str(threshold)+".json", "w") as f:
+#						f.write(json.dumps(result_s, separators=(',', ':'))+"\n")						
 
 	print("######################################################################")		
 
@@ -289,7 +289,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-output_dir = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/"
+output_dir = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/density_v2/"
 
 ######################################################################################################################
 if __name__ == "__main__": main()
