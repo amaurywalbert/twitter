@@ -75,8 +75,10 @@ def calc_metrics(communities,G,ud):
 			else:
 				operator1 = float(external_edges)/(float(internal_edges)+float(external_edges))
 				operator2 = float(external_edges)/((n_edges-float(internal_edges))+float(external_edges))
-			
-			result = operator1+operator2									
+			if operator2 != 0:
+				result = operator1+operator2
+			else:
+				result = 0	
 		return result		
 ######################################################################################################################################################################
 ######################################################################################################################################################################
