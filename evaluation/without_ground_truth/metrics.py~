@@ -24,17 +24,14 @@ def calc_metrics(communities,G,ud):
 		return result
 ######################################################################################################################################################################
 ######################################################################################################################################################################	
-	def calc_conductance(n_edges,internal_edges,external_edges,internal_nodes,external_nodes):			
-		if ud is False:
-			if internal_edges != 0 and external_edges != 0:															# Provavelmente vamos excluir esse cálculo
+	def calc_conductance(n_edges,internal_edges,external_edges,internal_nodes,external_nodes):
+		if internal_edges != 0 and external_edges != 0:															# Provavelmente vamos excluir esse cálculo			
+			if ud is False:
 				result = float(external_edges)/(2*(float(internal_edges))+float(external_edges))			# Ver pq que tem um 2 no denominador nos artigos  "Metrics for community analisys"
-			else:																													# Cálculo tá confuso... parece que o calculo correto cresce exponencialmente no numero de vértices da comunidade...
-				result = 0
-		else:
-			if internal_edges != 0 and external_edges != 0:															# Provavelmente vamos excluir esse cálculo
+			else:
 				result = float(external_edges)/(float(internal_edges)+float(external_edges))				# Ver pq que tem um 2 no denominador nos artigos  "Metrics for community analisys"
-			else:																													# Cálculo tá confuso... parece que o calculo correto cresce exponencialmente no numero de vértices da comunidade...
-				result = 0						
+		else:																														# Cálculo tá confuso... parece que o calculo correto cresce exponencialmente no numero de vértices da comunidade...
+			result = 0						
 		return result
 ######################################################################################################################################################################
 ######################################################################################################################################################################	
@@ -49,17 +46,14 @@ def calc_metrics(communities,G,ud):
 ######################################################################################################################################################################
 ######################################################################################################################################################################	
 	def calc_density(n_edges,internal_edges,internal_nodes):
-		if ud is False:
-			if internal_nodes-1 != 0:
-				result = float(internal_edges)/(float(internal_nodes)*(float(internal_nodes)-1))
+		if internal_nodes-1 > 0:
+			if ud is False:
+				result = float(internal_edges)/(float(internal_nodes)*(float(internal_nodes)-1))				
 			else:
-				result = 0					
+				operator2 = (float(internal_nodes)*(float(internal_nodes)-1))/2
+				result = float(internal_edges)/float(operator2)
 		else:
-			_result = (float(internal_nodes)*(float(internal_nodes)-1))/2
-			if _result != 0:
-				result = float(internal_edges)/float(_result)
-			else:
-				result = 0				
+			result = 0				
 		return result
 ######################################################################################################################################################################
 ######################################################################################################################################################################			
@@ -72,13 +66,16 @@ def calc_metrics(communities,G,ud):
 ######################################################################################################################################################################
 ######################################################################################################################################################################	
 	def calc_normal_cut(n_edges,internal_edges,external_edges):
-		if ud is False:
-			operator1 = float(external_edges)/(2*float(internal_edges)+float(external_edges))
-			operator2 = float(external_edges)/(2*(n_edges-float(internal_edges))+float(external_edges))
-			result = operator1+operator2					
+		if internal_edges == 0 and external_edges == 0
+		result = 0
 		else:
-			operator1 = float(external_edges)/(float(internal_edges)+float(external_edges))
-			operator2 = float(external_edges)/((n_edges-float(internal_edges))+float(external_edges))
+			if ud is False:
+				operator1 = float(external_edges)/(2*float(internal_edges)+float(external_edges))
+				operator2 = float(external_edges)/(2*(n_edges-float(internal_edges))+float(external_edges))					
+			else:
+				operator1 = float(external_edges)/(float(internal_edges)+float(external_edges))
+				operator2 = float(external_edges)/((n_edges-float(internal_edges))+float(external_edges))
+			
 			result = operator1+operator2									
 		return result		
 ######################################################################################################################################################################
