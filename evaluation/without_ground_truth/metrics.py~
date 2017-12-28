@@ -82,7 +82,7 @@ def calc_metrics(communities,G,ud):
 ######################################################################################################################################################################
 	def calc_separability(n_edges,internal_edges,external_edges,internal_nodes): 
 		if external_edges != 0:
-			result = float(internal_edges)/float(external_edges)					# FALTA VERIFICAR A DIVISÃO POR ZERO!
+			result = float(internal_edges)/float(external_edges)
 		else:
 			result = 0				
 		return result
