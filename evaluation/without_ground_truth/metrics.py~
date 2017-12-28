@@ -66,8 +66,8 @@ def calc_metrics(communities,G,ud):
 ######################################################################################################################################################################
 ######################################################################################################################################################################	
 	def calc_normal_cut(n_edges,internal_edges,external_edges):
-		if internal_edges == 0 and external_edges == 0
-		result = 0
+		if internal_edges == 0 and external_edges == 0:
+			result = 0
 		else:
 			if ud is False:
 				operator1 = float(external_edges)/(2*float(internal_edges)+float(external_edges))
