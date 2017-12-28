@@ -47,7 +47,7 @@ def calc_metrics(communities,G,ud):
 			else:
 				result = 0					
 		else:
-			_result = (float(internal_nodes)*float(internal_nodes)-1)/2
+			_result = (float(internal_nodes)*(float(internal_nodes)-1))/2
 			if _result != 0:
 				result = float(internal_edges)/float(_result)
 			else:
@@ -157,13 +157,13 @@ def calc_metrics(communities,G,ud):
  			_result_normal_cut = 0
 			_result_s = 0
 		else:	
-			_result_ad = calc_average_degree(n_edges,internal_edges,internal_nodes) 
- 			_result_c = calc_conductance(n_edges,internal_edges,external_edges,internal_nodes,external_nodes)		
- 			_result_cut_r = calc_cut_r(n_edges,internal_edges,external_edges,n_nodes,internal_nodes)
+		#	_result_ad = calc_average_degree(n_edges,internal_edges,internal_nodes) 
+ 		#	_result_c = calc_conductance(n_edges,internal_edges,external_edges,internal_nodes,external_nodes)		
+ 		#	_result_cut_r = calc_cut_r(n_edges,internal_edges,external_edges,n_nodes,internal_nodes)
  			_result_d = calc_density(n_edges,internal_edges,internal_nodes)
- 			_result_e = calc_expansion(n_edges,internal_edges,external_edges,internal_nodes)
- 			_result_normal_cut = calc_normal_cut(n_edges,internal_edges,external_edges)
-			_result_s = calc_separability(n_edges,internal_edges,external_edges,internal_nodes)
+ 		#	_result_e = calc_expansion(n_edges,internal_edges,external_edges,internal_nodes)
+ 		#	_result_normal_cut = calc_normal_cut(n_edges,internal_edges,external_edges)
+		#	_result_s = calc_separability(n_edges,internal_edges,external_edges,internal_nodes)
 
 		_metric_ad.append(_result_ad)																			#Armazena os resultados para cada partição para depois fazer a média do ego. 		
 		_metric_c.append(_result_c)																			#Armazena os resultados para cada partição para depois fazer a média do ego.

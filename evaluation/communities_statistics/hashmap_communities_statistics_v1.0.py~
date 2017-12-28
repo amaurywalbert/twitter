@@ -56,14 +56,14 @@ def create_dirs(out_dir):
 #
 ######################################################################################################################################################################
 def calculate_alg(singletons,net,ud,g_type,alg):
-	op3 = int(raw_input("Escolha um threshold para o algoritmo "+str(alg)+": "))
-	if op3 is not None:
-		threshold = op3
-	else:
-		threshold = ""
-		print("Opção inválida! Saindo...")
-		sys.exit()
-	print("######################################################################\n")	
+#	op3 = int(raw_input("Escolha um threshold para o algoritmo "+str(alg)+": "))
+#	if op3 is not None:
+#		threshold = op3
+#	else:
+#		threshold = ""
+#		print("Opção inválida! Saindo...")
+#		sys.exit()
+#	print("######################################################################\n")	
 	
 	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
 	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"

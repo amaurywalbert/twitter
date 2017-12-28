@@ -81,7 +81,7 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 				print ("Threshold para a rede "+str(net)+" não encontrado: "+str(threshold))
 
 			else:
-
+				print ("Threshold: "+str(threshold))
 				create_dirs(out_dir)
 
 				if os.path.exists(str(out_dir)+str(threshold)+".json"):

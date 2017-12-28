@@ -134,7 +134,7 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 									
 									result_ad.append(avg_ad['media'])  									# Salvar Métrica									
 									result_c.append(avg_c['media'])  									# Salvar Métrica
-									result_cut_r.append(avg_cut_r['media'])  									# Salvar Métrica
+									result_cut_r.append(avg_cut_r['media'])  							# Salvar Métrica
 									result_d.append(avg_d['media'])  									# Salvar Métrica
 									result_e.append(avg_e['media'])  									# Salvar Métrica
 									result_normal_cut.append(avg_normal_cut['media'])  									# Salvar Métrica									
