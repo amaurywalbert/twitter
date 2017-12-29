@@ -1,0 +1,88 @@
+# -*- coding: latin1 -*-
+################################################################################################
+#	
+#
+import sys, os, os.path
+import plotly.plotly as py
+import plotly.graph_objs as go
+
+# Create random data with numpy
+import numpy as np
+import plotly
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+######################################################################################################################################################################
+##		Status - Versão 1 - Gera histograma a partir de um de vértices e arestas
+## 
+######################################################################################################################################################################
+def prepare(data_nodes,data_edges,output,net):
+
+	if not os.path.exists(output):
+		os.makedirs(output)
+	
+	if net == 'n1':
+		network = 'Follow'
+	elif net == 'n9':
+		network = 'Followers'			
+			
+	elif net == 'n2':
+		network = 'Retweets'			
+
+	elif net == 'n3':
+		network = 'Likes'
+			
+	elif net == 'n4':
+		network = 'Mentions'
+						
+	elif net == 'n5':
+		network = 'Co-Follow'
+
+	elif net == 'n6':
+		network = 'Co-Retweets'
+
+	elif net == 'n7':
+		network = 'Co-Likes'
+
+	elif net == 'n8':
+		network = 'Co-Mentions'
+
+	elif net == 'n10':
+		network = 'Co-Followers'
+
+	else:
+		print ("Valor incorreto para nome da rede-ego")
+		exit()						
+
+	histogram(data_nodes,data_edges,output,net,network)
+
+
+
+
+######################################################################################################################################################################
+# Criando Histograma de Vértices e Arestas
+######################################################################################################################################################################
+def histogram(data_nodes,data_edges,output,net,network):
+	print ("\nCriando histograma...")
+	print ("Salvando dados em: "+str(output)+"\n")
+
+
+	trace = go.Histogram(x=data_nodes, marker=dict(color='green'))
+	_data = [trace]
+	layout = go.Layout(title='Distribuição de Vértices - '+str(network), xaxis=dict(title='Vértices'),yaxis=dict(title='Rede-Ego'))    
+	fig = go.Figure(data=_data, layout=layout)
+	plotly.offline.plot(fig, filename=str(output)+str(net)+"_hist_nodes.html",auto_open=False)
+	
+	
+	
+	trace = go.Histogram(x=data_edges, marker=dict(color='red'))
+	_data = [trace]
+	layout = go.Layout(title='Distribuição de Arestas - '+str(network), xaxis=dict(title='Rede-Ego'),yaxis=dict(title='Arestas'))    
+	fig = go.Figure(data=_data, layout=layout)
+	plotly.offline.plot(fig, filename=str(output)+str(net)+"_hist_edges.html",auto_open=False)
+
+
+	print ("OK! Histograma salvo em: "+str(output))
+	print
+	
