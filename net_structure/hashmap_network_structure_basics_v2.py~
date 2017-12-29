@@ -3,13 +3,9 @@
 #	
 #
 import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
-import numpy as np
 from math import*
 # Script auxiliar para cálculos matemáticos que deve estar no mesmo diretório deste aqui.
 import calc
-# Script auxiliar para gerar histogramas
-import histogram
-import networkx as nx
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
@@ -26,37 +22,32 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	print("\n######################################################################\n")
-	if os.path.isfile(str(output_dir)+str(net)+"_net_struct.json"):
-		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_net_struct.json")
-	else:
-
-		print ("Dataset network structure - " +str(dataset_dir))
-		n = []																										# Média dos nós por rede-ego
-		e = []																										# Média das arestas por rede-ego	
-
-		i = 0
+	print ("Dataset network structure - " +str(dataset_dir))
+	n = []																										# Média dos nós por rede-ego
+	e = []																										# Média das arestas por rede-ego	
+	i = 0
 
 
-		for file in os.listdir(dataset_dir):
-			i+=1 
-			print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))
-			if IsDir is True:
-				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-			else:
-				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+	for file in os.listdir(dataset_dir):
+		i+=1 
+		print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))
+		if IsDir is True:
+			G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+		else:
+			G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			
 #####################################################################################		
 
-			n.append(G.GetNodes())																		# Numero de vértices
-			e.append(G.GetEdges())																		# Numero de arestas
-			nodes_stats = calc.calcular_full(n)
-			edges_stats = calc.calcular_full(e)
-			overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_statis':edges_stats}
+		n.append(G.GetNodes())																		# Numero de vértices
+		e.append(G.GetEdges())																		# Numero de arestas
+		nodes_stats = calc.calcular_full(n)
+		edges_stats = calc.calcular_full(e)
+		overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_statis':edges_stats}
 	
 #####################################################################################
 	
-		with open(str(output_dir)+str(net)+"_net_struct_basics.json", 'w') as f:
-			f.write(json.dumps(overview_basics))
+	with open(str(output_dir)+str(net)+"_net_struct_basics.json", 'w') as f:
+		f.write(json.dumps(overview_basics))
 	
 #Average Degree - Olhar no oslom pq parece que já tem....
 #Average clustering coefficient	0.5653
