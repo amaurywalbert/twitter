@@ -27,7 +27,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	e = []																										# Média das arestas por rede-ego	
 	i = 0
 
-
+	if os.path.isfile(str(output_dir)+str(net)+"_net_struct_basics.json"):
+		print ("Arquivo já existe! "+str(output_dir)+str(net)+"_net_struct_basics.json")
 	for file in os.listdir(dataset_dir):
 		i+=1 
 		print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))

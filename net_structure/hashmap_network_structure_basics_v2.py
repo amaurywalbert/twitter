@@ -27,27 +27,29 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	e = []																										# Média das arestas por rede-ego	
 	i = 0
 
-
-	for file in os.listdir(dataset_dir):
-		i+=1 
-		print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))
-		if IsDir is True:
-			G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-		else:
-			G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+	if os.path.isfile(str(output_dir)+str(net)+"_net_struct_basics.json"):
+		print ("Arquivo já existe! "+str(output_dir)+str(net)+"_net_struct_basics.json")
+	else:	
+		for file in os.listdir(dataset_dir):
+			i+=1 
+			print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))
+			if IsDir is True:
+				G = snap.LoadEdgeList(snap.PNGraph, dataset_dir+file, 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+			else:
+				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			
 #####################################################################################		
 
-		n.append(G.GetNodes())																		# Numero de vértices
-		e.append(G.GetEdges())																		# Numero de arestas
-		nodes_stats = calc.calcular_full(n)
-		edges_stats = calc.calcular_full(e)
-		overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_statis':edges_stats}
+			n.append(G.GetNodes())																		# Numero de vértices
+			e.append(G.GetEdges())																		# Numero de arestas
+			nodes_stats = calc.calcular_full(n)
+			edges_stats = calc.calcular_full(e)
+			overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_statis':edges_stats}
 	
 #####################################################################################
 	
-	with open(str(output_dir)+str(net)+"_net_struct_basics.json", 'w') as f:
-		f.write(json.dumps(overview_basics))
+		with open(str(output_dir)+str(net)+"_net_struct_basics.json", 'w') as f:
+			f.write(json.dumps(overview_basics))
 	
 #Average Degree - Olhar no oslom pq parece que já tem....
 #Average clustering coefficient	0.5653
