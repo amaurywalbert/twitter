@@ -14,9 +14,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para gerar propriedades estruturais das redes-ego
+##		Status - Versão 1 - Script para gerar propriedades estruturais das redes-ego - Média dos nós e arestas de cada uma das 500 redes em cada modelo
 ## 
-##												v2 - Normalizei a centralidade de intermediação;
 ######################################################################################################################################################################
 
 
@@ -35,9 +34,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		n = []																										# Média dos nós por rede-ego
 		e = []																										# Média das arestas por rede-ego	
 
-		bc_n = []																									# média de betweenness centrality dos nós	
-		bc_e = []																									# média de betweenness centrality das arestas
-
 		i = 0
 
 
@@ -51,61 +47,34 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			
 #####################################################################################		
 
-			n.append(G.GetNodes())																		# Numero de vertices
+			n.append(G.GetNodes())																		# Numero de vértices
 			e.append(G.GetEdges())																		# Numero de arestas
-			n_nodes = G.GetNodes()	
-			n_edges = G.GetEdges()
+			nodes_stats = calc.calcular_full(n)
+			edges_stats = calc.calcular_full(e)
+			overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_statis':edges_stats}
 	
 #####################################################################################
-			if n_edges == 0 or n_nodes < 3:
-				bc_n.append(n_edges)
-				bc_e.append(n_edges)	
-			else:
-				Nodes = snap.TIntFltH()
-				Edges = snap.TIntPrFltH()
-				snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
-				_bc_n = []
-				_bc_e = []
-				if IsDir is True:
-					max_betweenneess = (n_nodes-1)*(n_nodes-2)
-				else:
-					max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
-			
-				for node in Nodes:
-					bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
-					_bc_n.append(bc_n_normalized)
-
-				for edge in Edges:
-					bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
-					_bc_e.append(bc_e_normalized)
-				result = calc.calcular(_bc_n)
-				bc_n.append(result['media'])
-				result = calc.calcular(_bc_e)
-				bc_e.append(result['media'])	
-
-#####################################################################################
-
 	
-		BC_N = calc.calcular_full(bc_n)
-		BC_E = calc.calcular_full(bc_e)
-
+		with open(str(output_dir)+str(net)+"_net_struct_basics.json", 'w') as f:
+			f.write(json.dumps(overview_basics))
 	
-		overview = {}
-	
-		overview['BetweennessCentrNodes'] = BC_N
-		overview['BetweennessCentrEdges'] = BC_E
+#Average Degree - Olhar no oslom pq parece que já tem....
+#Average clustering coefficient	0.5653
+#Number of triangles	13082506
+#Fraction of closed triangles	0.06415
+#Diameter (longest shortest path)	7
+#90-percentile effective diameter	4.5
 
-	
-		with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
-			f.write(json.dumps(overview))
-	
-		with open(str(output_dir)+str(net)+"_net_struct.txt", 'w') as f:
-			f.write("\n######################################################################\n")
-			f.write ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
-			f.write ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
-			f.write("\n######################################################################\n")
+#Dataset			N				E				C				K				S				A
+#Twitter			125,120		2,248,406	3,140			33,569		15.54			0.39
 
-
+#DATASET STATISTICS.
+#N: NUMBER OF NODES,
+#E: NUMBER OF EDGES,
+#C: NUMBER OF COMMUNITIES,
+#K: NUMBER OF NODE ATTRIBUTES,
+#S: AVERAGE COMMUNITY SIZE,
+#A: COMMUNITY MEMBERSHIPS PER NODE
 print("\n######################################################################\n")
 
 ######################################################################################################################################################################
@@ -164,7 +133,7 @@ def main():
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/snap_v2/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/snap/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
@@ -174,7 +143,7 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/snap_v2/graphs_without_ego/"
+		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/snap/graphs_without_ego/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		net_structure(dataset_dir2,output_dir2,net,isdir,weight)												# Inicia os cálculos...	

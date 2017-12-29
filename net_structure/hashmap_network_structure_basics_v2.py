@@ -14,9 +14,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para gerar propriedades estruturais das redes-ego
+##		Status - Versão 1 - Script para gerar propriedades estruturais das redes-ego - Média dos nós e arestas de cada uma das 500 redes em cada modelo
 ## 
-##												ERRRO DE ALOCAÇÃO DE MEMÓRIA!!!!!
 ######################################################################################################################################################################
 
 
@@ -34,12 +33,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		print ("Dataset network structure - " +str(dataset_dir))
 		n = []																										# Média dos nós por rede-ego
 		e = []																										# Média das arestas por rede-ego	
-		d = []																										# Média dos diametros por rede-ego
-		cc = []																										# Média dos Close Centrality																				
-		bc_n = []																									# média de betweenness centrality dos nós	
-		bc_e = []																									# média de betweenness centrality das arestas
-		m = []																										# média das modularidades
-		degree = {}																									# chave-valor para armazenar "grau dos nós - numero de nós com este grau"
+
 		i = 0
 
 
@@ -53,117 +47,17 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			
 #####################################################################################		
 
-			n.append(G.GetNodes())																		# Numero de vertices
+			n.append(G.GetNodes())																		# Numero de vértices
 			e.append(G.GetEdges())																		# Numero de arestas
-			n_nodes = G.GetNodes()	
-			n_edges = G.GetEdges()
+			nodes_stats = calc.calcular_full(n)
+			edges_stats = calc.calcular_full(e)
+			overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_statis':edges_stats}
 	
 #####################################################################################
-			if n_edges == 0:
-				a = 0
-				d.append(a)
-				cc.append(a)
-				bc_n.append(a)
-				bc_e.append(a)	
-				m.append(a)
-			else:
-				d.append(snap.GetBfsFullDiam(G, 100, IsDir))											# get diameter of G
-		
-#####################################################################################
-
-				_cc = []	
-				Normalized = True
-				for NI in G.Nodes():
-					_cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
-				result = calc.calcular(_cc)
-				cc.append(result['media'])
-		
-#####################################################################################
-
-				Nodes = snap.TIntFltH()
-				Edges = snap.TIntPrFltH()
-				snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
-				_bc_n = []
-				_bc_e = []
-				for node in Nodes:
-					_bc_n.append(Nodes[node])
-				for edge in Edges:
-					_bc_e.append(Edges[edge])
-				result = calc.calcular(_bc_n)
-				bc_n.append(result['media'])
-				result = calc.calcular(_bc_e)
-				bc_e.append(result['media'])	
-
-#####################################################################################
-		
-				DegToCntV = snap.TIntPrV()
-				snap.GetDegCnt(G, DegToCntV)																#Grau de cada nó em cada rede-ego
-				for item in DegToCntV:
-					k = item.GetVal1()
-					v = item.GetVal2()
-					if degree.has_key(k):
-						degree[k] = degree[k]+v 
-					else:
-						degree[k] = v
-
-#####################################################################################
-		
-				Nodes = snap.TIntV()				
-				if weight:
-					G_nx=nx.read_weighted_edgelist(dataset_dir+file)
-				else:
-					G_nx=nx.read_edgelist(dataset_dir+file)
-			
-				for NI in G_nx.nodes_iter():
-					Nodes.Add(long(NI))
-				m.append(snap.GetModularity(G, Nodes, n_edges))									#Passar o número de arestas do grafo como parâmetro para agilizar o processo
-#####################################################################################
-
-			print	n[i-1], e[i-1], d[i-1], cc[i-1], bc_n[i-1], bc_e[i-1], m[i-1]
-			print 
-#####################################################################################		
-		
-		
-		N = calc.calcular_full(n)
-		E = calc.calcular_full(e)
 	
-		histogram.histogram(degree,output_dir+str(net)+"/", N['soma'])
-
-		D = calc.calcular_full(d)
-
-		CC = calc.calcular_full(cc)
+		with open(str(output_dir)+str(net)+"_net_struct_basics.json", 'w') as f:
+			f.write(json.dumps(overview_basics))
 	
-	
-		BC_N = calc.calcular_full(bc_n)
-		BC_E = calc.calcular_full(bc_e)
-
-		M = calc.calcular_full(m)
-	
-		overview = {}
-		overview['Nodes'] = N
-		overview['Edges'] = E
-		overview['Diameter'] = D
-		overview['CloseCentr'] = CC
-		overview['BetweennessCentrNodes'] = BC_N
-		overview['BetweennessCentrEdges'] = BC_E
-		overview['Modularity'] = M
-	
-		with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
-			f.write(json.dumps(overview))
-	
-		with open(str(output_dir)+str(net)+"_net_struct.txt", 'w') as f:
-			f.write("\n######################################################################\n")	
-			f.write ("NET: %s -- Ego-nets: %d \n" % (net,len(n)))
-			f.write ("Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N['media'],N['variancia'],N['desvio_padrao']))
-			f.write ("Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (E['media'],E['variancia'],E['desvio_padrao']))
-			f.write ("Diameter: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (D['media'],D['variancia'],D['desvio_padrao']))
-			f.write ("CloseCentr: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
-			f.write ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
-			f.write ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
-			f.write ("Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (M['media'],M['variancia'],M['desvio_padrao']))
-			f.write("\n######################################################################\n")
-
-
 #Average Degree - Olhar no oslom pq parece que já tem....
 #Average clustering coefficient	0.5653
 #Number of triangles	13082506
