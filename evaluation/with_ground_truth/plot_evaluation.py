@@ -1115,8 +1115,8 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 	ind=np.arange(n)
 	width=0.15
 
-	p1=plt.bar(ind-0.4,y,width,color="darkblue", label="NMI - Grafo COM ego - Threshold - "+str(dataset[1][3]))
-	p2=plt.bar(ind-0.3,z,width,color="blue", label="NMI - Grafo SEM ego - Threshold - "+str(dataset[2][3]))
+	p1=plt.bar(ind-0.1,y,width,color="darkblue", label="NMI - Grafo COM ego - Threshold - "+str(dataset[1][3]))
+	p2=plt.bar(ind,z,width,color="blue", label="NMI - Grafo SEM ego - Threshold - "+str(dataset[2][3]))
 	
 
 	p3=plt.bar(ind+0.1,y1,width,color="darkgreen", label="JACCARD - Grafo COM ego - Threshold - "+str(dataset[3][3]))
