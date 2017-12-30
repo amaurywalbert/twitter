@@ -21,10 +21,10 @@ def move(origem,destino):
 			os.makedirs(destino)
 				
 		for threshold in os.listdir(origem):
-			if threshold == "1" or threshold == "01":
+			if threshold == "1" or threshold == "01" or threshold == "1.json" or threshold == "01.json":
 				print str(origem)+str(threshold)
-	#		if not os.path.getsize(origem+file) > 0:
-	#			shutil.move(origem+file,destino)
+
+				shutil.move(origem+threshold,destino)
 
 
 ######################################################################################################################################################################
@@ -42,9 +42,20 @@ def prepare(g_type,singletons):
 		origem2 = "/home/amaury/communities/"+str(g_type)+"/copra/"+str(singletons)+"/"+str(net)+"/"
 		destino2 = "/home/amaury/communities/"+str(g_type)+"/copra_partition/"+str(singletons)+"/"+str(net)+"/"
 		
+		origem3 = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/"+str(g_type)+"/copra/"+str(singletons)+"/"+str(net)+"/"
+		destino3 = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/"+str(g_type)+"/copra_partition/"+str(singletons)+"/"+str(net)+"/"
+		
+		origem4 = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/average_degree/"+str(g_type)+"/copra/"+str(singletons)+"/"+str(net)+"/"
+		destino4 = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/average_degree/"+str(g_type)+"/copra_partition/"+str(singletons)+"/"+str(net)+"/"
+	
+		origem5 = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth_old/average_degree/"+str(g_type)+"/copra/"+str(singletons)+"/"+str(net)+"/"	
+		destino5 = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth_old/average_degree/"+str(g_type)+"/copra_partition/"+str(singletons)+"/"+str(net)+"/"
+		
 		move(origem1,destino1)
 		move(origem2,destino2)
-	
+		move(origem3,destino3)
+		move(origem4,destino4)
+		move(origem5,destino5)		
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
