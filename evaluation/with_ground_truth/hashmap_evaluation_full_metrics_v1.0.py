@@ -173,7 +173,7 @@ def main():
 	metric = "jaccard"
 	data_full2 = instructions(metric,alg)
 	
-	plot_evaluation.plot_full_metrics(output,data_full1,data_full2,alg)			
+	plot_evaluation.plot_full_metrics_with_singletons(output,data_full1,data_full2,alg)			
 	
 #######################################################################
 	print
