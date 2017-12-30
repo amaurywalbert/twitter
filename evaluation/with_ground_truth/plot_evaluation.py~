@@ -254,7 +254,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 
 ######################################################################################################################################################################
 #
-# Plota Gráficos dos dados... Desconsiderando se tem ou não singletons
+# Plota Gráficos dos dados... Desconsiderando se tem ou não singletons - Considera TUDO
 #
 ######################################################################################################################################################################
 def plot_full_with_singletons(output,data1,data2,metric,alg):
@@ -276,12 +276,12 @@ def plot_full_with_singletons(output,data1,data2,metric,alg):
 		interaction = []
 		value = []
 		std = []
-		treshold = []
+		threshold = []
 				
 		co_interaction = []
 		co_value = []
 		co_std = []
-		co_treshold = []
+		co_threshold = []
 		
 		for k, v in data_overview.iteritems():
 			if k == 'n1':
