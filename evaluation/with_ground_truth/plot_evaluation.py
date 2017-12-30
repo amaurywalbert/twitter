@@ -1081,12 +1081,12 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 	x = dataset[1][1]								# recebe os nomes das redes ego
 	n=len(x)
 	
-	y = np.array(dataset[1][0])								# recebe os valores para COM
-	z = np.array(dataset[2][0])								# recebe os valores para COM
+	y = np.array(dataset[1][0])								# recebe os valores COM
+	z = np.array(dataset[2][0])								# recebe os valores COM
 
 
-	y1 = np.array(dataset[5][0])								# recebe os valores para COM ego
-	z1 = np.array(dataset[6][0])								# recebe os valores para SEM ego
+	y1 = np.array(dataset[5][0])								# recebe os valores COM ego
+	z1 = np.array(dataset[6][0])								# recebe os valores SEM ego
 
 
 	ind=np.arange(n)
@@ -1114,11 +1114,11 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 	plt.close()
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
 
-	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="NMI - Grafo COM ego", marker=dict(color='darkblue'))
-	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="NMI - Grafo SEM ego", marker=dict(color='royalblue'))
+	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="NMI - Grafo COM ego - Threshold - "+str(dataset[1][3]), marker=dict(color='darkblue'))
+	trace2 = go.Bar(x = dataset[2][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="NMI - Grafo SEM ego - Threshold - "+str(dataset[2][3]), marker=dict(color='royalblue'))
 
-	trace3 = go.Bar(x = dataset[1][1], y = dataset[5][0], error_y=dict(type='data',array=dataset[5][2], color='#E6842A', visible=True), name="JACCARD - Grafo COM ego", marker=dict(color='darkgreen'))
-	trace4 = go.Bar(x = dataset[1][1], y = dataset[6][0], error_y=dict(type='data',array=dataset[6][2], color='#E6842A', visible=True), name="JACCARD - Grafo SEM ego", marker=dict(color='seagreen'))
+	trace3 = go.Bar(x = dataset[5][1], y = dataset[5][0], error_y=dict(type='data',array=dataset[5][2], color='#E6842A', visible=True), name="JACCARD - Grafo COM ego - Threshold - "+str(dataset[5][3]), marker=dict(color='darkgreen'))
+	trace4 = go.Bar(x = dataset[6][1], y = dataset[6][0], error_y=dict(type='data',array=dataset[6][2], color='#E6842A', visible=True), name="JACCARD - - Grafo Sem ego - Threshold - "+str(dataset[6][3]), marker=dict(color='seagreen'))
 		
 	
 	data = [trace1,trace2,trace3,trace4]

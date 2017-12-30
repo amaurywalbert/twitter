@@ -403,7 +403,7 @@ def plot_full_without_singletons(output,data1,data2,metric,alg):
 		os.makedirs(output)
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
 	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego - Threshold - "+str(dataset[1][3]), marker=dict(color='blue'))
-	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego - Threshold - "+str(dataset[2][3]), marker=dict(color='green'))
+	trace2 = go.Bar(x = dataset[2][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego - Threshold - "+str(dataset[2][3]), marker=dict(color='green'))
 
 	
 	data = [trace1,trace2]
