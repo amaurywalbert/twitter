@@ -1097,7 +1097,7 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 	
 
 	p3=plt.bar(ind+0.1,y1,width,color="darkgreen", label="JACCARD - Grafo COM ego - Threshold - "+str(dataset[1][3]))
-	p4=plt.bar(ind+0.2,z1,width,color="green", label="JACCARD - Grafo SEM ego - Threshold - "+str(dataset[2][3])
+	p4=plt.bar(ind+0.2,z1,width,color="green", label="JACCARD - Grafo SEM ego - Threshold - "+str(dataset[2][3]))
 
 	plt.ylabel(alg)
 	plt.title(str(title))
