@@ -277,10 +277,13 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 #	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 	plt.close()
 
-#############################################################################################################################################
-#Sem considerar singletons#
-#############################################################################################################################################
-def plot_full(output,data1,data2,metric,alg):
+
+
+
+######################################################################################################################################################################
+# Plota Gráficos dos dados... Desconsiderando se hṕa ou não singletons
+######################################################################################################################################################################
+def plot_full_without_singletons(output,data1,data2,metric,alg):
 	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
 	print ("\n##################################################\n")
 	print ("Gerando Gráfico Completo...")
@@ -399,8 +402,8 @@ def plot_full(output,data1,data2,metric,alg):
 	if not os.path.exists(output):
 		os.makedirs(output)
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
-	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego - "+str(dataset[1][3]), marker=dict(color='blue'))
-	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego - "+str(dataset[2][3]), marker=dict(color='green'))
+	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego - Threshold - "+str(dataset[1][3]), marker=dict(color='blue'))
+	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego - Threshold - "+str(dataset[2][3]), marker=dict(color='green'))
 
 	
 	data = [trace1,trace2]
@@ -412,8 +415,8 @@ def plot_full(output,data1,data2,metric,alg):
 	plotly.offline.plot(fig, filename=output+str(metric)+"_"+str(alg)+".html",auto_open=False)
 
 ################################################################################################
-	p1=plt.bar(ind-0.1,y,width,color="blue", label='Grafo COM ego')
-	p2=plt.bar(ind,z,width,color="green", label='Grafo SEM ego')
+	p1=plt.bar(ind-0.1,y,width,color="blue", label="Grafo COM ego - Threshold - "+str(dataset[1][3]))
+	p2=plt.bar(ind,z,width,color="green", label="Grafo COM ego - Threshold - "+str(dataset[2][3]))
 
 	plt.ylabel(metric)
 	plt.title(str(title))

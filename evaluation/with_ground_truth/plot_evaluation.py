@@ -885,62 +885,83 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 		interaction = []
 		value = []
 		std = []
+		threshold = []
 		
 		co_interaction = []
 		co_value = []
-		co_std = []	
+		co_std = []
+		co_threshold = []
+			
 		for k, v in array.iteritems():
 			if k == 'n1':
 				key = 'follow'
 				interaction.append(key)
 				value.append(round(v['nmi'], 3))
-				std.append(round(v['std'], 3))			
+				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+													
 			elif k == 'n2':
 				key = 'retweets'			
 				interaction.append(key)
 				value.append(round(v['nmi'], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+				
 			elif k == 'n3':
 				key = 'likes'
 				interaction.append(key)
 				value.append(round(v['nmi'], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+				
 			elif k == 'n4':
 				key = 'mentions'
 				interaction.append(key)
 				value.append(round(v['nmi'], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+
 			elif k == 'n9':
 				key = 'followers'
 				interaction.append(key)
 				value.append(round(v['nmi'], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+				
 						
 			elif k == 'n5':
 				key = 'co-follow'
 				co_interaction.append(key)
 				co_value.append(round(v['nmi'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+				
 			elif k == 'n6':
 				key = 'co-retweets'
 				co_interaction.append(key)
 				co_value.append(round(v['nmi'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+				
 			elif k == 'n7':
 				key = 'co-likes'
 				co_interaction.append(key)
 				co_value.append(round(v['nmi'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
 			elif k == 'n8':
 				key = 'co-mentions'
 				co_interaction.append(key)
 				co_value.append(round(v['nmi'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+				
 			elif k == 'n10':
 				key = 'co-followers'
 				co_interaction.append(key)
 				co_value.append(round(v['nmi'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
 			
 			else:
 				print ("Valor incorreto para nome da rede-ego")
@@ -952,6 +973,8 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 			interaction.append(item)
 		for item in co_std:
 			std.append(item)
+		for item in co_threshold:
+			threshold.append(item)
 		 	
 		data1 = [value,interaction,std]
 		dataset[i] = data1
@@ -961,63 +984,84 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 		interaction = []
 		value = []
 		std = []
+		threshold = []
 		
 		co_interaction = []
 		co_value = []
-		co_std = []	
+		co_std = []
+		co_threshold = []
+			
 		for k, v in array.iteritems():
 			if k == 'n1':
 				key = 'follow'
 				interaction.append(key)
 				value.append(round(v['jaccard'], 3))
 				std.append(round(v['std'], 3))			
+				threshold.append(v['threshold'])
+				
 			elif k == 'n2':
 				key = 'retweets'			
 				interaction.append(key)
 				value.append(round(v['jaccard'], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+				
 			elif k == 'n3':
 				key = 'likes'
 				interaction.append(key)
 				value.append(round(v['jaccard'], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+				
 			elif k == 'n4':
 				key = 'mentions'
 				interaction.append(key)
 				value.append(round(v['jaccard'], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+				
 			elif k == 'n9':
 				key = 'followers'
 				interaction.append(key)
 				value.append(round(v['jaccard'], 3))
 				std.append(round(v['std'], 3))
-						
+				threshold.append(v['threshold'])
+										
 			elif k == 'n5':
 				key = 'co-follow'
 				co_interaction.append(key)
 				co_value.append(round(v['jaccard'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+				
 			elif k == 'n6':
 				key = 'co-retweets'
 				co_interaction.append(key)
 				co_value.append(round(v['jaccard'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+				
 			elif k == 'n7':
 				key = 'co-likes'
 				co_interaction.append(key)
 				co_value.append(round(v['jaccard'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+				
 			elif k == 'n8':
 				key = 'co-mentions'
 				co_interaction.append(key)
 				co_value.append(round(v['jaccard'], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+				
 			elif k == 'n10':
 				key = 'co-followers'
 				co_interaction.append(key)
 				co_value.append(round(v['jaccard'], 3))
 				co_std.append(round(v['std'], 3))
-			
+				co_threshold.append(v['threshold'])
+							
 			else:
 				print ("Valor incorreto para nome da rede-ego")
 				exit()																																						
@@ -1028,7 +1072,9 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 			interaction.append(item)
 		for item in co_std:
 			std.append(item)
-		 	
+		for item in co_threshold:
+			threshold.append(item)
+					 	
 		data2 = [value,interaction,std]
 		dataset[i] = data2
 		
@@ -1046,12 +1092,12 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 	ind=np.arange(n)
 	width=0.15
 
-	p1=plt.bar(ind-0.4,y,width,color="darkblue", label='NMI - Grafo COM ego')
-	p2=plt.bar(ind-0.3,z,width,color="blue", label='NMI - Grafo SEM ego')
+	p1=plt.bar(ind-0.4,y,width,color="darkblue", label="NMI - Grafo COM ego - Threshold - "+str(dataset[1][3]))
+	p2=plt.bar(ind-0.3,z,width,color="blue", label="NMI - Grafo SEM ego - Threshold - "+str(dataset[2][3]))
 	
 
-	p3=plt.bar(ind+0.1,y1,width,color="darkgreen", label='JACCARD - Grafo COM ego')
-	p4=plt.bar(ind+0.2,z1,width,color="green", label='JACCARD - Grafo SEM ego')
+	p3=plt.bar(ind+0.1,y1,width,color="darkgreen", label="JACCARD - Grafo COM ego - Threshold - "+str(dataset[1][3]))
+	p4=plt.bar(ind+0.2,z1,width,color="green", label="JACCARD - Grafo SEM ego - Threshold - "+str(dataset[2][3])
 
 	plt.ylabel(alg)
 	plt.title(str(title))
