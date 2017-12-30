@@ -267,20 +267,9 @@ def main():
 ######################################################################################################################
 	os.system('clear')
 	
-#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-#	calculate_alg(singletons1,net,uw,ud,g_type1,alg)
-	
-
-#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons2))
-#	calculate_alg(singletons2,net,uw,ud,g_type2,alg)
-	
-
 	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type3)+" - Algoritmo: "+str(alg)+" - "+str(singletons3))
 	calculate_alg(singletons3,net,uw,ud,g_type3,alg)
 
-
-#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type4)+" - Algoritmo: "+str(alg)+" - "+str(singletons4))
-#	calculate_alg(singletons4,net,uw,ud,g_type4,alg)
 	
 
 ######################################################################################################################		

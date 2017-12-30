@@ -103,13 +103,13 @@ def instructions(metric,alg):
 	data1 = data_overview
 ################################################################################################
 
-	comm_data_dir = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
-	output_dir = str(output)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
-
-	data,data_overview = algorithm(comm_data_dir,metric)
-	save_data(output_dir,data,data_overview)		
+#	comm_data_dir = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
+#	output_dir = str(output)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
+#
+#	data,data_overview = algorithm(comm_data_dir,metric)
+#	save_data(output_dir,data,data_overview)		
 #	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities without singletons')	
-	data2 = data_overview
+#	data2 = data_overview
 ################################################################################################
 
 	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"
@@ -120,17 +120,18 @@ def instructions(metric,alg):
 #	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities with singletons')
 	data3 = data_overview
 ################################################################################################
-	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
-	output_dir = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
-	
-
-	data,data_overview = algorithm(comm_data_dir,metric)
-	save_data(output_dir,data,data_overview)		
+#	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
+#	output_dir = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
+#	
+#
+#	data,data_overview = algorithm(comm_data_dir,metric)
+#	save_data(output_dir,data,data_overview)		
 #	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities without singletons')	
-	data4 = data_overview
+#	data4 = data_overview
 
 ################################################################################################
-	data_full = [data1,data2,data3,data4]
+#	data_full = [data1,data2,data3,data4]
+	data_full = [data1,data3]
 
 	return data_full
 		

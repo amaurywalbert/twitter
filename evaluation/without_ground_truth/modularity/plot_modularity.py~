@@ -274,8 +274,153 @@ def plot_bars_full(output,data1,data2,data3,data4,metric,alg):
 	
 	
 	
+##########################################################################################################################################
+# Não considera without singletons
+##########################################################################################################################################	
+def plot_bars_full_without_singletons(output,data1,data2,metric,alg):
+	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
+	name =  str(metric)+"_"+str(alg)
+	print ("\n##################################################\n")
+	print ("Gerando Gráfico Completo - Algoritmo: "+str(alg)+" - Métrica: "+str(metric))
+
+	data_overview_full = [data1,data2,data3,data4]
+	dataset = {}
+	#i = 1										#armazenar dados de plotagem para dataset COM ego e comunidades COM singletons
+	#i = 2										#armazenar dados de plotagem para dataset COM ego e comunidades SEM singletons
+	#i = 3										#armazenar dados de plotagem para dataset SEM ego e comunidades COM singletons
+	#i = 4										#armazenar dados de plotagem para dataset SEM ego e comunidades SEM singletons
+	
+	i=0
+
+	for data_overview in data_overview_full:
+		i+=1
+		interaction = []
+		value = []
+		std = []
+		
+		co_interaction = []
+		co_value = []
+		co_std = []	
+		for k, v in data_overview.iteritems():
+			if k == 'n1':
+				key = 'follow'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))			
+			elif k == 'n2':
+				key = 'retweets'			
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+			elif k == 'n3':
+				key = 'likes'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+			elif k == 'n4':
+				key = 'mentions'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+			elif k == 'n9':
+				key = 'followers'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+						
+			elif k == 'n5':
+				key = 'co-follow'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+			elif k == 'n6':
+				key = 'co-retweets'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+			elif k == 'n7':
+				key = 'co-likes'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+			elif k == 'n8':
+				key = 'co-mentions'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+			elif k == 'n10':
+				key = 'co-followers'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+			
+			else:
+				print ("Valor incorreto para nome da rede-ego")
+				exit()																																						
+
+		for item in co_value:
+			value.append(item)
+		for item in co_interaction:
+			interaction.append(item)
+		for item in co_std:
+			std.append(item)
+		 	
+		data = [value,interaction,std]
+		dataset[i] = data
+
+	x = dataset[1][1]								# recebe os nomes das redes ego
+	n=len(x)
+	
+	y = np.array(dataset[1][0])								# recebe os valores para COM ego e comunidades COM singletons
+	z = np.array(dataset[2][0])								# recebe os valores para COM ego e comunidades SEM singletons
+
+
+	y_std = np.array(dataset[1][2])								# recebe os valores para COM ego e comunidades COM singletons
+	z_std = np.array(dataset[2][2])								# recebe os valores para COM ego e comunidades SEM singletons
+
+	
+	print y, y_std
+	print z, z_std
+
+		
+	ind=np.arange(n)
+	width=0.35
+
+	p1=plt.bar(ind,y,width,color="blue", label='Grafo COM ego')
+
+	p2=plt.bar(ind+0.1,z,width,color="green", label='Grafo SEM ego')
+
+	plt.ylabel(metric)
+	plt.title(str(title))
+	
+	plt.xticks(ind+width/2,(x))
+	plt.legend(loc='best')	
+	plt.tight_layout()
+	plt.show()
+
+	if not os.path.exists(output):
+		os.makedirs(output)
+		
+#	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
+	plt.close()
+################################################################################################  MANTER -- Dá pra exportar a tabela depois...
+
+	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego", marker=dict(color='blue'))
+	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego", marker=dict(color='green'))
+	
+	data = [trace1,trace2]
+	
+	title_plot = title
+	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=output+str(alg)+"_"+str(metric)+".html",auto_open=False)
 	
 	
+	
+	
+	
+		
 ######################################################################################################################################################################	
 ######################################################################################################################################################################	
 ######################################################################################################################################################################	

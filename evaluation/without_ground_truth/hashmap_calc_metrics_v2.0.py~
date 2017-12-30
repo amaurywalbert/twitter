@@ -256,14 +256,11 @@ def main():
 	
 ######################################################################################################################
 	g_type1 = "graphs_with_ego"
-	g_type2 = "graphs_with_ego"
-	g_type3 = "graphs_without_ego"
-	g_type4 = "graphs_without_ego"
+	g_type2 = "graphs_without_ego"
 	
 	singletons1 = "full"
 	singletons2 = "without_singletons"
-	singletons3 = "full"
-	singletons4 = "without_singletons"
+
 	
 ######################################################################################################################
 	os.system('clear')
@@ -272,16 +269,16 @@ def main():
 	calculate_alg(singletons1,net,uw,ud,g_type1,alg)
 	
 
-	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons2))
-	calculate_alg(singletons2,net,uw,ud,g_type2,alg)
+#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons2))
+#	calculate_alg(singletons2,net,uw,ud,g_type1,alg)
 	
 
 	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type3)+" - Algoritmo: "+str(alg)+" - "+str(singletons3))
-	calculate_alg(singletons3,net,uw,ud,g_type3,alg)
+	calculate_alg(singletons1,net,uw,ud,g_type2,alg)
 
 
-	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type4)+" - Algoritmo: "+str(alg)+" - "+str(singletons4))
-	calculate_alg(singletons4,net,uw,ud,g_type4,alg)
+#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type4)+" - Algoritmo: "+str(alg)+" - "+str(singletons4))
+#	calculate_alg(singletons2,net,uw,ud,g_type2,alg)
 	
 
 ######################################################################################################################		

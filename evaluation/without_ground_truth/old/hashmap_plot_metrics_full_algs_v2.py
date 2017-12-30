@@ -56,8 +56,8 @@ def instructions(metric,alg):
 
 ######################################################################				
 
-	dataset2 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"	
-	data2 = prepare(dataset2,metric)
+#	dataset2 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"	
+#	data2 = prepare(dataset2,metric)
 
 ######################################################################
 
@@ -65,23 +65,24 @@ def instructions(metric,alg):
 	data3 = prepare(dataset3,metric)
 ######################################################################		
 
-	dataset4 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
-	data4 = prepare(dataset4,metric)
+#	dataset4 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
+#	data4 = prepare(dataset4,metric)
 
 ######################################################################
 ######################################################################		
 	
-	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-		if len(data1) == len(data2) == len(data3) == len(data4):
-			data_full = [data1,data2,data3,data4]
+#	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
+	if data1 is not None and data3 is not None:	
+		if len(data1) == len(data3):
+			data_full = [data1,data3]
 			return data_full	
 	
 	else:
 		print ("\nImpossível gerar gráfico para os 04 cenários...\n")
 		print data1
-		print data2
+#		print data2
 		print data3
-		print data4	
+#		print data4	
 
 	
 	
@@ -139,8 +140,15 @@ def main():
 	alg2 = "oslom"
 	data_full2 = instructions(metric,alg2)
 	
-	if data_full1 is not None and data_full2 is not None:
-		plot_metrics.plot_full_algs(output,data_full1,data_full2,metric)
+	alg3 = "gn"
+	data_full3 = instructions(metric,alg3)
+	
+	alg2 = "copra_partition"
+	data_full4 = instructions(metric,alg4)
+		
+	if data_full1 is not None and data_full2 is not None and data_full3 is not None and data_full4 is not None:
+		if len(data_full1) == len(data_full2) == len(data_full3) == len(data_full4):  
+			plot_metrics.plot_full_algs(output,data_full1,data_full2,metric)
 	else:
 		print ("\nImpossível gerar gráfico COM TODOS OS ALGORITMOS para os 04 cenários...\n")
 		print alg1,data_full1

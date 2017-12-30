@@ -87,8 +87,8 @@ def main():
 ######################################################################				
 ######################################################################
 
-	dataset2 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"	
-	data2 = prepare(dataset2)
+#	dataset2 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"	
+#	data2 = prepare(dataset2)
 
 ######################################################################
 ######################################################################
@@ -99,15 +99,17 @@ def main():
 ######################################################################		
 ######################################################################
 
-	dataset4 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
-	data4 = prepare(dataset4)
+#	dataset4 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
+#	data4 = prepare(dataset4)
 	
 ######################################################################
 ######################################################################		
 
-	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-		plot_modularity.plot_bars_full(output,data1,data2,data3,data4,metric,alg)		
+#	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
+#		plot_modularity.plot_bars_full(output,data1,data2,data3,data4,metric,alg)		
 
+	if data1 is not None and data3:
+		plot_modularity.plot_bars_full_without_singletons(output,data1,data3,metric,alg)		
 ######################################################################
 ######################################################################	
 	
