@@ -55,8 +55,10 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	print"  1 - Copra"
-	print"  2 - Oslom"		
+	print"  1 - COPRA"
+	print"  2 - OSLOM"
+	print"  3 - GN"		
+	print"  4 - COPRA - Partition"						
 	print
 	op1 = int(raw_input("Escolha uma opção acima: "))
 
@@ -64,9 +66,14 @@ def main():
 		alg = "copra"
 	elif op1 == 2:
 		alg = "oslom"
+	elif op1 == 3:
+		alg = "gn"
+	elif op1 == 4:
+		alg = "copra_partition"				
 	else:
+		alg = ""
 		print("Opção inválida! Saindo...")
-		sys.exit()
+		sys.exit()	
 	print ("\n")
 	print"#################################################################################"
 	print

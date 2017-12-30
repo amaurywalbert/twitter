@@ -224,16 +224,23 @@ def main():
 	print
 	print "Algoritmo utilizado na detecção das comunidades"
 	print 
-	print" 01 - COPRA"
-	print" 02 - OSLOM"
+	print
+	print"  1 - COPRA"
+	print"  2 - OSLOM"
+	print"  3 - GN"		
+	print"  4 - COPRA - Partition"						
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
-	if op2 == 01:
+
+	if op2 == 1:
 		alg = "copra"
-	elif op2 == 02:
-		alg = "oslom"	
+	elif op2 == 2:
+		alg = "oslom"
+	elif op2 == 3:
+		alg = "gn"
+	elif op2 == 4:
+		alg = "copra_partition"				
 	else:
-		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
 	print

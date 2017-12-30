@@ -149,8 +149,10 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	print"  1 - Copra"
-	print"  2 - Oslom"		
+	print"  1 - COPRA"
+	print"  2 - OSLOM"
+	print"  3 - GN"		
+	print"  4 - COPRA - Partition"						
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -158,6 +160,10 @@ def main():
 		alg = "copra"
 	elif op2 == 2:
 		alg = "oslom"
+	elif op2 == 3:
+		alg = "gn"
+	elif op2 == 4:
+		alg = "copra_partition"				
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()		
@@ -249,6 +255,7 @@ def main():
 ######################################################################################################################################################################
 
 output = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/"
+			 
 
 #Executa o método main
 if __name__ == "__main__": main()

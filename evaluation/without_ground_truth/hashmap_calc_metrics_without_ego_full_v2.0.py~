@@ -272,8 +272,8 @@ def main():
 	calculate_alg(singletons3,net,uw,ud,g_type3,alg)
 
 
-	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type4)+" - Algoritmo: "+str(alg)+" - "+str(singletons4))
-	calculate_alg(singletons4,net,uw,ud,g_type4,alg)
+#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type4)+" - Algoritmo: "+str(alg)+" - "+str(singletons4))
+#	calculate_alg(singletons4,net,uw,ud,g_type4,alg)
 	
 
 ######################################################################################################################		
