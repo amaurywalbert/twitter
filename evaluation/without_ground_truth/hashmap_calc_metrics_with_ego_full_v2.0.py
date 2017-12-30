@@ -224,7 +224,6 @@ def main():
 	print
 	print "Algoritmo utilizado na detecção das comunidades"
 	print 
-	print
 	print"  1 - COPRA"
 	print"  2 - OSLOM"
 	print"  3 - GN"		

@@ -241,6 +241,7 @@ def main():
 	elif op2 == 4:
 		alg = "copra_partition"				
 	else:
+		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
 	print
