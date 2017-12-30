@@ -276,62 +276,83 @@ def plot_full_with_singletons(output,data1,data2,metric,alg):
 		interaction = []
 		value = []
 		std = []
-		
+		treshold = []
+				
 		co_interaction = []
 		co_value = []
-		co_std = []	
+		co_std = []
+		co_treshold = []
+		
 		for k, v in data_overview.iteritems():
 			if k == 'n1':
 				key = 'follow'
 				interaction.append(key)
 				value.append(round(v[metric], 3))
-				std.append(round(v['std'], 3))			
+				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+													
 			elif k == 'n2':
 				key = 'retweets'			
 				interaction.append(key)
 				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])						
+				
 			elif k == 'n3':
 				key = 'likes'
 				interaction.append(key)
 				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])						
+
 			elif k == 'n4':
 				key = 'mentions'
 				interaction.append(key)
 				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])						
+				
 			elif k == 'n9':
 				key = 'followers'
 				interaction.append(key)
 				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
-						
+				threshold.append(v['threshold'])						
+										
 			elif k == 'n5':
 				key = 'co-follow'
 				co_interaction.append(key)
 				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+										
 			elif k == 'n6':
 				key = 'co-retweets'
 				co_interaction.append(key)
 				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+										
 			elif k == 'n7':
 				key = 'co-likes'
 				co_interaction.append(key)
 				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])						
+				
 			elif k == 'n8':
 				key = 'co-mentions'
 				co_interaction.append(key)
 				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])						
+				
 			elif k == 'n10':
 				key = 'co-followers'
 				co_interaction.append(key)
 				co_value.append(round(v[metric], 3))
 				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])										
 			
 			else:
 				print ("Valor incorreto para nome da rede-ego")
@@ -343,8 +364,10 @@ def plot_full_with_singletons(output,data1,data2,metric,alg):
 			interaction.append(item)
 		for item in co_std:
 			std.append(item)
-		 	
-		data = [value,interaction,std]
+		for item in co_threshold:
+			threshold.append(item)
+					 	
+		data = [value,interaction,std,threshold]
 		dataset[i] = data
 
 	x = dataset[1][1]								# recebe os nomes das redes ego
@@ -356,8 +379,8 @@ def plot_full_with_singletons(output,data1,data2,metric,alg):
 	ind=np.arange(n)
 	width=0.35
 
-	p1=plt.bar(ind-0.1,y,width,color="blue", label='Grafo COM ego')
-	p2=plt.bar(ind,z,width,color="green", label='Grafo SEM ego')
+	p1=plt.bar(ind-0.1,y,width,color="blue", label="Grafo COM ego - "+str(dataset[1][3]))
+	p2=plt.bar(ind,z,width,color="green", label="Grafo SEM ego - "+str(dataset[2][3]))
 
 	plt.ylabel(metric)
 	plt.title(str(title))
@@ -375,8 +398,8 @@ def plot_full_with_singletons(output,data1,data2,metric,alg):
 	plt.close()
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
 
-	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego", marker=dict(color='blue'))
-	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego", marker=dict(color='green'))
+	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego - "+str(dataset[1][3]), marker=dict(color='blue'))
+	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego - "+str(dataset[2][3]), marker=dict(color='green'))
 	
 	data = [trace1,trace2]
 
@@ -976,7 +999,7 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 		for item in co_threshold:
 			threshold.append(item)
 		 	
-		data1 = [value,interaction,std]
+		data1 = [value,interaction,std,threshold]
 		dataset[i] = data1
 
 	for array in dataset2:
@@ -1075,7 +1098,7 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 		for item in co_threshold:
 			threshold.append(item)
 					 	
-		data2 = [value,interaction,std]
+		data2 = [value,interaction,std,threshold]
 		dataset[i] = data2
 		
 	x = dataset[1][1]								# recebe os nomes das redes ego
@@ -1097,7 +1120,7 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 	
 
 	p3=plt.bar(ind+0.1,y1,width,color="darkgreen", label="JACCARD - Grafo COM ego - Threshold - "+str(dataset[1][3]))
-	p4=plt.bar(ind+0.2,z1,width,color="green", label="JACCARD - Grafo SEM ego - Threshold - "+str(dataset[2][3])
+	p4=plt.bar(ind+0.2,z1,width,color="green", label="JACCARD - Grafo SEM ego - Threshold - "+str(dataset[2][3]))
 
 	plt.ylabel(alg)
 	plt.title(str(title))
