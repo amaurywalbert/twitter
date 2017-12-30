@@ -1069,7 +1069,7 @@ def plot_full_metrics_with_singletons(output,dataset1,dataset2,alg):
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
 
 	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="NMI - Grafo COM ego", marker=dict(color='darkblue'))
-	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="NMI - Grafo SEM ego", marker=dict(color='royalblue')), marker=dict(color='lightblue'))
+	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="NMI - Grafo SEM ego", marker=dict(color='royalblue'))
 
 	trace3 = go.Bar(x = dataset[1][1], y = dataset[5][0], error_y=dict(type='data',array=dataset[5][2], color='#E6842A', visible=True), name="JACCARD - Grafo COM ego", marker=dict(color='darkgreen'))
 	trace4 = go.Bar(x = dataset[1][1], y = dataset[6][0], error_y=dict(type='data',array=dataset[6][2], color='#E6842A', visible=True), name="JACCARD - Grafo SEM ego", marker=dict(color='seagreen'))
