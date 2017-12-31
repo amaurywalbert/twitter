@@ -83,6 +83,6 @@ def histogram(data_nodes,data_edges,output,net,network):
 	plotly.offline.plot(fig, filename=str(output)+str(net)+"_hist_edges.html",auto_open=False)
 
 
-	print ("OK! Histograma salvo em: "+str(output))
+	print (str(net)+" - OK! Histograma salvo em: "+str(output))
 	print
 	

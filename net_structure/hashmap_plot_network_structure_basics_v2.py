@@ -23,8 +23,10 @@ def prepare(source_dir):
 
 	for i in range(1,11):
 		net="n"+str(i)
-		if os.path.isfile(source_dir+net+"_net_struct_basics.json"):
-			with open(source_dir+net+"_net_struct_basics.json", 'r') as f:
+		if not os.path.isfile(source_dir+"/"+net+"/"+str(net)+"_overview.json"):
+			print ("Arquivo não encontrado! "+str(source_dir)+"/"+str(net)+"/"+str(net)+"_overview.json")
+		else:	
+			with open(source_dir+"/"+net+"/"+str(net)+"_overview.json", 'r') as f:
 
 				data = json.load(f)
 				scatter.prepare(data['nodes'],data['edges'],output_scatter,net)

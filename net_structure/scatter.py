@@ -74,6 +74,6 @@ def scatter_print_single(data_nodes,data_edges,output,net,network):
 	
 	plotly.offline.plot(fig, filename=str(output)+str(net)+"_scatter_nodes_edges.html",auto_open=False)
 
-	print ("OK! Gráfico salvo em: "+str(output))
+	print (str(net)+" - OK! Gráfico salvo em: "+str(output))
 	print
 

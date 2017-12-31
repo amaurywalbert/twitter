@@ -19,7 +19,7 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Gera histogramas a partir de um dictionary {axis_X, axis_Y.
 ## 
 ######################################################################################################################################################################
-def histogram(data,output_dir,elements):
+def histogram(data,output_dir,elements,net):
 
 	if not os.path.exists(output_dir):
 		os.makedirs(output_dir)
@@ -28,19 +28,19 @@ def histogram(data,output_dir,elements):
 		_data = []
 		for k,v in data.iteritems():
 			_data.append(v)
-		histogram_print(_data,output_dir,elements)
-		normalized_print(_data,output_dir,elements)
+		histogram_print(_data,output_dir,elements,net)
+		normalized_print(_data,output_dir,elements,net)
 
 	elif data.__class__.__name__ == 'list':
-		histogram_print(data,output_dir,elements)
-		normalized_print(data,ouput_dir,elements)
+		histogram_print(data,output_dir,elements,net)
+		normalized_print(data,ouput_dir,elements,net)
 
 	else:
 		print ("\nTipo de dados não reconhecido para gerar histograma\n")
 ######################################################################################################################################################################
 # HTML
 ######################################################################################################################################################################
-def normalized_print(data,output_dir,elements):
+def normalized_print(data,output_dir,elements,net):
 	print ("\nCriando histograma dinâmico...")
 	print ("Salvando dados em: "+str(output_dir)+"\n")
 
@@ -49,15 +49,15 @@ def normalized_print(data,output_dir,elements):
 	layout = go.Layout(title='Distribuição de Graus', xaxis=dict(title='Graus'),yaxis=dict(title='Vértices'))    
 	fig = go.Figure(data=_data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output_dir+"histogram_dist_degree.html")
+	plotly.offline.plot(fig, filename=output_dir+str(net)+"_dist_degree.html")
 
-	print ("OK! Histograma salvo em: "+str(output_dir))
+	print (str(net)+" - "OK! Histograma salvo em: "+str(output_dir))
 	print
 	
 ######################################################################################################################################################################
 # Histograma
 ######################################################################################################################################################################
-def histogram_print(data,output_dir,elements):
+def histogram_print(data,output_dir,elements,net):
 	print ("\nCriando histograma...")
 	print ("Salvando dados em: "+str(output_dir)+"\n")
 	plt.hist(data,label="vértices = "+str(elements),color='green')
@@ -65,8 +65,8 @@ def histogram_print(data,output_dir,elements):
 	plt.ylabel ("Vértices")
 	plt.title ("Distribuição de graus")
 	plt.legend(loc='best')
-	plt.savefig(output_dir+"histogram_dist_degree.png")
+	plt.savefig(output_dir+str(net)+"_dist_degree.png")
 	plt.close()
 
-	print ("OK! Histograma salvo em: "+str(output_dir))
+	print (str(net)+" - "OK! Histograma salvo em: "+str(output_dir))
 	print

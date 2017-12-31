@@ -78,11 +78,11 @@ def histogram(data_nodes,data_edges,output,net,network):
 	
 	trace = go.Histogram(x=data_edges, marker=dict(color='red'))
 	_data = [trace]
-	layout = go.Layout(title='Distribuição de Arestas - '+str(network), xaxis=dict(title='Rede-Ego'),yaxis=dict(title='Arestas'))    
+	layout = go.Layout(title='Distribuição de Arestas - '+str(network), xaxis=dict(title='Arestas'),yaxis=dict(title='Rede-Ego'))    
 	fig = go.Figure(data=_data, layout=layout)
 	plotly.offline.plot(fig, filename=str(output)+str(net)+"_hist_edges.html",auto_open=False)
 
 
-	print ("OK! Histograma salvo em: "+str(output))
+	print (str(net)+" - "OK! Histograma salvo em: "+str(output))
 	print
 	

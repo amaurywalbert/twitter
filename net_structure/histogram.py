@@ -51,7 +51,7 @@ def normalized_print(data,output_dir,elements,net):
 
 	plotly.offline.plot(fig, filename=output_dir+str(net)+"_dist_degree.html")
 
-	print ("OK! Histograma salvo em: "+str(output_dir))
+	print (str(net)+" - OK! Histograma salvo em: "+str(output_dir))
 	print
 	
 ######################################################################################################################################################################
@@ -68,5 +68,5 @@ def histogram_print(data,output_dir,elements,net):
 	plt.savefig(output_dir+str(net)+"_dist_degree.png")
 	plt.close()
 
-	print ("OK! Histograma salvo em: "+str(output_dir))
+	print (str(net)+" - OK! Histograma salvo em: "+str(output_dir))
 	print

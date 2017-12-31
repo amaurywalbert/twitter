@@ -69,12 +69,11 @@ def scatter_print_single(data_nodes,data_edges,output,net,network):
 	
 	trace = go.Scatter(x = data_nodes,y = data_edges, mode = 'markers')
 	data = [trace]
-	layout = dict(title = title, yaxis = dict(zeroline = False), xaxis = dict(zeroline = False))
-	layout= go.Layout(title= 'Stats of USA States',hovermode= 'closest',xaxis= dict(title= 'Pop',ticklen= 5,zeroline= False,gridwidth= 2,),yaxis=dict(title= 'Rank',ticklen= 5,gridwidth= 2,),showlegend= False)
+	layout= go.Layout(title = title,hovermode= 'closest',xaxis= dict(title= 'Vértices',ticklen= 5,zeroline= False,gridwidth=2,),yaxis=dict(title= 'Arestas',ticklen= 5,gridwidth= 2,),showlegend= False)
 	fig = dict(data=data, layout=layout)	
 	
 	plotly.offline.plot(fig, filename=str(output)+str(net)+"_scatter_nodes_edges.html",auto_open=False)
 
-	print ("OK! Gráfico salvo em: "+str(output))
+	print (str(net)+" - OK! Gráfico salvo em: "+str(output))
 	print
 
