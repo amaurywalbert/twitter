@@ -35,6 +35,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		print ("Dataset network structure - " +str(dataset_dir))
 		n = []																										# Média dos nós por rede-ego
 		e = []																										# Média das arestas por rede-ego	
+		nodes = {}																									# chave_valor para ego_id e numero de vertices
+		edges = {}																									# chave_valor para ego_id e numero de arestas
 		d = []																										# Média dos diametros por rede-ego
 		cc = []																										# Média dos Close Centrality																				
 		bc_n = []																									# média de betweenness centrality dos nós	
@@ -42,9 +44,12 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		m = []																										# média das modularidades
 		degree = {}																									# chave-valor para armazenar "grau dos nós - numero de nós com este grau"
 		i = 0
-
+	
+		
 
 		for file in os.listdir(dataset_dir):
+			ego_id = file.split(".edge_list")
+			ego_id = long(ego_id[0])
 			i+=1 
 			print (str(output_dir)+str(net)+" - Calculando propriedades para o ego "+str(i)+": "+str(file))
 			if IsDir is True:
@@ -53,15 +58,13 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				G = snap.LoadEdgeList(snap.PUNGraph, dataset_dir+file, 0, 1)					# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
 			
 #####################################################################################		
+			n_nodes = G.GetNodes()
+			n_edges = G.GetEdges()		
+			nodes[ego_id] = n_nodes												#Dicionário ego_id = vertices
+			edges[ego_id] = n_edges 
+			n.append(n_nodes)																		# Numero de vértices
+			e.append(n_edges)																		# Número de Arestas
 
-			n.append(G.GetNodes())																		# Numero de vértices
-			e.append(G.GetEdges())																		# Numero de arestas
-			nodes_stats = calc.calcular_full(n)
-			edges_stats = calc.calcular_full(e)
-			overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_statis':edges_stats}
-			n_nodes = G.GetNodes()	
-			n_edges = G.GetEdges()
-	
 #####################################################################################
 			if n_edges == 0:
 				a = 0
@@ -144,7 +147,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		N = calc.calcular_full(n)
 		E = calc.calcular_full(e)
 	
-		histogram.histogram(degree,output_dir+str(net)+"/", N['soma'])
+		histogram.histogram(degree,output_dir+"histogram"+"/", N['soma'],net)
 
 		D = calc.calcular_full(d)
 
@@ -165,8 +168,20 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		overview['BetweennessCentrEdges'] = BC_E
 		overview['Modularity'] = M
 	
-	
-		with open(str(output_dir)+str(net)+"_net_struct_basics.json", 'w') as f:
+		nodes_stats = calc.calcular_full(n)
+		edges_stats = calc.calcular_full(e)
+		overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_stats':edges_stats}
+
+		output_basics = output_dir+"/"+str(net)+"/"
+		if not os.path.exists(output_basics):
+			os.makedirs(output_basics)
+				
+		with open(str(output_basics)+str(net)+"_nodes.json", 'w') as f:
+			f.write(json.dumps(nodes))
+		with open(str(output_basics)+str(net)+"_edges.json", 'w') as f:
+			f.write(json.dumps(edges))
+
+		with open(str(output_basics)+str(net)+"_overview.json", 'w') as f:
 			f.write(json.dumps(overview_basics))
 			
 		with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
