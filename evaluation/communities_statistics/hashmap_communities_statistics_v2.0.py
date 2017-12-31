@@ -1,7 +1,7 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-import snap,datetime, sys, time, json, os, os.path, shutil, time, struct, random
-#import metrics
+import snap,datetime, sys, time, json, os, os.path, time
+import calc
 
 
 reload(sys)
@@ -25,21 +25,42 @@ sys.setdefaultencoding('utf-8')
 # Recebe arquivo e devolve dicionário com as comunidades
 #
 ######################################################################################################################################################################
-def prepare_communities(community_file,n_nodes,size):
+def prepare_communities(community_file,n_nodes):
 	i=0
-	communities = {}
+
+	communities = {}														# Dicionário com uma chave (id da community): e uma lista de ids dos membros da comunidade
+	size = []																# Lista com os tamanhos das communidades
+	size_norm = []															# Lista com os tamanhos das communidades normalizada pelo número de vértices da rede-ego
+	n_singletons = 0														# Número de Singletons (comunidades formada por apenas um vértice) 
+	n_non_singletons = 0													# Número de Não Singletons
+
 	for line in community_file:
 		i+=1
-		key="com"+str(i)																# Chave para o dicionário comm
-		comm = []																		# Lista para armazenar as comunidades			
+		key="com"+str(i)													# Chave para o dicionário comm - um identificador "comm1"
+		comm = []															# Lista para armazenar as os membros da comunidade i
 		a = line.split(' ')
 		for item in a:
 			if item != "\n":
 				comm.append(long(item))
-		communities[key] = comm														# dicionário communities recebe a lista de ids dos membros das comunidades tendo como chave o valor key
+
+		if len(comm) > 1:
+			n_singletons+=1
+		else:
+			n_non_singletons+=1
+
+		communities[key] = comm											# dicionário communities recebe a lista de ids dos membros das comunidades tendo como chave o valor key
 		b = float(len(comm))/float(n_nodes)
-		size.append(b)
-	return communities
+		size.append(len(comm))
+		size_norm.append(b)
+
+	n_comm = len(communities)											# Quantidade de comunidades para o ego em questão
+
+	avg_size = calc.calcular(size)										# Somar o vetor com o tamanho das comunidades...
+	avg_size_norm = calc.calcular(size_norm)										# Somar o vetor com o tamanho das comunidades normalizado...
+			
+	overlap = float(avg_size['soma'])/float(n_nodes)				# The overlap: the average number of communities to which each vertex belongs. This is the sum of the sizes of all communities (including singletons) divided by the number of vertices, n.
+	
+	return communities, n_comm, size, avg_size['media'], size_norm, avg_size_norm['media'], overlap, n_singletons, n_non_singletons
 
 ######################################################################################################################################################################
 #
@@ -58,19 +79,22 @@ def create_dirs(out_dir):
 ######################################################################################################################################################################
 def calculate_alg(singletons,net,ud,g_type,alg):
 	
-	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
-	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"
+	communities_dir = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
+
+	net_struct = "/home/amaury/Dropbox/net_structure_hashmap/snap/"+str(g_type)+"/"+str(net)+"/"     #Substituindo os dados dos grafos...
+	
 	
 	out_dir = str(output_dir)+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"		
 	
-	if not os.path.exists(communities):
-		print ("Diretório com as comunidades não encontrado: "+str(communities)+"\n")
+	if not os.path.exists(communities_dir):
+		print ("Diretório com as comunidades não encontrado: "+str(communities_dir)+"\n")
 
 	else:
 		print("\n######################################################################")
 
-		for threshold in os.listdir(communities):
-			if not os.path.isdir(str(communities)+str(threshold)+"/"):
+		for threshold in os.listdir(communities_dir):
+			print communities_dir
+			if not os.path.isdir(str(communities_dir)+str(threshold)+"/"):
 				print ("Threshold para a rede "+str(net)+" não encontrado: "+str(threshold))
 
 			else:
@@ -78,49 +102,56 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 				create_dirs(out_dir)
 
 				if os.path.exists(str(out_dir)+str(threshold)+".json"):
-					print ("Arquivo de destino já existe: "+str(threshold)+".json")
+					print ("Arquivo de destino já existe: "+str(out_dir)+str(threshold)+".json")
 					
 				else:	
 					print("######################################################################")
 							
 					statistics = {}
-					size = []
-					lenght = []
+
+
 					i=0 		#Ponteiro para o ego
-					for file in os.listdir(str(communities)+str(threshold)+"/"):
-						if os.path.isfile(str(communities)+str(threshold)+"/"+file):
-							ego_id = file.split(".txt")
-							ego_id = long(ego_id[0])
-							i+=1
-							if not os.path.isfile(str(graphs)+str(ego_id)+".edge_list"):
-								print ("ERROR - EGO: "+str(i)+" - Arquivo com lista de arestas não encontrado:" +str(graphs)+str(ego_id)+".edge_list")
+					
+					if not os.path.isfile(str(net_struct)+str(net)+"_nodes.json"):
+						print ("ERROR - EGO: "+str(i)+" - Arquivo com informações da estrutura da rede não encontrado - NODES:" +str(net_struct)+str(net)+"_nodes.json")
 
-							else:
+					elif not os.path.isfile(str(net_struct)+str(net)+"_edges.json"):
+						print ("ERROR - EGO: "+str(i)+" - Arquivo com informações da estrutura da rede não encontrado - EDGES:" +str(net_struct)+str(net)+"_nodes.json")
+						
+					else:
+						with open(str(net_struct)+str(net)+"_nodes.json", 'r') as f:
+							net_struct_nodes = json.load(f)
+						with open(str(net_struct)+str(net)+"_edges.json", 'r') as g:	
+							net_struct_edges = json.load(g)
 
-								with open(str(communities)+str(threshold)+"/"+file, 'r') as community_file:
-									if ud is False:
-										G = snap.LoadEdgeList(snap.PNGraph, str(graphs)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-									else:
-										G = snap.LoadEdgeList(snap.PUNGraph, str(graphs)+str(ego_id)+".edge_list", 0, 1)						# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-									
-									n_nodes = (G.GetNodes())														# Numero de vértices
-									n_edges = (G.GetNodes())														# Numero de arestas
-									communities_dict = prepare_communities(community_file,n_nodes,size)							#Função para devolver um dicionário com as comunidades
-									lenght.append(len(communities_dict))
-									
-					print size
-					print len(size)
-					print
-					print lenght
-					print len(lenght)
+						for file in os.listdir(str(communities_dir)+str(threshold)+"/"):
+							if os.path.isfile(str(communities_dir)+str(threshold)+"/"+file):
+								ego_id = file.split(".txt")
+								ego_id = long(ego_id[0])
+								i+=1
+																								
+								with open(str(communities_dir)+str(threshold)+"/"+file, 'r') as community_file:
+								
+									communities, n_comm, size, avg_size, size_norm, avg_size_norm, overlap, n_singletons, n_non_singletons = prepare_communities(community_file,net_struct_nodes[str(ego_id)])		#Função para devolver um dicionário com as comunidades
+									statistics[ego_id] = {'n_nodes':net_struct_nodes[str(ego_id)],'n_edges':net_struct_edges[str(ego_id)],'n_communities':n_comm,'size':size,'avg_size':avg_size,'size_norm':size_norm,'avg_size_norm':avg_size_norm,'overlap':overlap, 'n_singletons':n_singletons,'n_non_singletons':n_non_singletons}							
+
 					print g_type,singletons,alg,net
-					statistics = {'size':size,'lenght':lenght}													 
+																		 
+
 					print("######################################################################")
 					print	
 
 					with open(str(out_dir)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(statistics, separators=(',', ':'))+"\n")
+						f.write(json.dumps(statistics))
 
+
+#Impressão na tela dos dados salvos...					
+#					with open(str(out_dir)+str(threshold)+".json", "r") as g:
+#						_statistics = json.load(g)
+#						for k,v in _statistics.iteritems():
+#							print
+#							print k,v
+#							print
 	print("######################################################################")		
 
 ######################################################################################################################################################################
@@ -215,7 +246,7 @@ def main():
 #	calculate_alg(singletons2,net,ud,g_type1,alg)
 	
 
-	print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type3)+" - Algoritmo: "+str(alg)+" - "+str(singletons3))
+	print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
 	calculate_alg(singletons1,net,ud,g_type2,alg)
 
 

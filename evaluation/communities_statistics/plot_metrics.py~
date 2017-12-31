@@ -1,0 +1,190 @@
+# -*- coding: latin1 -*-
+################################################################################################
+import datetime, sys, time, json, os, os.path, shutil, time, struct, random, math
+import matplotlib.pyplot as plt
+import matplotlib.mlab as mlab
+import pylab
+import numpy as np
+from math import*
+import plotly
+import plotly.plotly as py
+import plotly.graph_objs as go
+
+
+reload(sys)
+sys.setdefaultencoding('utf-8')
+######################################################################################################################################################################
+# Plota Gráficos dos dados... Desconsiderando se hṕa ou não singletons
+######################################################################################################################################################################
+def plot_lines(output,data1,data2,metric,alg):
+	month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+	high_2000 = [32.5, 37.6, 49.9, 53.0, 69.1, 75.4, 76.5, 76.6, 70.7, 60.6, 45.1, 29.3]
+	low_2000 = [13.8, 22.3, 32.5, 37.2, 49.9, 56.1, 57.7, 58.3, 51.2, 42.8, 31.6, 15.9]
+	high_2007 = [36.5, 26.6, 43.6, 52.3, 71.5, 81.4, 80.5, 82.2, 76.0, 67.3, 46.1, 35.0]
+	low_2007 = [23.6, 14.0, 27.0, 36.8, 47.6, 57.7, 58.9, 61.2, 53.3, 48.5, 31.0, 23.6]
+	high_2014 = [28.8, 28.5, 37.0, 56.8, 69.7, 79.7, 78.5, 77.8, 74.1, 62.6, 45.3, 39.9]
+	low_2014 = [12.7, 14.3, 18.6, 35.5, 49.9, 58.0, 60.0, 58.6, 51.7, 45.2, 32.2, 29.1]
+	
+	trace0 = go.Scatter(x = month,y = high_2014,name = 'High 2014',line = dict(color = ('rgb(205, 12, 24)'),width = 4))
+	trace1 = go.Scatter(x = month,y = low_2014,name = 'Low 2014',line = dict(color = ('rgb(22, 96, 167)'),width = 4,))
+	trace2 = go.Scatter(x = month,y = high_2007,name = 'High 2007',line = dict(color = ('rgb(205, 12, 24)'),width = 4,dash = 'dash') # dash options include 'dash', 'dot', and 'dashdot')
+	trace3 = go.Scatter(x = month,y = low_2007,name = 'Low 2007',line = dict(color = ('rgb(22, 96, 167)'),width = 4,dash = 'dash'))
+	trace4 = go.Scatter(x = month,y = high_2000,name = 'High 2000',line = dict(color = ('rgb(205, 12, 24)'),width = 4,dash = 'dot'))
+	trace5 = go.Scatter(x = month,y = low_2000,name = 'Low 2000',line = dict(color = ('rgb(22, 96, 167)'),width = 4,dash = 'dot'))
+	
+	data = [trace0, trace1, trace2, trace3, trace4, trace5]
+	
+	layout = dict(title = 'Average High and Low Temperatures in New York',xaxis = dict(title = 'Month'),yaxis = dict(title = 'Temperature (degrees F)'))
+	
+	fig = dict(data=data, layout=layout)
+	plotly.offline.plot(fig, filename=output+str(metric)+"_"+str(alg)+".html",auto_open=False)
+              
+######################################################################################################################################################################
+# Plota Gráficos dos dados... Desconsiderando se hṕa ou não singletons
+######################################################################################################################################################################
+def plot_full(output,data1,data2,metric,alg):
+	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
+	print ("\n##################################################\n")
+	print ("Gerando Gráfico Completo...")
+
+	data_overview_full = [data1,data2]
+	dataset = {}
+	#i = 1										#armazenar dados de plotagem para dataset COM ego e comunidades COM singletons
+	#i = 2										#armazenar dados de plotagem para dataset COM ego e comunidades SEM singletons
+	#i = 3										#armazenar dados de plotagem para dataset SEM ego e comunidades COM singletons
+	#i = 4										#armazenar dados de plotagem para dataset SEM ego e comunidades SEM singletons
+	
+	i=0
+
+	for data_overview in data_overview_full:
+		i+=1
+		interaction = []
+		value = []
+		std = []
+		threshold = []
+			
+		co_interaction = []
+		co_value = []
+		co_std = []
+		co_threshold = []	
+		for k, v in data_overview.iteritems():
+			if k == 'n1':
+				key = 'follow'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])						
+			elif k == 'n2':
+				key = 'retweets'			
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+			elif k == 'n3':
+				key = 'likes'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+			elif k == 'n4':
+				key = 'mentions'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+			elif k == 'n9':
+				key = 'followers'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+				threshold.append(v['threshold'])
+						
+			elif k == 'n5':
+				key = 'co-follow'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+			elif k == 'n6':
+				key = 'co-retweets'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+			elif k == 'n7':
+				key = 'co-likes'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+			elif k == 'n8':
+				key = 'co-mentions'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+			elif k == 'n10':
+				key = 'co-followers'
+				co_interaction.append(key)
+				co_value.append(round(v[metric], 3))
+				co_std.append(round(v['std'], 3))
+				co_threshold.append(v['threshold'])
+			
+			else:
+				print ("Valor incorreto para nome da rede-ego")
+				exit()																																						
+
+		for item in co_value:
+			value.append(item)
+		for item in co_interaction:
+			interaction.append(item)
+		for item in co_std:
+			std.append(item)
+		for item in co_threshold:
+			threshold.append(item)
+			 	
+		data = [value,interaction,std,threshold]
+		dataset[i] = data
+
+	x = dataset[1][1]								# recebe os nomes das redes ego
+	n=len(x)
+	
+	y = np.array(dataset[1][0])								# recebe os valores para COM ego
+	z = np.array(dataset[2][0])								# recebe os valores para SEM ego
+
+
+	ind=np.arange(n)
+	width=0.35
+
+	output = str(output)+"/"+str(metric)+"/"
+	
+	if not os.path.exists(output):
+		os.makedirs(output)
+################################################################################################  MANTER -- Dá pra exportar a tabela depois...
+	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego - Threshold - "+str(dataset[1][3]), marker=dict(color='blue'))
+	trace2 = go.Bar(x = dataset[2][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego - Threshold - "+str(dataset[2][3]), marker=dict(color='green'))
+
+	
+	data = [trace1,trace2]
+
+	title_plot = title
+	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=output+str(metric)+"_"+str(alg)+".html",auto_open=False)
+
+################################################################################################
+	p1=plt.bar(ind-0.1,y,width,color="blue", label="Grafo COM ego - Threshold - "+str(dataset[1][3]))
+	p2=plt.bar(ind,z,width,color="green", label="Grafo COM ego - Threshold - "+str(dataset[2][3]))
+
+	plt.ylabel(metric)
+	plt.title(str(title))
+	
+	plt.xticks(ind+width/2,(x))
+	plt.legend(loc='best')	
+	plt.tight_layout()
+	plt.show()	
+
+
+#	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
+	plt.close()
