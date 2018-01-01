@@ -133,7 +133,7 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 								with open(str(communities_dir)+str(threshold)+"/"+file, 'r') as community_file:
 								
 									communities, n_comm, size, avg_size, size_norm, avg_size_norm, overlap, n_singletons, n_non_singletons = prepare_communities(community_file,net_struct_nodes[str(ego_id)])		#Função para devolver um dicionário com as comunidades
-									statistics[ego_id] = {'n_nodes':net_struct_nodes[str(ego_id)],'n_edges':net_struct_edges[str(ego_id)],'n_communities':n_comm,'size':size,'size_norm':size_norm,'overlap':overlap, 'n_singletons':n_singletons,'n_non_singletons':n_non_singletons}							
+									statistics[ego_id] = {'n_nodes':net_struct_nodes[str(ego_id)],'n_edges':net_struct_edges[str(ego_id)],'n_communities':n_comm,'size':size,'avg_size':avg_size,'size_norm':size_norm,'avg_size_norm':avg_size_norm,'overlap':overlap, 'n_singletons':n_singletons,'n_non_singletons':n_non_singletons}							
 
 					print g_type,singletons,alg,net
 																		 
