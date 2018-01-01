@@ -118,20 +118,14 @@ def main():
 	dataset1 = str(source)+"/graphs_with_ego/"+str(alg)+"/full/"	
 	data1 = prepare(dataset1,metric)
 	title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
-	if data1 is not None:
-		plot_metrics.plot_single(output,data1,metric,alg,title)
-	else:
-		print ("Impossível gerar gráfico simples para: "+str(title))
+
 ######################################################################				
 ######################################################################
 
 	dataset2 = str(source)+"/graphs_without_ego/"+str(alg)+"/full/"	
 	data2 = prepare(dataset2,metric)
 	title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
-	if data2 is not None:
-		plot_metrics.plot_single(output,data2,metric,alg,title)
-	else:
-		print ("Impossível gerar gráfico simples para: "+str(title))
+
 ######################################################################		
 ######################################################################		
 
