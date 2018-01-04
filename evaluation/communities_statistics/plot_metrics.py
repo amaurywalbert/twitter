@@ -309,7 +309,7 @@ def plot_full_without_singletons(output,data1,data2,metric,alg):
 
 ################################################################################################
 	p1=plt.bar(ind-0.1,y,width,color="blue", label="Grafo COM ego - Threshold - "+str(dataset[1][3]))
-	p2=plt.bar(ind,z,width,color="green", label="Grafo COM ego - Threshold - "+str(dataset[2][3]))
+	p2=plt.bar(ind,z,width,color="green", label="Grafo SEM ego - Threshold - "+str(dataset[2][3]))
 
 	plt.ylabel(metric)
 	plt.title(str(title))
