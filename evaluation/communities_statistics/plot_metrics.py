@@ -21,7 +21,6 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def plot_full(output,data1,data2,data3,data4,metric,alg):
 	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
-	print ("\n##################################################\n")
 	print ("Gerando Gráfico Completo...")
 
 	data_overview_full = [data1,data2,data3,data4]
@@ -178,7 +177,6 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 ######################################################################################################################################################################
 def plot_full_without_singletons(output,data1,data2,metric,alg):
 	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
-	print ("\n##################################################\n")
 	print ("Gerando Gráfico Completo...")
 
 	data_overview_full = [data1,data2]
@@ -331,7 +329,6 @@ def plot_full_without_singletons(output,data1,data2,metric,alg):
 ######################################################################################################################################################################
 def plot_full_algs(output,dataset1,dataset2,dataset3,dataset4,metric):
 	title = "Avaliação das redes usando a métrica "+str(metric)
-	print ("\n##################################################\n")
 	print ("Gerando Gráfico Completo...")
 
 	dataset = {}

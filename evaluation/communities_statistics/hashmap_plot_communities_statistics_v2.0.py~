@@ -56,30 +56,30 @@ def main():
 	print"																											"
 	print" 					Impressão de Gráficos - Métricas de Avaliação Sem Ground - Truth	"
 	print"																											"
-	print" Escolha o algoritmo usado na detecção das comunidades									"
+#	print" Escolha o algoritmo usado na detecção das comunidades									"
 	print"																											"
 	print"#################################################################################"
 	print
-	print"  1 - COPRA"
-	print"  2 - OSLOM"
-	print"  3 - GN"		
-	print"  4 - COPRA - Partition"						
-	print
-	op1 = int(raw_input("Escolha uma opção acima: "))
-
-	if op1 == 1:
-		alg = "copra"
-	elif op1 == 2:
-		alg = "oslom"
-	elif op1 == 3:
-		alg = "gn"
-	elif op1 == 4:
-		alg = "copra_partition"				
-	else:
-		alg = ""
-		print("Opção inválida! Saindo...")
-		sys.exit()	
-	print ("\n")
+#	print"  1 - COPRA"
+#	print"  2 - OSLOM"
+#	print"  3 - GN"		
+#	print"  4 - COPRA - Partition"						
+#	print
+#	op1 = int(raw_input("Escolha uma opção acima: "))
+#
+#	if op1 == 1:
+#		alg = "copra"
+#	elif op1 == 2:
+#		alg = "oslom"
+#	elif op1 == 3:
+#		alg = "gn"
+#	elif op1 == 4:
+#		alg = "copra_partition"				
+#	else:
+#		alg = ""
+#		print("Opção inválida! Saindo...")
+#		sys.exit()	
+#	print ("\n")
 	print"#################################################################################"
 	print
 	print"  1 - Number of Communities"	
@@ -109,33 +109,37 @@ def main():
 	print ("\n")
 ######################################################################
 	
-	data1 = {}
-	data2 = {}
+	alg = ['copra','oslom','gn','copra_partition']
+	for i in range(len(alg)):
+		print"#################################################################################"
+		print ("\nPreparando dados para o algoritmo: "+str(alg[i]))
+		data1 = {}
+		data2 = {}
 	
 ######################################################################		
 ######################################################################
 
-	dataset1 = str(source)+"/graphs_with_ego/"+str(alg)+"/full/"	
-	data1 = prepare(dataset1,metric)
-	title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
+		dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
+		data1 = prepare(dataset1,metric)
+		title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
 
 ######################################################################				
 ######################################################################
 
-	dataset2 = str(source)+"/graphs_without_ego/"+str(alg)+"/full/"	
-	data2 = prepare(dataset2,metric)
-	title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
+		dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
+		data2 = prepare(dataset2,metric)
+		title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
 
 ######################################################################		
 ######################################################################		
 
-	if data1 is not None and data2:
-		if len(data1) == len(data2):
-			plot_metrics.plot_full_without_singletons(output,data1,data2,metric,alg)
-	else:
-		print ("\nImpossível gerar gráfico para os 02 cenários...\n")
-		print data1
-		print data2
+		if data1 is not None and data2:
+			if len(data1) == len(data2):
+				plot_metrics.plot_full_without_singletons(output,data1,data2,metric,str(alg[i]))
+		else:
+			print ("\nImpossível gerar gráfico para os 02 cenários...\n")
+			print data1
+			print data2
 ######################################################################
 ######################################################################	
 	
