@@ -14,7 +14,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para gerar propriedades estruturais das redes-ego
+##		Status - Versão 1 - Script para gerar propriedades estruturais das com média por rede-ego
 ##					Versão 2 - Normalizei a centralidade de intermediação
 ##					Versão 3 - Acrescentei propriedades basicas - Vetor com nós e arestas, para que se possa plotar ver a distribuição , justificando o uso da média ou não.
 ## 
@@ -275,7 +275,7 @@ def main():
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/snap/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/by_ego/snap/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
@@ -285,7 +285,7 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/snap/graphs_without_ego/"
+		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/by_ego/snap/graphs_without_ego/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		net_structure(dataset_dir2,output_dir2,net,isdir,weight)												# Inicia os cálculos...	
