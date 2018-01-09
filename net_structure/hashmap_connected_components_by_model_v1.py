@@ -58,7 +58,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				a = 0
 				cc.append(a)
 				cc_normal.append(a)
-				n_cc.append(a)
 				print ("Nenhuma aresta encontrada para a rede-ego "+str(i)+" - ("+str(file))				
 			else:
 				Components = snap.TCnComV()
