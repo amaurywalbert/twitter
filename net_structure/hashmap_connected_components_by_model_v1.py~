@@ -14,7 +14,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para verificar por componetes conectados. NA VERSÂO "BY MODEL" consideramos a média de todo o modelo, e não fazemos média por ego.
+##		Status - Versão 1 - Script para verificar por componentes conectados. NA VERSÂO "BY MODEL" consideramos a média de todo o modelo, e não fazemos média por ego.
 ## 
 ######################################################################################################################################################################
 
@@ -32,11 +32,9 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 		print ("Componentes conectados - " +str(dataset_dir))
 											
-		cc = []																										# Média do tamanho dos componentes conectados por rede-ego
-		cc_normal = []																								# Média (normalizada pelo número de vértices do grafo) do tamanho dos componentes conectados por rede-ego
-		n_cc = []																									# Média do número de componentes conectados por rede-ego
-		n = []																										# vetor com número de vértices para cada rede-ego																									
-		e = []																										# vetor com número de arestas para cada rede-ego
+		cc = []																										# Vetor com tamanho de todos os componentes conectados por modelo
+		cc_normal = []																								# Vetor com tamanho de todos os componentes conectados por modelo - Cada tamanho é normalizado pelo número de vértices da rede em que está o componente.
+		n_cc																											# Número de componentes conectados por modelo
 		i = 0
 
 		for file in os.listdir(dataset_dir):
@@ -52,10 +50,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 #####################################################################################		
 
-			n.append(G.GetNodes())																		# Numero de vertices
-			e.append(G.GetEdges())																		# Numero de arestas
-			n_nodes = G.GetNodes()	
-			n_edges = G.GetEdges()
+			n_nodes = G.GetNodes()												# Número de vértices
+			n_edges = G.GetEdges()												# Número de arestas
 		
 #####################################################################################
 			if n_edges == 0:
@@ -67,34 +63,20 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			else:
 				Components = snap.TCnComV()
 				snap.GetWccs(G, Components)
-				_cc = []
-				_cc_normal = []
-				_n_cc = 0
 				for CnCom in Components:
-					_cc.append(CnCom.Len())
+					cc.append(CnCom.Len())
 					b = float(CnCom.Len())/float(n_nodes)
-					_cc_normal.append(b)
-					_n_cc+=1
-				result = calc.calcular(_cc)
-				cc.append(result['media'])
+					cc_normal.append(b)
+					n_cc+=1			
 
-				result_normal = calc.calcular(_cc_normal)
-				cc_normal.append(result_normal['media'])
-				
-				n_cc.append(_n_cc)
-				print ("Número de componentes conectados para o ego "+str(i)+" ("+str(file)+"): "+str(_n_cc))
-				print ("Média do tamanho dos componentes conectados para o ego "+str(i)+" ("+str(file)+"): "+str(result['media']))
-				print ("Média (normalizada) do tamanho dos componentes conectados para o ego "+str(i)+" ("+str(file)+"): "+str(result_normal['media']))			
-				print  				
-
-		N_CC = calc.calcular_full(n_cc)
+		AVG_CC = float(n_cc)/float(i)						# Número de componentes conectados dividido pelo número de egos, pra saber a média de componentes conectados por ego.
 		CC = calc.calcular_full(cc)
 		CC_NORMAL = calc.calcular_full(cc_normal)			
 	
 		overview = {}
 		overview['Len_ConnectedComponents'] = CC
 		overview['Len_ConnectedComponents_Normal'] = CC_NORMAL
-		overview['N_ConnectedComponents'] = N_CC
+		overview['AVG_ConnectedComponents'] = AVG_CC
 
 
 		
@@ -103,13 +85,13 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	
 		with open(str(output_dir)+str(net)+"_connected_comp.txt", 'w') as f:
 			f.write("\n######################################################################\n")	
-			f.write ("Number_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N_CC['media'],N_CC['variancia'],N_CC['desvio_padrao']))			
+			f.write ("AVG_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (AVG_CC['media'],AVG_CC['variancia'],AVG_CC['desvio_padrao']))			
 			f.write ("Length_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
 			f.write ("Length_Connected_Comp_Normalized: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC_NORMAL['media'],CC_NORMAL['variancia'],CC_NORMAL['desvio_padrao']))
 			f.write("\n######################################################################\n")
 
 		print ("\n######################################################################\n")	
-		print ("Number_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N_CC['media'],N_CC['variancia'],N_CC['desvio_padrao']))
+		print ("AVG_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (AVG_CC['media'],AVG_CC['variancia'],AVG_CC['desvio_padrao']))
 		print ("Length_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
 		print ("Length_Connected_Comp_Normalized: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC_NORMAL['media'],CC_NORMAL['variancia'],CC_NORMAL['desvio_padrao']))
 		print ("\n######################################################################\n")
