@@ -34,7 +34,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 											
 		cc = []																										# Vetor com tamanho de todos os componentes conectados por modelo
 		cc_normal = []																								# Vetor com tamanho de todos os componentes conectados por modelo - Cada tamanho é normalizado pelo número de vértices da rede em que está o componente.
-		n_cc = 0																										# Número de componentes conectados por modelo
+		n_cc  = []																									# Número de componentes conectados por modelo
 		i = 0
 
 		for file in os.listdir(dataset_dir):
@@ -62,20 +62,20 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			else:
 				Components = snap.TCnComV()
 				snap.GetWccs(G, Components)
+				n_cc.append(len(Components))
 				for CnCom in Components:
 					cc.append(CnCom.Len())
 					b = float(CnCom.Len())/float(n_nodes)
 					cc_normal.append(b)
-					n_cc+=1			
 
-		AVG_CC = float(n_cc)/float(i)						# Número de componentes conectados dividido pelo número de egos, pra saber a média de componentes conectados por ego.
+		N_CC = calc.calcular_full(n_cc)						# Número de componentes conectados dividido pelo número de egos, pra saber a média de componentes conectados por ego.
 		CC = calc.calcular_full(cc)
 		CC_NORMAL = calc.calcular_full(cc_normal)			
 	
 		overview = {}
 		overview['Len_ConnectedComponents'] = CC
 		overview['Len_ConnectedComponents_Normal'] = CC_NORMAL
-		overview['AVG_ConnectedComponents'] = AVG_CC
+		overview['N_ConnectedComponents'] = N_CC
 
 
 		
@@ -84,13 +84,13 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	
 		with open(str(output_dir)+str(net)+"_connected_comp.txt", 'w') as f:
 			f.write("\n######################################################################\n")	
-			f.write ("AVG_Connected_Comp: %5.3f \n"% (AVG_CC))			
+			f.write ("Number_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N_CC['media'],CC['variancia'],N_CC['desvio_padrao']))
 			f.write ("Length_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
 			f.write ("Length_Connected_Comp_Normalized: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC_NORMAL['media'],CC_NORMAL['variancia'],CC_NORMAL['desvio_padrao']))
 			f.write("\n######################################################################\n")
 
 		print ("\n######################################################################\n")	
-		print ("AVG_Connected_Comp: %5.3f \n"% (AVG_CC))
+		print ("Number_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N_CC['media'],CC['variancia'],N_CC['desvio_padrao']))
 		print ("Length_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
 		print ("Length_Connected_Comp_Normalized: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC_NORMAL['media'],CC_NORMAL['variancia'],CC_NORMAL['desvio_padrao']))
 		print ("\n######################################################################\n")

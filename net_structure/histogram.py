@@ -49,7 +49,7 @@ def normalized_print(data,output_dir,elements,net):
 	layout = go.Layout(title='Distribuição de Graus', xaxis=dict(title='Graus'),yaxis=dict(title='Vértices'))    
 	fig = go.Figure(data=_data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output_dir+str(net)+"_dist_degree.html")
+	plotly.offline.plot(fig, filename=output_dir+str(net)+"_dist_degree.html",auto_open=False)
 
 	print (str(net)+" - OK! Histograma salvo em: "+str(output_dir))
 	print

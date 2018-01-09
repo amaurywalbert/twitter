@@ -14,7 +14,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para gerar propriedades estruturais das com média por rede-ego
+##		Status - Versão 1 - Script para gerar propriedades estruturais dos modelos. Média por modelo (considera todos os egos...)
 ##					Versão 2 - Normalizei a centralidade de intermediação
 ##					Versão 3 - Acrescentei propriedades basicas - Vetor com nós e arestas, para que se possa plotar ver a distribuição , justificando o uso da média ou não.
 ## 
@@ -75,13 +75,10 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				d.append(snap.GetBfsFullDiam(G, 100, IsDir))											# get diameter of G
 		
 #####################################################################################
-
-				_cc = []	
+	
 				Normalized = True
 				for NI in G.Nodes():
-					_cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
-				result = calc.calcular(_cc)
-				cc.append(result['media'])
+					cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
 		
 #####################################################################################
 
@@ -92,8 +89,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				Nodes = snap.TIntFltH()
 				Edges = snap.TIntPrFltH()
 				snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
-				_bc_n = []
-				_bc_e = []
+				
 				if IsDir is True:
 					max_betweenneess = (n_nodes-1)*(n_nodes-2)
 				else:
@@ -101,16 +97,11 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			
 				for node in Nodes:
 					bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
-					_bc_n.append(bc_n_normalized)
+					bc_n.append(bc_n_normalized)
 
 				for edge in Edges:
 					bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
-					_bc_e.append(bc_e_normalized)
-				result = calc.calcular(_bc_n)
-				bc_n.append(result['media'])
-				result = calc.calcular(_bc_e)
-				bc_e.append(result['media'])	
-
+					bc_e.append(bc_e_normalized)
 
 #####################################################################################
 		
@@ -143,6 +134,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	
 		BC_N = calc.calcular_full(bc_n)
 		BC_E = calc.calcular_full(bc_e)
+
 	
 		overview = {}
 		overview['Nodes'] = N
@@ -258,7 +250,7 @@ def main():
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/by_ego/snap/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/by_model/snap/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
@@ -268,7 +260,7 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/by_ego/snap/graphs_without_ego/"
+		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/by_model/snap/graphs_without_ego/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		net_structure(dataset_dir2,output_dir2,net,isdir,weight)												# Inicia os cálculos...	

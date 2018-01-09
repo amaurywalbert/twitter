@@ -101,8 +101,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-source = "/home/amaury/Dropbox/net_structure_hashmap/by_ego/snap/"
-output = "/home/amaury/Dropbox/net_structure_hashmap_statistics/by_ego/snap/"
+source = "/home/amaury/Dropbox/net_structure_hashmap/by_model/snap/"
+output = "/home/amaury/Dropbox/net_structure_hashmap_statistics/by_model/snap/"
 
 #Executa o método main
 if __name__ == "__main__": main()

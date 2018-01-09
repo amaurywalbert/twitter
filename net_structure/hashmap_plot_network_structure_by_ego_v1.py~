@@ -14,7 +14,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para plotar  propriedades estruturais das redes-ego
+##		Status - Versão 1 - Script para plotar propriedades estruturais das redes-ego, com média por rede-ego.
 ## 
 ##												ERRRO DE ALOCAÇÃO DE MEMÓRIA!!!!!
 ######################################################################################################################################################################

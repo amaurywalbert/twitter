@@ -14,7 +14,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para verificar por componetes conectados. Consideramos a média por ego...
+##		Status - Versão 1 - Script para verificar por componetes conectados. Consideramos a média por rede-ego...
 ## 
 ######################################################################################################################################################################
 
