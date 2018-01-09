@@ -130,8 +130,6 @@ def plot_bars_full(output,data1,data2,metric):
 	plt.legend(loc='best')	
 	plt.tight_layout()
 
-	output = output+"/bars/"
-
 	if not os.path.exists(output):
 		os.makedirs(output)
 		
