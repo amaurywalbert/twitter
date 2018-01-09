@@ -34,7 +34,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 											
 		cc = []																										# Vetor com tamanho de todos os componentes conectados por modelo
 		cc_normal = []																								# Vetor com tamanho de todos os componentes conectados por modelo - Cada tamanho é normalizado pelo número de vértices da rede em que está o componente.
-		n_cc																											# Número de componentes conectados por modelo
+		n_cc = 0																										# Número de componentes conectados por modelo
 		i = 0
 
 		for file in os.listdir(dataset_dir):
