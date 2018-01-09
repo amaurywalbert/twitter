@@ -84,13 +84,13 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	
 		with open(str(output_dir)+str(net)+"_connected_comp.txt", 'w') as f:
 			f.write("\n######################################################################\n")	
-			f.write ("AVG_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (AVG_CC['media'],AVG_CC['variancia'],AVG_CC['desvio_padrao']))			
+			f.write ("AVG_Connected_Comp: %5.3f \n"% (AVG_CC))			
 			f.write ("Length_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
 			f.write ("Length_Connected_Comp_Normalized: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC_NORMAL['media'],CC_NORMAL['variancia'],CC_NORMAL['desvio_padrao']))
 			f.write("\n######################################################################\n")
 
 		print ("\n######################################################################\n")	
-		print ("AVG_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (AVG_CC['media'],AVG_CC['variancia'],AVG_CC['desvio_padrao']))
+		print ("AVG_Connected_Comp: %5.3f \n"% (AVG_CC))
 		print ("Length_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
 		print ("Length_Connected_Comp_Normalized: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC_NORMAL['media'],CC_NORMAL['variancia'],CC_NORMAL['desvio_padrao']))
 		print ("\n######################################################################\n")
