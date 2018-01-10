@@ -30,8 +30,8 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	print("\n######################################################################\n")
-	if os.path.isfile(str(output_dir)+str(net)+"_net_struct.json"):
-		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_net_struct.json")
+	if os.path.isfile(str(output_dir)+str(net)+"_net_struct_density.json"):
+		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_net_struct_density.json")
 	else:
 
 		print ("Dataset network structure - " +str(dataset_dir))
@@ -89,107 +89,107 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				density[ego_id] = w	
 
 #####################################################################################
-			
-				z = snap.GetBfsFullDiam(G, 100, IsDir)
-				d.append(z)											# get diameter of G
-				diameter[ego_id] = z
-
+#			
+#				z = snap.GetBfsFullDiam(G, 100, IsDir)
+#				d.append(z)											# get diameter of G
+#				diameter[ego_id] = z
+#
 #####################################################################################
-	
-				Normalized = True
-				for NI in G.Nodes():
-					cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
-		
+#	
+#				Normalized = True
+#				for NI in G.Nodes():
+#					cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
+#		
 #####################################################################################
-
-				if n_edges == 0 or n_nodes < 3:
-					bc_n.append(n_edges)
-					bc_e.append(n_edges)	
-				else:
-					Nodes = snap.TIntFltH()
-					Edges = snap.TIntPrFltH()
-					snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
-				
-					if IsDir is True:
-						max_betweenneess = (n_nodes-1)*(n_nodes-2)
-					else:
-						max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
-			
-					for node in Nodes:
-						bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
-						bc_n.append(bc_n_normalized)
-
-					for edge in Edges:
-						bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
-						bc_e.append(bc_e_normalized)
-
+#
+#				if n_edges == 0 or n_nodes < 3:
+#					bc_n.append(n_edges)
+#					bc_e.append(n_edges)	
+#				else:
+#					Nodes = snap.TIntFltH()
+#					Edges = snap.TIntPrFltH()
+#					snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
+#				
+#					if IsDir is True:
+#						max_betweenneess = (n_nodes-1)*(n_nodes-2)
+#					else:
+#						max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
+#			
+#					for node in Nodes:
+#						bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
+#						bc_n.append(bc_n_normalized)
+#
+#					for edge in Edges:
+#						bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
+#						bc_e.append(bc_e_normalized)
+#
 #####################################################################################
-		
-					DegToCntV = snap.TIntPrV()
-					snap.GetDegCnt(G, DegToCntV)																#Grau de cada nó em cada rede-ego
-					for item in DegToCntV:
-						k = item.GetVal1()
-						v = item.GetVal2()
-						if degree.has_key(k):
-							degree[k] = degree[k]+v 
-						else:
-							degree[k] = v
-
+#		
+#					DegToCntV = snap.TIntPrV()
+#					snap.GetDegCnt(G, DegToCntV)																#Grau de cada nó em cada rede-ego
+#					for item in DegToCntV:
+#						k = item.GetVal1()
+#						v = item.GetVal2()
+#						if degree.has_key(k):
+#							degree[k] = degree[k]+v 
+#						else:
+#							degree[k] = v
+#
 #####################################################################################
-
-				print	n[i-1], e[i-1], dens[i-1], d[i-1], cc[i-1], bc_n[i-1], bc_e[i-1]
-				print 
+#
+#				print	n[i-1], e[i-1], d[i-1], cc[i-1], bc_n[i-1], bc_e[i-1], dens[i-1]
+#				print 
 #####################################################################################		
 		
 		
-		N = calc.calcular_full(n)
-		E = calc.calcular_full(e)
-	
-		histogram.histogram(degree,output_dir+"histogram"+"/", N['soma'],net)
+#		N = calc.calcular_full(n)
+#		E = calc.calcular_full(e)
+#	
+#		histogram.histogram(degree,output_dir+"histogram"+"/", N['soma'],net)
 
 		DENS = calc.calcular_full(dens)
-		 
-		D = calc.calcular_full(d)
-
-		CC = calc.calcular_full(cc)
-	
-		
-		BC_N = calc.calcular_full(bc_n)
-		BC_E = calc.calcular_full(bc_e)
-
-	
+#		 
+#		D = calc.calcular_full(d)
+#
+#		CC = calc.calcular_full(cc)
+#	
+#		
+#		BC_N = calc.calcular_full(bc_n)
+#		BC_E = calc.calcular_full(bc_e)
+#
+#	
 		overview = {}
-
-		overview['Nodes'] = N
-		overview['Edges'] = E
+#
+#		overview['Nodes'] = N
+#		overview['Edges'] = E
 		overview['Density'] = DENS		
-		overview['Diameter'] = D
-		overview['CloseCentr'] = CC
-		overview['BetweennessCentrNodes'] = BC_N
-		overview['BetweennessCentrEdges'] = BC_E
-	
-		nodes_stats = calc.calcular_full(n)
-		edges_stats = calc.calcular_full(e)
-		
-		overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_stats':edges_stats}
-
+#		overview['Diameter'] = D
+#		overview['CloseCentr'] = CC
+#		overview['BetweennessCentrNodes'] = BC_N
+#		overview['BetweennessCentrEdges'] = BC_E
+#	
+#		nodes_stats = calc.calcular_full(n)
+#		edges_stats = calc.calcular_full(e)
+#		
+#		overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_stats':edges_stats}
+#
 		output_basics = output_dir+"/"+str(net)+"/"
 		if not os.path.exists(output_basics):
 			os.makedirs(output_basics)
 				
-		with open(str(output_basics)+str(net)+"_nodes.json", 'w') as f:
-			f.write(json.dumps(nodes))
-		with open(str(output_basics)+str(net)+"_edges.json", 'w') as f:
-			f.write(json.dumps(edges))
+#		with open(str(output_basics)+str(net)+"_nodes.json", 'w') as f:
+#			f.write(json.dumps(nodes))
+#		with open(str(output_basics)+str(net)+"_edges.json", 'w') as f:
+#			f.write(json.dumps(edges))
 		with open(str(output_basics)+str(net)+"_density.json", 'w') as f:
 			f.write(json.dumps(density))
-		with open(str(output_basics)+str(net)+"_diameter.json", 'w') as f:
-			f.write(json.dumps(diameter))
+#		with open(str(output_basics)+str(net)+"_diameter.json", 'w') as f:
+#			f.write(json.dumps(diameter))
 
-		with open(str(output_basics)+str(net)+"_overview.json", 'w') as f:
-			f.write(json.dumps(overview_basics))
+#		with open(str(output_basics)+str(net)+"_overview.json", 'w') as f:
+#			f.write(json.dumps(overview_basics))
 			
-		with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
+		with open(str(output_dir)+str(net)+"_net_struct_density.json", 'w') as f:
 			f.write(json.dumps(overview))
 	
 #Average Degree - Olhar no oslom pq parece que já tem....

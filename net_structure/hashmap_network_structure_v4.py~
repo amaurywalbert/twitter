@@ -18,6 +18,7 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 2 - Normalizei a centralidade de intermediação
 ##					Versão 3 - Acrescentei propriedades basicas - Vetor com nós e arestas, para que se possa plotar ver a distribuição , justificando o uso da média ou não.
 ##					Versão 4 - Salva um dicionário com os valores do diametro e especifica qual o ego da rede-ego. Removi o conteúdo que gerava um arquivo texto com um resumo do resultado.
+##									Acrescentei o cálculo da densidade. 
 ## 
 ######################################################################################################################################################################
 
@@ -42,6 +43,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		d = []																										# Média dos diametros por rede-ego
 		diameter = {}																								# chave_valor para ego_id e diametro
 		
+		dens = []		
+		denstity = {}
 		cc = []																										# Média dos Close Centrality
 		bc_n = []																									# média de betweenness centrality dos nós	
 		bc_e = []																									# média de betweenness centrality das arestas
@@ -69,18 +72,28 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			n.append(n_nodes)																		# Numero de vértices
 			e.append(n_edges)																		# Número de Arestas
 
-#####################################################################################
 			if n_edges == 0:
 				a = 0
 				d.append(a)
 				cc.append(a)
 				bc_n.append(a)
 				bc_e.append(a)
+				dens.append(a)
+				density[ego_id] = a
 				diameter[ego_id] = a	
 			else:
+#####################################################################################
+				
+				w = float(n_edges)/(float(n_nodes)*(float(n_nodes)-1))			# Calcular a densidade da rede
+				dens.append(w)
+				density[ego_id] = w	
+
+#####################################################################################
+			
 				z = snap.GetBfsFullDiam(G, 100, IsDir)
 				d.append(z)											# get diameter of G
 				diameter[ego_id] = z
+
 #####################################################################################
 	
 				Normalized = True
@@ -89,43 +102,43 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		
 #####################################################################################
 
-			if n_edges == 0 or n_nodes < 3:
-				bc_n.append(n_edges)
-				bc_e.append(n_edges)	
-			else:
-				Nodes = snap.TIntFltH()
-				Edges = snap.TIntPrFltH()
-				snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
-				
-				if IsDir is True:
-					max_betweenneess = (n_nodes-1)*(n_nodes-2)
+				if n_edges == 0 or n_nodes < 3:
+					bc_n.append(n_edges)
+					bc_e.append(n_edges)	
 				else:
-					max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
+					Nodes = snap.TIntFltH()
+					Edges = snap.TIntPrFltH()
+					snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes and Edges
+				
+					if IsDir is True:
+						max_betweenneess = (n_nodes-1)*(n_nodes-2)
+					else:
+						max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
 			
-				for node in Nodes:
-					bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
-					bc_n.append(bc_n_normalized)
+					for node in Nodes:
+						bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
+						bc_n.append(bc_n_normalized)
 
-				for edge in Edges:
-					bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
-					bc_e.append(bc_e_normalized)
+					for edge in Edges:
+						bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
+						bc_e.append(bc_e_normalized)
 
 #####################################################################################
 		
-				DegToCntV = snap.TIntPrV()
-				snap.GetDegCnt(G, DegToCntV)																#Grau de cada nó em cada rede-ego
-				for item in DegToCntV:
-					k = item.GetVal1()
-					v = item.GetVal2()
-					if degree.has_key(k):
-						degree[k] = degree[k]+v 
-					else:
-						degree[k] = v
+					DegToCntV = snap.TIntPrV()
+					snap.GetDegCnt(G, DegToCntV)																#Grau de cada nó em cada rede-ego
+					for item in DegToCntV:
+						k = item.GetVal1()
+						v = item.GetVal2()
+						if degree.has_key(k):
+							degree[k] = degree[k]+v 
+						else:
+							degree[k] = v
 
 #####################################################################################
 
-			print	n[i-1], e[i-1], d[i-1], cc[i-1], bc_n[i-1], bc_e[i-1]
-			print 
+				print	n[i-1], e[i-1], d[i-1], cc[i-1], bc_n[i-1], bc_e[i-1]
+				print 
 #####################################################################################		
 		
 		
@@ -134,11 +147,13 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	
 		histogram.histogram(degree,output_dir+"histogram"+"/", N['soma'],net)
 
+		DENS = calc.calcular_full(dens)
+		 
 		D = calc.calcular_full(d)
 
 		CC = calc.calcular_full(cc)
 	
-	
+		
 		BC_N = calc.calcular_full(bc_n)
 		BC_E = calc.calcular_full(bc_e)
 
@@ -147,6 +162,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 		overview['Nodes'] = N
 		overview['Edges'] = E
+		overview['Density'] = DENS		
 		overview['Diameter'] = D
 		overview['CloseCentr'] = CC
 		overview['BetweennessCentrNodes'] = BC_N
@@ -165,6 +181,8 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			f.write(json.dumps(nodes))
 		with open(str(output_basics)+str(net)+"_edges.json", 'w') as f:
 			f.write(json.dumps(edges))
+		with open(str(output_basics)+str(net)+"_density.json", 'w') as f:
+			f.write(json.dumps(density))
 		with open(str(output_basics)+str(net)+"_diameter.json", 'w') as f:
 			f.write(json.dumps(diameter))
 
