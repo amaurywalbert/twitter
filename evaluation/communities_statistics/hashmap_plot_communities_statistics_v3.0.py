@@ -143,7 +143,7 @@ def main():
 		if data1 is not None and data2:
 			if len(data1) == len(data2):
 				
-				data_full[alg] = {'data1':data1,'data2':data2}
+#				data_full[alg] = {'data1':data1,'data2':data2}
 				plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg[i]))
 		else:
 			print ("\nImpossível gerar gráfico para os 02 cenários...\n")
