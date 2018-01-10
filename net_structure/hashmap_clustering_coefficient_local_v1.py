@@ -14,8 +14,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para verificar por componentes conectados. NA VERSÂO "BY MODEL" consideramos a média de todo o modelo, e não fazemos média por ego.
+##		Status - Versão 1 - Script para gerar coeficiente de clustering por ego. Nesse cálculo a média que é armazenada já é a média do modelo.
 ## 
+##												ERRRO DE ALOCAÇÃO DE MEMÓRIA!!!!!
 ######################################################################################################################################################################
 
 
@@ -26,15 +27,16 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	print("\n######################################################################\n")
-	if os.path.isfile(str(output_dir)+str(net)+"_connected_comp.json"):
-		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_connected_comp.json")
+	if os.path.isfile(str(output_dir)+str(net)+"_clustering_coef.json"):
+		print ("Arquivo já existe: "+str(output_dir)+str(net)+"_clustering_coef.json")
 	else:
 
-		print ("Componentes conectados - " +str(dataset_dir))
+		print ("Dataset clustering coefficient - " +str(dataset_dir))
 											
-		cc = []																										# Vetor com tamanho de todos os componentes conectados por modelo
-		cc_normal = []																								# Vetor com tamanho de todos os componentes conectados por modelo - Cada tamanho é normalizado pelo número de vértices da rede em que está o componente.
-		n_cc  = []																									# Número de componentes conectados por modelo
+		cf = []																										# Média dos coeficientes de clusterings por rede-ego
+		gcf = []																										# Média usando opção local
+		n = []																										# vetor com número de vértices para cada rede-ego																									
+		e = []																										# vetor com número de arestas para cada rede-ego
 		i = 0
 
 		for file in os.listdir(dataset_dir):
@@ -50,49 +52,42 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 #####################################################################################		
 
-			n_nodes = G.GetNodes()												# Número de vértices
-			n_edges = G.GetEdges()												# Número de arestas
+			n.append(G.GetNodes())																		# Numero de vertices
+			e.append(G.GetEdges())																		# Numero de arestas
+			n_nodes = G.GetNodes()	
+			n_edges = G.GetEdges()
 		
 #####################################################################################
 			if n_edges == 0:
 				a = 0
-				cc.append(a)
-				cc_normal.append(a)
+				cf.append(a)
 				print ("Nenhuma aresta encontrada para a rede-ego "+str(i)+" - ("+str(file))				
-			else:
-				Components = snap.TCnComV()
-				snap.GetWccs(G, Components)
-				n_cc.append(len(Components))
-				for CnCom in Components:
-					cc.append(CnCom.Len())
-					b = float(CnCom.Len())/float(n_nodes)
-					cc_normal.append(b)
+			else:	
+				NIdCCfH = snap.TIntFltH()
+				snap.GetNodeClustCf(G, NIdCCfH)
+				for item in NIdCCfH:
+					cf.append(NIdCCfH[item])																# Clusterinf Coefficient
+				
+				print ("Calculando Clustering Coef para a rede-ego: "+str(i))
+				print  				
 
-		N_CC = calc.calcular_full(n_cc)						# Número de componentes conectados dividido pelo número de egos, pra saber a média de componentes conectados por ego.
-		CC = calc.calcular_full(cc)
-		CC_NORMAL = calc.calcular_full(cc_normal)			
+		CF = calc.calcular_full(cf)
 	
 		overview = {}
-		overview['Len_ConnectedComponents'] = CC
-		overview['Len_ConnectedComponents_Normal'] = CC_NORMAL
-		overview['N_ConnectedComponents'] = N_CC
+		overview['ClusteringCoefficient'] = CF
 
 
 		
-		with open(str(output_dir)+str(net)+"_connected_comp.json", 'w') as f:
+		with open(str(output_dir)+str(net)+"_clustering_coef.json", 'w') as f:
 			f.write(json.dumps(overview))
 	
-		with open(str(output_dir)+str(net)+"_connected_comp.txt", 'w') as f:
+		with open(str(output_dir)+str(net)+"_clustering_coef.txt", 'w') as f:
 			f.write("\n######################################################################\n")	
-			f.write ("Number_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N_CC['media'],CC['variancia'],N_CC['desvio_padrao']))
-			f.write ("Length_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
-			f.write ("Length_Connected_Comp_Normalized: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC_NORMAL['media'],CC_NORMAL['variancia'],CC_NORMAL['desvio_padrao']))
+			f.write ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
 			f.write("\n######################################################################\n")
 
 		print ("\n######################################################################\n")	
-		print ("Number_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N_CC['media'],CC['variancia'],N_CC['desvio_padrao']))
-		print ("Length_Connected_Comp: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
-		print ("Length_Connected_Comp_Normalized: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC_NORMAL['media'],CC_NORMAL['variancia'],CC_NORMAL['desvio_padrao']))
+		print ("Clustering Coef: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CF['media'],CF['variancia'],CF['desvio_padrao']))
 		print ("\n######################################################################\n")
 
 print("\n######################################################################\n")
@@ -153,7 +148,7 @@ def main():
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/by_model_test/connected_comp/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/clustering_coefficient_local/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
@@ -163,7 +158,7 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/by_model_test/connected_comp/graphs_without_ego/"
+		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/clustering_coefficient_local/graphs_without_ego/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		net_structure(dataset_dir2,output_dir2,net,isdir,weight)												# Inicia os cálculos...	

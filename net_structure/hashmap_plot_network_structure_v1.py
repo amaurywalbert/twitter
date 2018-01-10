@@ -14,36 +14,48 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para plotar dados sobre componentes conectados
+##		Status - Versão 1 - Script para plotar propriedades estruturais das redes-ego, com média por rede-ego.
 ## 
+##												ERRRO DE ALOCAÇÃO DE MEMÓRIA!!!!!
 ######################################################################################################################################################################
+
 
 ######################################################################################################################################################################
 #
-# Carregar os dados as propriedades do dataset
+# Armazenar as propriedades do dataset
 #
 ######################################################################################################################################################################
 def prepare(source_dir):
 	print("\n######################################################################\n")
-
-	cc = {}
-	n_cc = {}
-	cc_normal = {}
+	
+	nodes = {}
+	edges = {}
+	diameter = {}
+	closecentr = {}
+	bet_centr_nodes = {}
+	bet_centr_edges = {}
 	for i in range(1,11):
 		net="n"+str(i)
-		if os.path.isfile(source_dir+net+"_connected_comp.json"):
-			with open(source_dir+net+"_connected_comp.json", 'r') as f:
+		if os.path.isfile(source_dir+net+"_net_struct.json"):
+			with open(source_dir+net+"_net_struct.json", 'r') as f:
 				overview = json.load(f)
-				n_cc[net] = {'media':overview['N_ConnectedComponents']['media'],'std':overview['N_ConnectedComponents']['desvio_padrao']} 
-				cc[net] = {'media':overview['Len_ConnectedComponents']['media'],'std':overview['Len_ConnectedComponents']['desvio_padrao']}
-				cc_normal[net] = {'media':overview['Len_ConnectedComponents_Normal']['media'],'std':overview['Len_ConnectedComponents_Normal']['desvio_padrao']}
 				
+				nodes[net] = {'media':overview['Nodes']['media'],'std':overview['Nodes']['desvio_padrao']}
+				edges[net] = {'media':overview['Edges']['media'],'std':overview['Edges']['desvio_padrao']}
+				diameter[net] = {'media':overview['Diameter']['media'],'std':overview['Diameter']['desvio_padrao']}
+				closecentr[net] = {'media':overview['CloseCentr']['media'],'std':overview['CloseCentr']['desvio_padrao']}
+				bet_centr_nodes[net] = {'media':overview['BetweennessCentrNodes']['media'],'std':overview['BetweennessCentrNodes']['desvio_padrao']}
+				bet_centr_edges[net] = {'media':overview['BetweennessCentrEdges']['media'],'std':overview['BetweennessCentrEdges']['desvio_padrao']}
+
 	data = {}
-	data['Number_Connected_Components'] = n_cc
-	data['Connected_Components'] = cc
-	data['Normalized_Connected_Components'] = cc_normal
+	data['Nodes'] = nodes
+	data['Edges'] = edges
+	data['Diameter'] = diameter
+	data['Close Centrality'] = closecentr
+	data['Betweenness Centrality Nodes'] = bet_centr_nodes
+	data['Betweenness Centrality Edges'] = bet_centr_edges
 	return data
-	print("\n######################################################################\n")
+
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -52,6 +64,7 @@ def prepare(source_dir):
 #
 ######################################################################################################################################################################
 ######################################################################################################################################################################
+
 def main():
 	os.system('clear')
 	print "################################################################################"
@@ -61,11 +74,11 @@ def main():
 	print"#################################################################################"
 	print
 	
-	source_dir1 = "/home/amaury/Dropbox/net_structure_hashmap/by_model_test/connected_comp/graphs_with_ego/"
-					
+	source_dir1 = source+"graphs_with_ego/"
+	
 	data1 = prepare(source_dir1)
 	
-	source_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/by_model_test/connected_comp/graphs_without_ego/"
+	source_dir2 = source+"graphs_without_ego/"
 	
 	data2 = prepare(source_dir2)
 	
@@ -88,7 +101,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-output = "/home/amaury/Dropbox/net_structure_hashmap_statistics/by_model/connected_comp/"
+source = "/home/amaury/Dropbox/net_structure_hashmap/snap/"
+output = "/home/amaury/Dropbox/net_structure_hashmap_statistics/snap/"
 
 #Executa o método main
 if __name__ == "__main__": main()

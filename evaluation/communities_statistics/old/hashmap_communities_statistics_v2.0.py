@@ -135,23 +135,23 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 									communities, n_comm, size, avg_size, size_norm, avg_size_norm, overlap, n_singletons, n_non_singletons = prepare_communities(community_file,net_struct_nodes[str(ego_id)])		#Função para devolver um dicionário com as comunidades
 									statistics[ego_id] = {'n_nodes':net_struct_nodes[str(ego_id)],'n_edges':net_struct_edges[str(ego_id)],'n_communities':n_comm,'size':size,'avg_size':avg_size,'size_norm':size_norm,'avg_size_norm':avg_size_norm,'overlap':overlap, 'n_singletons':n_singletons,'n_non_singletons':n_non_singletons}							
 
-					print g_type,singletons,alg,net
+						print g_type,singletons,alg,net
 																		 
 
-					print("######################################################################")
-					print	
+						print("######################################################################")
+						print	
 
-					with open(str(out_dir)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(statistics))
+						with open(str(out_dir)+str(threshold)+".json", "w") as f:
+							f.write(json.dumps(statistics))
 
 
 #Impressão na tela dos dados salvos...					
-#					with open(str(out_dir)+str(threshold)+".json", "r") as g:
-#						_statistics = json.load(g)
-#						for k,v in _statistics.iteritems():
-#							print
-#							print k,v
-#							print
+#						with open(str(out_dir)+str(threshold)+".json", "r") as g:
+#							_statistics = json.load(g)
+#							for k,v in _statistics.iteritems():
+#								print
+#								print k,v
+#								print
 	print("######################################################################")		
 
 ######################################################################################################################################################################

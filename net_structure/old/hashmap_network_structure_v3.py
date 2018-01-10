@@ -17,7 +17,6 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Script para gerar propriedades estruturais dos modelos. Média por modelo (considera todos os egos...)
 ##					Versão 2 - Normalizei a centralidade de intermediação
 ##					Versão 3 - Acrescentei propriedades basicas - Vetor com nós e arestas, para que se possa plotar ver a distribuição , justificando o uso da média ou não.
-##					Versão 4 - Salva um dicionário com os valores do diametro e especifica qual o ego da rede-ego. Removi o conteúdo que gerava um arquivo texto com um resumo do resultado.
 ## 
 ######################################################################################################################################################################
 
@@ -38,14 +37,10 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		e = []																										# Média das arestas por rede-ego	
 		nodes = {}																									# chave_valor para ego_id e numero de vertices
 		edges = {}																									# chave_valor para ego_id e numero de arestas
-
 		d = []																										# Média dos diametros por rede-ego
-		diameter = {}																								# chave_valor para ego_id e diametro
-		
-		cc = []																										# Média dos Close Centrality
+		cc = []																										# Média dos Close Centrality																				
 		bc_n = []																									# média de betweenness centrality dos nós	
 		bc_e = []																									# média de betweenness centrality das arestas
-		
 		degree = {}																									# chave-valor para armazenar "grau dos nós - numero de nós com este grau"
 		i = 0
 	
@@ -75,12 +70,10 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 				d.append(a)
 				cc.append(a)
 				bc_n.append(a)
-				bc_e.append(a)
-				diameter[ego_id] = a	
+				bc_e.append(a)	
 			else:
-				z = snap.GetBfsFullDiam(G, 100, IsDir)
-				d.append(z)											# get diameter of G
-				diameter[ego_id] = z
+				d.append(snap.GetBfsFullDiam(G, 100, IsDir))											# get diameter of G
+		
 #####################################################################################
 	
 				Normalized = True
@@ -144,7 +137,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 	
 		overview = {}
-
 		overview['Nodes'] = N
 		overview['Edges'] = E
 		overview['Diameter'] = D
@@ -154,7 +146,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 	
 		nodes_stats = calc.calcular_full(n)
 		edges_stats = calc.calcular_full(e)
-		
 		overview_basics = {'nodes':n,'nodes_stats':nodes_stats,'edges':e,'edges_stats':edges_stats}
 
 		output_basics = output_dir+"/"+str(net)+"/"
@@ -165,8 +156,6 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 			f.write(json.dumps(nodes))
 		with open(str(output_basics)+str(net)+"_edges.json", 'w') as f:
 			f.write(json.dumps(edges))
-		with open(str(output_basics)+str(net)+"_diameter.json", 'w') as f:
-			f.write(json.dumps(diameter))
 
 		with open(str(output_basics)+str(net)+"_overview.json", 'w') as f:
 			f.write(json.dumps(overview_basics))
@@ -174,6 +163,18 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		with open(str(output_dir)+str(net)+"_net_struct.json", 'w') as f:
 			f.write(json.dumps(overview))
 	
+		with open(str(output_dir)+str(net)+"_net_struct.txt", 'w') as f:
+			f.write("\n######################################################################\n")	
+			f.write ("NET: %s -- Ego-nets: %d \n" % (net,len(n)))
+			f.write ("Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (N['media'],N['variancia'],N['desvio_padrao']))
+			f.write ("Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (E['media'],E['variancia'],E['desvio_padrao']))
+			f.write ("Diameter: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (D['media'],D['variancia'],D['desvio_padrao']))
+			f.write ("CloseCentr: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (CC['media'],CC['variancia'],CC['desvio_padrao']))
+			f.write ("Betweenness Centr Nodes: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_N['media'],BC_N['variancia'],BC_N['desvio_padrao']))
+			f.write ("Betweenness Centr Edges: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f \n"% (BC_E['media'],BC_E['variancia'],BC_E['desvio_padrao']))
+			f.write("\n######################################################################\n")
+
+
 #Average Degree - Olhar no oslom pq parece que já tem....
 #Average clustering coefficient	0.5653
 #Number of triangles	13082506
@@ -249,7 +250,7 @@ def main():
 	if not os.path.isdir(dataset_dir):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir))
 	else:
-		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/by_model/snap/graphs_with_ego/"
+		output_dir = "/home/amaury/Dropbox/net_structure_hashmap/snap/graphs_with_ego/"
 		if not os.path.exists(output_dir):
 			os.makedirs(output_dir)
 		net_structure(dataset_dir,output_dir,net,isdir,weight)													# Inicia os cálculos...				
@@ -259,7 +260,7 @@ def main():
 	if not os.path.isdir(dataset_dir2):
 		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
 	else:
-		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/by_model/snap/graphs_without_ego/"
+		output_dir2 = "/home/amaury/Dropbox/net_structure_hashmap/snap/graphs_without_ego/"
 		if not os.path.exists(output_dir2):
 			os.makedirs(output_dir2)
 		net_structure(dataset_dir2,output_dir2,net,isdir,weight)												# Inicia os cálculos...	
