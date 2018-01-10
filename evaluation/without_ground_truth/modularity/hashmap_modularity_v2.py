@@ -116,7 +116,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net):
 def main():
 	os.system('clear')
 	print"																											"
-	print" Script para cálculo do coeficiente de agrupamento do dataset (rede-ego)							"
+	print" Script para cálculo da Modularidade 															"
 	print"																											"
 	print"#################################################################################"
 	print

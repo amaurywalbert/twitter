@@ -116,7 +116,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net):
 def main():
 	os.system('clear')
 	print"																											"
-	print" Script para cálculo do coeficiente de agrupamento do dataset (rede-ego)							"
+	print" Script para cálculo da Modularidade 													"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -191,22 +191,22 @@ def main():
 
 ######################################################################				
 ######################################################################
-	graph_type = "graphs_with_ego"	
-	dataset_dir2 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
-	
-	if not os.path.isdir(dataset_dir2):
-		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
-	else:
-		output_dir2 = str(output)+str(metric)+"/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
-		if not os.path.exists(output_dir2):
-			os.makedirs(output_dir2)
-		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
-	
-		if os.path.isfile(str(output_dir2)+str(net)+".json"):
-			print ("Arquivo já existe no destino: "+str(output_dir2)+str(net)+".json")
-		else:	
-			net_structure(dataset_dir2,output_dir2,graph_type,metric,net)														# Inicia os cálculos...
-
+#	graph_type = "graphs_with_ego"	
+#	dataset_dir2 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
+#	
+#	if not os.path.isdir(dataset_dir2):
+#		print("Diretório dos grafos não encontrado: "+str(dataset_dir2))
+#	else:
+#		output_dir2 = str(output)+str(metric)+"/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+#		if not os.path.exists(output_dir2):
+#			os.makedirs(output_dir2)
+#		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
+#	
+#		if os.path.isfile(str(output_dir2)+str(net)+".json"):
+#			print ("Arquivo já existe no destino: "+str(output_dir2)+str(net)+".json")
+#		else:	
+#			net_structure(dataset_dir2,output_dir2,graph_type,metric,net)														# Inicia os cálculos...
+#
 ######################################################################
 ######################################################################
 	graph_type = "graphs_without_ego"
@@ -226,21 +226,21 @@ def main():
 
 ######################################################################		
 ######################################################################
-	graph_type = "graphs_without_ego"
-	dataset_dir4 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
-
-	if not os.path.isdir(dataset_dir4):
-		print("Diretório dos grafos não encontrado: "+str(dataset_dir4))
-	else:
-		output_dir4 = str(output)+str(metric)+"/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
-		if not os.path.exists(output_dir4):
-			os.makedirs(output_dir4)
-		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
-		if os.path.isfile(str(output_dir4)+str(net)+".json"):
-			print ("Arquivo já existe no destino: "+str(output_dir4)+str(net)+".json")
-		else:	
-			net_structure(dataset_dir4,output_dir4,graph_type,metric,net)													# Inicia os cálculos...
-
+#	graph_type = "graphs_without_ego"
+#	dataset_dir4 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"	############### Arquivo contendo arquivos contendo as comunidades
+#
+#	if not os.path.isdir(dataset_dir4):
+#		print("Diretório dos grafos não encontrado: "+str(dataset_dir4))
+#	else:
+#		output_dir4 = str(output)+str(metric)+"/"+str(graph_type)+"/"+str(alg)+"/without_singletons/"
+#		if not os.path.exists(output_dir4):
+#			os.makedirs(output_dir4)
+#		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/without_singletons/")
+#		if os.path.isfile(str(output_dir4)+str(net)+".json"):
+#			print ("Arquivo já existe no destino: "+str(output_dir4)+str(net)+".json")
+#		else:	
+#			net_structure(dataset_dir4,output_dir4,graph_type,metric,net)													# Inicia os cálculos...
+#
 ######################################################################
 ######################################################################	
 	
