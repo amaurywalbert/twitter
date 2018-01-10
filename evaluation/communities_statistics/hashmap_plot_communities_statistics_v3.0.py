@@ -88,7 +88,8 @@ def main():
 	print"  4 - Overlap"
 	print"  5 - Singletons"
 	print"  6 - Non Singletons"
-	print"  7 - Alters Ignored"	
+	print"  7 - Alters Ignored"
+	print"  8 - Alters Ignored Normalized"		
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -106,6 +107,8 @@ def main():
 		metric = "n_non_singletons"
 	elif op2 == 7:
 		metric = "alters_ignored"
+	elif op2 == 8:
+		metric = "alters_ignored_norm"
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()

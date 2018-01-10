@@ -57,13 +57,14 @@ def prepare_communities(community_file,n_nodes):
 
 	n_comm = len(communities)											# Quantidade de comunidades para o ego em questão
 	alters_ignored = n_nodes - len(alters_set)					# Número de alters que foram ignorados no processo de detecção e não receberam rótulos.
+	alters_ignored_norm = float(alters_ignored)/float(n_nodes)
 
 	avg_size = calc.calcular(size)										# Somar o vetor com o tamanho das comunidades...
 	avg_size_norm = calc.calcular(size_norm)										# Somar o vetor com o tamanho das comunidades normalizado...
 			
 	overlap = float(avg_size['soma'])/float(n_nodes)				# The overlap: the average number of communities to which each vertex belongs. This is the sum of the sizes of all communities (including singletons) divided by the number of vertices, n.
 	
-	return communities, n_comm, size, avg_size['media'], size_norm, avg_size_norm['media'], overlap, n_singletons, n_non_singletons, alters_ignored
+	return communities, n_comm, size, avg_size['media'], size_norm, avg_size_norm['media'], overlap, n_singletons, n_non_singletons, alters_ignored, alters_ignored_norm
 
 ######################################################################################################################################################################
 #
@@ -135,8 +136,8 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 																								
 								with open(str(communities_dir)+str(threshold)+"/"+file, 'r') as community_file:
 								
-									communities, n_comm, size, avg_size, size_norm, avg_size_norm, overlap, n_singletons, n_non_singletons, alters_ignored = prepare_communities(community_file,net_struct_nodes[str(ego_id)])		#Função para devolver um dicionário com as comunidades
-									statistics[ego_id] = {'n_nodes':net_struct_nodes[str(ego_id)],'n_edges':net_struct_edges[str(ego_id)],'n_communities':n_comm,'size':size,'avg_size':avg_size,'size_norm':size_norm,'avg_size_norm':avg_size_norm,'overlap':overlap, 'n_singletons':n_singletons,'n_non_singletons':n_non_singletons,'alters_ignored':alters_ignored}							
+									communities, n_comm, size, avg_size, size_norm, avg_size_norm, overlap, n_singletons, n_non_singletons, alters_ignored, alters_ignored_norm = prepare_communities(community_file,net_struct_nodes[str(ego_id)])		#Função para devolver um dicionário com as comunidades
+									statistics[ego_id] = {'n_nodes':net_struct_nodes[str(ego_id)],'n_edges':net_struct_edges[str(ego_id)],'n_communities':n_comm,'size':size,'avg_size':avg_size,'size_norm':size_norm,'avg_size_norm':avg_size_norm,'overlap':overlap, 'n_singletons':n_singletons,'n_non_singletons':n_non_singletons,'alters_ignored':alters_ignored,'alters_ignored_norm':alters_ignored_norm}							
 
 						print g_type,singletons,alg,net
 																		 
