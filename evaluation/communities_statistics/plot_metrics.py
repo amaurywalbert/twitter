@@ -42,7 +42,8 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 		co_interaction = []
 		co_value = []
 		co_std = []
-		co_threshold = []	
+		co_threshold = []
+			
 		for k, v in data_overview.iteritems():
 			if k == 'n1':
 				key = 'follow'
