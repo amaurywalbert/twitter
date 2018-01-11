@@ -91,17 +91,17 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net):
 	
 						print (str(graph_type)+" - Rede: "+str(net)+" - Threshold: "+str(threshold)+" - Modularidade para o ego "+str(i)+" ("+str(file)+"): %5.3f" % (_m_file['media']))
 						print("######################################################################")	
-	
 				M = calc.calcular_full(modularity)
 	
-
-				overview = {'threshold': threshold, 'modularity':M}
-				with open(str(output_dir)+str(net)+".json", 'a+') as f:
-					f.write(json.dumps(overview)+"\n")		
-				if M is not None:												
+				if M is not None:
+					overview = {'threshold': threshold, 'modularity':M}
 					print("\n######################################################################\n")	
 					print ("Rede: %s   ---   Threshold: %s   ---   Modularity: Média: %5.3f -- Var:%5.3f -- Des. Padrão: %5.3f"% (net,threshold,M['media'],M['variancia'],M['desvio_padrao']))
 					print("\n######################################################################\n")	
+
+			if overview is not None:
+				with open(str(output_dir)+str(net)+".json", 'a+') as f:
+					f.write(json.dumps(overview)+"\n")		
 
 	print("\n######################################################################\n")
 
@@ -116,7 +116,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net):
 def main():
 	os.system('clear')
 	print"																											"
-	print" Script para cálculo da Modularidade 													"
+	print" Script para cálculo da Modularidade 															"
 	print"																											"
 	print"#################################################################################"
 	print

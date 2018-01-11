@@ -8,7 +8,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Coletar a modularidade da rede calculada durante o processo de detecçao de comunidades com o software 	
-##					http://deim.urv.cat/~sergio.gomez/radatools.php#download
+##					http://deim.urv.cat/~sergio.gomez/radatools.php#download - Detection Community - Tem que esperar concluir o software de detecção de comunidades para pegar os dados sobre a modularidade...
 ##								
 ## # INPUT:
 ##		- Arquivos com as comunidades completas

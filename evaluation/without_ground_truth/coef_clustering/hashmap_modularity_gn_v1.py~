@@ -7,8 +7,7 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-##		Status - Versão 1 - Coletar a modularidade da rede calculada durante o processo de detecçao de comunidades com o software 	
-##					http://deim.urv.cat/~sergio.gomez/radatools.php#download - Detection COmmunity - Tem que esperar concluir o software de detecção de comunidades para pegar os dados sobre a modularidade...
+##		Status - Versão 1 - Coletar a modularidade da rede calculada durante o processo de detecçao de comunidades com o software radatools-4.1-linux64
 ##								
 ## # INPUT:
 ##		- Arquivos com as comunidades completas
@@ -35,8 +34,12 @@ def save_data(graphs,alg):
 			print ("\nDiretório não encontrado "+str(source_dir))
 			print
 		else:	
-			if not os.path.exists(output):
+			if os.path.exists(output):
+				shutil.rmtree(output)		
+				os.makedirs(output)	
+			else:
 				os.makedirs(output)
+
 			i=0
 			modularity=[]
 			for file in os.listdir(source_dir):					
