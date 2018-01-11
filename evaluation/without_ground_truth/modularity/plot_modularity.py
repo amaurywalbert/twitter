@@ -283,7 +283,7 @@ def plot_bars_full_without_singletons(output,data1,data2,metric,alg):
 	print ("\n##################################################\n")
 	print ("Gerando Gráfico Completo - Algoritmo: "+str(alg)+" - Métrica: "+str(metric))
 
-	data_overview_full = [data1,data2,data3,data4]
+	data_overview_full = [data1,data2]
 	dataset = {}
 	#i = 1										#armazenar dados de plotagem para dataset COM ego e comunidades COM singletons
 	#i = 2										#armazenar dados de plotagem para dataset COM ego e comunidades SEM singletons
