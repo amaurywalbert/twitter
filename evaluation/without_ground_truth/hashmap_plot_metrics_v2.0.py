@@ -78,6 +78,7 @@ def main():
 	print ("\n")
 	print"#################################################################################"
 	print
+	print"  0 - All Metrics"
 	print"  1 - Average Degree"
 	print"  2 - Conductance"
 	print"  3 - Cut Ratio"
@@ -87,8 +88,53 @@ def main():
 	print"  7 - Separability"	
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
+	
+	if op2 == 0:
+		m = ["average_degree","conductance","cut_ratio","density","expansion","normalized_cut","separability"]
+		for metric in m:
+			data1 = {}
+			data2 = {}
+			data3 = {}
+			data4 = {}
+######################################################################		
+######################################################################
 
-	if op2 == 1:
+			dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
+			data1 = prepare(dataset1,metric)
+			title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
+			if data1 is not None:
+				plot_metrics.plot_single(output,data1,metric,alg,title)
+			else:
+				print ("Impossível gerar gráfico simples para: "+str(title))
+######################################################################				
+######################################################################
+
+			dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
+			data3 = prepare(dataset3,metric)
+			title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
+			if data3 is not None:				
+				plot_metrics.plot_single(output,data3,metric,alg,title)
+			else:
+				print ("Impossível gerar gráfico simples para: "+str(title))
+
+######################################################################				
+######################################################################
+			if data1 is not None and data3:
+				if len(data1) == len(data3):
+					plot_metrics.plot_full_without_singletons(output,data1,data3,metric,alg)
+			else:
+				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
+				print data1
+				print data3	
+	
+	
+		print("\n######################################################################\n")
+		print("Script finalizado!")
+		print("\n######################################################################\n")		
+		sys.exit()
+######################################################################				
+######################################################################			 
+	elif op2 == 1:
 		metric = "average_degree"
 	elif op2 == 2:
 		metric = "conductance"
@@ -164,11 +210,9 @@ def main():
 		if len(data1) == len(data3):
 			plot_metrics.plot_full_without_singletons(output,data1,data3,metric,alg)
 	else:
-		print ("\nImpossível gerar gráfico para os 04 cenários...\n")
+		print ("\nImpossível gerar gráfico para os 02 cenários...\n")
 		print data1
-		print data2
 		print data3
-		print data4	
 ######################################################################
 ######################################################################	
 	
