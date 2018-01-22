@@ -92,7 +92,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net):
 			
 
 						_m_file = calc.calcular(m_file)
-						coef_lust_data[ego_id] = m_file
+						coef_clust_data[ego_id] = m_file
 						if _m_file is not None:
 							coef_clust.append(_m_file['media'])
 	
