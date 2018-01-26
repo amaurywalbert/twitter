@@ -17,21 +17,25 @@ def prepare(dataset):
 	if not os.path.isdir(dataset):
 		print ("Diretório com coef_clust não encontrado: "+str(dataset))
 	else:	
-		coef_clust_plot = {}																	# Armazenar o nome da rede e o maior valor do da coef_clust - Formato {{'N1':0.012},...}
+		coef_clust_plot = {}																	# Armazenar o nome da rede e o maior valor do coef_clust - Formato {{'N1':0.012},...}
 
-		for file in os.listdir(dataset):
-			net = file.split(".json")
-			net = net[0]
-			coef_clust_plot[net] = {'threshold':' ','coef_clust':float(0),'std':float(0)}
-	
-			with open(dataset+file, 'r') as f:
-				for line in f:
-					data = json.loads(line)
-					threshold = data['threshold']
-					M = data['coef_clust']
-					if M is not None:						
-						if	float(M['media']) > coef_clust_plot[net]['coef_clust']:
-							coef_clust_plot[net] = {'threshold': threshold, 'coef_clust':float(M['media']),'std':float(M['desvio_padrao'])}
+		for net in os.listdir(dataset):
+			if not os.path.isdir(str(dataset)+str(net)+"/"):
+				print ("Diretório não encontrado. "+str(dataset)+str(net)+"/")
+			else:			
+				coef_clust_plot[net] = {'threshold':' ','coef_clust':float(0),'std':float(0)}
+
+				for file in os.listdir(dataset+str(net)+"/"):
+					threshold = file.split(".json")
+					threshold = threshold[0]
+
+					with open(dataset+str(net)+"/"+str(file), 'r') as f:
+						data = json.load(f)
+						M = data['coef_clust']
+						if M is not None:
+							print net,threshold,M['media']				
+							if	float(M['media']) > coef_clust_plot[net]['coef_clust']:
+								coef_clust_plot[net] = {'threshold': threshold, 'coef_clust':float(M['media']),'std':float(M['desvio_padrao'])}
  
 		return coef_clust_plot
 
