@@ -144,7 +144,7 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 									normalized_cut[ego_id] = avg_normal_cut
 									separability[ego_id] = avg_s	
 			
-									print ("Average Degree: "+str(avg_ad['media'])+" - Conductance: "+str(avg_c['media'])+" - Cut Ratio: "+str(avg_cut_r['media'])+" - Density: "+str(avg_ad['media']))
+									print ("Average Degree: "+str(avg_ad['media'])+" - Conductance: "+str(avg_c['media'])+" - Cut Ratio: "+str(avg_cut_r['media'])+" - Density: "+str(avg_d['media']))
 									print ("Expansion: "+str(avg_e['media'])+" - Normalized Cut: "+str(avg_normal_cut['media'])+" - Separability: "+str(avg_s['media']))
 									print 
 					print("######################################################################")	
