@@ -30,7 +30,6 @@ def csj(data1,data2):
 		result = intersection/float(union)									# float(uniao) para resultado no intervalo [0,1]
 	else:
 		result = 0
-#	print ("União: "+str(union)+" --- Interseção: "+str(intersection)+" --- CSJ: "+str(result))	
 	return result
 
 ######################################################################################################################################################################

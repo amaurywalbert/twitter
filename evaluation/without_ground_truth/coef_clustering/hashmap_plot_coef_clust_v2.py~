@@ -30,6 +30,7 @@ def prepare(dataset):
 					threshold = threshold[0]
 
 					with open(dataset+str(net)+"/"+str(file), 'r') as f:
+						print ("Abrindo: "+str(dataset)+str(net)+"/"+str(file))
 						data = json.load(f)
 						M = data['coef_clust']
 						if M is not None:

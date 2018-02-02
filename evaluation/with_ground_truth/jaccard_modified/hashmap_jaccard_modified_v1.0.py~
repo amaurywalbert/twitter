@@ -76,8 +76,7 @@ def jaccard_index(communities, ground_truth_communities):
 			jaccard = csj(y_pred,y_true)
 			if jaccard > bigger:
 				bigger = jaccard
-		performance.append(bigger)
-		print bigger			
+		performance.append(bigger)			
 
 	result = calcular(performance)
 	
