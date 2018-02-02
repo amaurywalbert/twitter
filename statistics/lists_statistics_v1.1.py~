@@ -209,7 +209,7 @@ def instructions(type_graphs,singletons):
 						else:
 						
 							i+=1
-							print (str(graphs_dir)+" - recuperando alters para o ego: "+str(i))
+							print (str(graphs_dir)+" - recuperando alters para o ego: "+str(i)+" - "+str(ego_id))
 							alters_set = recovery_alters(str(graphs_dir)+str(file))											# Recupera os alters para o ego.
 						
 							_ego_jaccard, _full_lists_jaccard = jaccard_verify(str(source_dir)+str(ego_id)+".txt", alters_set)
