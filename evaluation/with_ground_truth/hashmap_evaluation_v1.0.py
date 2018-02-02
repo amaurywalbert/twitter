@@ -165,6 +165,7 @@ def main():
 	print ("Métrica a ser aplicada na geração dos resultados:\n")
 	print("01 - NMI - Normalized Mutual Infomation. ")
 	print("02 - Jaccard Similarity.")
+	print("03 - Jaccard Similarity - Modified.")
 	print	
 	metric_op = int(raw_input("Escolha uma opção acima: "))
 	print ("\n##################################################\n")
@@ -174,6 +175,9 @@ def main():
 #######################################################################
 	elif metric_op == 02:
 		metric = "jaccard"
+#######################################################################
+	elif metric_op == 3:
+		metric = "jaccard_modified"		
 #######################################################################
 	else:
 		metric = ""
