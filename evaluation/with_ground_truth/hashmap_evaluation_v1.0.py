@@ -102,15 +102,6 @@ def instructions(metric,alg):
 #	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities with singletons')	
 	data1 = data_overview
 ################################################################################################
-#
-#	comm_data_dir = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
-#	output_dir = str(output)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
-#
-#	data,data_overview = algorithm(comm_data_dir,metric)
-#	save_data(output_dir,data,data_overview)		
-#	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities without singletons')	
-#	data2 = data_overview
-################################################################################################
 
 	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"
 	output_dir = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"
@@ -120,37 +111,20 @@ def instructions(metric,alg):
 #	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities with singletons')
 	data3 = data_overview
 ################################################################################################
-#	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
-#	output_dir = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
-#	
-#
-#	data,data_overview = algorithm(comm_data_dir,metric)
-#	save_data(output_dir,data,data_overview)		
-#	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities without singletons')	
-#	data4 = data_overview
-#
-################################################################################################
-#	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-#		if len(data1) == len(data2) == len(data3) == len(data4):
-#			plot_evaluation.plot_full(output,data1,data2,data3,data4,metric,alg)
 
-	if data1 is not None and data3:
+	if data1 is not None and data3 is not None:
 		if len(data1) == len(data3):
 			plot_evaluation.plot_full_with_singletons(output,data1,data3,metric,alg)
 
 		else:
-			print ("\nImpossível gerar gráfico para os 04 cenários...\n")
+			print ("\nImpossível gerar gráficos...\n")
 			print data1
-			print data2
-			print data3
-			print data4		
+			print data3		
 			
 	else:
-		print ("\nImpossível gerar gráfico para os 04 cenários...\n")
+		print ("\nImpossível gerar gráficos...\n")
 		print data1
-		print data2
-		print data3
-		print data4		
+		print data3		
 		
 ######################################################################################################################################################################
 #

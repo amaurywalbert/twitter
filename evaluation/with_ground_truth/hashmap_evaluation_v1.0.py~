@@ -134,23 +134,19 @@ def instructions(metric,alg):
 #		if len(data1) == len(data2) == len(data3) == len(data4):
 #			plot_evaluation.plot_full(output,data1,data2,data3,data4,metric,alg)
 
-	if data1 is not None and data3:
+	if data1 is not None and data3 is not None:
 		if len(data1) == len(data3):
 			plot_evaluation.plot_full_with_singletons(output,data1,data3,metric,alg)
 
 		else:
-			print ("\nImpossível gerar gráfico para os 04 cenários...\n")
+			print ("\nImpossível gerar gráficos...\n")
 			print data1
-			print data2
-			print data3
-			print data4		
+			print data3		
 			
 	else:
-		print ("\nImpossível gerar gráfico para os 04 cenários...\n")
+		print ("\nImpossível gerar gráficos...\n")
 		print data1
-		print data2
-		print data3
-		print data4		
+		print data3		
 		
 ######################################################################################################################################################################
 #
