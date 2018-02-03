@@ -9,7 +9,7 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-##		Status - Versão 1 - Calcular métrica definida abaixo para avaliação sem ground truth
+##		Status - Versão 1 - Calcular métrica definida abaixo para avaliação sem ground truth - Usando a Biblioteca SNAP
 ##					Versão 2 - Calcular todas as métricas métrica definidas abaixo para avaliação sem ground truth
 ##					Versaõ 3 - Usa calc metrics_v2 - com correções... e salvar os dados dos calculos em arquivo texto.
 ## 

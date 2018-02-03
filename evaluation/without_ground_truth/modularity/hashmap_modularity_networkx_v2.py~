@@ -52,20 +52,24 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net):
 						i+=1
 						ego_id = file.split(".txt")
 						ego_id = long(ego_id[0])
-						communities = []																			# Armazenar as comunidades da rede-ego
-						m_file = []																					# vetor de modularidade das comunidades do ego i
-						
-						
-						try:
+
+						if not os.path.isfile(str(graphs_dir)+str(ego_id)+".edge_list"):
+							print ("\nERRO - Impossível carregar o grafo para o ego: "+str(ego_id)+"  --  "+str(graphs_dir)+str(ego_id)+".edge_list\n")
+
+						else:							
 							G = nx.read_weighted_edgelist(str(graphs_dir)+str(ego_id)+".edge_list")
-							
 							n_edges = G.number_of_edges()													# Número de arestas do grafo
-						
+							communities = []																			# Armazenar as comunidades da rede-ego
+							m_file = []																					# vetor de modularidade das comunidades do ego i
+
 							if n_edges == 0:
 								a = 0							
 								m_file.append(a)
+
 							else:
-								try:
+								if not os.path.isfile(dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)):
+									print ("\nERRO - Impossível carregar as comunidades: "+dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)+"\n")
+								else:									
 									with open(dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file), 'r') as f:
 										for line in f:
 											comm = []																					#Lista para armazenar as comunidades			
@@ -74,19 +78,17 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net):
 												if item != "\n":
 													comm.append(item)
 											communities.append(comm)						
-								except Exception as e:
-									print ("\nERRO - Impossível carregar as comunidades: "+dataset_dir+str(net)+"/"+str(threshold)+"/"+str(file)+"\n")
-									print e
-				
-						
+
 								for comm in communities:
 									if comm is not None:
-										m_file.append(nx.algorithms.community.modularity(G,comm))
-										
+										m = nx.algorithms.community.modularity(G,comm)
+										m_file.append(m)
+										print m
+#										
+#
+#						except Exception as e:	
 
-						except Exception as e:	
-							print ("\nERRO - Impossível carregar o grafo para o ego: "+str(ego_id)+"  --  "+str(graphs_dir)+str(ego_id)+".edge_list\n")
-							print e
+#							print e
 #			
 #
 #						_m_file = calc.calcular(m_file)
