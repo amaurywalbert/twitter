@@ -28,11 +28,11 @@ def save_data(graphs,alg):
 		for threshold in range(51):
 			threshold+=1
 			
-			source_dir="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
+			source_dir="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
 			
-			output_full="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/"+str(threshold)+"/"			
-			output_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/singletons/n"+str(net)+"/"+str(threshold)+"/"
-			output_without_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
+			output_full="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/"+str(threshold)+"/"			
+			output_singletons="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/singletons/n"+str(net)+"/"+str(threshold)+"/"
+			output_without_singletons="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
 			
 			if not os.path.isdir(source_dir):
 				print ("\nDiretório não encontrado para o threshold "+str(threshold)+"\n"+str(source_dir))
@@ -58,12 +58,14 @@ def save_data(graphs,alg):
 
 
 				i=0
-				for file in os.listdir(source_dir):					
-					if not os.path.exists(source_dir+str(file)+"/tp"):
-						print ("Diretório não encontrado: "+str(source_dir)+str(file)+"/tp")
+				for file in os.listdir(source_dir):	
+					ego_id = file.split(".map")
+					ego_id = ego_id[0]				
+					if not os.path.exists(source_dir+str(file)):
+						print ("Diretório não encontrado: "+str(source_dir)+str(file))
 					else:	
 						i+=1
-						print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i))
+						print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i)+"  - "+str(file))
 
 						if os.path.isfile(output_full+file):											#Limpar diretórios
 							os.remove(output_full+file)	
@@ -72,34 +74,51 @@ def save_data(graphs,alg):
 						if os.path.isfile(output_singletons+file):
 							os.remove(output_singletons+file)	
 
-						with open(source_dir+str(file)+"/tp", 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "file"
+						with open(source_dir+str(file), 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "file
+							aux = 0
+							i = 0
+							elements = []
+							hashmap = {}
 							for line in f:
 								if not "#" in line:
-									a = line.split(' ')
-									if a is not None and a[0] != "\n":
+									if not "*" in line:
+										if not "," in line:
+											if "\"" in line:
+												comm_id,a = line.split(':')
+												b,c,d = a.split(" ")
+												member_id = c[1:-1]
+												
+												if aux < int(b):
+													aux = int(b)
+													elements.append(member_id)
+												else:
+													aux = 0
+													i+=1
+													hashmap[i] = elements
+													elements = []
+													elements.append(member_id)
+							i+=1
+							hashmap[i] = elements
 
-										with open(output_full+file+".txt", 'a+') as g:
-											for item in a:
-												if item != "\n":
-													if long(item) > 0:
-														g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-											g.write("\n")															# Passa para a próxima linha de g
-										if len(a) > 2:
-											with open(output_without_singletons+file+".txt", 'a+') as g:
-												for item in a:
-													if item != "\n":
-														if long(item) > 0:											
-															g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
-												g.write("\n")														# Passa para a próxima linha
-										else:
-											with open(output_singletons+file+".txt", 'a+') as g:
-												for item in a:
-													if item != "\n":
-														if long(item) > 0:
-															g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
-												g.write("\n")														
-									else:
-										print ("Eliminei aqui..."+str(a))						
+							with open(output_full+str(ego_id)+".txt", 'a+') as g:
+								for k,v in hashmap.iteritems():
+									for item in v:
+										g.write(str(item)+" ")											# Escreve os ids das Listas separadas por espaço
+									g.write("\n")															# Passa para a próxima linha de g
+
+							if len(hashmap) > 2:
+								with open(output_without_singletons+str(ego_id)+".txt", 'a+') as g:
+									for k,v in hashmap.iteritems():
+										for item in v:
+											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+										g.write("\n")														# Passa para a próxima linha de g
+							else:
+								with open(output_singletons+str(ego_id)+".txt", 'a+') as g:
+									for k,v in hashmap.iteritems():
+										for item in v:
+											g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
+										g.write("\n")														# Passa para a próxima linha de g
+						
 												
 #####################################################################################################################################################################
 #
