@@ -113,22 +113,22 @@ def main():
 	alg = "infomap"
 ######################################################################################################################
  
-	output = "/home/amaury/communities_hashmap/"+str(g_type1)+"/"+str(alg)+"/raw/"+str(net)+"/"
-	graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type1)+"/"
-
-	print ("Calculando Comunidades para a rede: "+str(net)+" - COM o ego")
-
-	calculate_alg(output,net,uw,ud,g_type1,alg,graphs)
+#	output = "/home/amaury/communities_hashmap/"+str(g_type1)+"/"+str(alg)+"/raw/"+str(net)+"/"
+#	graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type1)+"/"
+#
+#	print ("Calculando Comunidades para a rede: "+str(net)+" - COM o ego")
+#
+#	calculate_alg(output,net,uw,ud,g_type1,alg,graphs)
 	
 ######################################################################################################################
 ######################################################################################################################
 
-#	output = "/home/amaury/communities_hashmap/"+str(g_type2)+"/"+str(alg)+"/raw/"+str(net)+"/"
-#	graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type2)+"/"
-#
-#	print ("Calculando Comunidades para a rede: "+str(net)+" - SEM o ego")
-#
-#	calculate_alg(output,net,uw,ud,g_type2,alg,graphs)
+	output = "/home/amaury/communities_hashmap/"+str(g_type2)+"/"+str(alg)+"/raw/"+str(net)+"/"
+	graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type2)+"/"
+
+	print ("Calculando Comunidades para a rede: "+str(net)+" - SEM o ego")
+
+	calculate_alg(output,net,uw,ud,g_type2,alg,graphs)
 	
 ######################################################################################################################
 

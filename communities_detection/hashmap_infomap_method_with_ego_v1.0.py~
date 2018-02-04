@@ -50,16 +50,11 @@ def calculate_alg(output,net,uw,ud,g_type,alg,graphs):
 				if ud is False:		# Para grafo Directed
 					execute = subprocess.Popen(["/home/amaury/algoritmos/Infomap/Infomap","-i link-list", str(graphs)+str(file), str(output), "--out-name "+str(ego_id), "-N 10", "--directed", "--two-level", "--map"], stdout=subprocess.PIPE)
 				else:						# Para grafos Undirected							
-					print ud
-					time.sleep(2)
-					execute = subprocess.Popen(["/home/amaury/algoritmos/Infomap/Infomap","-i link-list", str(graphs)+str(file), str(output), "--out-name "+str(ego_id), "-N 10", "--undirdir", "--two-level", "--map"], stdout=subprocess.PIPE)
+					execute = subprocess.Popen(["/home/amaury/algoritmos/Infomap/Infomap","-i link-list", str(graphs)+str(file), str(output), "--out-name "+str(ego_id), "-N 10", "--undirected", "--two-level", "--map"], stdout=subprocess.PIPE)
 				value = execute.communicate()[0]
 				print value
 			except Exception as e:
-				print e				
-#						
-#			with open(str(output)+str(ego_id)".txt", 'w') as f:
-#				f.write(json.dumps(partition))
+				print e
 
 	print("######################################################################")		
 
