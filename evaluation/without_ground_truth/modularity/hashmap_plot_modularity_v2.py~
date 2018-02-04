@@ -33,10 +33,10 @@ def prepare(dataset):
 						data = json.load(f)
 						M = data['modularity']
 						if M is not None:
-							print net,threshold,M['media']				
+							print net,threshold,M['media']			
 							if	float(M['media']) > modularity_plot[net]['modularity']:
 								modularity_plot[net] = {'threshold': threshold, 'modularity':float(M['media']),'std':float(M['desvio_padrao'])}
- 
+ 			print ("\n#####################################################################################\n")
 		return modularity_plot
 
 ######################################################################################################################################################################
