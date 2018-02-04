@@ -46,13 +46,15 @@ def calculate_alg(output,net,uw,ud,g_type,alg,graphs):
 			print("Detectando comunidades: "+str(g_type)+" - "+str(alg)+" - Rede: "+str(net)+" - ego("+str(i)+"): "+str(file))
 			
 			try:
+
 				if ud is False:		# Para grafo Directed
 					execute = subprocess.Popen(["/home/amaury/algoritmos/Infomap/Infomap","-i link-list", str(graphs)+str(file), str(output), "--out-name "+str(ego_id), "-N 10", "--directed", "--two-level", "--map"], stdout=subprocess.PIPE)
 				else:						# Para grafos Undirected							
+					print ud
+					time.sleep(2)
 					execute = subprocess.Popen(["/home/amaury/algoritmos/Infomap/Infomap","-i link-list", str(graphs)+str(file), str(output), "--out-name "+str(ego_id), "-N 10", "--undirdir", "--two-level", "--map"], stdout=subprocess.PIPE)
 				value = execute.communicate()[0]
 				print value
-				time.sleep(5)
 			except Exception as e:
 				print e				
 #						
@@ -117,7 +119,7 @@ def main():
 ######################################################################################################################
  
 	output = "/home/amaury/communities_hashmap/"+str(g_type1)+"/"+str(alg)+"/raw/"+str(net)+"/"
-	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type1)+"/"
+	graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type1)+"/"
 
 	print ("Calculando Comunidades para a rede: "+str(net)+" - COM o ego")
 
@@ -127,7 +129,7 @@ def main():
 ######################################################################################################################
 
 #	output = "/home/amaury/communities_hashmap/"+str(g_type2)+"/"+str(alg)+"/raw/"+str(net)+"/"
-#	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type2)+"/"
+#	graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type2)+"/"
 #
 #	print ("Calculando Comunidades para a rede: "+str(net)+" - SEM o ego")
 #
