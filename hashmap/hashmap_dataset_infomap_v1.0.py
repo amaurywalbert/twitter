@@ -8,6 +8,8 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Receber dataset e converter o longint dos usuários para int - necessário parar rodar algoritmo de deteção INFOMAP (ids devem começar em 1)
+##									Converte dados para cada ego, portanto não dá pra comparar o conjunto de alters entre os egos...
+##									Para comparar conjunto de alters, deve-se usar o "hashmap_dataset.py"
 ##	
 ##								
 ## # INPUT: Arquivos só com redes-ego
