@@ -29,7 +29,7 @@ def remove_lines(singletons,g_type,alg):
 				if os.path.isdir(communities+net+"/"+threshold+"/"):
 					print("######################################################################")
 					i=0 		#Ponteiro para o ego
-					if os.path.exists(output+net+"/"+threshold+"/"):
+					if not os.path.exists(output+net+"/"+threshold+"/"):
 						os.makedirs(output+net+"/"+threshold+"/")
 								
 					for file in os.listdir(communities+net+"/"+threshold+"/"):
