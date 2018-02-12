@@ -7,7 +7,7 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-##		Status - Versão 1 - Receber o conjunto de conjunto de comunidades e separar em conjunto sem singletons e conjunto de singletons.
+##		Status - Versão 1 - Receber o conjunto de comunidades e separar em conjunto sem singletons e conjunto de singletons.
 ##								
 ## # INPUT:
 ##		- Arquivos com as comunidades completas
@@ -79,25 +79,34 @@ def save_data(graphs,alg):
 									if a is not None and a[0] != "\n":
 
 										with open(output_full+file+".txt", 'a+') as g:
+											x = False
 											for item in a:
 												if item != "\n":
 													if long(item) > 0:
 														g.write(str(item)+" ")										# Escreve os ids das Listas separadas por espaço
-											g.write("\n")															# Passa para a próxima linha de g
+														x = True
+											if x is True:
+												g.write("\n")															# Passa para a próxima linha de g
 										if len(a) > 2:
 											with open(output_without_singletons+file+".txt", 'a+') as g:
+												x = False
 												for item in a:
 													if item != "\n":
 														if long(item) > 0:											
 															g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
-												g.write("\n")														# Passa para a próxima linha
+												if x is True:
+													g.write("\n")															# Passa para a próxima linha de g
+
 										else:
 											with open(output_singletons+file+".txt", 'a+') as g:
+												x = False
 												for item in a:
 													if item != "\n":
 														if long(item) > 0:
 															g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
-												g.write("\n")														
+												if x is True:
+													g.write("\n")															# Passa para a próxima linha de g
+														
 									else:
 										print ("Eliminei aqui..."+str(a))						
 												

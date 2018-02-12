@@ -30,7 +30,7 @@ def remove_lines(singletons,g_type,alg):
 						if os.path.isfile(communities+net+"/"+threshold+"/"+file):
 
 							i+=1
-							#print(str(g_type)+" - "+str(alg)+" - "+str(singletons)+" - Rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego("+str(i)+"): "+str(file))
+#							print(str(g_type)+" - "+str(alg)+" - "+str(singletons)+" - Rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego("+str(i)+"): "+str(file))
 							execute = subprocess.Popen(["grep","'^$'",communities+net+"/"+threshold+"/"+file], stdout=subprocess.PIPE)
 							
 							resp = execute.communicate()[0]
