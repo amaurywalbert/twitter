@@ -94,6 +94,7 @@ def save_data(graphs,alg):
 													if item != "\n":
 														if long(item) > 0:											
 															g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
+															x = True
 												if x is True:
 													g.write("\n")															# Passa para a próxima linha de g
 
@@ -104,6 +105,7 @@ def save_data(graphs,alg):
 													if item != "\n":
 														if long(item) > 0:
 															g.write(str(item)+" ")									# Escreve os ids das Listas separadas por espaço
+															x = True
 												if x is True:
 													g.write("\n")															# Passa para a próxima linha de g
 														
