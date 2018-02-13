@@ -123,7 +123,7 @@ public class OverlappingCommunityQuality {
 			HashMap<Integer, Double> nodeNbs = nodeItem.getValue();										// Vizinhos do nó i
 			HashMap<Integer, Double> nodeComs = ovNodeCommunities.get(nodeId);
 
-			if (nodeNbs == null || nodeComs == null){
+			if (nodeNbs == null || nodeComs == null){															// Vértice que não foi adicionado a nenhuma comunidade 
 //				System.out.println("ERRROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 //				System.out.println("Node ID = " + nodeId + " --- Node Nbs = " + nodeNbs + " --- Node Coms = " + nodeComs);
 //				System.out.println(" ");

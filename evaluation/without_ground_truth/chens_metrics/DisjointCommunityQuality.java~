@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class CommunityQuality {
+public class DisjointCommunityQuality {
 	public static void main(String[] args) {
 		String networkFile = args[0];									// Network File		
 		String discoveredCommunityFile = args[1];					// Communities detected File
@@ -31,7 +31,7 @@ public class CommunityQuality {
 
 
 		// Calculate community quality metrics without ground truth
-		double[] qualities = CommunityQuality.computeQualityWithoutGroundTruth(
+		double[] qualities = DisjointCommunityQuality.computeQualityWithoutGroundTruth(
 				networkFile, isUnweighted, isUndirected,
 				discoveredCommunityFile);
 		System.out.println("Q = " + qualities[0] + ", Qds = " + qualities[1]
@@ -43,16 +43,16 @@ public class CommunityQuality {
 				+ qualities[8]);
 /*
 		// Calculate seven metrics based on ground truth communities
-		qualities = CommunityQuality.computeInformationEntropyMetrics(
+		qualities = DisjointCommunityQuality.computeInformationEntropyMetrics(
 				discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("VI = " + qualities[0] + ", NMI = " + qualities[1]);
 
-		qualities = CommunityQuality.computeClusterMatchingMetrics(
+		qualities = DisjointCommunityQuality.computeClusterMatchingMetrics(
 				discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("F-measure = " + qualities[0] + ", NVD = "
 				+ qualities[1]);
 
-		qualities = CommunityQuality.computeIndexMetrics(
+		qualities = DisjointCommunityQuality.computeIndexMetrics(
 				discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("RI = " + qualities[0] + ", ARI = " + qualities[1]
 				+ ", JI = " + qualities[2]);
@@ -74,43 +74,54 @@ public class CommunityQuality {
 		// Get outgoing network
 		HashMap<Integer, HashMap<Integer, Double>> outNet = new HashMap<Integer, HashMap<Integer, Double>>();
 		// Return total weight. if undirected: 2m; if directed: m
-		double[] weights = CommunityQuality.getNetwork(networkFile,
+		double[] weights = DisjointCommunityQuality.getNetwork(networkFile,
 				isUnweighted, isUndirected, outNet);
 		double totalWeight = weights[0];
 
 		// Get communities and their nodes
-		Map<Integer, Set<Integer>> communities = CommunityQuality
+		Map<Integer, Set<Integer>> communities = DisjointCommunityQuality
 				.getMapCommunities(communityFile);
 		int numComs = communities.size();
 		double[][] communityWeights = new double[numComs][numComs];
 		double[][] communityDensities = new double[numComs][numComs];
 
 		// Get the community of each node
-		Map<Integer, Integer> nodeCommunities = CommunityQuality
+		Map<Integer, Integer> nodeCommunities = DisjointCommunityQuality
 				.getNodeCommunities(communityFile);
 
 		for (Map.Entry<Integer, HashMap<Integer, Double>> nodeItem : outNet
 				.entrySet()) {
 			int nodeId = nodeItem.getKey();
-			int comId = nodeCommunities.get(nodeId);
-			long comSize = communities.get(comId).size();
-			HashMap<Integer, Double> nodeNbs = nodeItem.getValue();
+			
+			if (nodeCommunities.get(nodeId) == null){														// Vértice que não foi adicionado a nenhuma comunidade  
+//				System.out.println("ERRROR!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//				System.out.println("Node ID = " + nodeId);
+//				System.out.println(" ");
+				;			// pass
+			
+			} else {
+				
+				int comId = nodeCommunities.get(nodeId);
+				long comSize = communities.get(comId).size();
+				HashMap<Integer, Double> nodeNbs = nodeItem.getValue();
 
-			for (Map.Entry<Integer, Double> nbItem : nodeNbs.entrySet()) {
-				int nbNodeId = nbItem.getKey();
-				int nbComId = nodeCommunities.get(nbNodeId);
-				long nbComSize = communities.get(nbComId).size();
-				double weight = nbItem.getValue();
-				communityWeights[comId][nbComId] += weight;
-				if (comId == nbComId) {
-					communityDensities[comId][comId] += 1.0 / (comSize * (comSize - 1));
+		
+				for (Map.Entry<Integer, Double> nbItem : nodeNbs.entrySet()) {
+					int nbNodeId = nbItem.getKey();
+					int nbComId = nodeCommunities.get(nbNodeId);
+					long nbComSize = communities.get(nbComId).size();
+					double weight = nbItem.getValue();
+					communityWeights[comId][nbComId] += weight;
+					if (comId == nbComId) {
+						communityDensities[comId][comId] += 1.0 / (comSize * (comSize - 1));
 
-					if (comSize <= 1) {
-						// Used to debug
-						System.out.println("comSize = " + comSize);
-					}
-				} else {
-					communityDensities[comId][nbComId] += 1.0 / (comSize * nbComSize);
+						if (comSize <= 1) {
+							// Used to debug
+							System.out.println("comSize = " + comSize);
+						}
+					} else {
+						communityDensities[comId][nbComId] += 1.0 / (comSize * nbComSize);
+					}	
 				}
 			}
 		}
@@ -229,9 +240,9 @@ public class CommunityQuality {
 	 */
 	public static double[] computeInformationEntropyMetrics(
 			String disCommunityFile, String realCommunityFile) {
-		List<Set<Integer>> discoveredCommunities = CommunityQuality
+		List<Set<Integer>> discoveredCommunities = DisjointCommunityQuality
 				.getCommunities(disCommunityFile);
-		List<Set<Integer>> realCommunities = CommunityQuality
+		List<Set<Integer>> realCommunities = DisjointCommunityQuality
 				.getCommunities(realCommunityFile);
 
 		// H(X)
@@ -279,7 +290,7 @@ public class CommunityQuality {
 			for (int j = 0; j < exsize; ++j) {
 				Set<Integer> exCommunity = discoveredCommunities.get(j);
 				double nj = exCommunity.size();
-				double nij = CommunityQuality.getIntersectionNumber(
+				double nij = DisjointCommunityQuality.getIntersectionNumber(
 						realCommunity, exCommunity);
 				// log2
 				if (nij != 0) {
@@ -318,9 +329,9 @@ public class CommunityQuality {
 	 */
 	public static double[] computeClusterMatchingMetrics(
 			String disCommunityFile, String realCommunityFile) {
-		List<Set<Integer>> discoveredCommunities = CommunityQuality
+		List<Set<Integer>> discoveredCommunities = DisjointCommunityQuality
 				.getCommunities(disCommunityFile);
-		List<Set<Integer>> realCommunities = CommunityQuality
+		List<Set<Integer>> realCommunities = DisjointCommunityQuality
 				.getCommunities(realCommunityFile);
 
 		double fMeasure = 0;
@@ -345,7 +356,7 @@ public class CommunityQuality {
 
 			for (int j = 0; j < realsize; ++j) {
 				Set<Integer> realCommunity = realCommunities.get(j);
-				double nij = CommunityQuality.getIntersectionNumber(
+				double nij = DisjointCommunityQuality.getIntersectionNumber(
 						exCommunity, realCommunity);
 				if (nij > maxCommon) {
 					maxCommon = nij;
@@ -364,7 +375,7 @@ public class CommunityQuality {
 			for (int i = 0; i < exsize; ++i) {
 				Set<Integer> exCommunity = discoveredCommunities.get(i);
 				double ni = exCommunity.size();
-				double nji = CommunityQuality.getIntersectionNumber(
+				double nji = DisjointCommunityQuality.getIntersectionNumber(
 						realCommunity, exCommunity);
 
 				if (nji > maxCommon) {
@@ -400,9 +411,9 @@ public class CommunityQuality {
 		double randIndex = 0;
 		double jaccardIndex = 0;
 
-		Map<Integer, Integer> disNodeCommunities = CommunityQuality
+		Map<Integer, Integer> disNodeCommunities = DisjointCommunityQuality
 				.getNodeCommunities(disCommunityFile);
-		Map<Integer, Integer> realCommunities = CommunityQuality
+		Map<Integer, Integer> realCommunities = DisjointCommunityQuality
 				.getNodeCommunities(realCommunityFile);
 		ArrayList<Integer> nodes = new ArrayList<Integer>(
 				disNodeCommunities.keySet());

@@ -11,7 +11,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para plotar as métricas de avaliação sem ground_truth
+##		Status - Versão 1 - Script para plotar as métricas de avaliação sem ground_truth do Chen
 ##					Versão 2 - não considera without singletons
 ## 				Versão 3 - Filtra os dados salvos para impressão dos gráficos. Arquivos foram salvos com todos os calculos.
 ######################################################################################################################################################################
@@ -34,7 +34,7 @@ def prepare(dataset,metric):
 						data = json.load(f)
 						if data is not None:
 							for k,v in data.iteritems():
-								data_avg_values.append(v['media'])
+								data_avg_values.append(v)
 							print len(data_avg_values)
 												
 							M = calc.calcular_full(data_avg_values)
@@ -87,49 +87,45 @@ def main():
 	print"#################################################################################"
 	print
 	print"  0 - All Metrics"
-	print"  1 - Average Degree"
-	print"  2 - Conductance"
-	print"  3 - Cut Ratio"
-	print"  4 - Density"	
-	print"  5 - Expansion"
-	print"  6 - Normalized Cut"
-	print"  7 - Separability"	
+	print"  1 - Q - Modularidade"
+	print"  2 - N - Modularidade"
+	print"  3 - Qds - Modularidade Estendida"
+	print"  4 - Intra Edges"
+	print"  5 - Intra Density"	
+	print"  6 - Contraction"
+	print"  7 - Inter Edges"
+	print"  8 - Expansion"
+	print"  9 - Conductance"
+	print"  10 - Modularity Degree"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	
 	if op2 == 0:
-		m = ["average_degree","conductance","cut_ratio","density","expansion","normalized_cut","separability"]
+		m = ["modularity","N_modularity","modularity_density","intra_edges","intra_density","contraction","inter_edges","expansion","conductance","modularity_degree"]
 		for metric in m:
 			data1 = {}
-			data2 = {}
 			data3 = {}
-			data4 = {}
 ######################################################################		
 ######################################################################
 
 			dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
 			data1 = prepare(dataset1,metric)
 			title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
-#			if data1 is not None:
-#				plot_metrics.plot_single(output,data1,metric,alg,title)
-#			else:
-#				print ("Impossível gerar gráfico simples para: "+str(title))
+
 ######################################################################				
 ######################################################################
 
 			dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
 			data3 = prepare(dataset3,metric)
 			title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
-#			if data3 is not None:				
-#				plot_metrics.plot_single(output,data3,metric,alg,title)
-#			else:
-#				print ("Impossível gerar gráfico simples para: "+str(title))
-
+			
 ######################################################################				
 ######################################################################
 			if data1 is not None and data3 is not None:
 				if len(data1) == len(data3):
 					plot_metrics.plot_full_without_singletons(output,data1,data3,metric,alg)
+				else:
+					print ("\nImpossível gerar gráfico para os 02 cenários... Data01: "+str(len(data1))+" - Data03: "+str(len(data3))+"\n")					
 			else:
 				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
 				print data1
@@ -143,19 +139,25 @@ def main():
 ######################################################################				
 ######################################################################			 
 	elif op2 == 1:
-		metric = "average_degree"
+		metric = "modularity"
 	elif op2 == 2:
-		metric = "conductance"
+		metric = "N_modularity"
 	elif op2 == 3:
-		metric = "cut_ratio"
+		metric = "modularity_density"
 	elif op2 == 4:
-		metric = "density"
+		metric = "intra_edges"
 	elif op2 == 5:
-		metric = "expansion"
+		metric = "intra_density"
 	elif op2 == 6:
-		metric = "normalized_cut"
+		metric = "contraction"
 	elif op2 == 7:
-		metric = "separability"		
+		metric = "inter_edges"
+	elif op2 == 8:
+		metric = "expansion"		
+	elif op2 == 9:
+		metric = "conductance"		
+	elif op2 == 10:
+		metric = "modularity_degree"				
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()
@@ -193,6 +195,8 @@ def main():
 	if data1 is not None and data3 is not None:
 		if len(data1) == len(data3):
 			plot_metrics.plot_full_without_singletons(output,data1,data3,metric,alg)
+		else:
+			print ("\nImpossível gerar gráfico para os 02 cenários... Data01: "+str(len(data1))+" - Data03: "+str(len(data3))+"\n")
 	else:
 		print ("\nImpossível gerar gráfico para os 02 cenários...\n")
 		print data1
@@ -210,8 +214,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-source = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/"
-output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth/"
+source = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/chen/"
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth/chen/"
 
 if not os.path.exists(output):
 	os.makedirs(output)
