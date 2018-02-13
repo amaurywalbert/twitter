@@ -237,7 +237,7 @@ def main():
 	print 
 	print
 	print"  1 - COPRA"
-	print"  2 - OSLOM"
+	print"  2 - OSLOM"					
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -272,8 +272,8 @@ def main():
 
 	start = time.time()
 	
-	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-	calculate_alg(singletons1,net,uw,ud,g_type1,alg)
+#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
+#	calculate_alg(singletons1,net,uw,ud,g_type1,alg)
 	
 
 	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))

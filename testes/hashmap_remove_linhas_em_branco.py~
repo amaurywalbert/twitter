@@ -29,7 +29,7 @@ def remove_lines(singletons,g_type,alg):
 				if os.path.isdir(communities+net+"/"+threshold+"/"):
 					print("######################################################################")
 					i=0 		#Ponteiro para o ego
-					if os.path.exists(output+net+"/"+threshold+"/"):
+					if not os.path.exists(output+net+"/"+threshold+"/"):
 						os.makedirs(output+net+"/"+threshold+"/")
 								
 					for file in os.listdir(communities+net+"/"+threshold+"/"):
@@ -39,12 +39,14 @@ def remove_lines(singletons,g_type,alg):
 								print ("Arquivo já existe no destino: "+output+net+"/"+threshold+"/"+file)
 
 							else:	
-								print(str(g_type)+" - "+str(alg)+" - "+str(singletons)+" - Rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego("+str(i)+"): "+str(file))
+								print("Ego: "+str(i)+" - "+communities+net+"/"+threshold+"/"+file)
+								
 								with open(communities+net+"/"+threshold+"/"+file, 'r') as f:
 									linhas = f.read().splitlines()									# Elimina linhas em branco (suprime "\n")
 									with open(output+net+"/"+threshold+"/"+file, 'w') as g:
 										for linha in linhas:
-											g.write(linha+"\n")															# Passa para a próxima linha de g
+											if linha: 
+												g.write(linha+"\n")															# Passa para a próxima linha de g
 
 #####################################################################################################################################################################
 #

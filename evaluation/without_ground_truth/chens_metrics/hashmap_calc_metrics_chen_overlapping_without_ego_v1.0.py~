@@ -190,7 +190,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 			Avaliação de Comunidades - Chen's Software - OVERLAPPING						"
+	print" 			Avaliação de Comunidades - Amaury's Software										"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -238,6 +238,7 @@ def main():
 	print
 	print"  1 - COPRA"
 	print"  2 - OSLOM"
+	print"  3 - GN"					
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -272,8 +273,8 @@ def main():
 
 	start = time.time()
 	
-	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-	calculate_alg(singletons1,net,uw,ud,g_type1,alg)
+#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
+#	calculate_alg(singletons1,net,uw,ud,g_type1,alg)
 	
 
 	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))

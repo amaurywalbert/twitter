@@ -95,7 +95,7 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 								community_file = str(communities)+str(threshold)+"/"+file
 								graph_file = str(graphs)+str(ego_id)+".edge_list"
 
-								print(str(g_type)+" - "+str(alg)+" - "+str(singletons)+" - Rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego("+str(i)+"): "+str(file))
+								print("Ego: "+str(i)+" - "+communities+threshold+"/"+file)
 									
 									
 
@@ -119,7 +119,6 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 									
 									if item[0] == "Q":
 										Q[ego_id] = float(item[1])
-										print Q
 									elif item[0] == "NQ":
 										NQ[ego_id] = float(item[1])
 									elif item[0] == "Qds":
@@ -138,7 +137,6 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 										conductance[ego_id] = float(item[1])
 									elif item[0] == "modularity_degree":
 										modularity_degree[ego_id] = float(item[1])
-										print modularity_degree[ego_id]
 										
 					print("######################################################################")	
 
@@ -192,7 +190,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 			Avaliação de Comunidades - Amaury's Software										"
+	print" 			Avaliação de Comunidades - Chen's Software - OVERLAPPING						"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -240,7 +238,6 @@ def main():
 	print
 	print"  1 - COPRA"
 	print"  2 - OSLOM"
-	print"  3 - GN"					
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -262,7 +259,7 @@ def main():
 	print
 	print ("Opção escolhida: "+str(net)+" - "+str(alg))
 	print ("Aguarde...")
-	time.sleep(5)
+	time.sleep(3)
 	
 ######################################################################################################################
 	g_type1 = "graphs_with_ego"
