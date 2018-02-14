@@ -244,9 +244,7 @@ def main():
 	if op2 == 1:
 		alg = "copra"
 	elif op2 == 2:
-		alg = "oslom"
-	elif op2 == 3:
-		alg = "gn"				
+		alg = "oslom"			
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")

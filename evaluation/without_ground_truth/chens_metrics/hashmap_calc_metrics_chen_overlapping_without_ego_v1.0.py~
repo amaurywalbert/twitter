@@ -190,7 +190,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 			Avaliação de Comunidades - Amaury's Software										"
+	print" 			Avaliação de Comunidades - Chen's Software - OVERLAPPING						"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -237,8 +237,7 @@ def main():
 	print 
 	print
 	print"  1 - COPRA"
-	print"  2 - OSLOM"
-	print"  3 - GN"					
+	print"  2 - OSLOM"					
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -294,7 +293,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-output_dir = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/chen/"
+output_dir = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth_chen/"
 
 ######################################################################################################################
 if __name__ == "__main__": main()

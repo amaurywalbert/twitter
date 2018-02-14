@@ -36,7 +36,7 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
 
 	if alg == "infomap":
-		graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"
+		graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type)+"/"
 	else:
 		graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"
 	

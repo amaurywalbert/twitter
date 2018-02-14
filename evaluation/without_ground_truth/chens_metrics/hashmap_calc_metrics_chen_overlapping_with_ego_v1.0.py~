@@ -190,7 +190,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 			Avaliação de Comunidades - Amaury's Software										"
+	print" 			Avaliação de Comunidades - Chen's Software - OVERLAPPING						"
 	print"																											"
 	print"#################################################################################"
 	print

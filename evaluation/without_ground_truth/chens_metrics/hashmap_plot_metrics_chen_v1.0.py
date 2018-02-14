@@ -214,8 +214,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-source = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/chen/"
-output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth/chen/"
+source = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth_chen/"
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth_chen/"
 
 if not os.path.exists(output):
 	os.makedirs(output)
