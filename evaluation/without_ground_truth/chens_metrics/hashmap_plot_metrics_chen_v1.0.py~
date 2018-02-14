@@ -175,20 +175,14 @@ def main():
 	dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
 	data1 = prepare(dataset1,metric)
 	title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
-	if data1 is not None:
-		plot_metrics.plot_single(output,data1,metric,alg,title)
-	else:
-		print ("Impossível gerar gráfico simples para: "+str(title))
+
 ######################################################################				
 ######################################################################
 
 	dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
 	data3 = prepare(dataset3,metric)
 	title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
-	if data3 is not None:				
-		plot_metrics.plot_single(output,data3,metric,alg,title)
-	else:
-		print ("Impossível gerar gráfico simples para: "+str(title))
+	
 ######################################################################		
 ######################################################################
 
@@ -214,7 +208,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-source = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/chen/"
+source = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth_chen/"
 output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth_chen/"
 
 if not os.path.exists(output):
