@@ -135,7 +135,7 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 										expansion[ego_id] = float(item[1])
 									elif item[0] == "conductance":
 										conductance[ego_id] = float(item[1])
-									elif item[0] == "modularity_degree":
+									elif item[0] == "modularity degree":
 										modularity_degree[ego_id] = float(item[1])
 										
 					print("######################################################################")	
