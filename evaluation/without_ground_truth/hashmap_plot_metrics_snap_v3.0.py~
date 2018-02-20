@@ -127,7 +127,7 @@ def main():
 
 ######################################################################				
 ######################################################################
-			if data1 is not None and data3:
+			if data1 is not None and data3 is not None:
 				if len(data1) == len(data3):
 					plot_metrics.plot_full_without_singletons(output,data1,data3,metric,alg)
 			else:
@@ -190,7 +190,7 @@ def main():
 ######################################################################		
 ######################################################################
 
-	if data1 is not None and data3:
+	if data1 is not None and data3 is not None:
 		if len(data1) == len(data3):
 			plot_metrics.plot_full_without_singletons(output,data1,data3,metric,alg)
 	else:
