@@ -22,7 +22,7 @@ sys.setdefaultencoding('utf-8')
 # Calcular Modularity Density
 #
 ######################################################################################################################################################################
-def modularity_density_calc(dataset,metric): # Verifica pelo melhor threshold - aquele com maior Qds. Em caso de empate pega o último threshold verificado.
+def modularity_density_calc(dataset,metric,graph_type,alg): # Verifica pelo melhor threshold - aquele com maior Qds. Em caso de empate pega o último threshold verificado.
 	if not os.path.isdir(dataset):
 		print ("Diretório com "+str(metric)+" não encontrado: "+str(dataset))
 	else:	
@@ -51,6 +51,8 @@ def modularity_density_calc(dataset,metric): # Verifica pelo melhor threshold - 
 								if	float(M['media']) >= qds[net][metric]:
 									qds[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
 			print																		
+		with open(str(output)+str(graph_type)+"_"+str(alg)+"_modularity_density.json", "w") as f:
+			f.write(json.dumps(qds))
 		return qds
 
 ######################################################################################################################################################################
@@ -132,15 +134,15 @@ def main():
 	metric = "modularity_density"
 
 ######################################################################
-
-	dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
-	qds1 = modularity_density_calc(dataset1,metric)
+	graph_type1 = "graphs_with_ego"
+	dataset1 = str(source)+str(metric)+"/"+str(graph_type1)+"/"+str(alg)+"/full/"	
+	qds1 = modularity_density_calc(dataset1,metric,graph_type1,alg)
 	title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"		
 		
 ######################################################################
-	
-	dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
-	qds3 = modularity_density_calc(dataset3,metric)
+	graph_type3 = "graphs_without_ego"
+	dataset3 = str(source)+str(metric)+"/"+str(graph_type3)+"/"+str(alg)+"/full/"	
+	qds3 = modularity_density_calc(dataset3,metric,graph_type3,alg)
 	title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
 
 

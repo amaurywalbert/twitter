@@ -13,32 +13,38 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Script para plotar as métricas de avaliação sem ground_truth
 ##					Versão 2 - não considera without singletons
+##					Versão 3 - Usa dados (threshold) gerados pelas métricas do CHEN.
 ## 
 ######################################################################################################################################################################
-def prepare(dataset,metric):
+def prepare(dataset,metric,graph_type,alg):
 	if not os.path.isdir(dataset):
 		print ("Diretório não encontrado: "+str(dataset))
 	else:	
-		metric_plot = {}																	# Armazenar o nome da rede e o maior valor do métrica
 
-		for directory in os.listdir(dataset):
-			if os.path.isdir(dataset+directory):
-				net = str(directory)
-				metric_plot[net] = {'threshold':' ',metric:float(0),'std':float(0)}
-				
-				for file in os.listdir(dataset+directory):
-					threshold = file.split(".json")
-					threshold = threshold[0]
-					
-					with open(dataset+directory+"/"+file, 'r') as f:
-						data = json.load(f)
-						if data is not None:
-							_metric = []
-							for k,v in data.iteritems():
-								_metric.append(v[metric])
-							M = calc.calcular_full(_metric)
-							if M is not None:						
-								if	float(M['media']) > metric_plot[net][metric]:
+		if not os.path.isfile(str(threshold_data)+str(graph_type)+"_"+str(alg)+"_modularity_density.json"):
+			print ("Impossível abrir arquivo com os resultados da Modularidade Estendida: "+str(threshold_data)+str(graph_type)+"_"+str(alg)+"_modularity_density.json")
+
+		else:
+			metric_plot = {}																	# Armazenar o nome da rede e o maior valor do métrica			
+			with open(str(threshold_data)+str(graph_type)+"_"+str(alg)+"_modularity_density.json", "r") as f:
+				data = json.load(f)
+			for net in os.listdir(dataset):																		#Para cada modelo de rede do dataset
+				if os.path.isdir(dataset+net):		
+					t = data[net]																								#Recebe o melhor threhsold  determinado pelas métricas do Chen
+
+					threshold = t['threshold']
+					print net, threshold, t 
+					if not os.path.isfile(str(dataset)+str(net)+"/"+str(threshold)+".json"):
+						print ("Impossível abrir arquivo com threshold: "+str(dataset)+str(net)+"/"+str(threshold)+".json")
+					else:								
+						with open(str(dataset)+str(net)+"/"+str(threshold)+".json", 'r') as f:					# Abre arquivo com o melhor threshold			
+							data1 = json.load(f)
+							if data1 is not None:
+								_metric = []
+								for k,v in data1.iteritems():
+									_metric.append(v[metric])
+								M = calc.calcular_full(_metric)															#Calcula a média para a métrica...
+								if M is not None:					
 									metric_plot[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
 		return metric_plot
 
@@ -76,6 +82,8 @@ def main():
 #		alg = "gn"
 #	elif op1 == 4:
 #		alg = "copra_partition"				
+#	elif op1 == 5:
+#		alg = "infomap"
 #	else:
 #		alg = ""
 #		print("Opção inválida! Saindo...")
@@ -126,16 +134,16 @@ def main():
 	
 ######################################################################		
 ######################################################################
-
+		graph_type1 = "graphs_with_ego"
 		dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
-		data1 = prepare(dataset1,metric)
+		data1 = prepare(dataset1,metric,graph_type1,alg[i])
 		title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
 
 ######################################################################				
 ######################################################################
-
+		graph_type2 = "graphs_without_ego"
 		dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
-		data2 = prepare(dataset2,metric)
+		data2 = prepare(dataset2,metric,graph_type2,alg[i])
 		title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
 
 ######################################################################		
@@ -168,6 +176,7 @@ def main():
 
 source = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/"
 output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/"
+threshold_data = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth_chen/"
 
 if not os.path.exists(output):
 	os.makedirs(output)
