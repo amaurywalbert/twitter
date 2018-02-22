@@ -315,11 +315,10 @@ def plot_without_singletons(output,data1,data2,metric,alg):
 	
 	plt.xticks(ind+width/2,(x))
 	plt.legend(loc='best')	
-	plt.tight_layout()
-	print ("\nEstou aqui!\n")
+#	plt.tight_layout()
 	plt.show()
 
-	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
+#	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 	plt.close()
 	
 	

@@ -318,7 +318,7 @@ def plot_without_singletons(output,data1,data2,metric,alg):
 #	plt.tight_layout()
 	plt.show()
 
-	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
+#	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 	plt.close()
 	
 	
