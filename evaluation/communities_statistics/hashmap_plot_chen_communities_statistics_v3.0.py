@@ -123,7 +123,7 @@ def main():
 #		sys.exit()
 #	print ("\n")
 
-	metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm"
+	metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm"]
 	for metric in metrics:		
 	##################################################################
 	
@@ -156,7 +156,7 @@ def main():
 				if len(data1) == len(data2):
 				
 #				data_full[alg] = {'data1':data1,'data2':data2}
-				plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg))
+					plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg))
 			else:
 				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
 				print data1
