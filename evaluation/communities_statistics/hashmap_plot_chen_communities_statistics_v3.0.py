@@ -127,7 +127,7 @@ def main():
 	for metric in metrics:		
 	##################################################################
 	
-		algorithms = ['copra','oslom','gn','copra_partition']
+		algorithms = ['copra','oslom','gn','copra_partition','infomap']
 		data_full = {}
 		for alg in algorithms:
 			print"#################################################################################"
