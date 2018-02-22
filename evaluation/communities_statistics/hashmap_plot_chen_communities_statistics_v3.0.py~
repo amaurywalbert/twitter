@@ -100,64 +100,67 @@ def main():
 	print"  7 - Alters Ignored"
 	print"  8 - Alters Ignored Normalized"		
 	print
-	op2 = int(raw_input("Escolha uma opção acima: "))
+#	op2 = int(raw_input("Escolha uma opção acima: "))
+#
+#	if op2 == 1:
+#		metric = "n_communities"	
+#	elif op2 == 2:
+#		metric = "avg_size"
+#	elif op2 == 3:
+#		metric = "avg_size_norm"
+#	elif op2 == 4:
+#		metric = "overlap"		
+#	elif op2 == 5:
+#		metric = "n_singletons"		
+#	elif op2 == 6:
+#		metric = "n_non_singletons"
+#	elif op2 == 7:
+#		metric = "alters_ignored"
+#	elif op2 == 8:
+#		metric = "alters_ignored_norm"
+#	else:
+#		print("Opção inválida! Saindo...")
+#		sys.exit()
+#	print ("\n")
 
-	if op2 == 1:
-		metric = "n_communities"	
-	elif op2 == 2:
-		metric = "avg_size"
-	elif op2 == 3:
-		metric = "avg_size_norm"
-	elif op2 == 4:
-		metric = "overlap"		
-	elif op2 == 5:
-		metric = "n_singletons"		
-	elif op2 == 6:
-		metric = "n_non_singletons"
-	elif op2 == 7:
-		metric = "alters_ignored"
-	elif op2 == 8:
-		metric = "alters_ignored_norm"
-	else:
-		print("Opção inválida! Saindo...")
-		sys.exit()
-	print ("\n")
-######################################################################
+	metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm"
+	for metric in metrics:		
+	##################################################################
 	
-	algorithms = ['copra','oslom','gn','copra_partition']
-	data_full = {}
-	for alg in algorithms:
-		print"#################################################################################"
-		print ("\nPreparando dados para o algoritmo: "+str(alg))
-		data1 = {}
-		data2 = {}
+		algorithms = ['copra','oslom','gn','copra_partition']
+		data_full = {}
+		for alg in algorithms:
+			print"#################################################################################"
+			print ("\nPreparando dados para o algoritmo: "+str(alg))
+			data1 = {}
+			data2 = {}
 	
 ######################################################################		
 ######################################################################
-		graph_type1 = "graphs_with_ego"
-		dataset1 = str(source)+"graphs_with_ego/"+str(alg)+"/full/"	
-		data1 = prepare(dataset1,metric,graph_type1,alg)
-		title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
+			graph_type1 = "graphs_with_ego"
+			dataset1 = str(source)+"graphs_with_ego/"+str(alg)+"/full/"	
+			data1 = prepare(dataset1,metric,graph_type1,alg)
+			title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
 
 ######################################################################				
 ######################################################################
-		graph_type2 = "graphs_without_ego"
-		dataset2 = str(source)+"graphs_without_ego/"+str(alg)+"/full/"	
-		data2 = prepare(dataset2,metric,graph_type2,alg)
-		title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
+			graph_type2 = "graphs_without_ego"
+			dataset2 = str(source)+"graphs_without_ego/"+str(alg)+"/full/"	
+			data2 = prepare(dataset2,metric,graph_type2,alg)
+			title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
 
 ######################################################################		
 ######################################################################		
 
-		if data1 is not None and data2:
-			if len(data1) == len(data2):
+			if data1 is not None and data2:
+				if len(data1) == len(data2):
 				
 #				data_full[alg] = {'data1':data1,'data2':data2}
 				plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg))
-		else:
-			print ("\nImpossível gerar gráfico para os 02 cenários...\n")
-			print data1
-			print data2
+			else:
+				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
+				print data1
+				print data2
 			
 ######################################################################
 	# Plotar todos resultados com todos os algoritmos	
