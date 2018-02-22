@@ -124,27 +124,27 @@ def main():
 	print ("\n")
 ######################################################################
 	
-	alg = ['copra','oslom','gn','copra_partition']
+	algorithms = ['copra','oslom','gn','copra_partition']
 	data_full = {}
-	for i in range(len(alg)):
+	for alg in algorithms:
 		print"#################################################################################"
-		print ("\nPreparando dados para o algoritmo: "+str(alg[i]))
+		print ("\nPreparando dados para o algoritmo: "+str(alg))
 		data1 = {}
 		data2 = {}
 	
 ######################################################################		
 ######################################################################
 		graph_type1 = "graphs_with_ego"
-		dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
-		data1 = prepare(dataset1,metric,graph_type1,alg[i])
-		title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
+		dataset1 = str(source)+"graphs_with_ego/"+str(alg)+"/full/"	
+		data1 = prepare(dataset1,metric,graph_type1,alg)
+		title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
 
 ######################################################################				
 ######################################################################
 		graph_type2 = "graphs_without_ego"
-		dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
-		data2 = prepare(dataset2,metric,graph_type2,alg[i])
-		title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
+		dataset2 = str(source)+"graphs_without_ego/"+str(alg)+"/full/"	
+		data2 = prepare(dataset2,metric,graph_type2,alg)
+		title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
 
 ######################################################################		
 ######################################################################		
@@ -153,7 +153,7 @@ def main():
 			if len(data1) == len(data2):
 				
 #				data_full[alg] = {'data1':data1,'data2':data2}
-				plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg[i]))
+				plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg))
 		else:
 			print ("\nImpossível gerar gráfico para os 02 cenários...\n")
 			print data1

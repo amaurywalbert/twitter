@@ -278,6 +278,7 @@ def plot_without_singletons(output,data1,data2,metric,alg):
 			 	
 		data = [value,interaction,std,threshold]
 		dataset[i] = data
+		
 
 	x = dataset[1][1]								# recebe os nomes das redes ego
 	n=len(x)
@@ -297,7 +298,6 @@ def plot_without_singletons(output,data1,data2,metric,alg):
 	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego - Threshold - "+str(dataset[1][3]), marker=dict(color='blue'))
 	trace2 = go.Bar(x = dataset[2][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego - Threshold - "+str(dataset[2][3]), marker=dict(color='green'))
 
-	
 	data = [trace1,trace2]
 
 	title_plot = title
@@ -315,11 +315,10 @@ def plot_without_singletons(output,data1,data2,metric,alg):
 	
 	plt.xticks(ind+width/2,(x))
 	plt.legend(loc='best')	
-	plt.tight_layout()
-	plt.show()	
+#	plt.tight_layout()
+	plt.show()
 
-
-#	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
+	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 	plt.close()
 	
 	
