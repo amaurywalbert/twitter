@@ -15,6 +15,8 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 2 - não considera without singletons
 ##					Versão 3 - Usa dados (threshold) gerados pelas métricas do CHEN - Apenas Modularidade estendida.
 ##					Versão 4 - Usa dados (threshold) gerados pelas métricas do CHEN - Escolhe a métrica do Chen e dá opção para calcular estatísticas das comunidades de acordo com a métrica.
+##					
+##					Só odularity Density por enquanto.... mexer no arquivo que gera as estatísticas das métricas do Chen para salvar o arquivo que é necessário aqui.
 ## 
 ######################################################################################################################################################################
 def prepare(dataset,metric,graph_type,alg,file):
@@ -29,7 +31,6 @@ def prepare(dataset,metric,graph_type,alg,file):
 			if not os.path.isfile(str(dataset)+str(net)+"/"+str(threshold)+".json"):
 				print ("Impossível abrir arquivo com threshold: "+str(dataset)+str(net)+"/"+str(threshold)+".json")
 			else:
-				print ("Lendo arquivo com threshold: "+str(dataset)+str(net)+"/"+str(threshold)+".json")						
 				with open(str(dataset)+str(net)+"/"+str(threshold)+".json", 'r') as f:					# Abre arquivo com o melhor threshold			
 					data1 = json.load(f)
 					if data1 is not None:
@@ -171,7 +172,7 @@ def main():
 				if data1 is not None and data2:
 					if len(data1) == len(data2):
 						output_dir = output+chen_metric+"/"
-						plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg))
+						plot_metrics.plot_without_singletons(output_dir,data1,data2,metric,str(alg))
 				else:
 					print ("\nImpossível gerar gráfico para os 02 cenários...\n")
 					print data1
