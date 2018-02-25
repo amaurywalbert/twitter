@@ -91,6 +91,7 @@ def main():
 #	print ("\n")
 	print"#################################################################################"
 	print
+	print"  0 - All Metrics"
 	print"  1 - Number of Communities"	
 	print"  2 - Communities Size"
 	print"  3 - Communities Size Normalized"
@@ -99,32 +100,38 @@ def main():
 	print"  6 - Non Singletons"
 	print"  7 - Alters Ignored"
 	print"  8 - Alters Ignored Normalized"		
+	print"  9 - Greater Community AVG"		
 	print
-#	op2 = int(raw_input("Escolha uma opção acima: "))
-#
-#	if op2 == 1:
-#		metric = "n_communities"	
-#	elif op2 == 2:
-#		metric = "avg_size"
-#	elif op2 == 3:
-#		metric = "avg_size_norm"
-#	elif op2 == 4:
-#		metric = "overlap"		
-#	elif op2 == 5:
-#		metric = "n_singletons"		
-#	elif op2 == 6:
-#		metric = "n_non_singletons"
-#	elif op2 == 7:
-#		metric = "alters_ignored"
-#	elif op2 == 8:
-#		metric = "alters_ignored_norm"
-#	else:
-#		print("Opção inválida! Saindo...")
-#		sys.exit()
-#	print ("\n")
+	op2 = int(raw_input("Escolha uma opção acima: "))
 
-	metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm"]
-	for metric in metrics:		
+	if op2 == 0:
+		metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm","greater_comm_avg"]
+	if op2 == 1:
+		metrics = ["n_communities"]	
+	elif op2 == 2:
+		metrics = ["avg_size"]
+	elif op2 == 3:
+		metrics = ["avg_size_norm"]
+	elif op2 == 4:
+		metrics = ["overlap"]
+	elif op2 == 5:
+		metrics = ["n_singletons"]		
+	elif op2 == 6:
+		metrics = ["n_non_singletons"]
+	elif op2 == 7:
+		metrics = ["alters_ignored"]
+	elif op2 == 8:
+		metrics = ["alters_ignored_norm"]
+	elif op2 == 9:
+		metrics = ["greater_comm_avg"]
+	else:
+		print("Opção inválida! Saindo...")
+		sys.exit()
+	print ("\n")
+######################################################################
+
+	for metric in metrics:
+		
 	##################################################################
 	
 		algorithms = ['copra','oslom','gn','copra_partition','infomap']
@@ -178,7 +185,7 @@ def main():
 ######################################################################################################################################################################
 
 source = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/"
-output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/"
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics_chen_threshold/"
 threshold_data = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth_chen/"
 
 if not os.path.exists(output):

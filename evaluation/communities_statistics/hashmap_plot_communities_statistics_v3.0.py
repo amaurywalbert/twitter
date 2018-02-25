@@ -85,6 +85,7 @@ def main():
 #	print ("\n")
 	print"#################################################################################"
 	print
+	print"  0 - All Metrics"
 	print"  1 - Number of Communities"	
 	print"  2 - Communities Size"
 	print"  3 - Communities Size Normalized"
@@ -92,69 +93,77 @@ def main():
 	print"  5 - Singletons"
 	print"  6 - Non Singletons"
 	print"  7 - Alters Ignored"
-	print"  8 - Alters Ignored Normalized"		
+	print"  8 - Alters Ignored Normalized"
+	print"  9 - Greater Community AVG"				
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
+
+	if op2 == 0:
+		metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm","greater_comm_avg"]
 	if op2 == 1:
-		metric = "n_communities"	
+		metrics = ["n_communities"]	
 	elif op2 == 2:
-		metric = "avg_size"
+		metrics = ["avg_size"]
 	elif op2 == 3:
-		metric = "avg_size_norm"
+		metrics = ["avg_size_norm"]
 	elif op2 == 4:
-		metric = "overlap"		
+		metrics = ["overlap"]
 	elif op2 == 5:
-		metric = "n_singletons"		
+		metrics = ["n_singletons"]		
 	elif op2 == 6:
-		metric = "n_non_singletons"
+		metrics = ["n_non_singletons"]
 	elif op2 == 7:
-		metric = "alters_ignored"
+		metrics = ["alters_ignored"]
 	elif op2 == 8:
-		metric = "alters_ignored_norm"
+		metrics = ["alters_ignored_norm"]
+	elif op2 == 9:
+		metrics = ["greater_comm_avg"]
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()
 	print ("\n")
 ######################################################################
+
+	for metric in metrics:
 	
-	alg = ['copra','oslom','gn','copra_partition']
-	data_full = {}
-	for i in range(len(alg)):
-		print"#################################################################################"
-		print ("\nPreparando dados para o algoritmo: "+str(alg[i]))
-		data1 = {}
-		data2 = {}
+		alg = ['copra','oslom','gn','copra_partition','infomap']
+		data_full = {}
+		for i in range(len(alg)):
+			print"#################################################################################"
+			print ("\nPreparando dados para o algoritmo: "+str(alg[i]))
+			data1 = {}
+			data2 = {}
 	
 ######################################################################		
 ######################################################################
 
-		dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
-		data1 = prepare(dataset1,metric)
-		title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
+			dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
+			data1 = prepare(dataset1,metric)
+			title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
 
 ######################################################################				
 ######################################################################
 
-		dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
-		data2 = prepare(dataset2,metric)
-		title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
+			dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
+			data2 = prepare(dataset2,metric)
+			title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
 
 ######################################################################		
 ######################################################################		
 
-		if data1 is not None and data2:
-			if len(data1) == len(data2):
+			if data1 is not None and data2:
+				if len(data1) == len(data2):
 				
-#				data_full[alg] = {'data1':data1,'data2':data2}
-				plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg[i]))
-		else:
-			print ("\nImpossível gerar gráfico para os 02 cenários...\n")
-			print data1
-			print data2
+#					data_full[alg] = {'data1':data1,'data2':data2}
+					plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg[i]))
+			else:
+				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
+				print data1
+				print data2
 			
 ######################################################################
-	# Plotar todos resultados com todos os algoritmos	
+# Plotar todos resultados com todos os algoritmos	
 #	plot_metrics.plot_full_without_singletons(output,data_full,metric)
 ######################################################################	
 	
