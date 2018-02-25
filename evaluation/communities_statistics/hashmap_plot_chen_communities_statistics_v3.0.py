@@ -25,13 +25,12 @@ def prepare(dataset,metric,graph_type,alg):
 			print ("Impossível abrir arquivo com os resultados da Modularidade Estendida: "+str(threshold_data)+str(graph_type)+"_"+str(alg)+"_modularity_density.json")
 
 		else:
-			metric_plot = {}																	# Armazenar o nome da rede e o maior valor do métrica			
+			metric_plot = {}																							# Armazenar o nome da rede e o maior valor do métrica			
 			with open(str(threshold_data)+str(graph_type)+"_"+str(alg)+"_modularity_density.json", "r") as f:
 				data = json.load(f)
-			for net in os.listdir(dataset):																		#Para cada modelo de rede do dataset
+			for net in os.listdir(dataset):																		# Para cada modelo de rede do dataset
 				if os.path.isdir(dataset+net):		
-					t = data[net]																								#Recebe o melhor threhsold  determinado pelas métricas do Chen
-
+					t = data[net]																						# Recebe o melhor threhsold determinado pelas métricas do Chen
 					threshold = t['threshold']
 					print net, threshold, t 
 					if not os.path.isfile(str(dataset)+str(net)+"/"+str(threshold)+".json"):
@@ -46,7 +45,7 @@ def prepare(dataset,metric,graph_type,alg):
 								M = calc.calcular_full(_metric)															#Calcula a média para a métrica...
 								if M is not None:					
 									metric_plot[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
-		return metric_plot
+			return metric_plot
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -106,7 +105,7 @@ def main():
 
 	if op2 == 0:
 		metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm","greater_comm_avg"]
-	if op2 == 1:
+	elif op2 == 1:
 		metrics = ["n_communities"]	
 	elif op2 == 2:
 		metrics = ["avg_size"]

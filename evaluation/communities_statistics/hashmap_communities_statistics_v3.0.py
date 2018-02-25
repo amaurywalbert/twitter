@@ -32,7 +32,7 @@ def prepare_communities(community_file,n_nodes):
 	alters_set = set()
 	size = []																# Lista com os tamanhos das communidades
 	size_norm = []															# Lista com os tamanhos das communidades normalizada pelo número de vértices da rede-ego
-	greater_comm_avg = []												# Tamanho médio das maiores comunidades
+	greater_comm_avg = 0													# Tamanho médio das maiores comunidades
 	n_singletons = 0														# Número de Singletons (comunidades formada por apenas um vértice) 
 	n_non_singletons = 0													# Número de Não Singletons
 	greater_comm = 0														# Tamanho da maior comunidade
@@ -61,8 +61,7 @@ def prepare_communities(community_file,n_nodes):
 		size_norm.append(b)
 
 	n_comm = len(communities)												# Quantidade de comunidades para o ego em questão
-	c = float(greater_comm)/float(n_nodes)
-	greater_comm_avg.append(c)												# Tamanho da maior comunidade
+	greater_comm_avg = float(greater_comm)/float(n_nodes)
 	
 	if n_nodes > alters_set:	
 		alters_ignored = n_nodes - len(alters_set)					# Número de alters que foram ignorados no processo de detecção e não receberam rótulos.
