@@ -13,6 +13,14 @@ import java.util.Set;
 
 public class CommunityQuality {
 	public static void main(String[] args) {
+/*		
+		boolean isUnweighted = true;
+		boolean isUndirected = true;
+		String networkFile = "./football.txt";
+		String discoveredCommunityFile = "./football_disjoint_community.groups";
+		String groundTruthCommunityFile = "./football_true_community.groups";
+*/
+
 		String networkFile = args[0];									// Network File		
 		String discoveredCommunityFile = args[1];					// Communities detected File
 		boolean isUnweighted = false;									// Se rede é Weighted
@@ -29,7 +37,6 @@ public class CommunityQuality {
 		
 //		System.out.println("isUnweighted = " + isUnweighted + ", isUndirected = " + isUndirected);
 
-
 		// Calculate community quality metrics without ground truth
 		double[] qualities = CommunityQuality.computeQualityWithoutGroundTruth(
 				networkFile, isUnweighted, isUndirected,
@@ -39,24 +46,22 @@ public class CommunityQuality {
 				+ qualities[3] + ", contraction = " + qualities[4]
 				+ ", interEdges = " + qualities[5] + ", expansion = "
 				+ qualities[6] + ", conductance = " + qualities[7]
-				+ ", modularity degree = "
-				+ qualities[8]);
-/*
+				+ ", fitness = " + qualities[8] + ", modularity degree = "
+				+ qualities[9]);
+
 		// Calculate seven metrics based on ground truth communities
-		qualities = CommunityQuality.computeInformationEntropyMetrics(
-				discoveredCommunityFile, groundTruthCommunityFile);
+/*		
+		qualities = CommunityQuality.computeInformationEntropyMetrics(discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("VI = " + qualities[0] + ", NMI = " + qualities[1]);
 
-		qualities = CommunityQuality.computeClusterMatchingMetrics(
-				discoveredCommunityFile, groundTruthCommunityFile);
+		qualities = CommunityQuality.computeClusterMatchingMetrics(discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("F-measure = " + qualities[0] + ", NVD = "
 				+ qualities[1]);
 
-		qualities = CommunityQuality.computeIndexMetrics(
-				discoveredCommunityFile, groundTruthCommunityFile);
+		qualities = CommunityQuality.computeIndexMetrics(discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("RI = " + qualities[0] + ", ARI = " + qualities[1]
 				+ ", JI = " + qualities[2]);
-*/	
+*/
 	}
 
 	/**
@@ -132,6 +137,8 @@ public class CommunityQuality {
 		double expansion = 0;
 		// Condunctance
 		double conductance = 0;
+		// Fitness function
+		double fitness = 0;
 
 		// Average modularity degree metric
 		double D = 0;
@@ -208,6 +215,17 @@ public class CommunityQuality {
 				conductance += wout / (win + wout);
 			}
 
+			// The fitness function
+			if (win == 0) {
+				fitness += 0;
+			} else {
+				if (isUndirected) {
+					fitness += win / (win + 2 * wout);
+				} else {
+					fitness += win / (win + wout + wout_incoming);
+				}
+			}
+
 			// Average modularity degree
 			D += (win - wout) / iCommSize;
 		}
@@ -215,7 +233,7 @@ public class CommunityQuality {
 		double[] qualities = { Q, Qds, intraEdges / numComs,
 				intraDensity / numComs, contraction / numComs,
 				interEdges / numComs, expansion / numComs,
-				conductance / numComs, D };
+				conductance / numComs, fitness / numComs, D };
 		return qualities;
 	}
 

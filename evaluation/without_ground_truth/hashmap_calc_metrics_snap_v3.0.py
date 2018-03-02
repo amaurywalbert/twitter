@@ -1,6 +1,6 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-import snap,datetime, sys, time, json, os, os.path, shutil, time, struct, random
+import snap, datetime, sys, time, json, os, os.path, shutil, time, struct, random
 import metrics_v2,calc
 
 

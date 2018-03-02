@@ -13,29 +13,11 @@ import java.util.Set;
 
 public class CommunityQuality {
 	public static void main(String[] args) {
-/*		
 		boolean isUnweighted = true;
 		boolean isUndirected = true;
 		String networkFile = "./football.txt";
 		String discoveredCommunityFile = "./football_disjoint_community.groups";
 		String groundTruthCommunityFile = "./football_true_community.groups";
-*/
-
-		String networkFile = args[0];									// Network File		
-		String discoveredCommunityFile = args[1];					// Communities detected File
-		boolean isUnweighted = false;									// Se rede é Weighted
-		boolean isUndirected = false;									// Se rede é Directed
-	
-		for (String arg : args) {
-			if (arg.equals("isUnweighted")) {
-				isUnweighted = true;										// Se rede é Unweighted
-			} 
-			if (arg.equals("isUndirected")) {
-				isUndirected = true;										// Se rede é Undirected
-			}
-		}
-		
-//		System.out.println("isUnweighted = " + isUnweighted + ", isUndirected = " + isUndirected);
 
 		// Calculate community quality metrics without ground truth
 		double[] qualities = CommunityQuality.computeQualityWithoutGroundTruth(
@@ -50,18 +32,19 @@ public class CommunityQuality {
 				+ qualities[9]);
 
 		// Calculate seven metrics based on ground truth communities
-/*		
-		qualities = CommunityQuality.computeInformationEntropyMetrics(discoveredCommunityFile, groundTruthCommunityFile);
+		qualities = CommunityQuality.computeInformationEntropyMetrics(
+				discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("VI = " + qualities[0] + ", NMI = " + qualities[1]);
 
-		qualities = CommunityQuality.computeClusterMatchingMetrics(discoveredCommunityFile, groundTruthCommunityFile);
+		qualities = CommunityQuality.computeClusterMatchingMetrics(
+				discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("F-measure = " + qualities[0] + ", NVD = "
 				+ qualities[1]);
 
-		qualities = CommunityQuality.computeIndexMetrics(discoveredCommunityFile, groundTruthCommunityFile);
+		qualities = CommunityQuality.computeIndexMetrics(
+				discoveredCommunityFile, groundTruthCommunityFile);
 		System.out.println("RI = " + qualities[0] + ", ARI = " + qualities[1]
 				+ ", JI = " + qualities[2]);
-*/
 	}
 
 	/**

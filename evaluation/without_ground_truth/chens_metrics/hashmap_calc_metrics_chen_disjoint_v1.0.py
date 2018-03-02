@@ -102,16 +102,16 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 									
 
 								if uw is False and ud is False:		# Para grafo Ponderado e Direcionado (n2,n3,n4)
-									execute = subprocess.Popen(["java", "DisjointCommunityQuality", str(graph_file),str(community_file)], stdout=subprocess.PIPE)
+									execute = subprocess.Popen(["java", "CommunityQuality", str(graph_file),str(community_file)], stdout=subprocess.PIPE)
 
 								elif uw is True and ud is False:		# Para grafo NÂO Ponderado e Direcionado (n1,n9)
-									execute = subprocess.Popen(["java", "DisjointCommunityQuality", str(graph_file),str(community_file),"isUnweighted"], stdout=subprocess.PIPE)
+									execute = subprocess.Popen(["java", "CommunityQuality", str(graph_file),str(community_file),"isUnweighted"], stdout=subprocess.PIPE)
 
 								elif uw is False and ud is True:		# Para grafo Ponderado e NÃO Direcionado (n5,n6,n7,n8,n10)
-									execute = subprocess.Popen(["java", "DisjointCommunityQuality", str(graph_file),str(community_file),"isUndirected"], stdout=subprocess.PIPE)								
+									execute = subprocess.Popen(["java", "CommunityQuality", str(graph_file),str(community_file),"isUndirected"], stdout=subprocess.PIPE)								
 
 								elif uw is True and ud is True:		# Para grafo NÃO Ponderado e NÃO Direcionado (não tem nenhum...)
-									execute = subprocess.Popen(["java", "DisjointCommunityQuality", str(graph_file),str(community_file),"isUnweighted","isUndirected"], stdout=subprocess.PIPE)
+									execute = subprocess.Popen(["java", "CommunityQuality", str(graph_file),str(community_file),"isUnweighted","isUndirected"], stdout=subprocess.PIPE)
 
 								resp = execute.communicate()[0]
 								print resp

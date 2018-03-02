@@ -1,0 +1,216 @@
+# -*- coding: latin1 -*-
+################################################################################################
+#	
+#
+import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
+import numpy as np
+from math import*
+import plot_metrics
+import calc
+reload(sys)
+sys.setdefaultencoding('utf-8')
+
+######################################################################################################################################################################
+##		Status - Versão 1 - Script para plotar as métricas de avaliação sem ground_truth do Chen
+##					Versão 2 - não considera without singletons
+## 				Versão 3 - Filtra os dados salvos para impressão dos gráficos. Arquivos foram salvos com todos os calculos.
+## 				Versão 4 - Filtra os resultados das outras métricas com o threshold que retorna a maior Modularity Density
+## 				Versão 5 - Filtra os resultados das outras métricas com o threshold que retorna a melhor Métrica especificada - ou seja, para cada métrica calculada, salva um arquivo com o melhor threshold.
+######################################################################################################################################################################
+
+######################################################################################################################################################################
+#
+# Calcular e armazenar o MAIOR threshold para cada métrica
+#
+######################################################################################################################################################################
+def metric_calc_greater_than(dataset,metric,graph_type,alg): # Verifica pelo melhor threshold. Em caso de empate pega o último threshold verificado.
+	if not os.path.isdir(dataset):
+		print ("Diretório com "+str(metric)+" não encontrado: "+str(dataset))
+	else:	
+		best_t = {}																	# Armazenar o nome da rede e o melhor valor do métrica
+
+		for net in os.listdir(dataset):
+			print
+			if os.path.isdir(dataset+net):
+				best_t[net] = {'threshold':' ',metric:float("inf"),'std':float(0)}
+				for file in os.listdir(dataset+net):
+					data_avg_values = []
+					threshold = file.split(".json")
+					threshold = threshold[0]
+					with open(dataset+net+"/"+file, 'r') as f:
+						data = json.load(f)
+						if data is not None:
+							for k,v in data.iteritems():
+								data_avg_values.append(v)
+							#print len(data_avg_values)
+												
+							M = calc.calcular_full(data_avg_values)
+							if M is not None:
+
+								print threshold, M['media']
+								
+								if	float(M['media']) <= best_t[net][metric]:
+									best_t[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
+			print																		
+		with open(str(output)+str(graph_type)+"_"+str(alg)+"_"+str(metric)+"_best_threshold.json", "w") as f:
+			f.write(json.dumps(best_t))
+		return best_t
+
+
+######################################################################################################################################################################
+#
+# Calcular e armazenar o MENOR threshold para cada métrica
+#
+######################################################################################################################################################################
+def metric_calc_less_than(dataset,metric,graph_type,alg): # Verifica pelo melhor threshold. Em caso de empate pega o último threshold verificado.
+	if not os.path.isdir(dataset):
+		print ("Diretório com "+str(metric)+" não encontrado: "+str(dataset))
+	else:	
+		best_t = {}																	# Armazenar o nome da rede e o melhor valor do métrica
+
+		for net in os.listdir(dataset):
+			print
+			if os.path.isdir(dataset+net):
+				best_t[net] = {'threshold':' ',metric:float("-inf"),'std':float(0)}
+				for file in os.listdir(dataset+net):
+					data_avg_values = []
+					threshold = file.split(".json")
+					threshold = threshold[0]
+					with open(dataset+net+"/"+file, 'r') as f:
+						data = json.load(f)
+						if data is not None:
+							for k,v in data.iteritems():
+								data_avg_values.append(v)
+							#print len(data_avg_values)
+												
+							M = calc.calcular_full(data_avg_values)
+							if M is not None:
+
+								print threshold, M['media']
+								
+								if	float(M['media']) >= best_t[net][metric]:
+									best_t[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
+			print																		
+		with open(str(output)+str(graph_type)+"_"+str(alg)+"_"+str(metric)+"_best_threshold.json", "w") as f:
+			f.write(json.dumps(best_t))
+		return best_t
+
+######################################################################################################################################################################
+######################################################################################################################################################################
+#
+# Método principal do programa. 
+#
+######################################################################################################################################################################
+######################################################################################################################################################################
+
+def main():
+	os.system('clear')
+	print "################################################################################"
+	print"																											"
+	print" 					Impressão de Gráficos - Métricas de Avaliação Sem Ground - Truth	"
+	print"																											"
+	print" Escolha o algoritmo usado na detecção das comunidades									"
+	print"																											"
+	print"#################################################################################"
+	print
+	print"  1 - COPRA"
+	print"  2 - OSLOM"
+	print"  3 - GN"		
+	print"  4 - COPRA - Partition"
+	print"  5 - INFOMAP - Partition"												
+	print
+	op1 = int(raw_input("Escolha uma opção acima: "))
+
+	if op1 == 1:
+		alg = "copra"
+	elif op1 == 2:
+		alg = "oslom"
+	elif op1 == 3:
+		alg = "gn"
+	elif op1 == 4:
+		alg = "copra_partition"
+	elif op1 == 5:
+		alg = "infomap"							
+	else:
+		alg = ""
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+	print ("\n")
+	print"#################################################################################"
+	print
+
+######################################################################		
+######################################################################
+
+	m_greater = ["modularity_density","modularity","N_modularity","intra_edges","intra_density","modularity_degree","contraction"]
+	for metric in m_greater:
+######################################################################
+		graph_type1 = "graphs_with_ego"
+		dataset1 = str(source)+str(metric)+"/"+str(graph_type1)+"/"+str(alg)+"/full/"	
+		best_t1 = metric_calc_greater_than(dataset1,metric,graph_type1,alg)
+		title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"		
+		
+######################################################################
+		graph_type3 = "graphs_without_ego"
+		dataset3 = str(source)+str(metric)+"/"+str(graph_type3)+"/"+str(alg)+"/full/"	
+		best_t3 = metric_calc_greater_than(dataset3,metric,graph_type3,alg)
+		title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
+######################################################################
+
+		if best_t1 is not None and best_t3 is not None:
+			if len(best_t1) == len(best_t3):
+				plot_metrics.plot_full_without_singletons(output,best_t1,best_t3,metric,alg)
+			else:
+				print ("\nImpossível gerar gráfico para os 02 cenários... best_t1: "+str(len(best_t1))+" - best_t3: "+str(len(best_t3))+"\n")					
+		else:
+			print ("\nImpossível gerar gráfico para os 02 cenários...\n")
+			print best_t1
+			print best_t3
+######################################################################		
+######################################################################
+
+	m_less = ["inter_edges","expansion","conductance"]
+	for metric in m_less:
+######################################################################
+		graph_type1 = "graphs_with_ego"
+		dataset1 = str(source)+str(metric)+"/"+str(graph_type1)+"/"+str(alg)+"/full/"	
+		best_t1 = metric_calc_less_than(dataset1,metric,graph_type1,alg)
+		title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"		
+		
+######################################################################
+		graph_type3 = "graphs_without_ego"
+		dataset3 = str(source)+str(metric)+"/"+str(graph_type3)+"/"+str(alg)+"/full/"	
+		best_t3 = metric_calc_less_than(dataset3,metric,graph_type3,alg)
+		title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
+######################################################################
+
+		if best_t1 is not None and best_t3 is not None:
+			if len(best_t1) == len(best_t3):
+				plot_metrics.plot_full_without_singletons(output,best_t1,best_t3,metric,alg)
+			else:
+				print ("\nImpossível gerar gráfico para os 02 cenários... best_t1: "+str(len(best_t1))+" - best_t3: "+str(len(best_t3))+"\n")					
+		else:
+			print ("\nImpossível gerar gráfico para os 02 cenários...\n")
+			print best_t1
+			print best_t3
+
+######################################################################
+	
+	print("\n######################################################################\n")
+	print("Script finalizado!")
+	print("\n######################################################################\n")
+
+######################################################################################################################################################################
+#
+# INÍCIO DO PROGRAMA
+#
+######################################################################################################################################################################
+
+source = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth_chen/"
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/without_ground_truth_chen/"
+
+if not os.path.exists(output):
+	os.makedirs(output)
+
+#Executa o método main
+if __name__ == "__main__": main()

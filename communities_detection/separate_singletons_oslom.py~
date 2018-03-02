@@ -1,6 +1,6 @@
 	# -*- coding: latin1 -*-
 ################################################################################################
-import datetime, sys, time, json, os, os.path, shutil, time, struct, random
+import datetime, sys, time, json, os, os.path, shutil, time, struct, random, snap
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -29,7 +29,7 @@ def save_data(graphs,alg):
 			threshold+=1
 			
 			source_dir="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/raw/n"+str(net)+"/"+str(threshold)+"/"
-			
+			graphs_dir=""
 			output_full="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/"+str(threshold)+"/"			
 			output_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/singletons/n"+str(net)+"/"+str(threshold)+"/"
 			output_without_singletons="/home/amaury/communities/"+str(graphs)+"/"+str(alg)+"/without_singletons/n"+str(net)+"/"+str(threshold)+"/"
@@ -58,19 +58,17 @@ def save_data(graphs,alg):
 
 
 				i=0
+				
 				for file in os.listdir(source_dir):					
 					if not os.path.exists(source_dir+str(file)+"/tp"):
 						print ("Diretório não encontrado: "+str(source_dir)+str(file)+"/tp")
 					else:	
 						i+=1
+						alters_detected = set() 												# Armazena o conjunto de alters detectados pela ferramenta.... 						
+						
+						
+						
 						print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i))
-
-						if os.path.isfile(output_full+file):											#Limpar diretórios
-							os.remove(output_full+file)	
-						if os.path.isfile(output_without_singletons+file):
-							os.remove(output_without_singletons+file)
-						if os.path.isfile(output_singletons+file):
-							os.remove(output_singletons+file)	
 
 						with open(source_dir+str(file)+"/tp", 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "file"
 							for line in f:
