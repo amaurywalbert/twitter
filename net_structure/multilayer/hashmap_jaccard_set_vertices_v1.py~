@@ -52,7 +52,9 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
+	i=0
 	for ego,v in dictionary.iteritems():
+		i+=1
 		nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
 		for net1 in nets:
 			if net1 == "n1":
@@ -105,10 +107,12 @@ def main():
 								nodes2 = set(G2.nodes)																		
 
 								result = jaccard_similarity(nodes1,nodes2)											# Calcula Jaccard dos dois grafos
-								print ego,net1,net2,layer1,layer2,result
+								print i,ego,net1,net2,layer1,layer2,result
 							
 		print
 		print			
+		
+								#############  FALTA SALVARRRRRRRR
 
 	print("\n######################################################################\n")
 	print("Script finalizado!")
