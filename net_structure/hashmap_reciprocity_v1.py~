@@ -14,9 +14,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para gerar coeficiente de clustering por ego. Nesse cálculo a média que é armazenada já é a média do modelo.
+##		Status - Versão 1 - Script para calcular a reciprocidade em redes direcionadas.
 ## 
-##												Considers the graph as undirected!!!!!
 ######################################################################################################################################################################
 
 
@@ -104,7 +103,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Script para cálculo do coeficiente de agrupamento do dataset (rede-ego)							"
+	print" Script para cálculo da reciprocidade das redes direcionadas							"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -112,22 +111,11 @@ def main():
 	print"  9 - Follwowers"
 	print"  2 - Retweets"
 	print"  3 - Likes"
-	print"  3 - Mentions"
-	
-	print " "
-	print"  5 - Co-Follow"
-	print" 10 - Co-Followers"				
-	print"  6 - Co-Retweets"
-	print"  7 - Co-Likes"
-	print"  8 - Co-Mentions"
-			
+	print"  3 - Mentions"			
 	print
 	op = int(raw_input("Escolha uma opção acima: "))
 
-
-	if op in (5,6,7,8,10):																						# Testar se é um grafo direcionado ou não
-		isdir = False
-	elif op in (1,2,3,4,9):
+	if op in (1,2,3,4,9):
 		isdir = True 
 	else:
 		print("Opção inválida! Saindo...")

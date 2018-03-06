@@ -68,7 +68,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 					b = float(CnCom.Len())/float(n_nodes)
 					cc_normal.append(b)
 
-		N_CC = calc.calcular_full(n_cc)						# Número de componentes conectados dividido pelo número de egos, pra saber a média de componentes conectados por ego.
+		N_CC = calc.calcular_full(n_cc)						# Número de componentes conectados dividido pelo número de vértices, pra saber a média de componentes conectados por ego.
 		CC = calc.calcular_full(cc)
 		CC_NORMAL = calc.calcular_full(cc_normal)			
 	
