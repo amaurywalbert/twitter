@@ -21,6 +21,16 @@ sys.setdefaultencoding('utf-8')
 ##ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções 
 ######################################################################################################################################################################
 
+######################################################################################################################################################################
+#
+# Cria diretórios
+#
+######################################################################################################################################################################
+def create_dirs(x,y):
+	if not os.path.exists(x):
+		os.makedirs(x)
+	if not os.path.exists(y):
+		os.makedirs(y)		
 
 
 ######################################################################################################################################################################
@@ -36,6 +46,17 @@ def jaccard_similarity(x,y):
 
 ######################################################################################################################################################################
 #
+# Salvar arquivo no formato JSON: ego_id:{as:data,ar:data,al:data,am:data,...,rm:data}  
+#
+######################################################################################################################################################################
+def save_file(ego,dataset,f):
+	f.write(str(ego))
+	for k,v in dataset.iteritems():
+		f.write(" "+str(k)+":"+str(v))
+	f.write("\n")
+	
+######################################################################################################################################################################
+#
 # Salvar arquivo texto com padrão:  ego_id as:data ar:data al:data am:data ... rm:data  
 #
 ######################################################################################################################################################################
@@ -43,11 +64,8 @@ def save_file(ego,dataset,f):
 	f.write(str(ego))
 	for k,v in dataset.iteritems():
 		f.write(" "+str(k)+":"+str(v))
-	f.write("/n")
+	f.write("\n")
 					
-		
-
-
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -65,12 +83,15 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir+"jaccard_set_vertices.txt"):
-		print ("Arquivo de destino já existe!"+str(output_dir+"jaccard_set_vertices.txt"))
+	if os.path.exists(output_dir_txt+"jaccard_set_vertices.txt"):
+		print ("Arquivo de destino já existe!"+str(output_dir_txt+"jaccard_set_vertices.txt"))
 	else:
-		if not os.path.exists(output_dir):
-			os.makedirs(output_dir)			
-		with open(output_dir+"jaccard_set_vertices.txt",'w') as out_file:
+		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
+
+		dataset_json = {}																													# Salvar Arquivos no Formato Json
+
+		with open(output_dir_txt+"jaccard_set_vertices.txt",'w') as out_file:
+			
 			for ego,v in dictionary.iteritems():
 				i+=1
 				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
@@ -130,8 +151,12 @@ def main():
 										dataset[pair] = result
 										print i,ego,net1,net2,layer1,layer2,result
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
+				dataset_json[ego] = dataset
 				print
 				print
+			
+			save_json(dataset_json)																									# Salvar arquivo no formato JSON
+				
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -142,8 +167,9 @@ def main():
 #
 ######################################################################################################################################################################
 
-data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"									# Pegar a lista com os ids dos egos
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/"	# Pegar a lista com os ids dos egos
+data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"										# Pegar a lista com os ids dos egos
+output_dir_txt = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/txt/"	# Pegar a lista com os ids dos egos
+output_dir_json = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"	# Pegar a lista com os ids dos egos
 
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos
