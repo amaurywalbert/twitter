@@ -50,8 +50,8 @@ def jaccard_similarity(x,y):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"jaccard_set_vertices.json"):
-		json.dumps(dataset_json)	
+	with open(output_dir_json+"jaccard_set_vertices.json","w"):
+		json.dumps(dataset_json)		
 ######################################################################################################################################################################
 #
 # Salvar arquivo texto com padrão:  ego_id as:data ar:data al:data am:data ... rm:data  
