@@ -34,6 +34,19 @@ def jaccard_similarity(x,y):
 	union_cardinality = len(set.union(*[set(x), set(y)]))
 	return intersection_cardinality/float(union_cardinality)
 
+######################################################################################################################################################################
+#
+# Salvar arquivo texto com padrão:  ego_id as:data ar:data al:data am:data ... rm:data  
+#
+######################################################################################################################################################################
+def save_file(ego,dataset,f):
+	f.write(str(ego))
+	for k,v in dataset.iteritems():
+		f.write(" "+str(k)+":"+str(v))
+	f.write("\n")
+					
+		
+
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -52,72 +65,73 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	for ego,v in dictionary.iteritems():
-		i+=1
-		nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
-		dataset = {}
-		for net1 in nets:
-			if net1 == "n1":
-				layer1 = "a"
-			elif net1 == "n9":
-				layer1 = "s"
-			elif net1 == "n2":
-				layer1 = "r"
-			elif net1 == "n3":
-				layer1 = "l"
-			elif net1 == "n4":
-				layer1 = "m"
-			else:
-				print ("Rede 1 inválida")
-				sys.exit()
+	if os.path.exists(output_dir+"jaccard_set_vertices.txt"):
+		print ("Arquivo de destino já existe!"+str(output_dir+"jaccard_set_vertices.txt"))
+	else:
+		if not os.path.exists(output_dir):
+			os.makedirs(output_dir)			
+		with open(output_dir+"jaccard_set_vertices.txt",'w') as out_file:
+			for ego,v in dictionary.iteritems():
+				i+=1
+				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
+				dataset = {}
+				for net1 in nets:
+					if net1 == "n1":
+						layer1 = "a"
+					elif net1 == "n9":
+						layer1 = "s"
+					elif net1 == "n2":
+						layer1 = "r"
+					elif net1 == "n3":
+						layer1 = "l"
+					elif net1 == "n4":
+						layer1 = "m"
+					else:
+						print ("Rede 1 inválida")
+						sys.exit()
 
-			edge_list1 = "/home/amaury/graphs_hashmap/"+str(net1)+"/graphs_with_ego/"							# Diretório da camada i
+					edge_list1 = "/home/amaury/graphs_hashmap/"+str(net1)+"/graphs_with_ego/"							# Diretório da camada i
 
-			if not os.path.isdir(edge_list1):																				# Verifica se diretório existe	
-				print ("Impossível localizar diretório com lista de arestas: "+str(edge_list1))
+					if not os.path.isdir(edge_list1):																				# Verifica se diretório existe	
+						print ("Impossível localizar diretório com lista de arestas: "+str(edge_list1))
 
-			else:
+					else:
 
-				source = str(edge_list1)+str(ego)+".edge_list"
-				G1 = nx.read_weighted_edgelist(source,create_using=nx.DiGraph())								# Carrega o grafo da camada i
-				nodes1 = set(G1.nodes)
-				for net2 in nets:																								# Busca pelo arquivo do mesmo ego nas outras camadas (redes) j
-					if net1 != net2:
-						if not net2 < net1:
-							if net2 == "n1":
-								layer2 = "a"
-							elif net2 == "n9":
-								layer2 = "s"
-							elif net2 == "n2":
-								layer2 = "r"
-							elif net2 == "n3":
-								layer2 = "l"
-							elif net2 == "n4":
-								layer2 = "m"
-							else:
-								print ("Rede 2 inválida")
-								sys.exit()	
+						source = str(edge_list1)+str(ego)+".edge_list"
+						G1 = nx.read_weighted_edgelist(source,create_using=nx.DiGraph())								# Carrega o grafo da camada i
+						nodes1 = set(G1.nodes)
+						for net2 in nets:																								# Busca pelo arquivo do mesmo ego nas outras camadas (redes) j
+							if net1 != net2:
+								if not net2 < net1:
+									if net2 == "n1":
+										layer2 = "a"
+									elif net2 == "n9":
+										layer2 = "s"
+									elif net2 == "n2":
+										layer2 = "r"
+									elif net2 == "n3":
+										layer2 = "l"
+									elif net2 == "n4":
+										layer2 = "m"
+									else:
+										print ("Rede 2 inválida")
+										sys.exit()	
 														
-							dest = "/home/amaury/graphs_hashmap/"+str(net2)+"/graphs_with_ego/"+str(ego)+".edge_list"	# Diretório do arquivo na camada j							
-							if not os.path.isfile(dest):																	# Testa se arquivo do mesmo ego existe na camada j	
-#								pass								
-								print ("Impossível localizar arquivo no destino: "+str(dest))
-							else:
-								G2 = nx.read_weighted_edgelist(dest,create_using=nx.DiGraph())					# Carrega o grafo da camada j
-								nodes2 = set(G2.nodes)																		
+									dest = "/home/amaury/graphs_hashmap/"+str(net2)+"/graphs_with_ego/"+str(ego)+".edge_list"	# Diretório do arquivo na camada j							
+									if not os.path.isfile(dest):																	# Testa se arquivo do mesmo ego existe na camada j	
+#										pass								
+										print ("Impossível localizar arquivo no destino: "+str(dest))
+									else:
+										G2 = nx.read_weighted_edgelist(dest,create_using=nx.DiGraph())					# Carrega o grafo da camada j
+										nodes2 = set(G2.nodes)																		
 
-								result = jaccard_similarity(nodes1,nodes2)											# Calcula Jaccard dos dois grafos
-								pair=str(layer1)+str(layer2)
-								dataset[pair] = result
-								print i,ego,net1,net2,layer1,layer2,result
-								
-		print
-		print
-		for k,v in dataset.iteritems():
-			print ego,k,v			
-		
-								#############  FALTA SALVARRRRRRRR
-
+										result = jaccard_similarity(nodes1,nodes2)											# Calcula Jaccard dos dois grafos
+										pair=str(layer1)+str(layer2)
+										dataset[pair] = result
+										print i,ego,net1,net2,layer1,layer2,result
+				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
+				print
+				print
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -128,7 +142,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"							# Pegar a lista com os ids dos egos
+data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"									# Pegar a lista com os ids dos egos
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/"	# Pegar a lista com os ids dos egos
 
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos
