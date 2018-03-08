@@ -35,7 +35,6 @@ def jaccard_similarity(x,y):
 	return intersection_cardinality/float(union_cardinality)
 
 
-
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -48,7 +47,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo da similaridade (JACCARD)) para a par entre os alters das camadas			"
+	print" Cálculo da similaridade (JACCARD) para a par entre os alters das camadas			"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -56,6 +55,7 @@ def main():
 	for ego,v in dictionary.iteritems():
 		i+=1
 		nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
+		dataset = {}
 		for net1 in nets:
 			if net1 == "n1":
 				layer1 = "a"
@@ -107,10 +107,14 @@ def main():
 								nodes2 = set(G2.nodes)																		
 
 								result = jaccard_similarity(nodes1,nodes2)											# Calcula Jaccard dos dois grafos
+								pair=str(layer1)+str(layer2)
+								dataset[pair] = result
 								print i,ego,net1,net2,layer1,layer2,result
-							
+								
 		print
-		print			
+		print
+		for k,v in dataset.iteritems():
+			print ego,k,v			
 		
 								#############  FALTA SALVARRRRRRRR
 
