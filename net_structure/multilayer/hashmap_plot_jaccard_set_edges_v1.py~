@@ -40,13 +40,13 @@ def create_dirs(x):
 ######################################################################################################################################################################
 # HTML
 ######################################################################################################################################################################
-def plotly_jaccard_over_vertices(data,output,name,pairs):
+def plotly_jaccard_over_edges(data,output,name,pairs):
 	print ("\nCriando histograma dinâmico...")
 	print ("Salvando dados em: "+str(output)+"\n")
 
-	trace = go.Histogram(x=data, name="vértices", marker=dict(color='green'))
+	trace = go.Histogram(x=data, name="edges", marker=dict(color='green'))
 	_data = [trace]
-	layout = go.Layout(title="Jaccard over Vértices - "+str(pairs), xaxis=dict(title='jaccard'),yaxis=dict(title="egos"))    
+	layout = go.Layout(title="Jaccard over Edges - "+str(pairs), xaxis=dict(title='Jaccard'),yaxis=dict(title="Egos"))    
 	fig = go.Figure(data=_data, layout=layout)
 
 	plotly.offline.plot(fig, filename=output+pairs+".html",auto_open=False)
@@ -57,13 +57,13 @@ def plotly_jaccard_over_vertices(data,output,name,pairs):
 ######################################################################################################################################################################
 # Histograma
 ######################################################################################################################################################################
-def plot_jaccard_over_vertices(data,output,name,pairs):
+def plot_jaccard_over_edges(data,output,name,pairs):
 	print ("\nCriando histograma...")
 	print ("Salvando dados em: "+str(output)+"\n")
 	plt.hist(data,color='green')
-	plt.xlabel ("jaccard")
-	plt.ylabel (pairs)
-	plt.title ("Jaccard over Vértices - "+str(pairs))
+	plt.xlabel ("Jaccard")
+	plt.ylabel ("Egos")
+	plt.title ("Jaccard over Edges - "+str(pairs))
 	plt.legend(loc='best')
 	plt.savefig(output+pairs+".png")
 	plt.close()
@@ -113,16 +113,16 @@ def print_data_jaccard_over_vertives(metric,file,output):
 					_rl.append(value)
 				elif key == "rm":
 					_rm.append(value)
-		plot_jaccard_over_vertices(_rs,output,metric,"Retweets and Followers")
-		plot_jaccard_over_vertices(_lm,output,metric,"Likes and Mentions")
-		plot_jaccard_over_vertices(_am,output,metric,"Following and Mentions")
-		plot_jaccard_over_vertices(_al,output,metric,"Following and Likes")
-		plot_jaccard_over_vertices(_as,output,metric,"Following and Followers")
-		plot_jaccard_over_vertices(_ar,output,metric,"Following and Retweets")
-		plot_jaccard_over_vertices(_ls,output,metric,"Likes and Followers")
-		plot_jaccard_over_vertices(_ms,output,metric,"Mentions and Followers")
-		plot_jaccard_over_vertices(_rl,output,metric,"Retweets and Likes")
-		plot_jaccard_over_vertices(_rm,output,metric,"Retweets and Mentions")
+		plot_jaccard_over_edges(_rs,output,metric,"Retweets and Followers")
+		plot_jaccard_over_edges(_lm,output,metric,"Likes and Mentions")
+		plot_jaccard_over_edges(_am,output,metric,"Following and Mentions")
+		plot_jaccard_over_edges(_al,output,metric,"Following and Likes")
+		plot_jaccard_over_edges(_as,output,metric,"Following and Followers")
+		plot_jaccard_over_edges(_ar,output,metric,"Following and Retweets")
+		plot_jaccard_over_edges(_ls,output,metric,"Likes and Followers")
+		plot_jaccard_over_edges(_ms,output,metric,"Mentions and Followers")
+		plot_jaccard_over_edges(_rl,output,metric,"Retweets and Likes")
+		plot_jaccard_over_edges(_rm,output,metric,"Retweets and Mentions")
 					
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -140,33 +140,15 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	print"  1 - Jaccard over Vertices Set"
-	print"  2 - "
-	print"  3 - "		
-	print"  4 - "
-	print"  5 - "						
-	print
-	op1 = int(raw_input("Escolha uma opção acima: "))
-
-	if op1 == 1:
-		metric = "jaccard_set_vertices"
-		if not os.path.exists(str(data_dir)+str(metric)+".json"):																				# Verifica se diretório existe
-			print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
-		else:
-			file = str(data_dir)+str(metric)+".json"
-			output =str(output_dir)+str(metric)+"/"
-			create_dirs(output)
-			print_data_jaccard_over_vertives(metric,file,output)
-
-
+	metric = "jaccard_set_edges"
+	if not os.path.exists(str(data_dir)+str(metric)+".json"):																				# Verifica se diretório existe
+		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
-		metric = ""
-		print("Opção inválida! Saindo...")
-		sys.exit()		
-	print
-	print ("\n")
+		file = str(data_dir)+str(metric)+".json"
+		output =str(output_dir)+str(metric)+"/"
+		create_dirs(output)
+		print_data_jaccard_over_vertives(metric,file,output)
 
-			
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")

@@ -6,7 +6,6 @@ import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
 import networkx as nx
-import histograms
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -75,7 +74,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo da similaridade (JACCARD) para a par entre os alters das camadas			"
+	print" Cálculo da similaridade (JACCARD) para a par entre os vertices das camadas		"
 	print"																											"
 	print"#################################################################################"
 	print

@@ -6,13 +6,12 @@ import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
 import networkx as nx
-import histograms
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para calcular o jaccard entre os conjuntos de vértices das redes-ego, par-a-par e armazenar em um arquivo texto.
+##		Status - Versão 1 - Script para calcular o jaccard entre os conjuntos de arestas das redes-ego, par-a-par e armazenar em um arquivo texto.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
 ##	INPUT: Redes-ego
@@ -50,7 +49,7 @@ def jaccard_similarity(x,y):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"jaccard_set_vertices.json","w") as f:
+	with open(output_dir_json+"jaccard_set_edges.json","w") as f:
 		f.write(json.dumps(dataset_json))
 ######################################################################################################################################################################
 #
@@ -75,19 +74,19 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo da similaridade (JACCARD) para a par entre os vertices das camadas		"
+	print" Cálculo da similaridade (JACCARD) para a par entre os arestas das camadas			"
 	print"																											"
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_txt+"jaccard_set_vertices.txt"):
-		print ("Arquivo de destino já existe!"+str(output_dir_txt+"jaccard_set_vertices.txt"))
+	if os.path.exists(output_dir_txt+"jaccard_set_edges.txt"):
+		print ("Arquivo de destino já existe!"+str(output_dir_txt+"jaccard_set_edges.txt"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
 
-		with open(output_dir_txt+"jaccard_set_vertices.txt",'w') as out_file:
+		with open(output_dir_txt+"jaccard_set_edges.txt",'w') as out_file:
 			
 			for ego,v in dictionary.iteritems():
 				i+=1
@@ -117,7 +116,7 @@ def main():
 
 						source = str(edge_list1)+str(ego)+".edge_list"
 						G1 = nx.read_weighted_edgelist(source,create_using=nx.DiGraph())								# Carrega o grafo da camada i
-						nodes1 = set(G1.nodes)
+						edges1 = set(G1.edges)
 						for net2 in nets:																								# Busca pelo arquivo do mesmo ego nas outras camadas (redes) j
 							if net1 != net2:
 								if not net2 < net1:
@@ -141,9 +140,9 @@ def main():
 										print ("Impossível localizar arquivo no destino: "+str(dest))
 									else:
 										G2 = nx.read_weighted_edgelist(dest,create_using=nx.DiGraph())					# Carrega o grafo da camada j
-										nodes2 = set(G2.nodes)																		
+										edges2 = set(G2.edges)																		
 
-										result = jaccard_similarity(nodes1,nodes2)											# Calcula Jaccard dos dois grafos
+										result = jaccard_similarity(edges1,edges2)											# Calcula Jaccard dos dois grafos
 										pair=str(layer1)+str(layer2)
 										dataset[pair] = result
 										print i,ego,net1,net2,layer1,layer2,result
