@@ -148,7 +148,7 @@ def main():
 										dataset[pair] = result
 										print i,ego,net1,net2,layer1,layer2,result
 				dataset_json[ego] = dataset
-				print dataset_json[ego] = dataset
+				print dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 				
 				print

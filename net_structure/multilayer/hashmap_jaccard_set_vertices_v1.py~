@@ -154,7 +154,7 @@ def main():
 				print
 				print
 			
-			save_json(dataset_json)																									# Salvar arquivo no formato JSON
+		save_json(dataset_json)																									# Salvar arquivo no formato JSON
 				
 	print("\n######################################################################\n")
 	print("Script finalizado!")
