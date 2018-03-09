@@ -147,12 +147,14 @@ def main():
 										pair=str(layer1)+str(layer2)
 										dataset[pair] = result
 										print i,ego,net1,net2,layer1,layer2,result
-				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 				dataset_json[ego] = dataset
+				print dataset_json[ego] = dataset
+				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
+				
 				print
 				print
 			
-			save_json(dataset_json)																									# Salvar arquivo no formato JSON
+		save_json(dataset_json)																									# Salvar arquivo no formato JSON
 				
 	print("\n######################################################################\n")
 	print("Script finalizado!")
