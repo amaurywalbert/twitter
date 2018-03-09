@@ -44,7 +44,7 @@ def plotly_jaccard_over_edges(data,output,name,pairs):
 	print ("\nCriando histograma dinâmico...")
 	print ("Salvando dados em: "+str(output)+"\n")
 
-	trace = go.Histogram(x=data, name="edges", marker=dict(color='green'))
+	trace = go.Histogram(x=data, name="edges", marker=dict(color='blue'))
 	_data = [trace]
 	layout = go.Layout(title="Jaccard over Edges - "+str(pairs), xaxis=dict(title='Jaccard'),yaxis=dict(title="Egos"))    
 	fig = go.Figure(data=_data, layout=layout)
