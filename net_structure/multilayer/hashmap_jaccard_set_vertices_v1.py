@@ -6,6 +6,7 @@ import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
 import networkx as nx
+import histograms
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -31,7 +32,6 @@ def create_dirs(x,y):
 		os.makedirs(x)
 	if not os.path.exists(y):
 		os.makedirs(y)		
-
 
 ######################################################################################################################################################################
 #
@@ -155,7 +155,6 @@ def main():
 				print
 			
 		save_json(dataset_json)																									# Salvar arquivo no formato JSON
-				
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
