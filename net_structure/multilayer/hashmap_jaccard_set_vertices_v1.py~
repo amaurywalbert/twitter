@@ -50,7 +50,8 @@ def jaccard_similarity(x,y):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"jaccard_set_vertices.json","w"):
+	with open(output_dir_json+"jaccard_set_vertices.json","w") as f:
+		f.write(json.dumps(overview))
 		json.dumps(dataset_json)		
 ######################################################################################################################################################################
 #
@@ -148,7 +149,7 @@ def main():
 										dataset[pair] = result
 										print i,ego,net1,net2,layer1,layer2,result
 				dataset_json[ego] = dataset
-				print dataset_json[ego] = dataset
+				print dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 				
 				print
