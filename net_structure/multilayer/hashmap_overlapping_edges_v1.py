@@ -73,11 +73,11 @@ def save_file(ego,dataset,f):
 
 def main():
 	os.system('clear')
-	print "################################################################################"
-	print"																											"
-	print" Cálculo da Interseção (Overlapping) para a par entre os arestas das camadas		"
-	print"																											"
-	print"#################################################################################"
+	print "###############################################################################"
+	print"																										"
+	print" Cálculo da Interseção (Overlapping) para a par entre as arestas das camadas	"
+	print"																										"
+	print"################################################################################"
 	print
 	i=0
 	if os.path.exists(output_dir_json+"overlapping_edges.json"):
@@ -145,7 +145,7 @@ def main():
 								pair=str(layer1)+str(layer2)
 								dataset[pair] = result
 				dataset_json[ego] = dataset
-				print dataset_json[ego]
+				print i, dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 				
 				print
