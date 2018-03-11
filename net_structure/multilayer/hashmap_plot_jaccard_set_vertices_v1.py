@@ -8,12 +8,18 @@ from math import*
 import networkx as nx
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
+import matplotlib as mpl
 import pylab
 import numpy as np
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
 import pandas as pd
+import pandas_datareader
+from pandas_datareader import data, wb
+from pandas import Series, DataFrame
+pd.__version__
+
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -35,7 +41,6 @@ sys.setdefaultencoding('utf-8')
 def create_dirs(x):
 	if not os.path.exists(x):
 		os.makedirs(x)	
-
 
 ######################################################################################################################################################################
 # HTML
@@ -69,7 +74,7 @@ def plot_jaccard_over_vertices(data,output,name,pairs):
 	plt.close()
 
 	print (" - OK! Histograma salvo em: "+str(output))
-	print		
+	print
 
 ######################################################################################################################################################################
 #
