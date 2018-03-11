@@ -84,9 +84,9 @@ def calc_metric(G,metric):
 				max_betweenneess = (n_nodes-1)*(n_nodes-2)
 			else:
 				max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
-				for node in Nodes:
-					bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
-					bc_n.append(bc_n_normalized)
+			for node in Nodes:
+				bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
+				bc_n.append(bc_n_normalized)
 		_bc_n = calc.calcular(bc_n)			
 		result = _bc_n['media']
 
@@ -102,9 +102,9 @@ def calc_metric(G,metric):
 				max_betweenneess = (n_nodes-1)*(n_nodes-2)
 			else:
 				max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
-				for edge in Edges:
-					bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
-					bc_e.append(bc_e_normalized)
+			for edge in Edges:
+				bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
+				bc_e.append(bc_e_normalized)
 		_bc_e = calc.calcular(bc_e)
 		result = _bc_e['media']
 
