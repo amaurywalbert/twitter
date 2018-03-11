@@ -145,7 +145,7 @@ def main():
 								pair=str(layer1)+str(layer2)
 								dataset[pair] = result
 				dataset_json[ego] = dataset
-				print dataset_json[ego]
+				print i,dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 				
 				print

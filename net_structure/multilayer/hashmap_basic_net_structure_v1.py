@@ -55,7 +55,7 @@ def calc_metric(G,metric):
 		result = n_nodes+n_edges
 
 	elif metric == "avg_degree":
-		result = float(n_edges)/float(n_nodes)
+		result = float(2*n_edges)/float(n_nodes)
 
 	elif metric == "diameter":
 		result = snap.GetBfsFullDiam(G, 100, IsDir)
@@ -232,7 +232,7 @@ def main():
 				dataset_json[ego] = dataset
 				print i, metric, dataset_json[ego]
 				save_file(ego,dataset,out_file)																						# Salvar arquivo texto
-				print("\n")
+				print
 		save_json(dataset_json,metric)																								# Salvar arquivo no formato JSON
 	print("\n######################################################################\n")
 	print("Script finalizado!")

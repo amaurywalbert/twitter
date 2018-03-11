@@ -147,8 +147,6 @@ def main():
 				dataset_json[ego] = dataset
 				print i, dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
-				
-				print
 				print
 			
 		save_json(dataset_json)																										# Salvar arquivo no formato JSON
