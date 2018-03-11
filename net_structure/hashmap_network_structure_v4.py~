@@ -101,7 +101,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 					cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
 		
 #####################################################################################
-
+ #### Tem que corrigir... fazer uma versão 5 com correção: se n_nodes < 3 a bc fica = n_edges e deveria ser bc=0
 				if n_edges == 0 or n_nodes < 3:
 					bc_n.append(n_edges)
 					bc_e.append(n_edges)	
@@ -137,7 +137,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 
 #####################################################################################
 
-				print	n[i-1], e[i-1], d[i-1], cc[i-1], bc_n[i-1], bc_e[i-1]
+				print	n[i-1], e[i-1], dens[i-1], d[i-1], cc[i-1], bc_n[i-1], bc_e[i-1]
 				print 
 #####################################################################################		
 		
