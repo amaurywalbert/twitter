@@ -6,7 +6,6 @@ import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
 import networkx as nx
-import histograms
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
@@ -80,8 +79,8 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_txt+"jaccard_set_vertices.txt"):
-		print ("Arquivo de destino já existe!"+str(output_dir_txt+"jaccard_set_vertices.txt"))
+	if os.path.exists(output_dir_json+"jaccard_set_vertices.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"jaccard_set_vertices.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 

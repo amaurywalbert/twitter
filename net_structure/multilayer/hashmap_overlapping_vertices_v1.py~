@@ -80,8 +80,8 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_txt+"overlapping_vertices.txt"):
-		print ("Arquivo de destino já existe!"+str(output_dir_txt+"overlapping_vertices.txt"))
+	if os.path.exists(output_dir_json+"overlapping_vertices.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"overlapping_vertices.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 
@@ -144,7 +144,6 @@ def main():
 								result = overlapping_pairs(nodes1,nodes2)													# Calcula a sobreposição dos dois grafos
 								pair=str(layer1)+str(layer2)
 								dataset[pair] = result
-								print i,ego,net1,net2,layer1,layer2,result
 				dataset_json[ego] = dataset
 				print dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto

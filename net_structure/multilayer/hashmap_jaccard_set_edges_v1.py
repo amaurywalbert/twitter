@@ -79,8 +79,8 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_txt+"jaccard_set_edges.txt"):
-		print ("Arquivo de destino já existe!"+str(output_dir_txt+"jaccard_set_edges.txt"))
+	if os.path.exists(output_dir_json+"jaccard_set_edges.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"jaccard_set_edges.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 
@@ -145,7 +145,6 @@ def main():
 										result = jaccard_similarity(edges1,edges2)											# Calcula Jaccard dos dois grafos
 										pair=str(layer1)+str(layer2)
 										dataset[pair] = result
-										print i,ego,net1,net2,layer1,layer2,result
 				dataset_json[ego] = dataset
 				print dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto

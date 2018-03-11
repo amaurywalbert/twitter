@@ -11,8 +11,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para calcular a interseção entre os conjuntos de vértices das redes-ego, par-a-par e armazenar em um arquivo texto.
-##								- Quero descobrir se há porcentagem de sobreamento entre as redes... quantos vértices em comum, sobrepostos.
+##		Status - Versão 1 - Script para calcular a interseção entre os conjuntos de arestas das redes-ego, par-a-par e armazenar em um arquivo texto.
+##								- Quero descobrir se há porcentagem de sobreamento entre as redes... quantas arestas em comum, sobrepostas. 
 ##								- Para os conjuntos x e y, calcula-se a interseção dos conjuntos x e y sobre o tamanho do conjunto x. Faz-se o processo para todo par de conjuntos (layers)
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
@@ -36,7 +36,7 @@ def create_dirs(x,y):
 
 ######################################################################################################################################################################
 #
-# Cálculo da Interseção entre os dois conjuntos de vértices
+# Cálculo da Interseção entre os dois conjuntos de arestas
 #
 ######################################################################################################################################################################
 def overlapping_pairs(x,y):
@@ -50,7 +50,7 @@ def overlapping_pairs(x,y):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"overlapping_vertices.json","w") as f:
+	with open(output_dir_json+"overlapping_edges.json","w") as f:
 		f.write(json.dumps(dataset_json))
 ######################################################################################################################################################################
 #
@@ -75,19 +75,19 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo da Interseção (Overlapping) para a par entre os vértices das camadas		"
+	print" Cálculo da Interseção (Overlapping) para a par entre os arestas das camadas		"
 	print"																											"
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_json+"overlapping_vertices.json"):
-		print ("Arquivo de destino já existe!"+str(output_dir_json+"overlapping_vertices.json"))
+	if os.path.exists(output_dir_json+"overlapping_edges.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"overlapping_edges.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
 
-		with open(output_dir_txt+"overlapping_vertices.txt",'w') as out_file:
+		with open(output_dir_txt+"overlapping_edges.txt",'w') as out_file:
 			
 			for ego,v in dictionary.iteritems():
 				i+=1
@@ -111,13 +111,13 @@ def main():
 					edge_list1 = "/home/amaury/graphs_hashmap/"+str(net1)+"/graphs_with_ego/"							# Diretório da camada i
 
 					if not os.path.isdir(edge_list1):																				# Verifica se diretório existe	
-						print ("Impossível localizar diretório com lista de vértices: "+str(edge_list1))
+						print ("Impossível localizar diretório com lista de arestas: "+str(edge_list1))
 
 					else:
 
 						source = str(edge_list1)+str(ego)+".edge_list"
 						G1 = nx.read_weighted_edgelist(source,create_using=nx.DiGraph())								# Carrega o grafo da camada i
-						nodes1 = set(G1.nodes)
+						edges1 = set(G1.edges)
 						G1.clear()
 						for net2 in nets:																								# Busca pelo arquivo do mesmo ego nas outras camadas (redes) j
 							if net2 == "n1":
@@ -139,9 +139,9 @@ def main():
 								print ("Impossível localizar arquivo no destino: "+str(dest))
 							else:
 								G2 = nx.read_weighted_edgelist(dest,create_using=nx.DiGraph())					# Carrega o grafo da camada j
-								nodes2 = set(G2.nodes)																		
+								edges2 = set(G2.edges)																		
 								G2.clear()
-								result = overlapping_pairs(nodes1,nodes2)													# Calcula a sobreposição dos dois grafos
+								result = overlapping_pairs(edges1,edges2)													# Calcula a sobreposição dos dois grafos
 								pair=str(layer1)+str(layer2)
 								dataset[pair] = result
 				dataset_json[ego] = dataset
