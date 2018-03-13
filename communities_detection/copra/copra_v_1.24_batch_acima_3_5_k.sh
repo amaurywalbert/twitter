@@ -191,8 +191,8 @@ case $op in
 	echo
 	;;
 esac
-INPUT_DIR=/home/amaury/graphs_hashmap_acima_3_5_k_alters/$NET/$GRAPH/
-OUTPUT_DIR=/home/amaury/communities_hashmap_acima_3_5_k_alters/$GRAPH/$algorithm/raw/$NET/
+INPUT_DIR=/home/amaury/graphs/$NET/$GRAPH/
+OUTPUT_DIR=/home/amaury/communities/$GRAPH/$algorithm/raw/$NET/
 
 #Execução do algoritmo...
 ###############################################################
