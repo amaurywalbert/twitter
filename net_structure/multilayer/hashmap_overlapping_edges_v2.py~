@@ -42,7 +42,7 @@ def create_dirs(x,y):
 def overlapping_pairs(x,y):
 
 	intersection_cardinality = len(set.intersection(*[set(x), set(y)]))
-	if x <= y:
+	if len(x) <= len(y):
 		result = intersection_cardinality/float(len(x))
 	else:
 		result = intersection_cardinality/float(len(y))	 
