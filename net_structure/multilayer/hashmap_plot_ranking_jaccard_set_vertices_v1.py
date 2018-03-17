@@ -96,7 +96,7 @@ def make_plot(metric,df,output):
 	# The frame is matplotlib.patches.Rectangle instance surrounding the legend.
 	frame = legend.get_frame()
 	frame.set_facecolor('0.90')
-
+	
 	# Set the fontsize
 	for label in legend.get_texts():
 		label.set_fontsize('large')

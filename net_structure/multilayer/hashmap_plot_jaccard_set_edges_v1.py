@@ -66,8 +66,9 @@ def color_bar_jaccard(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_m
 	print df
 	
 #	plt.matshow(df)
-#	plt.matshow(df,cmap='hot')
-	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
+#	plt.matshow(df,cmap='gray')
+#	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
+	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 20))
 	plt.xticks(range(len(df.columns)), df.columns)
 	plt.yticks(range(len(df.columns)), df.columns)
 

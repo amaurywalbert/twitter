@@ -117,6 +117,7 @@ def main():
 						source = str(edge_list1)+str(ego)+".edge_list"
 						G1 = nx.read_weighted_edgelist(source,create_using=nx.DiGraph())								# Carrega o grafo da camada i
 						nodes1 = set(G1.nodes)
+						G1.clear()						
 						for net2 in nets:																								# Busca pelo arquivo do mesmo ego nas outras camadas (redes) j
 							if net1 != net2:
 								if not net2 < net1:
@@ -141,7 +142,7 @@ def main():
 									else:
 										G2 = nx.read_weighted_edgelist(dest,create_using=nx.DiGraph())					# Carrega o grafo da camada j
 										nodes2 = set(G2.nodes)																		
-
+										G2.clear()
 										result = jaccard_similarity(nodes1,nodes2)											# Calcula Jaccard dos dois grafos
 										pair=str(layer1)+str(layer2)
 										dataset[pair] = result

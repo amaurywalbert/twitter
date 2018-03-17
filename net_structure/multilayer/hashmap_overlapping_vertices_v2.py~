@@ -13,7 +13,7 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Script para calcular a interseção entre os conjuntos de vértices das redes-ego, par-a-par e armazenar em um arquivo texto.
 ##								- Quero descobrir se há porcentagem de sobreamento entre as redes... quantos vértices em comum, sobrepostos.
-##								- Para os conjuntos x e y, calcula-se a interseção dos conjuntos x e y sobre o tamanho de x. Faz-se o processo para todo par de conjuntos (layers)
+##								- Para os conjuntos x e y, calcula-se a interseção dos conjuntos x e y sobre o tamanho do menor conjunto - min(x,y)
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
 ##	INPUT: Redes-ego
@@ -41,8 +41,12 @@ def create_dirs(x,y):
 ######################################################################################################################################################################
 def overlapping_pairs(x,y):
 
-	intersection_cardinality = len(set.intersection(*[set(x), set(y)]))	 
-	return intersection_cardinality/float(len(x))
+	intersection_cardinality = len(set.intersection(*[set(x), set(y)]))
+	if x <= y:
+		result = intersection_cardinality/float(len(x))
+	else:
+		result = intersection_cardinality/float(len(y))	 
+	return result
 
 ######################################################################################################################################################################
 #
@@ -50,7 +54,7 @@ def overlapping_pairs(x,y):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"overlapping_vertices.json","w") as f:
+	with open(output_dir_json+"overlapping_vertices_v2.json","w") as f:
 		f.write(json.dumps(dataset_json))
 ######################################################################################################################################################################
 #
@@ -80,14 +84,14 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_json+"overlapping_vertices.json"):
-		print ("Arquivo de destino já existe!"+str(output_dir_json+"overlapping_vertices.json"))
+	if os.path.exists(output_dir_json+"overlapping_vertices_v2.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"overlapping_vertices_v2.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
 
-		with open(output_dir_txt+"overlapping_vertices.txt",'w') as out_file:
+		with open(output_dir_txt+"overlapping_vertices_v2.txt",'w') as out_file:
 			
 			for ego,v in dictionary.iteritems():
 				i+=1
@@ -120,32 +124,35 @@ def main():
 						nodes1 = set(G1.nodes)
 						G1.clear()
 						for net2 in nets:																								# Busca pelo arquivo do mesmo ego nas outras camadas (redes) j
-							if net2 == "n1":
-								layer2 = "a"
-							elif net2 == "n9":
-								layer2 = "s"
-							elif net2 == "n2":
-								layer2 = "r"
-							elif net2 == "n3":
-								layer2 = "l"
-							elif net2 == "n4":
-								layer2 = "m"
-							else:
-								print ("Rede 2 inválida")
-								sys.exit()	
-														
-							dest = "/home/amaury/graphs_hashmap/"+str(net2)+"/graphs_with_ego/"+str(ego)+".edge_list"	# Diretório do arquivo na camada j							
-							if not os.path.isfile(dest):																	# Testa se arquivo do mesmo ego existe na camada j	
-								print ("Impossível localizar arquivo no destino: "+str(dest))
-							else:
-								G2 = nx.read_weighted_edgelist(dest,create_using=nx.DiGraph())					# Carrega o grafo da camada j
-								nodes2 = set(G2.nodes)																		
-								G2.clear()
-								result = overlapping_pairs(nodes1,nodes2)													# Calcula a sobreposição dos dois grafos
-								pair=str(layer1)+str(layer2)
-								dataset[pair] = result
+							if net1 != net2:
+								if not net2 < net1:
+									if net2 == "n1":
+										layer2 = "a"
+									elif net2 == "n9":
+										layer2 = "s"
+									elif net2 == "n2":
+										layer2 = "r"
+									elif net2 == "n3":
+										layer2 = "l"
+									elif net2 == "n4":
+										layer2 = "m"
+									else:
+										print ("Rede 2 inválida")
+										sys.exit()						
+									
+									dest = "/home/amaury/graphs_hashmap/"+str(net2)+"/graphs_with_ego/"+str(ego)+".edge_list"	# Diretório do arquivo na camada j							
+									if not os.path.isfile(dest):																	# Testa se arquivo do mesmo ego existe na camada j
+#										pass	
+										print ("Impossível localizar arquivo no destino: "+str(dest))
+									else:
+										G2 = nx.read_weighted_edgelist(dest,create_using=nx.DiGraph())					# Carrega o grafo da camada j
+										nodes2 = set(G2.nodes)																		
+										G2.clear()
+										result = overlapping_pairs(nodes1,nodes2)												# Calcula a sobreposição dos dois grafos
+										pair=str(layer1)+str(layer2)
+										dataset[pair] = result
 				dataset_json[ego] = dataset
-				print i,dataset_json[ego]
+				print i, dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 				print
 			
