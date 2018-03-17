@@ -46,7 +46,7 @@ def create_dirs(x):
 ######################################################################################################################################################################
 # Color Bar - Correlation Matrix
 ######################################################################################################################################################################
-def color_bar_jaccard(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output):
+def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output):
 	print ("\nCriando Matriz de Correlação...")
 	print ("Salvando dados em: "+str(output)+"\n")
 
@@ -68,7 +68,7 @@ def color_bar_jaccard(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_m
         'm': [_ma,_ms,_mr,_ml,_mm]
         }
 
-	df = pd.DataFrame(raw_data, columns = ['a','s','r','l','m'])
+	df = pd.DataFrame(raw_data, columns = ['following','followers','retweets','likes','mentions'])
 	print df
 	
 #	plt.matshow(df)
@@ -80,22 +80,26 @@ def color_bar_jaccard(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_m
 
 	plt.title('Jaccard over Vertices')
 	plt.colorbar()
+	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
+		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.5'))	
+
 	plt.savefig(output+"Jaccard_over_Vertices.png")
 	plt.show()
 
 	plt.close()
 	print (" - OK! Color Bar salvo em: "+str(output))
 	print
+
 ######################################################################################################################################################################
 # Histograma - HTML
 ######################################################################################################################################################################
-def plotly_jaccard_over_vertices(data,output,name,pairs):
+def plotly_hist(data,output,name,pairs):
 	print ("\nCriando histograma dinâmico...")
 	print ("Salvando dados em: "+str(output)+"\n")
 
 	trace = go.Histogram(x=data, name="vertices", marker=dict(color='green'))
 	_data = [trace]
-	layout = go.Layout(title="Jaccard over Vertices - "+str(pairs), xaxis=dict(title='Jaccard'),yaxis=dict(title="Egos"))    
+	layout = go.Layout(title="Jaccard over Vertices - "+str(pairs), xaxis=dict(title='Jaccard Coefficient'),yaxis=dict(title="Egos"))    
 	fig = go.Figure(data=_data, layout=layout)
 
 	plotly.offline.plot(fig, filename=output+pairs+".html",auto_open=False)
@@ -106,11 +110,11 @@ def plotly_jaccard_over_vertices(data,output,name,pairs):
 ######################################################################################################################################################################
 # Histograma
 ######################################################################################################################################################################
-def plot_jaccard_over_vertices(data,output,name,pairs):
+def plot_hist(data,output,name,pairs):
 	print ("\nCriando histograma...")
 	print ("Salvando dados em: "+str(output)+"\n")
 	plt.hist(data,color='green')
-	plt.xlabel ("Jaccard")
+	plt.xlabel ("Jaccard Coefficient")
 	plt.ylabel ("Egos")
 	plt.title ("Jaccard over Vertices - "+str(pairs))
 	plt.legend(loc='best')
@@ -124,12 +128,12 @@ def plot_jaccard_over_vertices(data,output,name,pairs):
 ######################################################################################################################################################################
 # Histograma
 ######################################################################################################################################################################
-def plot_jaccard_over_vertices_stacked(data,output,name,pairs):
+def plot_hist_stacked(data,output,name,pairs):
 	nBins = 10
 	print ("\nCriando histograma...")
 	print ("Salvando dados em: "+str(output)+"\n")
 	plt.hist(data, nBins, normed=1, histtype='bar', stacked=True)
-	plt.xlabel ("Jaccard")
+	plt.xlabel ("Jaccard Coefficient")
 	plt.ylabel ("Egos")
 	plt.title ("Jaccard over Vertices - "+str(pairs))
 	plt.legend(loc='best')
@@ -145,93 +149,91 @@ def plot_jaccard_over_vertices_stacked(data,output,name,pairs):
 # Plotar Gŕaficos relacionados aos dados
 #
 ######################################################################################################################################################################
-def print_data_jaccard(metric,file,output):
-	with open(file,'r') as f:
-		
+def prepare(metric,file,output):
+	with open(file,'r') as f:	
 		data = json.load(f)
-		pairs = {}
-		_rs = []
-		_lm = [] 
-		_am = [] 
-		_al = []
-		_as = [] 
-		_ar = [] 
-		_ls = [] 
-		_ms = [] 
-		_rl = [] 
-		_rm = [] 
+	pairs = {}
+	_rs = []
+	_lm = [] 
+	_am = [] 
+	_al = []
+	_as = [] 
+	_ar = [] 
+	_ls = [] 
+	_ms = [] 
+	_rl = [] 
+	_rm = [] 
 
-		for k,v in data.iteritems():
-			for key,value in v.iteritems():
-				if key == "rs":
-					_rs.append(value)
-				elif key == "lm":	
-					_lm.append(value)
-				elif key == "am":
-					_am.append(value)
-				elif key == "al":
-					_al.append(value)
-				elif key == "as":
-					_as.append(value)
-				elif key == "ar":
-					_ar.append(value)
-				elif key == "ls":
-					_ls.append(value)
-				elif key == "ms":
-					_ms.append(value)
-				elif key == "rl":
-					_rl.append(value)
-				elif key == "rm":
-					_rm.append(value)
-		plot_jaccard_over_vertices(_rs,output,metric,"Retweets and Followers")
-		plot_jaccard_over_vertices(_lm,output,metric,"Likes and Mentions")
-		plot_jaccard_over_vertices(_am,output,metric,"Following and Mentions")
-		plot_jaccard_over_vertices(_al,output,metric,"Following and Likes")
-		plot_jaccard_over_vertices(_as,output,metric,"Following and Followers")
-		plot_jaccard_over_vertices(_ar,output,metric,"Following and Retweets")
-		plot_jaccard_over_vertices(_ls,output,metric,"Likes and Followers")
-		plot_jaccard_over_vertices(_ms,output,metric,"Mentions and Followers")
-		plot_jaccard_over_vertices(_rl,output,metric,"Retweets and Likes")
-		plot_jaccard_over_vertices(_rm,output,metric,"Retweets and Mentions")
+	for k,v in data.iteritems():
+		for key,value in v.iteritems():
+			if key == "rs":
+				_rs.append(value)
+			elif key == "lm":	
+				_lm.append(value)
+			elif key == "am":
+				_am.append(value)
+			elif key == "al":
+				_al.append(value)
+			elif key == "as":
+				_as.append(value)
+			elif key == "ar":
+				_ar.append(value)
+			elif key == "ls":
+				_ls.append(value)
+			elif key == "ms":
+				_ms.append(value)
+			elif key == "rl":
+				_rl.append(value)
+			elif key == "rm":
+				_rm.append(value)
+	plot_hist(_rs,output,metric,"Retweets and Followers")
+	plot_hist(_lm,output,metric,"Likes and Mentions")
+	plot_hist(_am,output,metric,"Following and Mentions")
+	plot_hist(_al,output,metric,"Following and Likes")
+	plot_hist(_as,output,metric,"Following and Followers")
+	plot_hist(_ar,output,metric,"Following and Retweets")
+	plot_hist(_ls,output,metric,"Likes and Followers")
+	plot_hist(_ms,output,metric,"Mentions and Followers")
+	plot_hist(_rl,output,metric,"Retweets and Likes")
+	plot_hist(_rm,output,metric,"Retweets and Mentions")
 		
-		_rs_avg = calc.calcular_full(_rs)
-		_rs_avg = _rs_avg['media'] 
+	_rs_avg = calc.calcular_full(_rs)
+	_rs_avg = _rs_avg['media'] 
 
-		_lm_avg = calc.calcular_full(_lm)
-		_lm_avg = _lm_avg['media']
+	_lm_avg = calc.calcular_full(_lm)
+	_lm_avg = _lm_avg['media']
 		
-		_am_avg = calc.calcular_full(_am)
-		_am_avg = _am_avg['media']
+	_am_avg = calc.calcular_full(_am)
+	_am_avg = _am_avg['media']
 
-		_al_avg = calc.calcular_full(_al)
-		_al_avg = _al_avg['media']
+	_al_avg = calc.calcular_full(_al)
+	_al_avg = _al_avg['media']
 		
-		_as_avg = calc.calcular_full(_as)
-		_as_avg = _as_avg['media']
+	_as_avg = calc.calcular_full(_as)
+	_as_avg = _as_avg['media']
 		
-		_ar_avg = calc.calcular_full(_ar)
-		_ar_avg = _ar_avg['media']
+	_ar_avg = calc.calcular_full(_ar)
+	_ar_avg = _ar_avg['media']
 		
-		_ls_avg = calc.calcular_full(_ls)
-		_ls_avg = _ls_avg['media']
+	_ls_avg = calc.calcular_full(_ls)
+	_ls_avg = _ls_avg['media']
 		
-		_ms_avg = calc.calcular_full(_ms)
-		_ms_avg = _ms_avg['media']
+	_ms_avg = calc.calcular_full(_ms)
+	_ms_avg = _ms_avg['media']
 
-		_rl_avg = calc.calcular_full(_rl)
-		_rl_avg = _rl_avg['media']
+	_rl_avg = calc.calcular_full(_rl)
+	_rl_avg = _rl_avg['media']
 		
-		_rm_avg = calc.calcular_full(_rm)
-		_rm_avg = _rm_avg['media']
+	_rm_avg = calc.calcular_full(_rm)
+	_rm_avg = _rm_avg['media']
 		
-		_aa_avg = 1.0
-		_ss_avg = 1.0
-		_rr_avg = 1.0
-		_ll_avg = 1.0
-		_mm_avg = 1.0
+	_aa_avg = 1.0
+	_ss_avg = 1.0
+	_rr_avg = 1.0
+	_ll_avg = 1.0
+	_mm_avg = 1.0
 		
-		
-		color_bar_jaccard(_rs_avg,_lm_avg,_am_avg,_al_avg,_as_avg,_ar_avg,_ls_avg,_ms_avg,_rl_avg,_rm_avg,_aa_avg,_ss_avg,_rr_avg,_ll_avg,_mm_avg,output_dir)
+	color_bar(_rs_avg,_lm_avg,_am_avg,_al_avg,_as_avg,_ar_avg,_ls_avg,_ms_avg,_rl_avg,_rm_avg,_aa_avg,_ss_avg,_rr_avg,_ll_avg,_mm_avg,output_dir)
 		
 					
 ######################################################################################################################################################################
@@ -251,13 +253,13 @@ def main():
 	print"#################################################################################"
 	print
 	metric = "jaccard_set_vertices"
-	if not os.path.exists(str(data_dir)+str(metric)+".json"):																				# Verifica se diretório existe
+	if not os.path.exists(str(data_dir)+str(metric)+".json"):													# Verifica se diretório existe
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
 		file = str(data_dir)+str(metric)+".json"
 		output =str(output_dir)+str(metric)+"/"
 		create_dirs(output)
-		print_data_jaccard(metric,file,output)
+		prepare(metric,file,output)
 
 	print("\n######################################################################\n")
 	print("Script finalizado!")

@@ -51,6 +51,9 @@ def create_dirs(x):
 ######################################################################################################################################################################
 
 def make_plot(metric,df,output):
+	patterns = [ "/" , "\\" , "|" , "-" , "+" , "x", "o", "O", ".", "*" ]
+
+	
 	f, ax = plt.subplots(1, figsize=(10,5))																# Create a figure with a single subplot
 	bar_width = 1																									# Set bar width at 1
 	bar_l = [i for i in range(len(df['rl']))]																# positions of the left bar-boundaries 

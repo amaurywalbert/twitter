@@ -43,7 +43,7 @@ def create_dirs(x):
 	if not os.path.exists(x):
 		os.makedirs(x)	
 
-######################################################################################################################################################################
+#####################################################################################################################################################################
 # Color Bar - Correlation Matrix
 ######################################################################################################################################################################
 def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output):
@@ -68,22 +68,22 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
         'm': [_ma,_ms,_mr,_ml,_mm]
         }
 
-	df = pd.DataFrame(raw_data, columns = ['a','s','r','l','m'])
+	df = pd.DataFrame(raw_data, columns = ['follow','followers','retweets','likes','mentions'])
 	print df
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
 #	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 40))
+	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 20))
 	plt.xticks(range(len(df.columns)), df.columns)
 	plt.yticks(range(len(df.columns)), df.columns)
 
-	plt.title('Jaccard over Vertices')
+	plt.title('Overlapping Vertices')
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
-		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.5'))	
-
-	plt.savefig(output+"Jaccard_over_Vertices.png")
+		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.5'))
+		
+	plt.savefig(output+"Overlapping_Vertices.png")
 	plt.show()
 
 	plt.close()
@@ -99,7 +99,7 @@ def plotly_hist(data,output,name,pairs):
 
 	trace = go.Histogram(x=data, name="vertices", marker=dict(color='green'))
 	_data = [trace]
-	layout = go.Layout(title="Jaccard over Vertices - "+str(pairs), xaxis=dict(title='Jaccard Coefficient'),yaxis=dict(title="Egos"))    
+	layout = go.Layout(title="Overlapping Vertices - "+str(pairs), xaxis=dict(title='Overlapping Degree'),yaxis=dict(title="Egos"))    
 	fig = go.Figure(data=_data, layout=layout)
 
 	plotly.offline.plot(fig, filename=output+pairs+".html",auto_open=False)
@@ -114,30 +114,10 @@ def plot_hist(data,output,name,pairs):
 	print ("\nCriando histograma...")
 	print ("Salvando dados em: "+str(output)+"\n")
 	plt.hist(data,color='green')
-	plt.xlabel ("Jaccard Coefficient")
+	plt.xlabel ("Overlapping Degree")
 	plt.ylabel ("Egos")
-	plt.title ("Jaccard over Vertices - "+str(pairs))
+	plt.title ("Overlapping Vertices - "+str(pairs))
 	plt.legend(loc='best')
-	plt.savefig(output+pairs+".png")
-	plt.close()
-
-	print (" - OK! Histograma salvo em: "+str(output))
-	print
-
-
-######################################################################################################################################################################
-# Histograma
-######################################################################################################################################################################
-def plot_hist_stacked(data,output,name,pairs):
-	nBins = 10
-	print ("\nCriando histograma...")
-	print ("Salvando dados em: "+str(output)+"\n")
-	plt.hist(data, nBins, normed=1, histtype='bar', stacked=True)
-	plt.xlabel ("Jaccard Coefficient")
-	plt.ylabel ("Egos")
-	plt.title ("Jaccard over Vertices - "+str(pairs))
-	plt.legend(loc='best')
-	plt.show()
 	plt.savefig(output+pairs+".png")
 	plt.close()
 
@@ -150,7 +130,7 @@ def plot_hist_stacked(data,output,name,pairs):
 #
 ######################################################################################################################################################################
 def prepare(metric,file,output):
-	with open(file,'r') as f:	
+	with open(file,'r') as f:
 		data = json.load(f)
 	pairs = {}
 	_rs = []
@@ -235,7 +215,7 @@ def prepare(metric,file,output):
 		
 	color_bar(_rs_avg,_lm_avg,_am_avg,_al_avg,_as_avg,_ar_avg,_ls_avg,_ms_avg,_rl_avg,_rm_avg,_aa_avg,_ss_avg,_rr_avg,_ll_avg,_mm_avg,output_dir)
 		
-					
+	
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -252,11 +232,11 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "jaccard_set_vertices"
-	if not os.path.exists(str(data_dir)+str(metric)+".json"):													# Verifica se diretório existe
-		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
+	metric = "overlapping_vertices"
+	if not os.path.exists(str(data_dir)+str(metric)+"_v2.json"):												# Verifica se diretório existe
+		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+"_v2.json")
 	else:
-		file = str(data_dir)+str(metric)+".json"
+		file = str(data_dir)+str(metric)+"_v2.json"
 		output =str(output_dir)+str(metric)+"/"
 		create_dirs(output)
 		prepare(metric,file,output)

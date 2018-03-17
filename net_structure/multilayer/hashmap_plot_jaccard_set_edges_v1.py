@@ -40,7 +40,7 @@ def create_dirs(x):
 ######################################################################################################################################################################
 # Color Bar - Correlation Matrix
 ######################################################################################################################################################################
-def color_bar_jaccard(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output):
+def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output):
 	print ("\nCriando Matriz de Correlação...")
 	print ("Salvando dados em: "+str(output)+"\n")
 
@@ -74,6 +74,9 @@ def color_bar_jaccard(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_m
 
 	plt.title('Jaccard over Edges')
 	plt.colorbar()
+	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
+		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.5'))
+		
 	plt.savefig(output+"Jaccard_over_Edges.png")
 	plt.show()
 
@@ -84,13 +87,13 @@ def color_bar_jaccard(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_m
 ######################################################################################################################################################################
 # HTML
 ######################################################################################################################################################################
-def plotly_jaccard_over_edges(data,output,name,pairs):
+def plotly_hist(data,output,name,pairs):
 	print ("\nCriando histograma dinâmico...")
 	print ("Salvando dados em: "+str(output)+"\n")
 
 	trace = go.Histogram(x=data, name="edges", marker=dict(color='blue'))
 	_data = [trace]
-	layout = go.Layout(title="Jaccard over Edges - "+str(pairs), xaxis=dict(title='Jaccard'),yaxis=dict(title="Egos"))    
+	layout = go.Layout(title="Jaccard over Edges - "+str(pairs), xaxis=dict(title='Jaccard Coefficient'),yaxis=dict(title="Egos"))    
 	fig = go.Figure(data=_data, layout=layout)
 
 	plotly.offline.plot(fig, filename=output+pairs+".html",auto_open=False)
@@ -101,11 +104,11 @@ def plotly_jaccard_over_edges(data,output,name,pairs):
 ######################################################################################################################################################################
 # Histograma
 ######################################################################################################################################################################
-def plot_jaccard_over_edges(data,output,name,pairs):
+def plot_hist(data,output,name,pairs):
 	print ("\nCriando histograma...")
 	print ("Salvando dados em: "+str(output)+"\n")
 	plt.hist(data,color='green')
-	plt.xlabel ("Jaccard")
+	plt.xlabel ("Jaccard Coefficient")
 	plt.ylabel ("Egos")
 	plt.title ("Jaccard over Edges - "+str(pairs))
 	plt.legend(loc='best')
@@ -120,7 +123,7 @@ def plot_jaccard_over_edges(data,output,name,pairs):
 # Plotar Gŕaficos relacionados aos dados
 #
 ######################################################################################################################################################################
-def print_data_jaccard(metric,file,output):
+def prepare(metric,file,output):
 	with open(file,'r') as f:
 		data = json.load(f)
 		pairs = {}
@@ -157,16 +160,16 @@ def print_data_jaccard(metric,file,output):
 					_rl.append(value)
 				elif key == "rm":
 					_rm.append(value)
-		plot_jaccard_over_edges(_rs,output,metric,"Retweets and Followers")
-		plot_jaccard_over_edges(_lm,output,metric,"Likes and Mentions")
-		plot_jaccard_over_edges(_am,output,metric,"Following and Mentions")
-		plot_jaccard_over_edges(_al,output,metric,"Following and Likes")
-		plot_jaccard_over_edges(_as,output,metric,"Following and Followers")
-		plot_jaccard_over_edges(_ar,output,metric,"Following and Retweets")
-		plot_jaccard_over_edges(_ls,output,metric,"Likes and Followers")
-		plot_jaccard_over_edges(_ms,output,metric,"Mentions and Followers")
-		plot_jaccard_over_edges(_rl,output,metric,"Retweets and Likes")
-		plot_jaccard_over_edges(_rm,output,metric,"Retweets and Mentions")
+		plot_hist(_rs,output,metric,"Retweets and Followers")
+		plot_hist(_lm,output,metric,"Likes and Mentions")
+		v(_am,output,metric,"Following and Mentions")
+		plot_hist(_al,output,metric,"Following and Likes")
+		plot_hist(_as,output,metric,"Following and Followers")
+		plot_hist(_ar,output,metric,"Following and Retweets")
+		plot_hist(_ls,output,metric,"Likes and Followers")
+		plot_hist(_ms,output,metric,"Mentions and Followers")
+		plot_hist(_rl,output,metric,"Retweets and Likes")
+		plot_hist(_rm,output,metric,"Retweets and Mentions")
 
 		_rs_avg = calc.calcular_full(_rs)
 		_rs_avg = _rs_avg['media'] 
@@ -205,7 +208,7 @@ def print_data_jaccard(metric,file,output):
 		_mm_avg = 1.0
 		
 		
-		color_bar_jaccard(_rs_avg,_lm_avg,_am_avg,_al_avg,_as_avg,_ar_avg,_ls_avg,_ms_avg,_rl_avg,_rm_avg,_aa_avg,_ss_avg,_rr_avg,_ll_avg,_mm_avg,output_dir)
+		color_bar(_rs_avg,_lm_avg,_am_avg,_al_avg,_as_avg,_ar_avg,_ls_avg,_ms_avg,_rl_avg,_rm_avg,_aa_avg,_ss_avg,_rr_avg,_ll_avg,_mm_avg,output_dir)
 		
 									
 ######################################################################################################################################################################
@@ -231,7 +234,7 @@ def main():
 		file = str(data_dir)+str(metric)+".json"
 		output =str(output_dir)+str(metric)+"/"
 		create_dirs(output)
-		print_data_jaccard(metric,file,output)
+		prepare(metric,file,output)
 
 	print("\n######################################################################\n")
 	print("Script finalizado!")

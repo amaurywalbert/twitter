@@ -278,7 +278,9 @@ def print_data_overlapping_vertives(metric,file,output):
 			
 	_ar_avg = calc.calcular_full(_ar)
 	_ar_avg = _ar_avg['media']
-		
+	_ra_avg = calc.calcular_full(_ra)
+	_ra_avg = _ra_avg['media']
+			
 	_ls_avg = calc.calcular_full(_ls)
 	_ls_avg = _ls_avg['media']
 		
