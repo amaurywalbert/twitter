@@ -11,8 +11,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para calcular a interseção entre os conjuntos de vértices das redes-ego, par-a-par e armazenar em um arquivo texto.
-##								- Quero descobrir se há porcentagem de sobreamento entre as redes... quantos vértices em comum, sobrepostos.
+##		Status - Versão 1 - Script para calcular a interseção entre os conjuntos de arestas das redes-ego, par-a-par e armazenar em um arquivo texto.
+##								- Quero descobrir se há porcentagem de sobreamento entre as redes... quantos arestas em comum, sobrepostos.
 ##								- Para os conjuntos x e y, calcula-se a interseção dos conjuntos x e y sobre o tamanho do menor conjunto - min(x,y)
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
@@ -36,7 +36,7 @@ def create_dirs(x,y):
 
 ######################################################################################################################################################################
 #
-# Cálculo da Interseção entre os dois conjuntos de vértices
+# Cálculo da Interseção entre os dois conjuntos de arestas
 #
 ######################################################################################################################################################################
 def overlapping_pairs(x,y):
@@ -79,7 +79,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo da Interseção (Overlapping) para a par entre os vértices das camadas		"
+	print" Cálculo da Interseção (Overlapping) para a par entre as arestas das camadas		"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -115,7 +115,7 @@ def main():
 					edge_list1 = "/home/amaury/graphs_hashmap/"+str(net1)+"/graphs_with_ego/"							# Diretório da camada i
 
 					if not os.path.isdir(edge_list1):																				# Verifica se diretório existe	
-						print ("Impossível localizar diretório com lista de vértices: "+str(edge_list1))
+						print ("Impossível localizar diretório com lista de aretas: "+str(edge_list1))
 
 					else:
 

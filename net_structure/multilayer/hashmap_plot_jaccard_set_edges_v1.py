@@ -55,11 +55,11 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_lr=_rl
 	_mr=_rm
 
-	raw_data = {'a': [_aa,_as,_ar,_al,_am],
-        's': [_sa,_ss,_sr,_sl,_sm],
-        'r': [_ra,_rs,_rr,_rl,_rm],
-        'l': [_la,_ls,_lr,_ll,_lm],
-        'm': [_ma,_ms,_mr,_ml,_mm]
+	raw_data = {'following': [_aa,_as,_ar,_al,_am],
+        'followers': [_sa,_ss,_sr,_sl,_sm],
+        'retweets': [_ra,_rs,_rr,_rl,_rm],
+        'likes': [_la,_ls,_lr,_ll,_lm],
+        'mentions': [_ma,_ms,_mr,_ml,_mm]
         }
 
 	df = pd.DataFrame(raw_data, columns = ['following','followers','retweets','likes','mentions'])
