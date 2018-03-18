@@ -162,7 +162,7 @@ def prepare(metric,file,output):
 					_rm.append(value)
 		plot_hist(_rs,output,metric,"Retweets and Followers")
 		plot_hist(_lm,output,metric,"Likes and Mentions")
-		v(_am,output,metric,"Following and Mentions")
+		plot_hist(_am,output,metric,"Following and Mentions")
 		plot_hist(_al,output,metric,"Following and Likes")
 		plot_hist(_as,output,metric,"Following and Followers")
 		plot_hist(_ar,output,metric,"Following and Retweets")
