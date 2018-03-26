@@ -52,15 +52,17 @@ def create_dirs(x):
 #
 ######################################################################################################################################################################
 def to_percent(y, position):
-    # Ignore the passed in position. This has the effect of scaling the default
-    # tick locations.
-    s = str(100 * y)
+	# Ignore the passed in position. This has the effect of scaling the default
+	# tick locations.
+	s = str(100 * y)
 
-    # The percent symbol needs escaping in latex
-    if matplotlib.rcParams['text.usetex'] is True:
-        return s + r'$\%$'
-    else:
-        return s + '%'
+	# The percent symbol needs escaping in latex
+	if matplotlib.rcParams['text.usetex'] is True:
+#		return s + r'$\%$'
+		return s
+	else:
+#		return s + '%'
+		return s
         
         
 ######################################################################################################################################################################
@@ -119,7 +121,7 @@ def plot_hist(data,output,name,pairs):
 	
 	weights = np.ones_like(data)/float(len(data))
 #	plt.hist(data, weights=weights,color='black',rwidth=0.5,bins=10,range=[0.0, 1])
-	plt.hist(data, weights=weights,color='black',rwidth=0.5,bins=10)
+	plt.hist(data, weights=weights,color='black',rwidth=0.75,bins=10)
 
 	formatter = FuncFormatter(to_percent)						# Create the formatter using the function to_percent. This multiplies all the default labels by 100, making them all percentages
 	plt.gca().yaxis.set_major_formatter(formatter)
@@ -127,10 +129,12 @@ def plot_hist(data,output,name,pairs):
 	plt.xlabel ("Jaccard value intervals - "+str(pairs))
 	plt.ylabel ("% of egos")
 #	plt.xlim(xmin=0, xmax = 1.0)
-#	plt.ylim(ymin=0, ymax = 0.99)
+	plt.ylim(ymin=0, ymax = 0.65)
 
 #	plt.title ("Jaccard over Vertices - "+str(pairs))
 	plt.legend(loc='best')
+#	plt.grid(zorder=10)
+	plt.grid()
 	plt.savefig(output+pairs+".png")
 	plt.close()
 

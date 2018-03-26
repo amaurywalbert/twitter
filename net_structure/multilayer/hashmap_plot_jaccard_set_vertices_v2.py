@@ -52,15 +52,17 @@ def create_dirs(x):
 #
 ######################################################################################################################################################################
 def to_percent(y, position):
-    # Ignore the passed in position. This has the effect of scaling the default
-    # tick locations.
-    s = str(100 * y)
+	# Ignore the passed in position. This has the effect of scaling the default
+	# tick locations.
+	s = str(100 * y)
 
-    # The percent symbol needs escaping in latex
-    if matplotlib.rcParams['text.usetex'] is True:
-        return s + r'$\%$'
-    else:
-        return s + '%'
+	# The percent symbol needs escaping in latex
+	if matplotlib.rcParams['text.usetex'] is True:
+#		return s + r'$\%$'
+		return s
+	else:
+#		return s + '%'
+		return s
         
         
 ######################################################################################################################################################################
@@ -127,10 +129,12 @@ def plot_hist(data,output,name,pairs):
 	plt.xlabel ("Jaccard value intervals - "+str(pairs))
 	plt.ylabel ("% of egos")
 #	plt.xlim(xmin=0, xmax = 1.0)
-#	plt.ylim(ymin=0, ymax = 0.99)
+	plt.ylim(ymin=0, ymax = 0.65)
 
 #	plt.title ("Jaccard over Vertices - "+str(pairs))
 	plt.legend(loc='best')
+#	plt.grid(zorder=10)
+	plt.grid()
 	plt.savefig(output+pairs+".png")
 	plt.close()
 
