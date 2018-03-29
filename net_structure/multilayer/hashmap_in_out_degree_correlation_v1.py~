@@ -13,7 +13,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para calcular a Reciprocity e armazenar o resultado num arquivo texto.
+##		Status - Versão 1 - Script para calcular a correlação entre in-degree e out-degree e armazenar o resultado num arquivo texto.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
 ##	INPUT: Redes-ego
@@ -34,6 +34,38 @@ def create_dirs(x,y):
 	if not os.path.exists(y):
 		os.makedirs(y)		
 
+######################################################################################################################################################################
+#
+# Cálculo Correlação In-Degree e Out-Degree
+#
+######################################################################################################################################################################
+def in_out_degree_correlation(G):
+	result = None        #REMOVER
+	in_degree = {}
+	out_degree = {}
+	v_in_d = []
+	v_out_d = []
+	
+	InDegV = snap.TIntPrV()
+	snap.GetNodeInDegV(G,InDegV)					#Retorna o id do vertice e o grau de entrada- inclusive se o grau for 0 
+	for item in InDegV:
+		node = item.GetVal1()
+		degree = item.GetVal2()
+		in_degree[node] = degree
+	
+	OutDegV = snap.TIntPrV()
+	snap.GetNodeOutDegV(G, OutDegV)
+	for item in OutDegV:
+		node = item.GetVal1()
+		degree = item.GetVal2()
+		out_degree[node] = degree
+
+	for k,v in in_degree.iteritems():
+		if k in out_degree:
+			v_in_d.append(v)
+			v_out_d.append(out_degree[k])
+	result = pearsonr(v_in_d,v_out_d)				#Retorna uma tupla (coef,p-value)
+	return result[0]									 	#Retorna apenas o coef									
 
 ######################################################################################################################################################################
 #
@@ -41,7 +73,7 @@ def create_dirs(x,y):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"reciprocity.json","w") as f:
+	with open(output_dir_json+"in_out_degree_correlation.json","w") as f:
 		f.write(json.dumps(dataset_json))
 ######################################################################################################################################################################
 #
@@ -66,17 +98,17 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo da reciprocity em cada Layer			"
+	print" Cálculo da in_out_degree_correlation em cada Layer			"
 	print"																											"
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_json+"reciprocity.json"):
-		print ("Arquivo de destino já existe!"+str(output_dir_json+"reciprocity.json"))
+	if os.path.exists(output_dir_json+"in_out_degree_correlation.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"in_out_degree_correlation.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
-		with open(output_dir_txt+"reciprocity.txt",'w') as out_file:
+		with open(output_dir_txt+"in_out_degree_correlation.txt",'w') as out_file:
 			for ego,v in dictionary.iteritems():
 				i+=1
 				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
@@ -102,8 +134,8 @@ def main():
 						print ("Impossível localizar diretório com lista de arestas: "+str(edge_list))
 					else:
 						source = str(edge_list)+str(ego)+".edge_list"
-						G = nx.read_weighted_edgelist(str(source),create_using=nx.DiGraph())							# Carrega o grafo da camada i - Direcionado e Ponderado
-						result = nx.overall_reciprocity(G)																		# Calcula reciprocity em cada layer
+						G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)					   							# Carrega o grafo da camada i - Direcionado e Não Ponderado
+						result = in_out_degree_correlation(G)																	# Calcula in_out_degree_correlation em cada layer
 						dataset[layer] = result
 						
 				dataset_json[ego] = dataset
