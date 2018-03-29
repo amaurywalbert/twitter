@@ -129,7 +129,7 @@ def plot_hist(data,output,name,pairs):
 	plt.xlabel ("Jaccard value intervals - "+str(pairs))
 	plt.ylabel ("% of egos")
 #	plt.xlim(xmin=0, xmax = 1.0)
-	plt.ylim(ymin=0, ymax = 0.65)
+	plt.ylim(ymin=0, ymax = 0.90)
 
 #	plt.title ("Jaccard over Edges - "+str(pairs))
 	plt.legend(loc='best')
