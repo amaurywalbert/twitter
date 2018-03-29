@@ -6,8 +6,6 @@ import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
 import networkx as nx
-from scipy.stats.stats import pearsonr 
-
 import pandas as pd
 import pandas_datareader
 from pandas_datareader import data, wb
@@ -64,8 +62,9 @@ def get_in_degree_rank(G):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"rank_correlation.json","w") as f:
+	with open(output_dir_json+"spearman_rank_correlation.json","w") as f:
 		f.write(json.dumps(dataset_json))
+
 ######################################################################################################################################################################
 #
 # Salvar arquivo texto com padrão:  ego_id as:data ar:data al:data am:data ... rm:data  
@@ -76,7 +75,30 @@ def save_file(ego,dataset,f):
 	for k,v in dataset.iteritems():
 		f.write(" "+str(k)+":"+str(v))
 	f.write("\n")
-					
+
+######################################################################################################################################################################
+#
+# Calcula a Correlação de Spearman entre os rankings de pares de layers  
+#
+######################################################################################################################################################################
+def calc_spearman_corr(dataset):
+	pairs = {}
+	df = pd.DataFrame(dataset, columns = ['a','s','r','l','m'])
+	result = df.corr(method='spearman')
+
+	pairs['as'] = result.loc['a','s']
+	pairs['ar'] = result.loc['a','r']
+	pairs['al'] = result.loc['a','l']
+	pairs['am'] = result.loc['a','m']
+	pairs['rs'] = result.loc['r','s']
+	pairs['rl'] = result.loc['r','l']
+	pairs['rm'] = result.loc['r','m']
+	pairs['ls'] = result.loc['l','s']
+	pairs['lm'] = result.loc['l','m']
+	pairs['ms'] = result.loc['m','s']
+	
+	return pairs
+						
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -94,50 +116,49 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_json+"rank_correlation.json"):
-		print ("Arquivo de destino já existe!"+str(output_dir_json+"rank_correlation.json"))
+	if os.path.exists(output_dir_json+"spearman_rank_correlation.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"spearman_rank_correlation.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
-#		with open(output_dir_txt+"rank_correlation.txt",'w') as out_file:
-		for ego,v in dictionary.iteritems():
-			i+=1
-			nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
-			dataset = {}
-			for net in nets:
-				if net == "n1":
-					layer = "a"
-				elif net == "n9":
-					layer = "s"
-				elif net == "n2":
-					layer = "r"
-				elif net == "n3":
-					layer = "l"
-				elif net == "n4":
-					layer = "m"
-				else:
-					print ("Rede inválida")
-					sys.exit()
+		with open(output_dir_txt+"spearman_rank_correlation.txt",'w') as out_file:
+			for ego,v in dictionary.iteritems():
+				i+=1
+				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
+				dataset = {}
+				for net in nets:
+					if net == "n1":
+						layer = "a"
+					elif net == "n9":
+						layer = "s"
+					elif net == "n2":
+						layer = "r"
+					elif net == "n3":
+						layer = "l"
+					elif net == "n4":
+						layer = "m"
+					else:
+						print ("Rede inválida")
+						sys.exit()
 
-				edge_list = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"							# Diretório da camada i
+					edge_list = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"							# Diretório da camada i
 
-				if not os.path.isdir(edge_list):																				# Verifica se diretório existe	
-					print ("Impossível localizar diretório com lista de arestas: "+str(edge_list))
-				else:
-					source = str(edge_list)+str(ego)+".edge_list"
-					G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)					   							# Carrega o grafo da camada i - Direcionado e Não Ponderado
-					in_degree_rank = get_in_degree_rank(G)																	# Calcula rank_correlation em cada layer
-					dataset[layer] = in_degree_rank
-
-			df = pd.DataFrame(dataset, columns = ['a','s','r','l','m'])
-			print df								
-
-#				dataset_json[ego] = dataset
-#				print i, dataset_json[ego]
-#				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
-			print
-			
-#		save_json(dataset_json)																										# Salvar arquivo no formato JSON
+					if not os.path.isdir(edge_list):																				# Verifica se diretório existe	
+						print ("Impossível localizar diretório com lista de arestas: "+str(edge_list))
+					else:
+						source = str(edge_list)+str(ego)+".edge_list"
+						G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)					   							# Carrega o grafo da camada i - Direcionado e Não Ponderado
+						in_degree_rank = get_in_degree_rank(G)																	# Calcula spearman_rank_correlation em cada layer
+						dataset[layer] = in_degree_rank
+				
+				pairs = calc_spearman_corr(dataset) 
+				dataset_json[ego] = pairs
+				print i, dataset_json[ego]
+				save_file(ego,pairs,out_file)																						# Salvar arquivo texto
+				print
+						
+		save_json(dataset_json)																										# Salvar arquivo no formato JSON
+		
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")

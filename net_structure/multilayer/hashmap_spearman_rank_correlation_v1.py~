@@ -62,7 +62,7 @@ def get_in_degree_rank(G):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"rank_correlation.json","w") as f:
+	with open(output_dir_json+"spearman_rank_correlation.json","w") as f:
 		f.write(json.dumps(dataset_json))
 
 ######################################################################################################################################################################
@@ -86,16 +86,16 @@ def calc_spearman_corr(dataset):
 	df = pd.DataFrame(dataset, columns = ['a','s','r','l','m'])
 	result = df.corr(method='spearman')
 
-	pairs['as'] = result.loc['a','s']
-	pairs['ar'] = result.loc['a','r']
-	pairs['al'] = result.loc['a','l']
+#	pairs['as'] = result.loc['a','s']
+#	pairs['ar'] = result.loc['a','r']
+#	pairs['al'] = result.loc['a','l']
 	pairs['am'] = result.loc['a','m']
-	pairs['rs'] = result.loc['r','s']
-	pairs['rl'] = result.loc['r','l']
-	pairs['rm'] = result.loc['r','m']
-	pairs['ls'] = result.loc['l','s']
-	pairs['lm'] = result.loc['l','m']
-	pairs['ms'] = result.loc['m','s']
+#	pairs['rs'] = result.loc['r','s']
+#	pairs['rl'] = result.loc['r','l']
+#	pairs['rm'] = result.loc['r','m']
+#	pairs['ls'] = result.loc['l','s']
+#	pairs['lm'] = result.loc['l','m']
+#	pairs['ms'] = result.loc['m','s']
 	
 	return pairs
 						
@@ -116,12 +116,12 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_json+"rank_correlation.json"):
-		print ("Arquivo de destino já existe!"+str(output_dir_json+"rank_correlation.json"))
+	if os.path.exists(output_dir_json+"spearman_rank_correlation.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"spearman_rank_correlation.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
-		with open(output_dir_txt+"rank_correlation.txt",'w') as out_file:
+		with open(output_dir_txt+"spearman_rank_correlation.txt",'w') as out_file:
 			for ego,v in dictionary.iteritems():
 				i+=1
 				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
@@ -148,7 +148,7 @@ def main():
 					else:
 						source = str(edge_list)+str(ego)+".edge_list"
 						G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)					   							# Carrega o grafo da camada i - Direcionado e Não Ponderado
-						in_degree_rank = get_in_degree_rank(G)																	# Calcula rank_correlation em cada layer
+						in_degree_rank = get_in_degree_rank(G)																	# Calcula spearman_rank_correlation em cada layer
 						dataset[layer] = in_degree_rank
 				
 				pairs = calc_spearman_corr(dataset) 
