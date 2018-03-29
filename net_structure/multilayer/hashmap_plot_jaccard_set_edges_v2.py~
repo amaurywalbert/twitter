@@ -100,12 +100,12 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	plt.xticks(range(len(df.columns)), df.columns)
 	plt.yticks(range(len(df.columns)), df.columns)
 
-	plt.title('Jaccard over Vertices')
+	plt.title('Jaccard over Edges')
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))	
 
-	plt.savefig(output+"Jaccard_over_Vertices.png")
+	plt.savefig(output+"Jaccard_over_Edges.png")
 	plt.show()
 
 	plt.close()
@@ -131,7 +131,7 @@ def plot_hist(data,output,name,pairs):
 #	plt.xlim(xmin=0, xmax = 1.0)
 	plt.ylim(ymin=0, ymax = 0.65)
 
-#	plt.title ("Jaccard over Vertices - "+str(pairs))
+#	plt.title ("Jaccard over Edges - "+str(pairs))
 	plt.legend(loc='best')
 #	plt.grid(zorder=10)
 	plt.grid()
@@ -252,7 +252,7 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "jaccard_set_vertices"
+	metric = "jaccard_set_edges"
 	if not os.path.exists(str(data_dir)+str(metric)+".json"):													# Verifica se diretório existe
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
