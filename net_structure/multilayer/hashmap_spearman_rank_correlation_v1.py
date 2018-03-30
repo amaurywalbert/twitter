@@ -4,6 +4,7 @@
 #
 import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
+import matplotlib.pyplot as plt
 from math import*
 import networkx as nx
 import pandas as pd
@@ -17,7 +18,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para calcular a correlação ranks.
+##		Status - Versão 1 - Script para calcular a correlação de ranks.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
 ##	INPUT: Redes-ego
@@ -83,19 +84,48 @@ def save_file(ego,dataset,f):
 ######################################################################################################################################################################
 def calc_spearman_corr(dataset):
 	pairs = {}
-	df = pd.DataFrame(dataset, columns = ['a','s','r','l','m'])
-	result = df.corr(method='spearman')
+	
+	df = pd.DataFrame(dataset, columns = ['a','s','r','l','m'])				#Coloca os dados em um frame onde as colunas são as camadas e as linhas são os vértices
+	print df.info()
 
-	pairs['as'] = result.loc['a','s']
-	pairs['ar'] = result.loc['a','r']
-	pairs['al'] = result.loc['a','l']
-	pairs['am'] = result.loc['a','m']
-	pairs['rs'] = result.loc['r','s']
-	pairs['rl'] = result.loc['r','l']
-	pairs['rm'] = result.loc['r','m']
-	pairs['ls'] = result.loc['l','s']
-	pairs['lm'] = result.loc['l','m']
-	pairs['ms'] = result.loc['m','s']
+#	result = df.corr(method='spearman')												#Calcula a correlação par-a-par entre as colunas do frame
+	print
+	print df.corr(method='spearman')
+	print df.corr(method='kendall')
+	print
+
+
+
+	#plot correlated values
+	plt.rcParams['figure.figsize'] = [16, 6]
+
+	fig, ax = plt.subplots(nrows=1, ncols=3)
+
+	ax=ax.flatten()
+
+	cols = ['a', 's', 'r']
+	colors=['#415952', '#f35134', '#243AB5', '#243AB5']
+	j=0
+
+	for i in ax:
+		if j==0:
+			i.set_ylabel('MPG')
+		i.scatter(mpg_data[cols[j]], mpg_data['mpg'],  alpha=0.5, color=colors[j])
+		i.set_xlabel(cols[j])
+		i.set_title('Pearson: %s'%mpg_data.corr().loc[cols[j]]['mpg'].round(2)+' Spearman: %s'%mpg_data.corr(method='spearman').loc[cols[j]]['mpg'].round(2))
+		j+=1
+	plt.show()
+
+#	pairs['as'] = result.loc['a','s']
+#	pairs['ar'] = result.loc['a','r']
+#	pairs['al'] = result.loc['a','l']
+#	pairs['am'] = result.loc['a','m']
+#	pairs['rs'] = result.loc['r','s']
+#	pairs['rl'] = result.loc['r','l']
+#	pairs['rm'] = result.loc['r','m']
+#	pairs['ls'] = result.loc['l','s']
+#	pairs['lm'] = result.loc['l','m']
+#	pairs['ms'] = result.loc['m','s']
 	
 	return pairs
 						

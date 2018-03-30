@@ -28,6 +28,8 @@ sys.setdefaultencoding('utf-8')
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Plotar os dados de acordo com as métricas e propriedades calculadas nas redes Multilayer
 ##
+##				INCORRETO... aguardando orientador definir a melhor maneira de apresentar os dados.
+##
 ## ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
 ##
 ## ID_ego as:data sr:data rl:data lm:data ma:data - TXT
@@ -134,34 +136,54 @@ def prepare(metric,file,output):
 				_rm.append(value)
 		
 	_rs_avg = calc.calcular_full(_rs)
-	_rs_avg = _rs_avg['media'] 
+	_rs_avg = _rs_avg['media']
+	print _rs
+	print _rs_avg 
 
 	_lm_avg = calc.calcular_full(_lm)
 	_lm_avg = _lm_avg['media']
+	print _lm_avg
+	print _lm
 		
 	_am_avg = calc.calcular_full(_am)
 	_am_avg = _am_avg['media']
+	print _am_avg
+	print _am
 
 	_al_avg = calc.calcular_full(_al)
 	_al_avg = _al_avg['media']
+	print _al_avg
+	print _al
 		
 	_as_avg = calc.calcular_full(_as)
 	_as_avg = _as_avg['media']
+	print _as_avg
+	print _as
 		
 	_ar_avg = calc.calcular_full(_ar)
 	_ar_avg = _ar_avg['media']
+	print _ar_avg
+	print _ar
 		
 	_ls_avg = calc.calcular_full(_ls)
 	_ls_avg = _ls_avg['media']
+	print _ls_avg
+	print _ls
 		
 	_ms_avg = calc.calcular_full(_ms)
 	_ms_avg = _ms_avg['media']
+	print _ms_avg
+	print _ms
 
 	_rl_avg = calc.calcular_full(_rl)
 	_rl_avg = _rl_avg['media']
+	print _rl_avg
+	print _rl
 		
 	_rm_avg = calc.calcular_full(_rm)
 	_rm_avg = _rm_avg['media']
+	print _rm_avg
+	print _rm
 		
 	_aa_avg = 1.0
 	_ss_avg = 1.0

@@ -176,10 +176,12 @@ def prepare(metric,file,output):
 	_rl_avg = calc.calcular_full(_rl)
 	_rl_avg = _rl_avg['media']
 	print _rl_avg
+	print _rl
 		
 	_rm_avg = calc.calcular_full(_rm)
 	_rm_avg = _rm_avg['media']
 	print _rm_avg
+	print _rm
 		
 	_aa_avg = 1.0
 	_ss_avg = 1.0
