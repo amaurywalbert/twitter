@@ -1,4 +1,4 @@
-	# -*- coding: latin1 -*-
+# -*- coding: latin1 -*-
 ################################################################################################
 import datetime, sys, time, json, os, os.path, shutil, time, struct, random, math
 import numpy as np
@@ -102,15 +102,6 @@ def instructions(metric,alg):
 #	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities with singletons')	
 	data1 = data_overview
 ################################################################################################
-#
-#	comm_data_dir = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
-#	output_dir = str(output)+str(metric)+"/graphs_with_ego/"+str(alg)+"/without_singletons/"
-#
-#	data,data_overview = algorithm(comm_data_dir,metric)
-#	save_data(output_dir,data,data_overview)		
-#	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs with ego - Communities without singletons')	
-#	data2 = data_overview
-################################################################################################
 
 	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"
 	output_dir = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"
@@ -120,19 +111,6 @@ def instructions(metric,alg):
 #	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities with singletons')
 	data3 = data_overview
 ################################################################################################
-#	comm_data_dir = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
-#	output_dir = str(output)+str(metric)+"/graphs_without_ego/"+str(alg)+"/without_singletons/"
-#	
-#
-#	data,data_overview = algorithm(comm_data_dir,metric)
-#	save_data(output_dir,data,data_overview)		
-#	plot_evaluation.plot_single(output,data_overview,metric,alg,title='Graphs without ego - Communities without singletons')	
-#	data4 = data_overview
-#
-################################################################################################
-#	if data1 is not None and data2 is not None and data3 is not None and data4 is not None:
-#		if len(data1) == len(data2) == len(data3) == len(data4):
-#			plot_evaluation.plot_full(output,data1,data2,data3,data4,metric,alg)
 
 	if data1 is not None and data3 is not None:
 		if len(data1) == len(data3):
@@ -185,8 +163,8 @@ def main():
 	print ("Algoritmo usado na detecção das comunidades:\n")
 	print("01 - COPRA ")
 	print("02 - OSLOM")
-	print("03 - GN")
-	print("04 - COPRA - Partition")	
+	print("03 - COPRA - Partition")	
+	print("04 - INFOMAP - Partition")	
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:
@@ -194,9 +172,9 @@ def main():
 	elif op2 == 02:
 		alg = "oslom"
 	elif op2 == 03:
-		alg = "gn"
+		alg = "copra_partition"
 	elif op2 == 04:
-		alg = "copra_partition"		
+		alg = "infomap"		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
