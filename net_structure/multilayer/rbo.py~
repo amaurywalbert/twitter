@@ -19,7 +19,7 @@ from bisect import bisect_left
 
 
 def _numtest(floatn):
-	return "{:.3f}".format(floatn)
+    return "{:.3f}".format(floatn)
 
 
 def set_at_depth(lst, depth):
