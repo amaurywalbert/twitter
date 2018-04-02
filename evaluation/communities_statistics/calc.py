@@ -61,8 +61,8 @@ def calcular_full(valores=None):
  
  				for valor in valores:
  					soma += math.pow( (valor - _media), 2)
- 					_variancia = soma / float( len(valores) )
- 					return _variancia
+ 				_variancia = soma / float( len(valores) )
+ 				return _variancia
  
  			def desvio_padrao(valores):
  				return math.sqrt( variancia(valores) )
