@@ -170,8 +170,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/"
+source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/basics/"
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/basics/"
 
 #Executa o método main
 if __name__ == "__main__": main()

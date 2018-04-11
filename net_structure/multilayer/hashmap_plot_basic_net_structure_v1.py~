@@ -5,8 +5,6 @@
 import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
-#Calculadora copiada da net...
-import calc	
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go				
@@ -173,7 +171,7 @@ def main():
 ######################################################################################################################################################################
 
 source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/"
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/basics/"
 
 #Executa o método main
 if __name__ == "__main__": main()
