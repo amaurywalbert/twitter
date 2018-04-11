@@ -80,12 +80,12 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	plt.xticks(range(len(df.columns)), df.columns)
 	plt.yticks(range(len(df.columns)), df.columns)
 
-	plt.title('Spearman Rank Correlation')
+	plt.title('Rank-Biased Overlap - Extended')
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))
 		
-	plt.savefig(output+"Spearman_Rank_Correlation.png")
+	plt.savefig(output+"Rank-Biased Overlap - Extended.png")
 	plt.show()
 
 	plt.close()
@@ -109,30 +109,30 @@ def prepare(metric,file,output):
 	_ar = [] 
 	_ls = [] 
 	_ms = [] 
-	_lr = [] 
+	_rl = [] 
 	_rm = [] 
 
 	for k,v in data.iteritems():
 		for key,value in v.iteritems():
-			if key == "rs":
+			if key == "rs" or key == "sr":
 				_rs.append(value)
-			elif key == "lm":	
+			elif key == "lm" or key == "ml":	
 				_lm.append(value)
-			elif key == "am":
+			elif key == "am" or key == "ma":
 				_am.append(value)
-			elif key == "al":
+			elif key == "al" or key == "la":
 				_al.append(value)
-			elif key == "as":
+			elif key == "as" or key == "sa":
 				_as.append(value)
-			elif key == "ar":
+			elif key == "ar" or key == "ra":
 				_ar.append(value)
-			elif key == "ls":
+			elif key == "ls" or key == "sl":
 				_ls.append(value)
-			elif key == "ms":
+			elif key == "ms" or key == "sm":
 				_ms.append(value)
-			elif key == "rl":
+			elif key == "rl" or key == "lr":
 				_rl.append(value)
-			elif key == "rm":
+			elif key == "rm" or key == "mr":
 				_rm.append(value)
 		
 	_rs_avg = calc.calcular_full(_rs)
