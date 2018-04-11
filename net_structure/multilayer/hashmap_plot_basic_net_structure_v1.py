@@ -5,8 +5,6 @@
 import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
-#Calculadora copiada da net...
-import calc	
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go				
