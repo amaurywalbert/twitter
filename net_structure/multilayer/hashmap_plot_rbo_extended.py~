@@ -109,7 +109,7 @@ def prepare(metric,file,output):
 	_ar = [] 
 	_ls = [] 
 	_ms = [] 
-	_rl = [] 
+	_lr = [] 
 	_rm = [] 
 
 	for k,v in data.iteritems():
