@@ -105,6 +105,7 @@ def main():
 	print
 	
 	metric = "in_out_degree_correlation"
+	title = "In-degree/Out-degree Correlation"
 	if not os.path.exists(str(source_dir)+str(metric)+".json"):
 		print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")
 	else:
