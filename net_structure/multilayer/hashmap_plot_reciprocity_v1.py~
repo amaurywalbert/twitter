@@ -105,7 +105,7 @@ def main():
 	print
 	
 	metric = "reciprocity"
-		title = "Reciprocity"
+	title = "Reciprocity"
 	if not os.path.exists(str(source_dir)+str(metric)+".json"):
 		print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")
 	else:
