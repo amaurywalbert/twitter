@@ -81,12 +81,12 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	plt.xticks(range(len(df.columns)), df.columns)
 	plt.yticks(range(len(df.columns)), df.columns)
 
-	plt.title('Rank-Biased Overlap - Extended')
+	plt.title('Rank-Biased Overlap (Extended) - In-Degree Rank')
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))
 		
-	plt.savefig(output+"Rank-Biased Overlap - Extended.png")
+	plt.savefig(output+"Rank-Biased Overlap - Extended - InDegreeRank.png")
 	plt.show()
 
 	plt.close()
@@ -211,7 +211,7 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "rbo_extended"
+	metric = "rbo_extended_ind_degree_rank"
 	if not os.path.exists(str(data_dir)+str(metric)+".json"):												# Verifica se diretório existe
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
