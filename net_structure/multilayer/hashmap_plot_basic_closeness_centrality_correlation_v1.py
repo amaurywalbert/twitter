@@ -202,8 +202,7 @@ def main():
 		file = str(data_dir)+str(metric)+".json"
 		output =str(output_dir)+str(metric)+"/"
 		create_dirs(output)
-		calc_correlation(metric,file,output)		
-#		prepare(metric,file,output)
+		prepare(metric,file,output)
 
 	print("\n######################################################################\n")
 	print("Script finalizado!")
