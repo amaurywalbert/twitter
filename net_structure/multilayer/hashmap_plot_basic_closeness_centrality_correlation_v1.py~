@@ -113,25 +113,25 @@ def prepare(metric,file,output):
 
 	for k,v in data.iteritems():
 		for key,value in v.iteritems():
-			if key == "rs":
+			if key == "rs" or key == "sr":
 				_rs.append(value)
-			elif key == "lm":	
+			elif key == "lm" or key == "ml":	
 				_lm.append(value)
-			elif key == "am":
+			elif key == "am" or key == "ma":
 				_am.append(value)
-			elif key == "al":
+			elif key == "al" or key == "la":
 				_al.append(value)
-			elif key == "as":
+			elif key == "as" or key == "sa":
 				_as.append(value)
-			elif key == "ar":
+			elif key == "ar" or key == "ra":
 				_ar.append(value)
-			elif key == "ls":
+			elif key == "ls" or key == "sl":
 				_ls.append(value)
-			elif key == "ms":
+			elif key == "ms" or key == "sm":
 				_ms.append(value)
-			elif key == "rl":
+			elif key == "rl" or key == "lr":
 				_rl.append(value)
-			elif key == "rm":
+			elif key == "rm" or key == "mr":
 				_rm.append(value)
 		
 	_rs_avg = calc.calcular_full(_rs)
