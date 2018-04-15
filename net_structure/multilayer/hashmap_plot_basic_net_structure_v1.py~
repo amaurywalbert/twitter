@@ -43,8 +43,8 @@ def box_plot(_a,_s,_r,_l,_m, metric,title):
 	output = str(output_dir)+"/"+str(metric)+"/"
 	create_dir(output)	
 	
-	trace0 = go.Box(y=_a,name='Following',boxmean='sd')
-	trace1 = go.Box(y=_s,name='Followers',boxmean='sd')
+	trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
+	trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
 	trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
 	trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
 	trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
@@ -170,7 +170,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"
+source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/basics/"
 output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/basics/"
 
 #Executa o método main

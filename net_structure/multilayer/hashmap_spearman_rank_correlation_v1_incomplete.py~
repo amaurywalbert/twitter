@@ -103,7 +103,7 @@ def calc_spearman_corr(dataset):
 
 	ax=ax.flatten()
 
-	cols = ['a', 's', 'r']
+	cols = ['a', 's', 'r', 'l', 'm']
 	colors=['#415952', '#f35134', '#243AB5', '#243AB5']
 	j=0
 

@@ -116,9 +116,9 @@ def make_plot(metric,df,output):
 #	plt.setp(plt.gca().get_xticklabels(), rotation=45, horizontalalignment='right')
 	
 	plt.legend(prop={'size': 12},bbox_to_anchor=(1.01, 1), loc=2, borderaxespad=0.)
-	plt.title('Ranking of Jaccard over Vertices')
+#	plt.title('Ranking of Jaccard over Vertices')
 	
-	plt.savefig(output+"Ranking_of_Jaccard_Vertices.png")
+	plt.savefig(output+"Ranking_of_Jaccard_Vertices.png",dpi=300)
 
 	# shot plot
 	plt.show()

@@ -17,6 +17,8 @@ import numpy as np
 import plotly
 import plotly.plotly as py
 import plotly.graph_objs as go
+import plotly.figure_factory as ff
+from plotly.graph_objs import *
 import pandas as pd
 import pandas_datareader
 from pandas_datareader import data, wb
@@ -83,31 +85,36 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_lr=_rl
 	_mr=_rm
 
-	raw_data = {'following': [_aa,_as,_ar,_al,_am],
-        'followers': [_sa,_ss,_sr,_sl,_sm],
-        'retweets': [_ra,_rs,_rr,_rl,_rm],
-        'likes': [_la,_ls,_lr,_ll,_lm],
-        'mentions': [_ma,_ms,_mr,_ml,_mm]
+	raw_data = {'Following': [_aa,_as,_ar,_al,_am],
+        'Followers': [_sa,_ss,_sr,_sl,_sm],
+        'Retweets': [_ra,_rs,_rr,_rl,_rm],
+        'Likes': [_la,_ls,_lr,_ll,_lm],
+        'Mentions': [_ma,_ms,_mr,_ml,_mm]
         }
 
-	df = pd.DataFrame(raw_data, columns = ['following','followers','retweets','likes','mentions'])
+	df = pd.DataFrame(raw_data, columns = ['Following','Followers','Retweets','Likes','Mentions'])
 	print df
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
 #	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 40))
-	plt.xticks(range(len(df.columns)), df.columns)
-	plt.yticks(range(len(df.columns)), df.columns)
 
-	plt.title('Jaccard over Edges')
+	
+	plt.rcParams['xtick.bottom'] = True
+	plt.rcParams['xtick.top'] = False
+	
+	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
+	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=10)
+	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=10)
+
+#	plt.title('Jaccard over Edges',y=-0.08)
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
-		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))	
+		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=9)	
 
-	plt.savefig(output+"Jaccard_over_Edges.png")
+	name = "Jaccard_over_Edges"
+	plt.savefig(output+name+".png",bbox_inches='tight',dpi=300)
 	plt.show()
-
 	plt.close()
 	print (" - OK! Color Bar salvo em: "+str(output))
 	print
@@ -233,7 +240,7 @@ def prepare(metric,file,output):
 	_mm_avg = 1.0
 
 	
-#	color_bar(_rs_avg,_lm_avg,_am_avg,_al_avg,_as_avg,_ar_avg,_ls_avg,_ms_avg,_rl_avg,_rm_avg,_aa_avg,_ss_avg,_rr_avg,_ll_avg,_mm_avg,output_dir)
+	color_bar(_rs_avg,_lm_avg,_am_avg,_al_avg,_as_avg,_ar_avg,_ls_avg,_ms_avg,_rl_avg,_rm_avg,_aa_avg,_ss_avg,_rr_avg,_ll_avg,_mm_avg,output_dir)
 		
 					
 ######################################################################################################################################################################

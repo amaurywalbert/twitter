@@ -61,29 +61,30 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_lr=_rl
 	_mr=_rm
 
-	raw_data = {'following': [_aa,_as,_ar,_al,_am],
-        'followers': [_sa,_ss,_sr,_sl,_sm],
-        'retweets': [_ra,_rs,_rr,_rl,_rm],
-        'likes': [_la,_ls,_lr,_ll,_lm],
-        'mentions': [_ma,_ms,_mr,_ml,_mm]
+	raw_data = {'Follow': [_aa,_as,_ar,_al,_am],
+        'Followee': [_sa,_ss,_sr,_sl,_sm],
+        'Retweets': [_ra,_rs,_rr,_rl,_rm],
+        'Likes': [_la,_ls,_lr,_ll,_lm],
+        'Mentions': [_ma,_ms,_mr,_ml,_mm]
         }
 
-	df = pd.DataFrame(raw_data, columns = ['following','followers','retweets','likes','mentions'])
+	df = pd.DataFrame(raw_data, columns = ['Follow','Followee','Retweets','Likes','Mentions'])
 	print df
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
 #	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 20))
-	plt.xticks(range(len(df.columns)), df.columns)
-	plt.yticks(range(len(df.columns)), df.columns)
+	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
+	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=10)
+	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=10)
 
-	plt.title('Overlapping Vertices')
+#	plt.title('Overlapping Vertices',y=-0.08)
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
-		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))
+		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=9)	
+
 		
-	plt.savefig(output+"Overlapping_Vertices.png")
+	plt.savefig(output+"Overlapping_Vertices.png",dpi=300)
 	plt.show()
 
 	plt.close()
@@ -166,16 +167,16 @@ def prepare(metric,file,output):
 				_rl.append(value)
 			elif key == "rm":
 				_rm.append(value)
-	plot_hist(_rs,output,metric,"Retweets and Followers")
-	plot_hist(_lm,output,metric,"Likes and Mentions")
-	plot_hist(_am,output,metric,"Following and Mentions")
-	plot_hist(_al,output,metric,"Following and Likes")
-	plot_hist(_as,output,metric,"Following and Followers")
-	plot_hist(_ar,output,metric,"Following and Retweets")
-	plot_hist(_ls,output,metric,"Likes and Followers")
-	plot_hist(_ms,output,metric,"Mentions and Followers")
-	plot_hist(_rl,output,metric,"Retweets and Likes")
-	plot_hist(_rm,output,metric,"Retweets and Mentions")
+	plot_hist(_rs,output,metric,"Retweets X Followee")
+	plot_hist(_lm,output,metric,"Likes X Mentions")
+	plot_hist(_am,output,metric,"Follow X Mentions")
+	plot_hist(_al,output,metric,"Follow X Likes")
+	plot_hist(_as,output,metric,"Follow X Followee")
+	plot_hist(_ar,output,metric,"Follow X Retweets")
+	plot_hist(_ls,output,metric,"Likes X Followee")
+	plot_hist(_ms,output,metric,"Mentions X Followee")
+	plot_hist(_rl,output,metric,"Retweets X Likes")
+	plot_hist(_rm,output,metric,"Retweets X Mentions")
 		
 	_rs_avg = calc.calcular_full(_rs)
 	_rs_avg = _rs_avg['media'] 

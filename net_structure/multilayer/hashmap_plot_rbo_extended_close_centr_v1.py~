@@ -63,30 +63,31 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_lr=_rl
 	_mr=_rm
 
-	raw_data = {'following': [_aa,_as,_ar,_al,_am],
-        'followers': [_sa,_ss,_sr,_sl,_sm],
-        'retweets': [_ra,_rs,_rr,_rl,_rm],
-        'likes': [_la,_ls,_lr,_ll,_lm],
-        'mentions': [_ma,_ms,_mr,_ml,_mm]
+	raw_data = {'Follow': [_aa,_as,_ar,_al,_am],
+        'Followee': [_sa,_ss,_sr,_sl,_sm],
+        'Retweets': [_ra,_rs,_rr,_rl,_rm],
+        'Likes': [_la,_ls,_lr,_ll,_lm],
+        'Mentions': [_ma,_ms,_mr,_ml,_mm]
         }
 
-	df = pd.DataFrame(raw_data, columns = ['following','followers','retweets','likes','mentions'])
+	df = pd.DataFrame(raw_data, columns = ['Follow','Followee','Retweets','Likes','Mentions'])
 	print
 	print df
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
 #	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 20))
-	plt.xticks(range(len(df.columns)), df.columns)
-	plt.yticks(range(len(df.columns)), df.columns)
+	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
+	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=10)
+	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=10)
 
-	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank')
+	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank',y=-0.08)
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
-		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.3'))
+		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=9)	
+
 		
-	plt.savefig(output+"Rank-Biased Overlap - Extended - CloseCentr.png")
+	plt.savefig(output+"rbo_close_centr.png",dpi=300)
 	plt.show()
 
 	plt.close()
