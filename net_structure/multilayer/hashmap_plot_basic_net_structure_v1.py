@@ -55,7 +55,7 @@ def box_plot(_a,_s,_r,_l,_m, metric,title):
 	layout = go.Layout(title=title_plot)
 	fig = go.Figure(data=data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output+str(metric)+"box_plot.html",auto_open=True)
+	plotly.offline.plot(fig, filename=output+str(metric)+"_box_plot.html",auto_open=True)
 	
 	
 	pass
