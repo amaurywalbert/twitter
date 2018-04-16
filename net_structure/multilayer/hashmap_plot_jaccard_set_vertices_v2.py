@@ -96,19 +96,19 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
 #	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
+
 	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
-	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=10)
-	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=10)
+	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
+	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 
 #	plt.title('Jaccard over Vertices',y=-0.08)
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
-		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=9)	
+		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
 
+	name = "Jaccard_over_Vertices"
 
-	plt.savefig(output+"Jaccard_over_Vertices.png",dpi=300)
-	plt.show()
-
+	plt.savefig(output+name+".png",bbox_inches='tight',dpi=300)
 	plt.close()
 	print (" - OK! Color Bar salvo em: "+str(output))
 	print

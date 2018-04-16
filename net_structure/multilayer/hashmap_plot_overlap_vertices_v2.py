@@ -75,17 +75,17 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 #	plt.matshow(df,cmap='gray')
 #	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
 	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
-	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=10)
-	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=10)
-	
-#	plt.title('Overlapping Edges',y=-0.08)
+	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
+	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)
+
+#	plt.title('Overlap Vertices',y=-0.08)
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
-		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=9)	
+		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
 
-		
-	plt.savefig(output+"Overlapping_Edges.png",dpi=300)
-	plt.show()
+	name = "Overlap_Vertices"
+
+	plt.savefig(output+name+".png",bbox_inches='tight',dpi=300)
 
 	plt.close()
 	print (" - OK! Color Bar salvo em: "+str(output))
@@ -98,9 +98,9 @@ def plotly_hist(data,output,name,pairs):
 	print ("\nCriando histograma dinâmico...")
 	print ("Salvando dados em: "+str(output)+"\n")
 
-	trace = go.Histogram(x=data, name="edges", marker=dict(color='green'))
+	trace = go.Histogram(x=data, name="vertices", marker=dict(color='green'))
 	_data = [trace]
-	layout = go.Layout(title="Overlapping Edges - "+str(pairs), xaxis=dict(title='Overlapping Degree'),yaxis=dict(title="Egos"))    
+	layout = go.Layout(title="Overlap Vertices - "+str(pairs), xaxis=dict(title='Overlap Degree'),yaxis=dict(title="Egos"))    
 	fig = go.Figure(data=_data, layout=layout)
 
 	plotly.offline.plot(fig, filename=output+pairs+".html",auto_open=False)
@@ -115,9 +115,9 @@ def plot_hist(data,output,name,pairs):
 	print ("\nCriando histograma...")
 	print ("Salvando dados em: "+str(output)+"\n")
 	plt.hist(data,color='green')
-	plt.xlabel ("Overlapping Degree")
+	plt.xlabel ("Overlap Degree")
 	plt.ylabel ("Egos")
-	plt.title ("Overlapping Edges - "+str(pairs))
+	plt.title ("Overlap Vertices - "+str(pairs))
 	plt.legend(loc='best')
 	plt.savefig(output+pairs+".png")
 	plt.close()
@@ -233,7 +233,7 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "overlapping_edges"
+	metric = "overlapping_vertices"
 	if not os.path.exists(str(data_dir)+str(metric)+"_v2.json"):												# Verifica se diretório existe
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+"_v2.json")
 	else:

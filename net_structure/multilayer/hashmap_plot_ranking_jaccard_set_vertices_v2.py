@@ -119,10 +119,6 @@ def make_plot(metric,df,output):
 #	plt.title('Ranking of Jaccard over Vertices')
 	
 	plt.savefig(output+"Ranking_of_Jaccard_Vertices.png",dpi=300)
-
-	# shot plot
-	plt.show()
-	
 	plt.close()
 	print (" - OK! Color Bar salvo em: "+str(output))
 	print
