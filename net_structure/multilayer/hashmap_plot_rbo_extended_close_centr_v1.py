@@ -63,13 +63,19 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_lr=_rl
 	_mr=_rm
 
-	raw_data = {'Follow': [_aa,_as,_ar,_al,_am],
+#	raw_data = {'Follow': [_aa,_as,_ar,_al,_am],
 #        'Followee': [_sa,_ss,_sr,_sl,_sm],
-        'Retweets': [_ra,_rs,_rr,_rl,_rm],
-        'Likes': [_la,_ls,_lr,_ll,_lm],
-        'Mentions': [_ma,_ms,_mr,_ml,_mm]
-        }
+#        'Retweets': [_ra,_rs,_rr,_rl,_rm],
+#        'Likes': [_la,_ls,_lr,_ll,_lm],
+#        'Mentions': [_ma,_ms,_mr,_ml,_mm]
+#        }
 
+	raw_data = {'Follow': [_aa,_ar,_al,_am],
+        'Retweets': [_ra,_rr,_rl,_rm],
+        'Likes': [_la,_lr,_ll,_lm],
+        'Mentions': [_ma,_mr,_ml,_mm]
+        }
+        
 #	df = pd.DataFrame(raw_data, columns = ['Follow','Followee','Retweets','Likes','Mentions'])
 	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'])
 	print df
@@ -83,6 +89,7 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 
 #	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank',y=-0.08)
+#	plt.colorbar(orientation='horizontal')
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	

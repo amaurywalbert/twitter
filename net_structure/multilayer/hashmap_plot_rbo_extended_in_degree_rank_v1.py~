@@ -64,13 +64,14 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_mr=_rm
 
 	raw_data = {'Follow': [_aa,_as,_ar,_al,_am],
-        'Followee': [_sa,_ss,_sr,_sl,_sm],
+#        'Followee': [_sa,_ss,_sr,_sl,_sm],
         'Retweets': [_ra,_rs,_rr,_rl,_rm],
         'Likes': [_la,_ls,_lr,_ll,_lm],
         'Mentions': [_ma,_ms,_mr,_ml,_mm]
         }
 
-	df = pd.DataFrame(raw_data, columns = ['Follow','Followee','Retweets','Likes','Mentions'])
+#	df = pd.DataFrame(raw_data, columns = ['Follow','Followee','Retweets','Likes','Mentions'])
+	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'])
 	print df
 	
 #	plt.matshow(df)
