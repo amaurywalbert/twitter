@@ -44,7 +44,7 @@ def net_structure(dataset_dir,output_dir,net,IsDir, weight):
 		diameter = {}																								# chave_valor para ego_id e diametro
 		
 		dens = []		
-		denstity = {}
+		density = {}
 		cc = []																										# Média dos Close Centrality
 		bc_n = []																									# média de betweenness centrality dos nós	
 		bc_e = []																									# média de betweenness centrality das arestas
