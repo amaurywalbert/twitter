@@ -99,10 +99,10 @@ def main():
 	print"#################################################################################"	
 	
 #	egonet_source1 = "/home/amaury/graphs/n5_3_5k/"
-#	egonet_output1 = "/home/amaury/graphs_hashmap_acima_3_5_k_alters/n5_3_5k/"
+#	egonet_output1 = "/home/amaury/graphs_hashmap/n5_3_5k/"
 
 	egonet_source2 = "/home/amaury/graphs/n10_3_5k/"
-	egonet_output2 = "/home/amaury/graphs_hashmap_acima_3_5_k_alters/n10_3_5k/"
+	egonet_output2 = "/home/amaury/graphs_hashmap/n10_3_5k/"
 
 
 	print ("Atenção! Este script apagará os seguintes diretórios:")

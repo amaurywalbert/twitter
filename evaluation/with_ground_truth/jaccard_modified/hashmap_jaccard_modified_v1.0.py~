@@ -30,7 +30,6 @@ def csj(data1,data2):
 		result = intersection/float(union)									# float(uniao) para resultado no intervalo [0,1]
 	else:
 		result = 0
-#	print ("União: "+str(union)+" --- Interseção: "+str(intersection)+" --- CSJ: "+str(result))	
 	return result
 
 ######################################################################################################################################################################
@@ -189,12 +188,13 @@ def main():
 #######################################################################
 	print("######################################################################")	
 	print
-	print "Algoritmo utilizado na detecção das comunidades"
+	print "Algoritmo utilizado na detecção das comunidades" 
 	print 
 	print" 01 - COPRA"
 	print" 02 - OSLOM"
-	print" 03 - GN"
-	print" 04 - COPRA -Partition"
+	print" 03 - GN - Partition"
+	print" 04 - COPRA - Partition"
+	print" 05 - Infomap - Partition"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:
