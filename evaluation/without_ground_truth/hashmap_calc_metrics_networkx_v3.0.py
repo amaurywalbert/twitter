@@ -246,8 +246,9 @@ def main():
 	print
 	print"  1 - COPRA"
 	print"  2 - OSLOM"
-	print"  3 - GN"		
-	print"  4 - COPRA - Partition"						
+	print"  3 - GN - Partition"		
+	print"  4 - COPRA - Partition"
+	print"  5 - INFOMAP - Partition"						
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -258,7 +259,9 @@ def main():
 	elif op2 == 3:
 		alg = "gn"
 	elif op2 == 4:
-		alg = "copra_partition"				
+		alg = "copra_partition"
+	elif op2 == 5:
+		alg = "infomap"					
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
