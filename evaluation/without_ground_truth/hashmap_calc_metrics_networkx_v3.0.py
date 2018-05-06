@@ -156,29 +156,29 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 		 
 					print("######################################################################")	
 
-#					with open(str(out_ad)+str(threshold)+".json", "w") as f:
-#						f.write(json.dumps(average_degree))
-#						
-#					with open(str(out_c)+str(threshold)+".json", "w") as f:
-#						f.write(json.dumps(conductance))
-#
-#					with open(str(out_cut_r)+str(threshold)+".json", "w") as f:
-#						f.write(json.dumps(cut_ratio))
-#											
-#					with open(str(out_d)+str(threshold)+".json", "w") as f:
-#						f.write(json.dumps(density))
-#
-#					with open(str(out_e)+str(threshold)+".json", "w") as f:
-#						f.write(json.dumps(expansion))
-#
-#					with open(str(out_normal_cut)+str(threshold)+".json", "w") as f:
-#						f.write(json.dumps(normalized_cut))
-#
-#					with open(str(out_s)+str(threshold)+".json", "w") as f:
-#						f.write(json.dumps(separability))
-#					
-#					with open(str(out_s)+str(threshold)+".json", "w") as f:
-#						f.write(json.dumps(clustering))					
+					with open(str(out_ad)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(average_degree))
+						
+					with open(str(out_c)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(conductance))
+
+					with open(str(out_cut_r)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(cut_ratio))
+											
+					with open(str(out_d)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(density))
+
+					with open(str(out_e)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(expansion))
+
+					with open(str(out_normal_cut)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(normalized_cut))
+
+					with open(str(out_s)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(separability))
+					
+					with open(str(out_s)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(clustering))					
 				partial_end = time.time()
 				partial_time_exec = partial_end - partial_start
 				print ("\nTempo de execução para o threshold "+str(threshold)+": "+str(partial_time_exec)+"\n")
