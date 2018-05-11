@@ -56,52 +56,21 @@ def main():
 	print" Escolha o algoritmo usado na detecção das comunidades									"
 	print"																											"
 	print"#################################################################################"
-	print
-	print"  1 - COPRA"
-	print"  2 - OSLOM"
-	print"  3 - GN"		
-	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"												
-	print
-	op2 = int(raw_input("Escolha uma opção acima: "))
 
-	if op2 == 1:
-		alg = "copra"
-	elif op2 == 2:
-		alg = "oslom"
-	elif op2 == 3:
-		alg = "gn"
-	elif op2 == 4:
-		alg = "copra_partition"
-	elif op2 == 5:
-		alg = "infomap"						
-	else:
-		print("Opção inválida! Saindo...")
-		sys.exit()		
 ######################################################################
-	
+
+	algs = ["copra","oslom","copra_partition","infomap"]	
 	metric = 'modularity'
-	data1 = {}
-	data2 = {}
-	data3 = {}
-	data4 = {}
+	algorithms_data = []
+
 ######################################################################		
-######################################################################
+	for alg in algs:
+		dataset = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
+		data = prepare(dataset)
+		if data is not None:
+			algorithms_data.append(data)						
+	plot_modularity.plot_full_algs_only_with_ego(output,algorithms_data,metric)
 
-	dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
-	data1 = prepare(dataset1)
-	
-######################################################################				
-######################################################################
-
-#	dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
-#	data3 = prepare(dataset3)
-
-
-#	if data1 is not None and data3:
-#		plot_coef_clust.plot_bars_full_without_singletons(output,data1,data3,metric,alg)		
-	if data1 is not None:
-		plot_modularity.plot_full_only_with_ego(output,data1,metric,alg)	
 ######################################################################
 ######################################################################	
 	

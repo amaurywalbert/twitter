@@ -286,7 +286,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 def plot_full_without_singletons(output,data1,data2,metric,alg):
 	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
 	print ("\n##################################################\n")
-	print ("Gerando Gráfico Completo...")
+	print ("Gerando Gráfico Completo..."+str(metric))
 
 	data_overview_full = [data1,data2]
 	dataset = {}
@@ -429,7 +429,6 @@ def plot_full_without_singletons(output,data1,data2,metric,alg):
 
 #	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 	plt.close()
-
 
 ######################################################################################################################################################################
 #
@@ -664,3 +663,327 @@ def plot_full_algs(output,dataset1,dataset2,dataset3,dataset4,metric):
 
 #	plt.savefig(output+"full_algs_"+str(metric)+".png")
 	plt.close()
+
+
+######################################################################################################################################################################
+# Plota Gráficos dos dados... Apenas com dados das redes with ego - with singletons
+######################################################################################################################################################################
+def plot_full_only_with_ego(output,data,metric,alg):
+	print ("\n##################################################\n")
+	print ("Gerando Gráfico Completo..."+str(metric))
+
+	data_overview = data
+	dataset = {}
+	
+	interaction = []
+	value = []
+	std = []
+	threshold = []
+			
+	co_interaction = []
+	co_value = []
+	co_std = []
+	co_threshold = []	
+	for k, v in data_overview.iteritems():
+		if k == 'n1':
+			key = 'Follow'
+			interaction.append(key)
+			value.append(round(v[metric], 3))
+			std.append(round(v['std'], 3))
+			threshold.append(v['threshold'])						
+		elif k == 'n2':
+			key = 'Retweets'			
+			interaction.append(key)
+			value.append(round(v[metric], 3))
+			std.append(round(v['std'], 3))
+			threshold.append(v['threshold'])
+		elif k == 'n3':
+			key = 'Likes'
+			interaction.append(key)
+			value.append(round(v[metric], 3))
+			std.append(round(v['std'], 3))
+			threshold.append(v['threshold'])
+		elif k == 'n4':
+			key = 'Mentions'
+			interaction.append(key)
+			value.append(round(v[metric], 3))
+			std.append(round(v['std'], 3))
+			threshold.append(v['threshold'])
+#		elif k == 'n9':
+#			key = 'Followers'
+#			interaction.append(key)
+#			value.append(round(v[metric], 3))
+#			std.append(round(v['std'], 3))
+#			threshold.append(v['threshold'])
+#					
+#		elif k == 'n5':
+#			key = 'Co-Follow'
+#			co_interaction.append(key)
+#			co_value.append(round(v[metric], 3))
+#			co_std.append(round(v['std'], 3))
+#			co_threshold.append(v['threshold'])
+#		elif k == 'n6':
+#			key = 'Co-Retweets'
+#			co_interaction.append(key)
+#			co_value.append(round(v[metric], 3))
+#			co_std.append(round(v['std'], 3))
+#			co_threshold.append(v['threshold'])
+#		elif k == 'n7':
+#			key = 'Co-Likes'
+#			co_interaction.append(key)
+#			co_value.append(round(v[metric], 3))
+#			co_std.append(round(v['std'], 3))
+#			co_threshold.append(v['threshold'])
+#		elif k == 'n8':
+#			key = 'Co-Mentions'
+#			co_interaction.append(key)
+#			co_value.append(round(v[metric], 3))
+#			co_std.append(round(v['std'], 3))
+#			co_threshold.append(v['threshold'])
+#		elif k == 'n10':
+#			key = 'Co-Followers'
+#			co_interaction.append(key)
+#			co_value.append(round(v[metric], 3))
+#			co_std.append(round(v['std'], 3))
+#			co_threshold.append(v['threshold'])
+			
+		else:
+			print ("Valor incorreto para nome da rede-ego")
+#			exit()																																						
+
+	for item in co_value:
+		value.append(item)
+	for item in co_interaction:
+		interaction.append(item)
+	for item in co_std:
+		std.append(item)
+	for item in co_threshold:
+		threshold.append(item)
+		 	
+	dataset = [value,interaction,std,threshold]
+
+	x = dataset[1]								# recebe os nomes das redes ego
+	n=len(x)
+	
+	y = np.array(dataset[0])								# recebe os valores para COM ego
+
+
+	ind=np.arange(n)
+	width=0.5
+
+	output = str(output)+"/"+str(metric)+"/"
+	
+	if not os.path.exists(output):
+		os.makedirs(output)
+################################################################################################
+	_filename = output+str(metric)+"_"+str(alg)
+	
+	if metric == "modularity_density":
+		metric = "Modularity Density"
+	elif metric == "modularity":
+		metric = "Modularity"
+	elif metric == "intra_edges":
+		metric = "Intra Edges"
+	elif metric == "intra_density":
+		metric = "Intra Density"
+	elif metric == "contraction":
+		metric = "Contraction"
+	elif metric == "inter_edges":
+		metric = "Inter Edges"
+	elif metric == "expansion":
+		metric = "Expansion"
+	elif metric == "conductance":
+		metric = "Conductance"
+																
+	title = "Communities Evaluation - "+str(metric)
+
+################################################################################################  MANTER -- Dá pra exportar a tabela depois...
+	trace1 = go.Bar(x = dataset[1], y = dataset[0], error_y=dict(type='data',array=dataset[2], color='#E6842A', visible=True), name="Threshold - "+str(dataset[3]), marker=dict(color='blue'))
+	data = [trace1]
+
+	title_plot = title
+	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=_filename+".html",auto_open=False)
+
+################################################################################################
+	p1=plt.bar(ind,y,width,color="blue", label="Threshold - "+str(dataset[3]))
+
+	plt.ylabel(metric)
+	plt.title(str(title))
+	
+	plt.xticks(ind+width/2,(x))
+	plt.legend(loc='best')	
+	plt.tight_layout()
+	plt.show()
+
+#	plt.savefig(_filename+".png")
+	plt.close()
+
+
+
+######################################################################################################################################################################
+#
+# Plota Gráficos dos dados...
+#
+######################################################################################################################################################################
+def plot_full_algs_only_with_ego(output,algorithms_data,metric):
+
+	print ("\n##################################################\n")
+	print ("Gerando Gráfico Completo...")
+
+	dataset = {}
+	#i = 1										#COPRA
+	#i = 2										#OSLOM
+	#i = 3										#RAK
+	#i = 4										#INFOMAP
+	
+	i=0
+
+	for algorithm in algorithms_data:
+		i+=1
+		interaction = []
+		value = []
+		std = []
+		
+		co_interaction = []
+		co_value = []
+		co_std = []	
+		for k, v in algorithm.iteritems():
+			if k == 'n1':
+				key = 'Follow'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))			
+			elif k == 'n2':
+				key = 'Retweets'			
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+			elif k == 'n3':
+				key = 'Likes'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+			elif k == 'n4':
+				key = 'Mentions'
+				interaction.append(key)
+				value.append(round(v[metric], 3))
+				std.append(round(v['std'], 3))
+#			elif k == 'n9':
+#				key = 'Followers'
+#				interaction.append(key)
+#				value.append(round(v[metric], 3))
+#				std.append(round(v['std'], 3))
+#						
+#			elif k == 'n5':
+#				key = 'Co-Follow'
+#				co_interaction.append(key)
+#				co_value.append(round(v[metric], 3))
+#				co_std.append(round(v['std'], 3))
+#			elif k == 'n6':
+#				key = 'Co-Retweets'
+#				co_interaction.append(key)
+#				co_value.append(round(v[metric], 3))
+#				co_std.append(round(v['std'], 3))
+#			elif k == 'n7':
+#				key = 'Co-Likes'
+#				co_interaction.append(key)
+#				co_value.append(round(v[metric], 3))
+#				co_std.append(round(v['std'], 3))
+#			elif k == 'n8':
+#				key = 'Co-Mentions'
+#				co_interaction.append(key)
+#				co_value.append(round(v[metric], 3))
+#				co_std.append(round(v['std'], 3))
+#			elif k == 'n10':
+#				key = 'Co-Followers'
+#				co_interaction.append(key)
+#				co_value.append(round(v[metric], 3))
+#				co_std.append(round(v['std'], 3))
+			
+			else:
+				print ("Valor incorreto para nome da rede-ego")
+#				exit()																																						
+
+		for item in co_value:
+			value.append(item)
+		for item in co_interaction:
+			interaction.append(item)
+		for item in co_std:
+			std.append(item)
+		 	
+		data = [value,interaction,std]
+		dataset[i] = data
+		
+		
+	x = dataset[1][1]								# recebe os nomes das redes ego
+	n=len(x)
+	
+	y = np.array(dataset[1][0])								# COPRA
+	z = np.array(dataset[2][0])								# OSLOM
+	k = np.array(dataset[3][0])								# RAK
+	w = np.array(dataset[4][0])								# INFOMAP
+
+
+	ind=np.arange(n)
+	width=0.25			 # Largura da barra
+
+	if not os.path.exists(output):
+		os.makedirs(output)
+		
+################################################################################################
+	_filename = output+"full_algs_"+str(metric)
+	
+	if metric == "modularity_density":
+		metric = "Modularity Density"
+	elif metric == "modularity":
+		metric = "Modularity"
+	elif metric == "intra_edges":
+		metric = "Intra Edges"
+	elif metric == "intra_density":
+		metric = "Intra Density"
+	elif metric == "contraction":
+		metric = "Contraction"
+	elif metric == "inter_edges":
+		metric = "Inter Edges"
+	elif metric == "expansion":
+		metric = "Expansion"
+	elif metric == "conductance":
+		metric = "Conductance"
+
+	title = "Communities Evaluation - "+str(metric)
+
+################################################################################################  MANTER -- Dá pra exportar a tabela depois...	
+	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="COPRA - Overlapping", marker=dict(color='darkblue'))
+	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="OSLOM - Overlapping", marker=dict(color='royalblue'))
+	trace3 = go.Bar(x = dataset[1][1], y = dataset[3][0], error_y=dict(type='data',array=dataset[3][2], color='#E6842A', visible=True), name="RAK - Partition", marker=dict(color='blue'))
+	trace4 = go.Bar(x = dataset[1][1], y = dataset[4][0], error_y=dict(type='data',array=dataset[4][2], color='#E6842A', visible=True), name="INFOMAP - Partition", marker=dict(color='lightblue'))
+
+	data = [trace1,trace2,trace3,trace4]
+
+	title_plot = title
+	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
+#	layout = go.Layout(xaxis=dict(tickangle=-45),barmode='group',)
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=_filename+".html",auto_open=False)
+
+################################################################################################
+	
+	p1=plt.bar(ind-0.2,y,width,color="darkblue", label='COPRA - Overlapping')
+	p2=plt.bar(ind,z,width,color="blue", label='OSLOM - Overlapping')
+	p3=plt.bar(ind+0.2,k,width,color="royalblue", label='COPRA - Partition')
+	p4=plt.bar(ind+0.4,w,width,color="lightblue", label='INFOMAP - Partition')
+	
+
+	plt.ylabel(metric)
+	plt.title(str(title))
+	
+	plt.xticks(ind+width/2,(x))
+	plt.legend(loc='best')	
+	plt.tight_layout()
+#	plt.show()	
+#	plt.savefig(_filename+".png")
+	plt.close()	

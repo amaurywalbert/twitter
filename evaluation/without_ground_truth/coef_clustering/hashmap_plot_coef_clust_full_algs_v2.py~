@@ -5,39 +5,40 @@
 import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
 from math import*
-import plot_modularity
+import plot_coef_clust
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para plotar a modularidade
+##		Status - Versão 1 - Script para plotar a coef_clust
 ## 
 ######################################################################################################################################################################
 def prepare(dataset):
 	if not os.path.isdir(dataset):
-		print ("Diretório com modularidades não encontrado: "+str(dataset))
+		print ("Diretório com coef_clust não encontrado: "+str(dataset))
 	else:	
-		modularity_plot = {}																	# Armazenar o nome da rede e o maior valor do da modularidade - Formato {{'N1':0.012},...}
+		coef_clust_plot = {}																	# Armazenar o nome da rede e o maior valor do coef_clust - Formato {{'N1':0.012},...}
 
 		for net in os.listdir(dataset):
 			if not os.path.isdir(str(dataset)+str(net)+"/"):
 				print ("Diretório não encontrado. "+str(dataset)+str(net)+"/")
 			else:			
-				modularity_plot[net] = {'threshold':' ','modularity':float(0),'std':float(0)}
+				coef_clust_plot[net] = {'threshold':' ','coef_clust':float(0),'std':float(0)}
 
 				for file in os.listdir(dataset+str(net)+"/"):
 					threshold = file.split(".json")
 					threshold = threshold[0]
 
 					with open(dataset+str(net)+"/"+str(file), 'r') as f:
+						print ("Abrindo: "+str(dataset)+str(net)+"/"+str(file))
 						data = json.load(f)
-						M = data['modularity']
+						M = data['coef_clust']
 						if M is not None:
-							print net,threshold,M['media']			
-							if	float(M['media']) > modularity_plot[net]['modularity']:
-								modularity_plot[net] = {'threshold': threshold, 'modularity':float(M['media']),'std':float(M['desvio_padrao'])}
- 			print ("\n#####################################################################################\n")
-		return modularity_plot
+							print net,threshold,M['media']				
+							if	float(M['media']) > coef_clust_plot[net]['coef_clust']:
+								coef_clust_plot[net] = {'threshold': threshold, 'coef_clust':float(M['media']),'std':float(M['desvio_padrao'])}
+ 
+		return coef_clust_plot
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -51,57 +52,26 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 					Impressão de Gráficos da Modularidade										"
+	print" 					Impressão de Gráficos da coef_clust										"
 	print"																											"
 	print" Escolha o algoritmo usado na detecção das comunidades									"
 	print"																											"
 	print"#################################################################################"
-	print
-	print"  1 - COPRA"
-	print"  2 - OSLOM"
-	print"  3 - GN"		
-	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"												
-	print
-	op2 = int(raw_input("Escolha uma opção acima: "))
 
-	if op2 == 1:
-		alg = "copra"
-	elif op2 == 2:
-		alg = "oslom"
-	elif op2 == 3:
-		alg = "gn"
-	elif op2 == 4:
-		alg = "copra_partition"
-	elif op2 == 5:
-		alg = "infomap"						
-	else:
-		print("Opção inválida! Saindo...")
-		sys.exit()		
 ######################################################################
-	
-	metric = 'modularity'
-	data1 = {}
-	data2 = {}
-	data3 = {}
-	data4 = {}
+
+	algs = ["copra","oslom","copra_partition","infomap"]	
+	metric = 'coef_clust'
+	algorithms_data = []
+
 ######################################################################		
-######################################################################
+	for alg in algs:
+		dataset = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
+		data = prepare(dataset)
+		if data is not None:
+			algorithms_data.append(data)						
+	plot_coef_clust.plot_full_algs_only_with_ego(output,algorithms_data,metric)
 
-	dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
-	data1 = prepare(dataset1)
-	
-######################################################################				
-######################################################################
-
-#	dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
-#	data3 = prepare(dataset3)
-
-
-#	if data1 is not None and data3:
-#		plot_coef_clust.plot_bars_full_without_singletons(output,data1,data3,metric,alg)		
-	if data1 is not None:
-		plot_modularity.plot_full_only_with_ego(output,data1,metric,alg)	
 ######################################################################
 ######################################################################	
 	

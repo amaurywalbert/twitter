@@ -95,12 +95,14 @@ def main():
 ######################################################################				
 ######################################################################
 
-	dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
-	data3 = prepare(dataset3)
+#	dataset3 = str(source)+str(metric)+"/graphs_without_ego/"+str(alg)+"/full/"	
+#	data3 = prepare(dataset3)
 
 
-	if data1 is not None and data3:
-		plot_coef_clust.plot_bars_full_without_singletons(output,data1,data3,metric,alg)		
+#	if data1 is not None and data3:
+#		plot_coef_clust.plot_bars_full_without_singletons(output,data1,data3,metric,alg)		
+	if data1 is not None:
+		plot_metrics.plot_full_only_with_ego(output,data1,metric,alg)
 ######################################################################
 ######################################################################	
 	
