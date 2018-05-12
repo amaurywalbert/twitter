@@ -8,7 +8,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script com funções para cálculo de métricas de avaliação sem                                                truth com a biblioteca NETWORKx
+##		Status - Versão 1 - Script com funções para cálculo de métricas de avaliação sem truth com a biblioteca NETWORKx
+##					
+##					ATENÇÃO - SÓ FAZ CÁLCULOS PARA GRAFOS NÃO DIRECIONADOS!!!
 ## 
 ######################################################################################################################################################################
 def calc_metrics(communities,G,uw,ud):
@@ -87,5 +89,7 @@ def calc_metrics(communities,G,uw,ud):
 	avg_s = calc.calcular_full(separability)
 	avg_cc = calc.calcular_full(clustering)		
 
+	print avg_ad, avg_c, avg_cut_r, avg_d, avg_e, avg_normal_cut, avg_s, avg_cc
+	time.sleep(5)
 	return avg_ad, avg_c, avg_cut_r, avg_d, avg_e, avg_normal_cut, avg_s, avg_cc
 	

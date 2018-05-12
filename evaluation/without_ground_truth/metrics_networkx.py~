@@ -87,5 +87,7 @@ def calc_metrics(communities,G,uw,ud):
 	avg_s = calc.calcular_full(separability)
 	avg_cc = calc.calcular_full(clustering)		
 
+	print avg_ad, avg_c, avg_cut_r, avg_d, avg_e, avg_normal_cut, avg_s, avg_cc
+	time.sleep(5)
 	return avg_ad, avg_c, avg_cut_r, avg_d, avg_e, avg_normal_cut, avg_s, avg_cc
 	
