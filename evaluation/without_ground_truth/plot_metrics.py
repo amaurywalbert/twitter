@@ -944,22 +944,22 @@ def plot_full_algs_only_with_ego(output,algorithms_data,metric):
 ################################################################################################
 	_filename = output+"full_algs_"+str(metric)
 	
-	if metric == "modularity_density":
-		metric = "Modularity Density"
-	elif metric == "modularity":
-		metric = "Modularity"
-	elif metric == "intra_edges":
-		metric = "Intra Edges"
-	elif metric == "intra_density":
-		metric = "Intra Density"
-	elif metric == "contraction":
-		metric = "Contraction"
-	elif metric == "inter_edges":
-		metric = "Inter Edges"
-	elif metric == "expansion":
-		metric = "Expansion"
+	if metric == "average_degree":
+		metric = "Average Degree"
 	elif metric == "conductance":
 		metric = "Conductance"
+	elif metric == "cut_ratio":
+		metric = "Cut Ratio"
+	elif metric == "density":
+		metric = "Density"
+	elif metric == "expansion":
+		metric = "Expansion"
+	elif metric == "normalized_cut":
+		metric = "Normalized Cut"
+	elif metric == "separability":
+		metric = "Separability"	
+	else:
+		print "Impossível ler métrica: "+str(metric)
 
 	title = "Communities Evaluation - "+str(metric)
 

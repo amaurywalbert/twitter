@@ -1167,25 +1167,11 @@ def plot_full_only_with_ego(output,data,metric,alg):
 	if not os.path.exists(output):
 		os.makedirs(output)
 ################################################################################################
-	_filename = output+str(metric)+"_"+str(alg)
+	_filename = output+"full_algs_"+str(metric)
 	
-	if metric == "modularity_density":
-		metric = "Modularity Density"
-	elif metric == "modularity":
-		metric = "Modularity"
-	elif metric == "intra_edges":
-		metric = "Intra Edges"
-	elif metric == "intra_density":
-		metric = "Intra Density"
-	elif metric == "contraction":
-		metric = "Contraction"
-	elif metric == "inter_edges":
-		metric = "Inter Edges"
-	elif metric == "expansion":
-		metric = "Expansion"
-	elif metric == "conductance":
-		metric = "Conductance"
-																
+	if metric == "coef_clust":
+		metric = "Clustering Coefficient"
+		
 	title = "Communities Evaluation - "+str(metric)
 
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
@@ -1327,23 +1313,9 @@ def plot_full_algs_only_with_ego(output,algorithms_data,metric):
 ################################################################################################
 	_filename = output+"full_algs_"+str(metric)
 	
-	if metric == "modularity_density":
-		metric = "Modularity Density"
-	elif metric == "modularity":
-		metric = "Modularity"
-	elif metric == "intra_edges":
-		metric = "Intra Edges"
-	elif metric == "intra_density":
-		metric = "Intra Density"
-	elif metric == "contraction":
-		metric = "Contraction"
-	elif metric == "inter_edges":
-		metric = "Inter Edges"
-	elif metric == "expansion":
-		metric = "Expansion"
-	elif metric == "conductance":
-		metric = "Conductance"
-
+	if metric == "coef_clust":
+		metric = "Clustering Coefficient"
+		
 	title = "Communities Evaluation - "+str(metric)
 
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...	
