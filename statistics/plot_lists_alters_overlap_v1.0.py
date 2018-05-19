@@ -132,7 +132,7 @@ singletons1 = "full"
 singletons2 = "without_singletons"
 
 source_dir = "/home/amaury/Dropbox/lists_properties/"+str(type_graphs1)+"_"+str(singletons1)+"/json/"
-output_dir = "/home/amaury/Dropbox/lists_properties_statistics/"+str(type_graphs1)+"_"+str(singletons1)+"/json/"
+output_dir = "/home/amaury/Dropbox/lists_properties_statistics/"+str(type_graphs1)+"_"+str(singletons1)+"/"
 
 #Executa o método main
 if __name__ == "__main__": main()

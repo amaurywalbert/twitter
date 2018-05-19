@@ -15,7 +15,10 @@ sys.setdefaultencoding('utf-8')
 ##			- Numero médio de listas por usuário ego e o desvio padrão...
 ##			- Eu encontro a lista na rede-ego?? - o tamanho da intersecção pelo tamanho da lista (fração) - para cada Lista.
 ##			- Quais alters estão na lista? será que é acima de 70%
+##	
+##			DESCOBRIMOS QUE A SOBREPOSIÇÃO NÃO PODE SER CALCULADO COM CADA LISTA, INDIVIDUALMENTE, PORQUE PODE HAVER REPETIÇÃO DE USERS ENTRE AS LISTAS DO MESMO EGO E ISSO MUDA O RESULTADO. 
 ##
+##			DESENVOLVEMOS OUTRO SCRIPT PARA CALCULAR A SOBREPOSIÇÃO.
 ######################################################################################################################################################################
 
 ################################################################################################
@@ -252,9 +255,9 @@ def main():
 #######################################################################
 	
 	instructions(type_graphs1,singletons1)
-	instructions(type_graphs1,singletons2)
-	instructions(type_graphs2,singletons1)
-	instructions(type_graphs2,singletons2)	
+#	instructions(type_graphs1,singletons2)
+#	instructions(type_graphs2,singletons1)
+#	instructions(type_graphs2,singletons2)	
 	
 #######################################################################
 	print

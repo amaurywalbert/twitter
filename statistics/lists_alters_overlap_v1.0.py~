@@ -50,13 +50,21 @@ def get_lists_set(file):
 # Recupera o conjunto de alters a a partir do grafo
 #
 ###############################################################
-def get_alters_set(file):
+def get_alters_set(ego_id,file):
 	alters_set = set()
+	alters_set_full = set()
+
 	with open(file, 'r') as f:
 		for line in f:			
 			a = line.split(' ')
-			alters_set.add(long(a[0]))									#Pega só o primeiro campo - nó1
-			alters_set.add(long(a[1]))									#Pega só o primeiro campo - nó 2 -  Exclui o peso das arestas...
+
+			alters_set_full.add(long(a[0]))									#Pega só o primeiro campo - nó1
+			alters_set_full.add(long(a[1]))									#Pega só o primeiro campo - nó 2 -  Exclui o peso das arestas...
+			if long(a[0])==long(ego_id) or long(a[1])==long(ego_id):
+				alters_set.add(long(a[0]))									#Pega só o primeiro campo - nó1
+				alters_set.add(long(a[1]))									#Pega só o primeiro campo - nó 2 -  Exclui o peso das arestas...
+	
+	print len(alters_set),len(alters_set_full)	
 	return alters_set
 			
 ################################################################################################
@@ -159,7 +167,7 @@ def instructions(type_graphs,singletons):
 								if not os.path.isfile(graphs_dir+str(ego_id)+".edge_list"):
 									print ("\nImpossível encontrar arquivo com lista de arestas: "+str(graphs_dir)+str(ego_id)+".edge_list")
 								else:
-									alters_set = get_alters_set(graphs_dir+str(ego_id)+".edge_list")												# Recupera os alters da camada n para ego_id
+									alters_set = get_alters_set(ego_id,graphs_dir+str(ego_id)+".edge_list")												# Recupera os alters da camada n para ego_id
 									jaccard,overlap_lists,overlap_alters = calc_overlap(lists_set,alters_set)
 
 									dataset_jaccard[layer] = jaccard
