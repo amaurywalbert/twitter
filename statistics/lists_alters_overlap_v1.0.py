@@ -76,7 +76,7 @@ def get_alters_set(ego_id,file):
 	for i in range(10):															# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
 		i+1
 		try:
-			top_k.append(ranking[i])
+			top_k.append(ranking[i][0])
 		except Exception as e:											# Ranking menor que o top-k
 			pass
 
@@ -104,11 +104,8 @@ def calc_overlap(lists_set,alters_set,top_k_set):
 		return overlap_alters													#... verifica se os alters estão nas listas
 																						# Qual a porcentagem dos alters aparecem nas listas?		
 	def calc_overlap_top_k(lists_set,top_k_set):
-		if len(top_k_set) > 0:
-			intersection = len(lists_set.intersection(top_k_set))	
-			overlap_top_k = intersection/float(len(top_k_set))			#Tamanho da interseção dos conjuntos sobre o tamanho do top_k
-		else:
-			overlap_top_k = 0
+		intersection = len(lists_set.intersection(top_k_set))	
+		overlap_top_k = intersection/float(len(top_k_set))			#Tamanho da interseção dos conjuntos sobre o tamanho do top_k
 		return overlap_top_k													#... verifica se os top_k estão nas listas
 																						# Qual a porcentagem dos top_k aparecem nas listas?
 
