@@ -19,16 +19,6 @@ sys.setdefaultencoding('utf-8')
 ##		Para cada arquivo da sobreposição (jaccard, overlap_lists, overlap_alters): ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
 ######################################################################################################################################################################
 
-#def ranking():
-#	top_k = []
-#	i=0						
-#	for i in range(10):															# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
-#		i+1
-#		try:
-#			top_k.append(ranking[i])
-#		except Exception as e:								# Ranking menor que o top-k
-#			pass
-
 ######################################################################################################################################################################
 #
 # Cria diretórios
@@ -108,7 +98,7 @@ def main():
 	print"#################################################################################"
 	print
 	
-	metrics = ["jaccard","overlap_lists","overlap_alters"]
+	metrics = ["jaccard","overlap_lists","overlap_alters","overlap_top_k"]
 	for metric in metrics:
 		if metric == "jaccard":
 			title = "Jaccard"
@@ -116,6 +106,8 @@ def main():
 			title = "Intersection over Lists Set"
 		elif metric == "overlap_alters":
 			title = "Intersection over Alters Set"
+		elif metric == "overlap_top_k":
+			title = "Intersection over Top-K Alters Set"	
 				
 		if not os.path.exists(str(source_dir)+str(metric)+".json"):
 			print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")

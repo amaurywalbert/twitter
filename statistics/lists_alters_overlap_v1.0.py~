@@ -70,12 +70,22 @@ def get_alters_set(ego_id,file):
 			
 								
 	ranking = sorted(ranking, key=lambda x: (x[1], -x[0]), reverse=True)	#Ordena uma tupla decrescente (id,weight)). Em caso de empate ordena crecente pelo id os empatados
-	return alters_set,ranking												# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
+
+	top_k = []
+	i=0						
+	for i in range(10):															# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
+		i+1
+		try:
+			top_k.append(ranking[i])
+		except Exception as e:											# Ranking menor que o top-k
+			pass
+
+	return alters_set,top_k												# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
 			
 ################################################################################################
 # Função para calcular o a sobreposição e o csj entre dois conjuntos de dados
 ################################################################################################         
-def calc_overlap(lists_set,alters_set):
+def calc_overlap(lists_set,alters_set,top_k_set):
 	
 	def calc_jaccard(lists_set,alters_set):
 		intersection = len(lists_set.intersection(alters_set))
@@ -93,11 +103,18 @@ def calc_overlap(lists_set,alters_set):
 		overlap_alters = intersection/float(len(alters_set))			#Tamanho da interseção dos conjuntos sobre o tamanho do conjunto de alters... verifica se os alters estão nas listas.
 		return overlap_alters													#... verifica se os alters estão nas listas
 																						# Qual a porcentagem dos alters aparecem nas listas?		
+	def calc_overlap_top_k(lists_set,top_k_set):
+		intersection = len(lists_set.intersection(top_k_set))	
+		overlap_top_k = intersection/float(len(top_k_set))			#Tamanho da interseção dos conjuntos sobre o tamanho do top_k
+		return overlap_top_k													#... verifica se os top_k estão nas listas
+																						# Qual a porcentagem dos top_k aparecem nas listas?
+
 	jaccard = calc_jaccard(lists_set,alters_set)
 	overlap_lists = calc_overlap_lists(lists_set,alters_set)
 	overlap_alters = calc_overlap_alters(lists_set,alters_set)
+	overlap_top_k =  calc_overlap_top_k(lists_set,top_k_set)
 
-	return jaccard,overlap_lists,overlap_alters
+	return jaccard,overlap_lists,overlap_alters,overlap_top_k
  
 ######################################################################################################################################################################
 #
@@ -137,71 +154,75 @@ def instructions(type_graphs,singletons):
 			print ("\nImpossível encontrar diretório com ground-truth communities: "+str(ground_truth_dir))
 		else:
 
-			dataset_json_ranking = {}
 			dataset_json_jaccard = {}																												# Salvar Arquivos no Formato Json
 			dataset_json_overlap_lists = {}
 			dataset_json_overlap_alters = {}
+			dataset_json_overlap_top_k = {}
 			
 			with open(output_dir_txt+"jaccard.txt",'w') as out_file_jaccard:
 				with open(output_dir_txt+"overlap_lists.txt",'w') as out_file_overlap_lists:
 					with open(output_dir_txt+"overlap_alters.txt",'w') as out_file_overlap_alters:
-						i=0
-						for ground_truth_file in os.listdir(ground_truth_dir):			
-							lists_set = get_lists_set(ground_truth_dir+ground_truth_file)												# Recupera o conjunto de elementos das listas do ego.
-							ego_id = ground_truth_file.split(".txt")
-							ego_id = long(ego_id[0])
-							i+=1
-							nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
-							dataset_ranking = {}
-							dataset_jaccard = {}
-							dataset_overlap_lists = {}
-							dataset_overlap_alters = {}
-							for net in nets:
-								if net == "n1":
-									layer = "a"
-								elif net == "n9":
-									layer = "s"
-								elif net == "n2":
-									layer = "r"
-								elif net == "n3":
-									layer = "l"
-								elif net == "n4":
-									layer = "m"
-								else:
-									print ("Rede inválida")
-									sys.exit()	
-								graphs_dir = "/home/amaury/graphs/"+str(net)+"/"+str(type_graphs)+"/"
-								if not os.path.isfile(graphs_dir+str(ego_id)+".edge_list"):
-									print ("\nImpossível encontrar arquivo com lista de arestas: "+str(graphs_dir)+str(ego_id)+".edge_list")
-								else:
-									alters_set,ranking = get_alters_set(ego_id,graphs_dir+str(ego_id)+".edge_list")												# Recupera os alters da camada n para ego_id
-									jaccard,overlap_lists,overlap_alters = calc_overlap(lists_set,alters_set)
-									
-									dataset_ranking[layer] = ranking
-									dataset_jaccard[layer] = jaccard
-									dataset_overlap_lists[layer] = overlap_lists
-									dataset_overlap_alters[layer] = overlap_alters
-					
-							save_file(ego_id,dataset_jaccard,out_file_jaccard)								# Salvar arquivo texto
-							save_file(ego_id,dataset_overlap_lists,out_file_overlap_lists)
-							save_file(ego_id,dataset_overlap_alters,out_file_overlap_alters)
+						with open(output_dir_txt+"overlap_top_k.txt",'w') as out_file_overlap_top_k:
+							i=0
+							for ground_truth_file in os.listdir(ground_truth_dir):			
+								lists_set = get_lists_set(ground_truth_dir+ground_truth_file)												# Recupera o conjunto de elementos das listas do ego.
+								ego_id = ground_truth_file.split(".txt")
+								ego_id = long(ego_id[0])
+								i+=1
+								nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
 
-							dataset_json_ranking[ego_id] = dataset_ranking									# Salvar arquivo json							
-							dataset_json_jaccard[ego_id] = dataset_jaccard									# Salvar arquivo json
-							dataset_json_overlap_lists[ego_id] = dataset_overlap_lists
-							dataset_json_overlap_alters[ego_id] = dataset_overlap_alters
+								dataset_jaccard = {}
+								dataset_overlap_lists = {}
+								dataset_overlap_alters = {}
+								dataset_overlap_top_k = {}
+							
+								for net in nets:
+									if net == "n1":
+										layer = "a"
+									elif net == "n9":
+										layer = "s"
+									elif net == "n2":
+										layer = "r"
+									elif net == "n3":
+										layer = "l"
+									elif net == "n4":
+										layer = "m"
+									else:
+										print ("Rede inválida")
+										sys.exit()	
+									graphs_dir = "/home/amaury/graphs/"+str(net)+"/"+str(type_graphs)+"/"
+									if not os.path.isfile(graphs_dir+str(ego_id)+".edge_list"):
+										print ("\nImpossível encontrar arquivo com lista de arestas: "+str(graphs_dir)+str(ego_id)+".edge_list")
+									else:
+										alters_set,top_k_set = get_alters_set(ego_id,graphs_dir+str(ego_id)+".edge_list")												# Recupera os alters da camada n para ego_id
+										jaccard,overlap_lists,overlap_alters,overlap_top_k = calc_overlap(lists_set,alters_set,top_k_set)
+										
+										dataset_jaccard[layer] = jaccard
+										dataset_overlap_lists[layer] = overlap_lists
+										dataset_overlap_alters[layer] = overlap_alters
+										dataset_overlap_top_k[layer] = overlap_top_k
 					
-							print ("Ego: "+str(i)+" - Jaccard: "+str(dataset_json_jaccard[ego_id])+" - Lists: "+str(dataset_json_overlap_lists[ego_id])+" - Alters: "+str(dataset_json_overlap_alters[ego_id]))
-							print
+								save_file(ego_id,dataset_jaccard,out_file_jaccard)								# Salvar arquivo texto
+								save_file(ego_id,dataset_overlap_lists,out_file_overlap_lists)
+								save_file(ego_id,dataset_overlap_alters,out_file_overlap_alters)
+								save_file(ego_id,dataset_overlap_top_k,out_file_overlap_top_k)
+
+								dataset_json_jaccard[ego_id] = dataset_jaccard									# Salvar arquivo json
+								dataset_json_overlap_lists[ego_id] = dataset_overlap_lists
+								dataset_json_overlap_alters[ego_id] = dataset_overlap_alters
+								dataset_json_overlap_top_k[ego_id] = dataset_overlap_top_k
+					
+								print ("Ego: "+str(i)+" - Jaccard: "+str(dataset_json_jaccard[ego_id])+" - Lists: "+str(dataset_json_overlap_lists[ego_id])+" - Alters: "+str(dataset_json_overlap_alters[ego_id])+" - Top-K: "+str(dataset_json_overlap_top_k[ego_id]))
+								print
 			
-			name = "ranking"
-			save_json(output_dir_json,dataset_json_ranking,name)
 			name = "jaccard"
 			save_json(output_dir_json,dataset_json_jaccard,name)
 			name = "overlap_lists"
 			save_json(output_dir_json,dataset_json_overlap_lists,name)
 			name = "overlap_alters"
 			save_json(output_dir_json,dataset_json_overlap_alters,name)
+			name = "overlap_top_k"
+			save_json(output_dir_json,dataset_json_overlap_top_k,name)
 ######################################################################################################################################################################
 #
 # Método principal do programa.
