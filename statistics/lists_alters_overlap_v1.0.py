@@ -66,7 +66,7 @@ def calc_overlap(list_set,alters_set):
 	
 	def calc_jaccard(lists_set,alters_set):
 		intersection = len(lists_set.intersection(alters_set))
-		union = len(lists_set.union(alters_set)	
+		union = len(lists_set.union(alters_set))	
 		jaccard = intersection/float(union)									#Jaccard Tradicional
 		return jaccard
 	
@@ -102,8 +102,8 @@ def instructions(type_graphs,singletons):
 	if os.path.exists(output_dir_json+"jaccard.json"):
 		print ("Arquivo de destino já existe!"+str(output_dir_json+"jaccard.json"))
 	else:
-		if not os.path.exists(source_dir):
-			print ("\nImpossível encontrar diretório com ground-truth communities: "+str(source_dir))
+		if not os.path.exists(ground_truth_dir):
+			print ("\nImpossível encontrar diretório com ground-truth communities: "+str(ground_truth_dir))
 		else:
 
 			dataset_json_jaccard = {}																													# Salvar Arquivos no Formato Json

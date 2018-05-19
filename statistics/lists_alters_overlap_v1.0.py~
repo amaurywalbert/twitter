@@ -66,7 +66,7 @@ def calc_overlap(list_set,alters_set):
 	
 	def calc_jaccard(lists_set,alters_set):
 		intersection = len(lists_set.intersection(alters_set))
-		union = len(lists_set.union(alters_set)	
+		union = len(lists_set.union(alters_set))	
 		jaccard = intersection/float(union)									#Jaccard Tradicional
 		return jaccard
 	
@@ -155,7 +155,6 @@ def instructions(type_graphs,singletons):
 							dataset_json_overlap_alters[ego] = dataset_overlap_alters
 					
 							print i, dataset_json_jaccard[ego],dataset_json_overlap_lists[ego],dataset_json_overlap_alters[ego]
-
 							print
 			
 			save_json(dataset_json_jaccard)
