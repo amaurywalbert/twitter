@@ -77,8 +77,8 @@ def get_alters_set(ego_id,file):
 		i+1
 		try:
 			top_k.append(ranking[i])
-		except Exception as e:
-			print e
+		except Exception as e:								# Ranking menor que o top-k
+			pass
 	print len(top_k), len(ranking)
 	return alters_set											# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
 			
