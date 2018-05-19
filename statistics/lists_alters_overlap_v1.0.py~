@@ -104,8 +104,11 @@ def calc_overlap(lists_set,alters_set,top_k_set):
 		return overlap_alters													#... verifica se os alters estão nas listas
 																						# Qual a porcentagem dos alters aparecem nas listas?		
 	def calc_overlap_top_k(lists_set,top_k_set):
-		intersection = len(lists_set.intersection(top_k_set))	
-		overlap_top_k = intersection/float(len(top_k_set))			#Tamanho da interseção dos conjuntos sobre o tamanho do top_k
+		if len(top_k_set) > 0:
+			intersection = len(lists_set.intersection(top_k_set))	
+			overlap_top_k = intersection/float(len(top_k_set))			#Tamanho da interseção dos conjuntos sobre o tamanho do top_k
+		else:
+			overlap_top_k = 0
 		return overlap_top_k													#... verifica se os top_k estão nas listas
 																						# Qual a porcentagem dos top_k aparecem nas listas?
 
