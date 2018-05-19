@@ -47,24 +47,39 @@ def get_lists_set(file):
 		
 ######################################################################################################################################################################
 #
-# Recupera o conjunto de alters a a partir do grafo
+# Recupera o conjunto de alters a partir do grafo
 #
 ###############################################################
 def get_alters_set(ego_id,file):
 	alters_set = set()
 	alters_set_full = set()
 
+	ranking = []
 	with open(file, 'r') as f:
 		for line in f:			
 			a = line.split(' ')
 
 			alters_set_full.add(long(a[0]))									#Pega só o primeiro campo - nó1
-			alters_set_full.add(long(a[1]))									#Pega só o primeiro campo - nó 2 -  Exclui o peso das arestas...
-			if long(a[0])==long(ego_id) or long(a[1])==long(ego_id):
-				alters_set.add(long(a[0]))									#Pega só o primeiro campo - nó1
-				alters_set.add(long(a[1]))									#Pega só o primeiro campo - nó 2 -  Exclui o peso das arestas...
+			alters_set_full.add(long(a[1]))									#Pega só o segundo campo - nó 2
+			
+			if len(a) > 2:
+				if long(a[0])==long(ego_id):
+					alters_set.add(long(a[0]))										#Pega só o primeiro campo - nó1
+					tuple=(a[1],a[2])													# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
+					ranking.append(tuple)
+				elif long(a[1])==long(ego_id):
+					alters_set.add(long(a[1]))										#Pega só o segundo campo - nó 2
+					tuple=(a[0],a[2])													# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
+					ranking.append(tuple)
+
+	ranking = sorted(ranking, key=lambda x: (x[1], -x[0]), reverse=True) 		#Ordena uma tupla decrescente (id,weight)). Em caso de empate ordena crecente pelo id os empatados
+	for i in range(10):
+		top_k.append(ranking[i])
 	
-	print len(alters_set),len(alters_set_full)	
+	print ranking	
+	print top_k
+			
+	print len(alters_set),len(alters_set_full)
 	return alters_set
 			
 ################################################################################################
