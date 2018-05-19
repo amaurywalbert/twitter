@@ -153,7 +153,7 @@ def instructions(type_graphs,singletons):
 								else:
 									print ("Rede inválida")
 									sys.exit()	
-								graphs_dir = "/home/amaury/graphs/"+str(layer)+"/"+str(type_graphs)+"/"
+								graphs_dir = "/home/amaury/graphs/"+str(net)+"/"+str(type_graphs)+"/"
 								if not os.path.isfile(graphs_dir+str(ego_id)+".edge_list"):
 									print ("\nImpossível encontrar arquivo com lista de arestas: "+str(graphs_dir)+str(ego_id)+".edge_list")
 								else:
@@ -164,15 +164,15 @@ def instructions(type_graphs,singletons):
 									dataset_overlap_lists[net] = overlap_lists
 									dataset_overlap_alters[net] = overlap_alters
 					
-							save_file(ego,dataset_jaccard,out_file_jaccard)								# Salvar arquivo texto
-							save_file(ego,dataset_overlap_lists,out_file_overlap_lists)
-							save_file(ego,dataset_overlap_alters,out_file_overlap_alters)
+							save_file(ego_id,dataset_jaccard,out_file_jaccard)								# Salvar arquivo texto
+							save_file(ego_id,dataset_overlap_lists,out_file_overlap_lists)
+							save_file(ego_id,dataset_overlap_alters,out_file_overlap_alters)
 
-							dataset_json_jaccard[ego] = dataset_jaccard									# Salvar arquivo json
-							dataset_json_overlap_lists[ego] = dataset_overlap_lists
-							dataset_json_overlap_alters[ego] = dataset_overlap_alters
+							dataset_json_jaccard[ego_id] = dataset_jaccard									# Salvar arquivo json
+							dataset_json_overlap_lists[ego_id] = dataset_overlap_lists
+							dataset_json_overlap_alters[ego_id] = dataset_overlap_alters
 					
-							print i, dataset_json_jaccard[ego],dataset_json_overlap_lists[ego],dataset_json_overlap_alters[ego]
+							print i, dataset_json_jaccard[ego_id],dataset_json_overlap_lists[ego_id],dataset_json_overlap_alters[ego_id]
 							print
 			
 			save_json(dataset_json_jaccard)

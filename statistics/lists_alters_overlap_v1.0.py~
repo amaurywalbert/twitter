@@ -86,7 +86,25 @@ def calc_overlap(list_set,alters_set):
 
 	return jaccard,overlap_lists,overlap_alters
  
-	
+######################################################################################################################################################################
+#
+# Salvar arquivo no formato JSON: ego_id:{as:data,ar:data,al:data,am:data,...,rm:data}  
+#
+######################################################################################################################################################################
+def save_json(dataset_json):
+	with open(output_dir_json+"reciprocity.json","w") as f:
+		f.write(json.dumps(dataset_json))
+######################################################################################################################################################################
+#
+# Salvar arquivo texto com padrão:  ego_id as:data ar:data al:data am:data ... rm:data  
+#
+######################################################################################################################################################################
+def save_file(ego,dataset,f):
+	f.write(str(ego))
+	for k,v in dataset.iteritems():
+		f.write(" "+str(k)+":"+str(v))
+	f.write("\n")
+				
 ######################################################################################################################################################################
 #
 # Realiza as configurações necessárias para os dados do METRICA
@@ -135,7 +153,7 @@ def instructions(type_graphs,singletons):
 								else:
 									print ("Rede inválida")
 									sys.exit()	
-								graphs_dir = "/home/amaury/graphs/"+str(layer)+"/"+str(type_graphs)+"/"
+								graphs_dir = "/home/amaury/graphs/"+str(net)+"/"+str(type_graphs)+"/"
 								if not os.path.isfile(graphs_dir+str(ego_id)+".edge_list"):
 									print ("\nImpossível encontrar arquivo com lista de arestas: "+str(graphs_dir)+str(ego_id)+".edge_list")
 								else:
@@ -146,15 +164,15 @@ def instructions(type_graphs,singletons):
 									dataset_overlap_lists[net] = overlap_lists
 									dataset_overlap_alters[net] = overlap_alters
 					
-							save_file(ego,dataset_jaccard,out_file_jaccard)								# Salvar arquivo texto
-							save_file(ego,dataset_overlap_lists,out_file_overlap_lists)
-							save_file(ego,dataset_overlap_alters,out_file_overlap_alters)
+							save_file(ego_id,dataset_jaccard,out_file_jaccard)								# Salvar arquivo texto
+							save_file(ego_id,dataset_overlap_lists,out_file_overlap_lists)
+							save_file(ego_id,dataset_overlap_alters,out_file_overlap_alters)
 
-							dataset_json_jaccard[ego] = dataset_jaccard									# Salvar arquivo json
-							dataset_json_overlap_lists[ego] = dataset_overlap_lists
-							dataset_json_overlap_alters[ego] = dataset_overlap_alters
+							dataset_json_jaccard[ego_id] = dataset_jaccard									# Salvar arquivo json
+							dataset_json_overlap_lists[ego_id] = dataset_overlap_lists
+							dataset_json_overlap_alters[ego_id] = dataset_overlap_alters
 					
-							print i, dataset_json_jaccard[ego],dataset_json_overlap_lists[ego],dataset_json_overlap_alters[ego]
+							print i, dataset_json_jaccard[ego_id],dataset_json_overlap_lists[ego_id],dataset_json_overlap_alters[ego_id]
 							print
 			
 			save_json(dataset_json_jaccard)
