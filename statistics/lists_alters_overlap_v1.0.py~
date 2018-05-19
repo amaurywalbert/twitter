@@ -91,7 +91,7 @@ def calc_overlap(lists_set,alters_set):
 # Salvar arquivo no formato JSON: ego_id:{as:data,ar:data,al:data,am:data,...,rm:data}  
 #
 ######################################################################################################################################################################
-def save_json(dataset_json,name):
+def save_json(output_dir_json,dataset_json,name):
 	with open(output_dir_json+name+".json","w") as f:
 		f.write(json.dumps(dataset_json))
 ######################################################################################################################################################################
@@ -178,11 +178,11 @@ def instructions(type_graphs,singletons):
 							print
 			
 			name = "jaccard"
-			save_json(dataset_json_jaccard,name)
+			save_json(output_dir_json,dataset_json_jaccard,name)
 			name = "overlap_lists"
-			save_json(dataset_json_overlap_lists,name)
+			save_json(output_dir_json,dataset_json_overlap_lists,name)
 			name = "overlap_alters"
-			save_json(dataset_json_overlap_alters,name)
+			save_json(output_dir_json,dataset_json_overlap_alters,name)
 ######################################################################################################################################################################
 #
 # Método principal do programa.
