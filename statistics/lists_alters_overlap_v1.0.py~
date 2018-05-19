@@ -93,8 +93,6 @@ def get_alters_set(ego_id,file):
 				top_k.append(ranking[i])
 			except Exception as e:
 				print e
-	
-		print ranking	
 		print top_k
 			
 	print len(alters_set),len(alters_set_full)
