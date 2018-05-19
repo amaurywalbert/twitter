@@ -137,7 +137,7 @@ def instructions(type_graphs,singletons):
 									sys.exit()	
 								graphs_dir = "/home/amaury/graphs/"+str(layer)+"/"+str(type_graphs)+"/"
 								if not os.path.isfile(graphs_dir+str(ego_id)+".edge_list"):
-									print ("\nImpossível encontrar arquivo com lista de arestas: "+str(graphs_dir)+str(graph_file))
+									print ("\nImpossível encontrar arquivo com lista de arestas: "+str(graphs_dir)+str(ego_id)+".edge_list")
 								else:
 									alters_set = get_alters_set(graphs_dir+str(ego_id)+".edge_list")												# Recupera os alters da camada n para ego_id
 									jaccard,overlap_lists,overlap_alters = calc_overlap(lists_set,alters_set)
