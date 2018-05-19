@@ -19,6 +19,15 @@ sys.setdefaultencoding('utf-8')
 ##		Para cada arquivo da sobreposição (jaccard, overlap_lists, overlap_alters): ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
 ######################################################################################################################################################################
 
+#def ranking():
+#	top_k = []
+#	i=0						
+#	for i in range(10):															# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
+#		i+1
+#		try:
+#			top_k.append(ranking[i])
+#		except Exception as e:								# Ranking menor que o top-k
+#			pass
 
 ######################################################################################################################################################################
 #
