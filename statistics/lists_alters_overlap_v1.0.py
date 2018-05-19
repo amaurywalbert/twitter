@@ -62,7 +62,7 @@ def get_alters_set(file):
 ################################################################################################
 # Função para calcular o a sobreposição e o csj entre dois conjuntos de dados
 ################################################################################################         
-def calc_overlap(list_set,alters_set):
+def calc_overlap(lists_set,alters_set):
 	
 	def calc_jaccard(lists_set,alters_set):
 		intersection = len(lists_set.intersection(alters_set))
