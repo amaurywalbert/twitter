@@ -125,7 +125,7 @@ def instructions(type_graphs,singletons):
 		else:
 
 			dataset_json_jaccard = {}																													# Salvar Arquivos no Formato Json
-			dataset_json_overlap_alters = {}
+			dataset_json_overlap_lists = {}
 			dataset_json_overlap_alters = {}
 			
 			with open(output_dir_txt+"jaccard.txt",'w') as out_file_jaccard:
@@ -162,9 +162,9 @@ def instructions(type_graphs,singletons):
 									alters_set = get_alters_set(graphs_dir+str(ego_id)+".edge_list")												# Recupera os alters da camada n para ego_id
 									jaccard,overlap_lists,overlap_alters = calc_overlap(lists_set,alters_set)
 
-									dataset_jaccard[net] = jaccard
-									dataset_overlap_lists[net] = overlap_lists
-									dataset_overlap_alters[net] = overlap_alters
+									dataset_jaccard[layer] = jaccard
+									dataset_overlap_lists[layer] = overlap_lists
+									dataset_overlap_alters[layer] = overlap_alters
 					
 							save_file(ego_id,dataset_jaccard,out_file_jaccard)								# Salvar arquivo texto
 							save_file(ego_id,dataset_overlap_lists,out_file_overlap_lists)
@@ -174,7 +174,7 @@ def instructions(type_graphs,singletons):
 							dataset_json_overlap_lists[ego_id] = dataset_overlap_lists
 							dataset_json_overlap_alters[ego_id] = dataset_overlap_alters
 					
-							print i, dataset_json_jaccard[ego_id],dataset_json_overlap_lists[ego_id],dataset_json_overlap_alters[ego_id]
+							print (str(i)+" - "+str(dataset_json_jaccard[ego_id])+" - "+str(dataset_json_overlap_lists[ego_id])+" - "+str(dataset_json_overlap_alters[ego_id]))
 							print
 			
 			save_json(dataset_json_jaccard)
