@@ -36,7 +36,7 @@ def calcular(valores=None):
 
 			calculos['soma'] = somar(valores)
 			calculos['media'] = media(valores)
-	return calculos
+			return calculos
 			
 def calcular_full(valores=None):
 	calculos = {}
@@ -71,4 +71,4 @@ def calcular_full(valores=None):
 			calculos['media'] = media(valores)
 			calculos['variancia'] = variancia(valores)
 			calculos['desvio_padrao'] = desvio_padrao(valores)
-	return calculos
+			return calculos
