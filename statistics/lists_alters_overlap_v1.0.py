@@ -125,7 +125,7 @@ def instructions(type_graphs,singletons):
 		else:
 
 			dataset_json_jaccard = {}																													# Salvar Arquivos no Formato Json
-			dataset_json_overlap_alters = {}
+			dataset_json_overlap_lists = {}
 			dataset_json_overlap_alters = {}
 			
 			with open(output_dir_txt+"jaccard.txt",'w') as out_file_jaccard:

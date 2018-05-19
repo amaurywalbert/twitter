@@ -138,7 +138,9 @@ def instructions(type_graphs,singletons):
 							ego_id = long(ego_id[0])
 							i+=1
 							nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
-							dataset = {}
+							dataset_jaccard = {}
+							dataset_overlap_lists = {}
+							dataset_overlap_alters = {}
 							for net in nets:
 								if net == "n1":
 									layer = "a"
