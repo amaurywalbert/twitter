@@ -52,7 +52,6 @@ def get_lists_set(file):
 ###############################################################
 def get_alters_set(ego_id,file):
 	alters_set = set()
-	alters_set_full = set()
 
 	ranking = []
 	with open(file, 'r') as f:
@@ -70,21 +69,17 @@ def get_alters_set(ego_id,file):
 					ranking.append(tuple)
 			
 								
+	ranking = sorted(ranking, key=lambda x: (x[1], -x[0]), reverse=True)	#Ordena uma tupla decrescente (id,weight)). Em caso de empate ordena crecente pelo id os empatados
 	
-	if ranking is not None:	
-		ranking = sorted(ranking, key=lambda x: (x[1], -x[0]), reverse=True)	#Ordena uma tupla decrescente (id,weight)). Em caso de empate ordena crecente pelo id os empatados
-	
-		top_k = []
-		i=0						
-		for i in range(10):															# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
-			i+1
-			try:
-				top_k.append(ranking[i])
-			except Exception as e:
-				print e
-		print len(top_k), len(ranking)
-			
-	print len(alters_set),len(alters_set_full)
+	top_k = []
+	i=0						
+	for i in range(10):															# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
+		i+1
+		try:
+			top_k.append(ranking[i])
+		except Exception as e:
+			print e
+	print len(top_k), len(ranking)
 	return alters_set											# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
 			
 ################################################################################################
