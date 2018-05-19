@@ -34,7 +34,7 @@ def create_dir(x):
 #
 ######################################################################################################################################################################
 def box_plot(_a,_s,_r,_l,_m, metric,title):
-	output = str(output_dir)+"/"+str(metric)+"/"
+	output = str(output_dir)+"/"
 	create_dir(output)	
 		
 	if metric == "overlap_top_k":	
