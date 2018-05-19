@@ -36,23 +36,27 @@ def create_dir(x):
 def box_plot(_a,_s,_r,_l,_m, metric,title):
 	output = str(output_dir)+"/"+str(metric)+"/"
 	create_dir(output)	
-	
-	trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
-	trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
-	trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
-	trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
-	trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
-	
-	data = [trace0, trace1, trace2, trace3, trace4]
+		
+	if metric == "overlap_top_k":	
+		#trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
+		#trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
+		trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
+		trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
+		trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
+		data = [trace2, trace3, trace4]
+	else:
+		trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
+		trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
+		trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
+		trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
+		trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
+		data = [trace0, trace1, trace2, trace3, trace4]
 
 	title_plot = title
 	layout = go.Layout(title=title_plot)
 	fig = go.Figure(data=data, layout=layout)
 
 	plotly.offline.plot(fig, filename=output+str(metric)+"_box_plot.html",auto_open=True)
-	
-	
-	pass
 	
 ######################################################################################################################################################################
 #
