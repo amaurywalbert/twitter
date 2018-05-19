@@ -114,8 +114,8 @@ def instructions(type_graphs,singletons):
 				with open(output_dir_txt+"overlap_lists.txt",'w') as out_file_overlap_lists:
 					with open(output_dir_txt+"overlap_alters.txt",'w') as out_file_overlap_alters:
 						i=0
-						for ground_truth_file in os.listdir(source_dir):			
-							lists_set = get_lists_set(source_dir+ground_truth_file)														# Recupera o conjunto de elementos das listas do ego.
+						for ground_truth_file in os.listdir(ground_truth_dir):			
+							lists_set = get_lists_set(ground_truth_dir+ground_truth_file)														# Recupera o conjunto de elementos das listas do ego.
 							ego_id = ground_truth_file.split(".txt")
 							ego_id = long(ego_id[0])
 							i+=1
