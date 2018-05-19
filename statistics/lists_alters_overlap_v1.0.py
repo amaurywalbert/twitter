@@ -78,7 +78,10 @@ def get_alters_set(ego_id,file):
 	i=0						
 	for i in range(10):															# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
 		i+1
-		top_k.append(ranking[i])
+		try:
+			top_k.append(ranking[i])
+		except Exception as e:
+			print e
 	
 	print ranking	
 	print top_k

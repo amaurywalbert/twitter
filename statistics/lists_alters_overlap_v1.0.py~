@@ -74,8 +74,10 @@ def get_alters_set(ego_id,file):
 
 	ranking = sorted(ranking, key=lambda x: (x[1], -x[0]), reverse=True) 		#Ordena uma tupla decrescente (id,weight)). Em caso de empate ordena crecente pelo id os empatados
 	
-	top_k = []						
+	top_k = []
+	i=0						
 	for i in range(10):															# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
+		i+1
 		top_k.append(ranking[i])
 	
 	print ranking	
