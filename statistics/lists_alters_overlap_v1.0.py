@@ -64,14 +64,24 @@ def get_alters_set(ego_id,file):
 			
 			if len(a) > 2:
 				if long(a[0])==long(ego_id):
-					alters_set.add(long(a[0]))										#Pega só o primeiro campo - nó1
+					alters_set.add(long(a[0]))										# Pega só o primeiro campo - nó1
 					tuple=(a[1],a[2])													# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
 					ranking.append(tuple)
 				elif long(a[1])==long(ego_id):
-					alters_set.add(long(a[1]))										#Pega só o segundo campo - nó 2
+					alters_set.add(long(a[1]))										# Pega só o segundo campo - nó 2
 					tuple=(a[0],a[2])													# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
 					ranking.append(tuple)
-
+			else:																			# Rede sem peso
+				weight = 1
+				if long(a[0])==long(ego_id):
+					alters_set.add(long(a[0]))										# Pega só o primeiro campo - nó1
+					tuple=(a[1],weight)												# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
+					ranking.append(tuple)
+				elif long(a[1])==long(ego_id):
+					alters_set.add(long(a[1]))										# Pega só o segundo campo - nó 2
+					tuple=(a[0],weight)												# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
+					ranking.append(tuple)				
+				
 	ranking = sorted(ranking, key=lambda x: (x[1], -x[0]), reverse=True) 		#Ordena uma tupla decrescente (id,weight)). Em caso de empate ordena crecente pelo id os empatados
 	
 	top_k = []
