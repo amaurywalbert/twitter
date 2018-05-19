@@ -61,7 +61,8 @@ def get_alters_set(ego_id,file):
 
 			alters_set_full.add(long(a[0]))									#Pega só o primeiro campo - nó1
 			alters_set_full.add(long(a[1]))									#Pega só o segundo campo - nó 2
-			
+			print len(a)
+			time.sleep(2)
 			if len(a) > 2:
 				if long(a[0])==long(ego_id):
 					alters_set.add(long(a[0]))										# Pega só o primeiro campo - nó1
