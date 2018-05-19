@@ -58,18 +58,15 @@ def get_alters_set(ego_id,file):
 	with open(file, 'r') as f:
 		for line in f:			
 			a = line.split(' ')
-
-			alters_set_full.add(long(a[0]))									#Pega só o primeiro campo - nó1
-			alters_set_full.add(long(a[1]))									#Pega só o segundo campo - nó 2
 			if long(a[0])==long(ego_id):
 				alters_set.add(long(a[1]))										# Pega só o primeiro campo - nó1
 				if len(a) > 2:
-					tuple=(long(a[1]),float(a[2]))													# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
+					tuple=(long(a[1]),float(a[2]))							# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
 					ranking.append(tuple)
 			elif long(a[1])==long(ego_id):
 				alters_set.add(long(a[0]))										# Pega só o segundo campo - nó 2
 				if len(a) > 2:
-					tuple=(long(a[0]),float(a[2]))													# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
+					tuple=(long(a[0]),float(a[2]))							# Armazena o peso do relacionamento entre o alter e o ego para formar um ranking depois.
 					ranking.append(tuple)
 			
 								
@@ -85,10 +82,10 @@ def get_alters_set(ego_id,file):
 				top_k.append(ranking[i])
 			except Exception as e:
 				print e
-		print top_k
+		print len(top_k), len(ranking)
 			
 	print len(alters_set),len(alters_set_full)
-	return alters_set
+	return alters_set											# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
 			
 ################################################################################################
 # Função para calcular o a sobreposição e o csj entre dois conjuntos de dados
