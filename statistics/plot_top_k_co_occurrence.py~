@@ -57,7 +57,7 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 			'Mentions': [_mr_avg['media'],_ml_avg['media'],_mm_avg['media']]
         }
         
-	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'])
+	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'],columns_y = ['Retweets','Likes','Mentions'])
 	print ("Média:")	
 	print df
 	
@@ -77,7 +77,7 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
 	
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
-	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)
+	plt.yticks(range(len(df.columns_y)), df.columns_y,rotation=30,size=9)
 
 #	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank',y=-0.08)
 #	plt.colorbar(orientation='horizontal')
