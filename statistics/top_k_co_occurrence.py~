@@ -98,9 +98,9 @@ def get_top_k(ego,file):
 #
 ######################################################################################################################################################################
 def jaccard_modified(set1,set2):
-	if len(set1) > 0:
+	if len(set2) > 0:
 		intersection = len(set1.intersection(set2))	
-		result = intersection/float(len(set1))				#Tamanho da interseção dos conjuntos sobre o tamanho do ranking.
+		result = intersection/float(len(set2))				#Tamanho da interseção dos conjuntos sobre o tamanho do ranking.
 	else:
 		result = 0
 									
@@ -114,9 +114,9 @@ def jaccard_modified(set1,set2):
 def calc_co_occurrence(alters_set,top_k):
 	pairs = {}			
 
-	for k,v in top_k.iteritems():
+	for k,v in alters_set.iteritems():
 		set1 = v
-		for j, x in alters_set.iteritems():
+		for j, x in top_k.iteritems():
 #			if j >= k and j != k:											# Considera todos os pares, inclusive duas camadas iguais.
 			set2 = x
 			name = str(k)+str(j)
@@ -169,7 +169,7 @@ def instructions(type_graphs,singletons):
 				save_file(ego,pairs,out_file)																						# Salvar arquivo texto			
 				top_k_dataset[ego] = pairs
 					
-				print ("Ego: "+str(i)+" - Top-K Pairs: "+str(top_k_dataset[ego]))
+				print ("Ego: "+str(i)+" - Top-K Co-Occurrence: "+str(top_k_dataset[ego]))
 				print
 			
 		name = "top_k_co_occurrence"
