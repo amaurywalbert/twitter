@@ -51,7 +51,7 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	print ("\nCriando Matriz de Correlação...")
 	print ("Salvando dados em: "+str(output_dir)+"\n")
 
-	raw_data = {'Retweets': [rr['media'],_rl['media'],_rm['media']],
+	raw_data = {'Retweets': [_rr['media'],_rl['media'],_rm['media']],
         'Likes': [_lr['media'],_ll['media'],_lm['media']],
         'Mentions': [_mr['media'],_ml['media'],_mm['media']]
         }
