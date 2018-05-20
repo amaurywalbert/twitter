@@ -89,7 +89,7 @@ def get_top_k(ego,file):
 		except Exception as e:													# Ranking menor que o top-k
 			pass
 	
-	return top_k														# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
+	return alters_set,top_k														# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
 
 
 ######################################################################################################################################################################
@@ -97,36 +97,30 @@ def get_top_k(ego,file):
 # Calcula Rank_based Overlap - Extended entre os rankings de pares de layers  
 #
 ######################################################################################################################################################################
-def jaccard_modified(ranking1,ranking2):
-	if len(ranking2) > 0:
-		intersection = len(ranking1.intersection(ranking2))	
-		result = intersection/float(len(ranking2))				#Tamanho da interseção dos rankings sobre o tamanho d segundo ranking
+def jaccard_modified(set1,set2):
+	if len(set1) > 0:
+		intersection = len(set1.intersection(set2))	
+		result = intersection/float(len(set1))				#Tamanho da interseção dos conjuntos sobre o tamanho do ranking.
 	else:
 		result = 0
 									
-	return result															#... verifica qual o percentual dos top_k da segunda camada está na primeira
+	return result													#... verifica qual o percentual dos top_k estão presentes nas demais camadas.
 																				
 ######################################################################################################################################################################
 #
 # Prepara o cálculo da co-ocorrência entre os pares de layers - Extended entre os rankings de pares de layers  
 #
 ######################################################################################################################################################################
-def calc_co_occurrence(top_k):
+def calc_co_occurrence(alters_set,top_k):
 	pairs = {}			
 
 	for k,v in top_k.iteritems():
-		ranking1 = []
-		for item in v:
-			ranking1.append(item)										# Colocando ranking em lista para a camada 1 - Apenas o ID do vertice
-
-		for j, x in top_k.iteritems():
-#			if j >= k and j != k:										# Considera todos os pares, inclusive duas camadas iguais.
-			ranking2 = []
-			for item in x:
-				ranking2.append(item)									# Colocando ranking em lista para a camada 2 - Apenas o ID do vertice
-				
+		set1 = v
+		for j, x in alters_set.iteritems():
+#			if j >= k and j != k:											# Considera todos os pares, inclusive duas camadas iguais.
+			set2 = x
 			name = str(k)+str(j)
-			pairs[name] = jaccard_modified(set(ranking1),set(ranking2))	# Comparando os rankings com jaccard_modified (tamanho da interseção sobre o tamanho do segundo conjunto (ranking2)				 	
+			pairs[name] = jaccard_modified(set(set1),set(set2))	#Comparando os conjuntos com jaccard_modified (tamanho da interseção sobre o tamanho do primeiro conjunto (ranking)				 	
 	
 	return pairs
 								
@@ -143,11 +137,12 @@ def instructions(type_graphs,singletons):
 		print ("Arquivo de destino já existe!"+str(output_dir+"top_k_co_occurrence.json"))
 	else:
 		i=0
-		top_k_dataset = {}																											# Armazenar os tpo-k de todas as camadas.
+		top_k_dataset = {}																												# Armazenar os tpo-k de todas as camadas.
 		with open(output_dir+"top_k_co_occurrence.txt",'w') as out_file:
 			for ego,v in dictionary.iteritems():
 				i+=1
 				top_k = {}																													# armazena os top-k das camadas do ego em corrente
+				alters_set = {}
 				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter					
 				for net in nets:
 					if net == "n1":
@@ -168,16 +163,16 @@ def instructions(type_graphs,singletons):
 					if not os.path.exists(graphs_dir):
 						print ("Impossível encontrar arquivos com o grafo: "+str(graphs_dir))
 					else:
-						top_k[layer] = get_top_k(ego,graphs_dir+str(ego)+".edge_list")												# Recupera os alters da camada n para ego_id
+						alters_set[layer],top_k[layer] = get_top_k(ego,graphs_dir+str(ego)+".edge_list")			# Recupera os alters da camada n para ego_id
 
-				pairs = calc_co_occurrence(top_k) 
+				pairs = calc_co_occurrence(alters_set,top_k) 
 				save_file(ego,pairs,out_file)																						# Salvar arquivo texto			
 				top_k_dataset[ego] = pairs
 					
 				print ("Ego: "+str(i)+" - Top-K Pairs: "+str(top_k_dataset[ego]))
 				print
 			
-		name = "top_k_co_occurrence.json"
+		name = "top_k_co_occurrence"
 		save_json(output_dir,top_k_dataset,name)
 ######################################################################################################################################################################
 #
