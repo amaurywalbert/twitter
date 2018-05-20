@@ -51,18 +51,18 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	print ("\nCriando Matriz de Correlação...")
 	print ("Salvando dados em: "+str(output_dir)+"\n")
 
-	raw_data = {'Retweets': [_rr['media'],_rl['media'],_rm['media']],
-        'Likes': [_lr['media'],_ll['media'],_lm['media']],
-        'Mentions': [_mr['media'],_ml['media'],_mm['media']]
+	raw_data = {'Retweets': [_rr_avg['media'],_rl_avg['media'],_rm_avg['media']],
+        'Likes': [_lr_avg['media'],_ll_avg['media'],_lm_avg['media']],
+        'Mentions': [_mr_avg['media'],_ml_avg['media'],_mm_avg['media']]
         }
         
 	df = pd.DataFrame(raw_data, columns = ['Retweets','Likes','Mentions'])
 	print ("Média:")	
 	print df
 	
-	raw_data_dp = {'Retweets': [_rr['desvio_padrao'],_rl['desvio_padrao'],_rm['desvio_padrao']],
-        'Likes': [_lr['desvio_padrao'],_ll['desvio_padrao'],_lm['desvio_padrao']],
-        'Mentions': [_mr['desvio_padrao'],_ml['desvio_padrao'],_mm['desvio_padrao']]
+	raw_data_dp = {'Retweets': [_rr_avg['desvio_padrao'],_rl_avg['desvio_padrao'],_rm_avg['desvio_padrao']],
+        'Likes': [_lr_avg['desvio_padrao'],_ll_avg['desvio_padrao'],_lm_avg['desvio_padrao']],
+        'Mentions': [_mr_avg['desvio_padrao'],_ml_avg['desvio_padrao'],_mm_avg['desvio_padrao']]
         }
         
 	df_dp = pd.DataFrame(raw_data_dp, columns = ['Retweets','Likes','Mentions'])
