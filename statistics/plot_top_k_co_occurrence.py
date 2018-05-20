@@ -51,7 +51,7 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	print ("\nCriando Matriz de Correlação...")
 	print ("Salvando dados em: "+str(output_dir)+"\n")
 
-	raw_data = {'Follow': [_aa_avg['media'],_ar_avg['media'],_al_avg['media'],_am_avg['media']],
+	raw_data = {'Follow': [' - ',' - ',' - ',' - '],
 			'Retweets': [_ra_avg['media'],_rr_avg['media'],_rl_avg['media'],_rm_avg['media']],
 			'Likes': [_la_avg['media'],_lr_avg['media'],_ll_avg['media'],_lm_avg['media']],
 			'Mentions': [_ma_avg['media'],_mr_avg['media'],_ml_avg['media'],_mm_avg['media']]
@@ -61,7 +61,7 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	print ("Média:")	
 	print df
 	
-	raw_data_dp = {'Follow': [_aa_avg['desvio_padrao'],_ar_avg['desvio_padrao'],_al_avg['desvio_padrao'],_am_avg['desvio_padrao']],
+	raw_data_dp = {'Follow': [' - ',' - ',' - ',' - '],
 			'Retweets': [_ra_avg['desvio_padrao'],_rr_avg['desvio_padrao'],_rl_avg['desvio_padrao'],_rm_avg['desvio_padrao']],
 			'Likes': [_la_avg['desvio_padrao'],_lr_avg['desvio_padrao'],_ll_avg['desvio_padrao'],_lm_avg['desvio_padrao']],
 			'Mentions': [_ma_avg['desvio_padrao'],_mr_avg['desvio_padrao'],_ml_avg['desvio_padrao'],_mm_avg['desvio_padrao']]
