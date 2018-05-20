@@ -177,7 +177,7 @@ def instructions(type_graphs,singletons):
 				print ("Ego: "+str(i)+" - Top-K Pairs: "+str(top_k_dataset[ego]))
 				print
 			
-		name = "top_k_co_occurrence.json"
+		name = "top_k_co_occurrence"
 		save_json(output_dir,top_k_dataset,name)
 ######################################################################################################################################################################
 #

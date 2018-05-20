@@ -98,7 +98,7 @@ def get_top_k(ego,file):
 #
 ######################################################################################################################################################################
 def jaccard_modified(ranking1,ranking2):
-	if len(ranking1) > 0:
+	if len(ranking2) > 0:
 		intersection = len(ranking1.intersection(ranking2))	
 		result = intersection/float(len(ranking2))				#Tamanho da interseção dos rankings sobre o tamanho d segundo ranking
 	else:

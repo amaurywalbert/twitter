@@ -246,9 +246,7 @@ def main():
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
 		file = str(data_dir)+str(metric)+".json"
-		output =str(output_dir)+str(metric)+"/"
-		create_dirs(output)
-		prepare(metric,file,output)
+		prepare(metric,file)
 
 	print("\n######################################################################\n")
 	print("Script finalizado!")

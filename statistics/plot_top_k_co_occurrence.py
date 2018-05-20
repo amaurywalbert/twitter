@@ -47,9 +47,9 @@ def create_dirs(x):
 #####################################################################################################################################################################
 # Color Bar - Correlation Matrix
 ######################################################################################################################################################################
-def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_sr_avg,_sl_avg,_sm_avg, _ra_avg,_rs_avg,_rr_avg,_rl_avg,_rm_avg, _la_avg,_ls_avg,_lr_avg,_ll_avg,_lm_avg, _ma_avg,_ms_avg,_mr_avg,_ml_avg,_mm_avg,output_dir):
+def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_sr_avg,_sl_avg,_sm_avg, _ra_avg,_rs_avg,_rr_avg,_rl_avg,_rm_avg, _la_avg,_ls_avg,_lr_avg,_ll_avg,_lm_avg, _ma_avg,_ms_avg,_mr_avg,_ml_avg,_mm_avg):
 	print ("\nCriando Matriz de Correlação...")
-	print ("Salvando dados em: "+str(output)+"\n")
+	print ("Salvando dados em: "+str(output_dir)+"\n")
 
 	raw_data = {'Retweets': [rr['media'],_rl['media'],_rm['media']],
         'Likes': [_lr['media'],_ll['media'],_lm['media']],
@@ -83,9 +83,9 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
 
-	plt.savefig(output+metric+".png",bbox_inches='tight',dpi=300)
+	plt.savefig(output_dir+metric+".png",bbox_inches='tight',dpi=300)
 	plt.close()
-	print (" - OK! Color Bar salvo em: "+str(output))
+	print (" - OK! Color Bar salvo em: "+str(output_dir))
 	print
 
 ######################################################################################################################################################################
@@ -93,7 +93,7 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 # Plotar Gŕaficos relacionados aos dados
 #
 ######################################################################################################################################################################
-def prepare(metric,file,output):
+def prepare(metric,file):
 	with open(file,'r') as f:
 		data = json.load(f)
 	pairs = {}
@@ -222,7 +222,7 @@ def prepare(metric,file,output):
 	_ml_avg = calc.calcular_full(_ml)
 	_mm_avg = calc.calcular_full(_mm)		
 
-	color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_sr_avg,_sl_avg,_sm_avg, _ra_avg,_rs_avg,_rr_avg,_rl_avg,_rm_avg, _la_avg,_ls_avg,_lr_avg,_ll_avg,_lm_avg, _ma_avg,_ms_avg,_mr_avg,_ml_avg,_mm_avg,output_dir)
+	color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_sr_avg,_sl_avg,_sm_avg, _ra_avg,_rs_avg,_rr_avg,_rl_avg,_rm_avg, _la_avg,_ls_avg,_lr_avg,_ll_avg,_lm_avg, _ma_avg,_ms_avg,_mr_avg,_ml_avg,_mm_avg)
 		
 	
 ######################################################################################################################################################################
@@ -246,9 +246,7 @@ def main():
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
 		file = str(data_dir)+str(metric)+".json"
-		output =str(output_dir)+str(metric)+"/"
-		create_dirs(output)
-		prepare(metric,file,output)
+		prepare(metric,file)
 
 	print("\n######################################################################\n")
 	print("Script finalizado!")
