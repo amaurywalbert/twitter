@@ -85,7 +85,7 @@ def get_top_k(ego,file):
 	for i in range(10):		#10 é o tamanho do ranking (top-k)		# Cria um sub-ranking com apenas os top-k elementos com os quais o ego mais interagiu nessa camada.
 		i+1
 		try:
-			top_k.append(ranking[i][0])
+			top_k.append(long(ranking[i][0]))
 		except Exception as e:													# Ranking menor que o top-k
 			pass
 	
@@ -97,9 +97,7 @@ def get_top_k(ego,file):
 # Calcula Rank_based Overlap - Extended entre os rankings de pares de layers  
 #
 ######################################################################################################################################################################
-def jaccard_modified(rank1,rank2):
-	ranking1 = set(rank1)
-	ranking2 = set(rank2)
+def jaccard_modified(ranking1,ranking2):
 	intersection = len(ranking1.intersection(ranking2))	
 	result = intersection/float(len(ranking2))				#Tamanho da interseção dos rankings sobre o tamanho d segundo ranking
 	return result															#... verifica qual o percentual dos top_k da segunda camada está na primeira
@@ -115,16 +113,16 @@ def calc_co_occurrence(top_k):
 	for k,v in top_k.iteritems():
 		ranking1 = []
 		for item in v:
-			ranking1.append(long(item))					# Colocando ranking em lista para a camada 1 - Apenas o ID do vertice
+			ranking1.append(item)										# Colocando ranking em lista para a camada 1 - Apenas o ID do vertice
 
 		for j, x in top_k.iteritems():
-#			if j >= k and j != k:					# Considera todos os pares, inclusive duas camadas iguais.
+#			if j >= k and j != k:										# Considera todos os pares, inclusive duas camadas iguais.
 			ranking2 = []
 			for item in x:
-				ranking2.append(long(item))				# Colocando ranking em lista para a camada 2 - Apenas o ID do vertice
+				ranking2.append(item)									# Colocando ranking em lista para a camada 2 - Apenas o ID do vertice
 				
 			name = str(k)+str(j)
-			pairs[name] = jaccard_modified(ranking1,ranking2)	# Comparando os rankings com jaccard_modified (tamanho da interseção sobre o tamanho do segundo conjunto (ranking2)				 	
+			pairs[name] = jaccard_modified(set(ranking1),set(ranking2))	# Comparando os rankings com jaccard_modified (tamanho da interseção sobre o tamanho do segundo conjunto (ranking2)				 	
 	
 	return pairs
 								
