@@ -98,8 +98,8 @@ def get_top_k(ego,file):
 #
 ######################################################################################################################################################################
 def jaccard_modified(ranking1,ranking2):
-		intersection = len(ranking1.intersection(ranking2))	
-		result = intersection/float(len(ranking2))				#Tamanho da interseção dos rankings sobre o tamanho d segundo ranking
+	intersection = len(ranking1.intersection(ranking2))	
+	result = intersection/float(len(ranking2))				#Tamanho da interseção dos rankings sobre o tamanho d segundo ranking
 	return result															#... verifica qual o percentual dos top_k da segunda camada está na primeira
 																				
 ######################################################################################################################################################################
