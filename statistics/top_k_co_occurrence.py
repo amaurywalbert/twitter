@@ -89,7 +89,7 @@ def get_top_k(ego,file):
 		except Exception as e:													# Ranking menor que o top-k
 			pass
 	
-	return alters_set,top_k														# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
+	return top_k														# Só retorna a lista de alters, sem considerar o ego, embora o ego apareça nas listas em que ele está inscrito.
 
 
 ######################################################################################################################################################################
@@ -98,8 +98,12 @@ def get_top_k(ego,file):
 #
 ######################################################################################################################################################################
 def jaccard_modified(ranking1,ranking2):
-	intersection = len(ranking1.intersection(ranking2))	
-	result = intersection/float(len(ranking2))				#Tamanho da interseção dos rankings sobre o tamanho d segundo ranking
+	if len(ranking2) > 0:
+		intersection = len(ranking1.intersection(ranking2))	
+		result = intersection/float(len(ranking2))				#Tamanho da interseção dos rankings sobre o tamanho d segundo ranking
+	else:
+		result = 0
+									
 	return result															#... verifica qual o percentual dos top_k da segunda camada está na primeira
 																				
 ######################################################################################################################################################################

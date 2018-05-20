@@ -51,23 +51,21 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	print ("\nCriando Matriz de Correlação...")
 	print ("Salvando dados em: "+str(output)+"\n")
 
-	raw_data = {'Follow': [_aa['media'],_ar['media'],_al['media'],_am['media']],
-        'Retweets': [_ra['media'],_rr['media'],_rl['media'],_rm['media']],
-        'Likes': [_la['media'],_lr['media'],_ll['media'],_lm['media']],
-        'Mentions': [_ma['media'],_mr['media'],_ml['media'],_mm['media']]
+	raw_data = {'Retweets': [rr['media'],_rl['media'],_rm['media']],
+        'Likes': [_lr['media'],_ll['media'],_lm['media']],
+        'Mentions': [_mr['media'],_ml['media'],_mm['media']]
         }
         
-	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'])
+	df = pd.DataFrame(raw_data, columns = ['Retweets','Likes','Mentions'])
 	print ("Média:")	
 	print df
 	
-	raw_data_dp = {'Follow': [_aa['desvio_padrao'],_ar['desvio_padrao'],_al['desvio_padrao'],_am['desvio_padrao']],
-        'Retweets': [_ra['desvio_padrao'],_rr['desvio_padrao'],_rl['desvio_padrao'],_rm['desvio_padrao']],
-        'Likes': [_la['desvio_padrao'],_lr['desvio_padrao'],_ll['desvio_padrao'],_lm['desvio_padrao']],
-        'Mentions': [_ma['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],_mm['desvio_padrao']]
+	raw_data_dp = {'Retweets': [_rr['desvio_padrao'],_rl['desvio_padrao'],_rm['desvio_padrao']],
+        'Likes': [_lr['desvio_padrao'],_ll['desvio_padrao'],_lm['desvio_padrao']],
+        'Mentions': [_mr['desvio_padrao'],_ml['desvio_padrao'],_mm['desvio_padrao']]
         }
         
-	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweets','Likes','Mentions'])
+	df_dp = pd.DataFrame(raw_data_dp, columns = ['Retweets','Likes','Mentions'])
 	print ("Desvio padrão:")
 	print df_dp	
 	
@@ -268,8 +266,8 @@ singletons1 = "full"
 singletons2 = "without_singletons"
 #######################################################################
 	
-data_dir = "/home/amaury/Dropbox/lists_properties/"+str(type_graphs)+"_"+str(singletons)+"/"
-output_dir = "/home/amaury/Dropbox/lists_properties_statistics/"+str(type_graphs)+"_"+str(singletons)+"/"
+data_dir = "/home/amaury/Dropbox/lists_properties/"+str(type_graphs1)+"_"+str(singletons1)+"/"
+output_dir = "/home/amaury/Dropbox/lists_properties_statistics/"+str(type_graphs1)+"_"+str(singletons1)+"/"
 
 #Executa o método main
 if __name__ == "__main__": main()
