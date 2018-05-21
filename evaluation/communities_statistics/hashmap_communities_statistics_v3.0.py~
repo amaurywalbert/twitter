@@ -97,7 +97,7 @@ def create_dirs(out_dir):
 # Cálculos iniciais sobre o conjunto de dados lidos.
 #
 ######################################################################################################################################################################
-def calculate_alg(singletons,net,ud,g_type,alg):
+def calculate_alg(singletons,net,g_type,alg):
 	
 	communities_dir = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
 
@@ -189,38 +189,6 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	print
-	print"  1 - Follow"
-	print"  9 - Follwowers"
-	print"  2 - Retweets"
-	print"  3 - Likes"
-	print"  4 - Mentions"
-	
-	print " "
-	print"  5 - Co-Follow"
-	print" 10 - Co-Followers"				
-	print"  6 - Co-Retweets"
-	print"  7 - Co-Likes"
-	print"  8 - Co-Mentions"
-			
-	print
-	op = int(raw_input("Escolha uma opção acima: "))
-
-	if op in (5,6,7,8,10):																						# Testar se é um grafo direcionado ou não
-		ud = True
-	elif op in (1,2,3,4,9):
-		ud = False 
-	else:
-		print("Opção inválida! Saindo...")
-		sys.exit()
-
-	
-	print
-	print ("\n")
-######################################################################
-	
-	net = "n"+str(op)	
-
 #######################################################################
 #######################################################################
 	print("######################################################################")	
@@ -250,31 +218,30 @@ def main():
 		sys.exit()	
 	print
 	print ("\n")
-	
+
 ######################################################################################################################
-	g_type1 = "graphs_with_ego"
-	g_type2 = "graphs_without_ego"
+	networks = ["n1","n2","n3","n4","n9"]	
+	for net in networks:
+		g_type1 = "graphs_with_ego"
+		g_type2 = "graphs_without_ego"
 
-	singletons1 = "full"
-	singletons2 = "without_singletons"
+		singletons1 = "full"
+		singletons2 = "without_singletons"
 	
-######################################################################################################################
-	os.system('clear')
-	
-	print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-	calculate_alg(singletons1,net,ud,g_type1,alg)
-	
-
-#	print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons2))
-#	calculate_alg(singletons2,net,ud,g_type1,alg)
+		print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
+		calculate_alg(singletons1,net,g_type1,alg)
 	
 
-	print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-	calculate_alg(singletons1,net,ud,g_type2,alg)
+#		print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons2))
+#		calculate_alg(singletons2,net,g_type1,alg)
+	
+
+#		print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
+#		calculate_alg(singletons1,net,g_type2,alg)
 
 
-#	print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type4)+" - Algoritmo: "+str(alg)+" - "+str(singletons4))
-#	calculate_alg(singletons2,net,ud,g_type2,alg)
+#		print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type4)+" - Algoritmo: "+str(alg)+" - "+str(singletons4))
+#		calculate_alg(singletons2,net,g_type2,alg)
 	
 
 ######################################################################################################################		
