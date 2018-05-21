@@ -32,10 +32,11 @@ def prepare_communities(community_file,n_nodes):
 	alters_set = set()
 	size = []																# Lista com os tamanhos das communidades
 	size_norm = []															# Lista com os tamanhos das communidades normalizada pelo número de vértices da rede-ego
-	greater_comm_avg = 0													# Tamanho médio das maiores comunidades
+	greater_comm_norm = 0												# Tamanho da maior comunidade normalizado pelo conjunto de vértices do grafo
 	n_singletons = 0														# Número de Singletons (comunidades formada por apenas um vértice) 
 	n_non_singletons = 0													# Número de Não Singletons
 	greater_comm = 0														# Tamanho da maior comunidade
+	smaller_comm = "inf"														# Tamanho da menor comunidade
 
 	for line in community_file:
 		i+=1
@@ -48,20 +49,24 @@ def prepare_communities(community_file,n_nodes):
 				alters_set.add(long(item))
 
 		if len(comm) > 1:
-			n_singletons+=1
-		else:
 			n_non_singletons+=1
+		else:
+			n_singletons+=1
 		
 		if len(comm) > greater_comm:										# Tamanho da maior comunidade
 			greater_comm = len(comm)
 
+		if len(comm) < smaller_comm:										# Tamanho da menor comunidade
+			smaller_comm = len(comm)
+			
+			
 		communities[key] = comm												# dicionário communities recebe a lista de ids dos membros das comunidades tendo como chave o valor key
 		b = float(len(comm))/float(n_nodes)
 		size.append(len(comm))
 		size_norm.append(b)
 
 	n_comm = len(communities)												# Quantidade de comunidades para o ego em questão
-	greater_comm_avg = float(greater_comm)/float(n_nodes)
+	greater_comm_norm = float(greater_comm)/float(n_nodes)
 	
 	if n_nodes > alters_set:	
 		alters_ignored = n_nodes - len(alters_set)					# Número de alters que foram ignorados no processo de detecção e não receberam rótulos.
@@ -70,12 +75,12 @@ def prepare_communities(community_file,n_nodes):
 		alters_ignored = 0
 		alters_ignored_norm = 0
 
-	avg_size = calc.calcular(size)										# Somar o vetor com o tamanho das comunidades...
+	avg_size = calc.calcular_full(size)									# Somar o vetor com o tamanho das comunidades...
 	avg_size_norm = calc.calcular(size_norm)							# Somar o vetor com o tamanho das comunidades normalizado...
 			
 	overlap = float(avg_size['soma'])/float(n_nodes)				# The overlap: the average number of communities to which each vertex belongs. This is the sum of the sizes of all communities (including singletons) divided by the number of vertices, n.
 	
-	return communities, n_comm, size, avg_size['media'], size_norm, avg_size_norm['media'], overlap, n_singletons, n_non_singletons, alters_ignored, alters_ignored_norm, greater_comm_avg
+	return communities, n_comm, size, avg_size['media'],avg_size['desvio_padrao'], size_norm, avg_size_norm['media'], overlap, n_singletons, n_non_singletons, alters_ignored, alters_ignored_norm, greater_comm, greater_comm_norm, smaller_comm
 
 ######################################################################################################################################################################
 #
@@ -147,8 +152,8 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 																								
 								with open(str(communities_dir)+str(threshold)+"/"+file, 'r') as community_file:
 								
-									communities, n_comm, size, avg_size, size_norm, avg_size_norm, overlap, n_singletons, n_non_singletons, alters_ignored, alters_ignored_norm, greater_comm_avg = prepare_communities(community_file,net_struct_nodes[str(ego_id)])		#Função para devolver um dicionário com as comunidades
-									statistics[ego_id] = {'n_nodes':net_struct_nodes[str(ego_id)],'n_edges':net_struct_edges[str(ego_id)],'n_communities':n_comm,'size':size,'avg_size':avg_size,'size_norm':size_norm,'avg_size_norm':avg_size_norm,'overlap':overlap, 'n_singletons':n_singletons,'n_non_singletons':n_non_singletons,'alters_ignored':alters_ignored,'alters_ignored_norm':alters_ignored_norm,'greater_comm_avg':greater_comm_avg}							
+									communities, n_comm, size, avg_size, std_size, size_norm, avg_size_norm, overlap, n_singletons, n_non_singletons, alters_ignored, alters_ignored_norm, greater_comm, greater_comm_norm, smaller_comm = prepare_communities(community_file,net_struct_nodes[str(ego_id)])		#Função para devolver um dicionário com as comunidades
+									statistics[ego_id] = {'n_nodes':net_struct_nodes[str(ego_id)],'n_edges':net_struct_edges[str(ego_id)],'n_communities':n_comm,'size':size,'avg_size':avg_size, "std_size":std_size, 'size_norm':size_norm,'avg_size_norm':avg_size_norm,'overlap':overlap, 'n_singletons':n_singletons,'n_non_singletons':n_non_singletons,'alters_ignored':alters_ignored,'alters_ignored_norm':alters_ignored_norm,'greater_comm':greater_comm,'greater_comm_norm':greater_comm_norm,"smaller_comm":smaller_comm}							
 
 						print g_type,singletons,alg,net
 																		 
@@ -225,8 +230,8 @@ def main():
 	print" 01 - COPRA"
 	print" 02 - OSLOM"
 	print" 03 - GN"
-	print" 04 - COPRA -Partition"
-	print" 05 - Infomap -Partition"
+	print" 04 - COPRA - Partition"
+	print" 05 - Infomap - Partition"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:

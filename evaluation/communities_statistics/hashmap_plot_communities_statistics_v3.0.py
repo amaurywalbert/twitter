@@ -100,7 +100,7 @@ def main():
 
 
 	if op2 == 0:
-		metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm","greater_comm_avg"]
+		metrics = ["n_communities","avg_size","avg_size_norm","overlap","n_singletons","n_non_singletons","alters_ignored","alters_ignored_norm","greater_comm","greater_comm_norm","smaller_comm"]
 	elif op2 == 1:
 		metrics = ["n_communities"]	
 	elif op2 == 2:
@@ -118,7 +118,11 @@ def main():
 	elif op2 == 8:
 		metrics = ["alters_ignored_norm"]
 	elif op2 == 9:
-		metrics = ["greater_comm_avg"]
+		metrics = ["greater_comm"]
+	elif op2 == 10:
+		metrics = ["greater_comm_norm"]
+	elif op2 == 11:
+		metrics = ["smaller_comm"]
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()
