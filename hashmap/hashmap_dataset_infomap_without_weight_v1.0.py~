@@ -75,12 +75,46 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 			Converte longint para int usando HashMap											"
+	print" 			Converte longint para int usando HashMap - Sem PESO							"
 	print"																											"
 	print"#################################################################################"	
+	print ("Grafos:\n")
+	print("01 - Follow ")
+	print("02 - Retweets")
+	print("03 - Likes")
+	print("04 - Mentions")
+	print("09 - Followers")	
+	print
+	op2 = int(raw_input("Escolha uma opção acima: "))
+	if op2 == 1:
+		net = "n1"
+	elif op2 == 2:
+		net = "n2"
+	elif op2 == 3:
+		net = "n3"		
+	elif op2 == 4:
+		net = "n4"
+	elif op2 == 9:
+		net = "n9"
+	else:
+		alg = ""
+		print("Opção inválida! Saindo...")
+		exit()	
 	
-	nets = ["n1","n2","n3","n4"]
-	for net in nets:
+	
+	print ("Atenção! Este script apagará os seguintes diretórios:")
+	print egonet_output+net
+	print
+	op = str(raw_input("Deseja continuar? (s/n) "))
+
+	if op != 's' and op != 'sim':
+		print ("Script finalizado pelo usuário...")
+		sys.exit()
+
+	else:
+		if os.path.exists(egonet_output+net):
+			shutil.rmtree(egonet_output+net)
+		
 		for diretorio in os.listdir(egonet_source+net):
 			if diretorio in ("graphs_with_ego","graphs_without_ego"):
 				j=0				
@@ -116,19 +150,5 @@ def main():
 egonet_source = "/home/amaury/graphs_hashmap/"
 egonet_output = "/home/amaury/graphs_hashmap_infomap_without_weight/"
 
-
-print ("Atenção! Este script apagará os seguintes diretórios:")
-print egonet_output
-print
-op = str(raw_input("Deseja continuar? (s/n) "))
-
-if op != 's' and op != 'sim':
-	print ("Script finalizado pelo usuário...")
-	sys.exit()
-
-else:
-	if os.path.exists(egonet_output):
-		shutil.rmtree(egonet_output)
-
 ######################################################################################################################
-	if __name__ == "__main__": main()
+if __name__ == "__main__": main()
