@@ -77,7 +77,7 @@ def get_alters_set(ego_id,file):
 		i+1
 		try:
 			top_k.append(ranking[i][0])
-		except Exception as e:											# Ranking menor que o top-k
+		except Exception as e:													# Ranking menor que o top-k
 			pass
 	
 	top_k_set = set(top_k)

@@ -107,11 +107,11 @@ def main():
 		if metric == "jaccard":
 			title = "Jaccard"
 		elif metric == "overlap_lists":
-			title = "Intersection over Lists Set"
+			title = "ALters Intersection over Lists Set"
 		elif metric == "overlap_alters":
-			title = "Intersection over Alters Set"
+			title = "Lists Intersection over Alters Set"
 		elif metric == "overlap_top_k":
-			title = "Intersection over Top-K Alters Set"	
+			title = "Top-K Intersection over Lists Set"	
 				
 		if not os.path.exists(str(source_dir)+str(metric)+".json"):
 			print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")
