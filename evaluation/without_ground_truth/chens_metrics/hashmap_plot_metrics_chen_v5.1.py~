@@ -132,6 +132,8 @@ def main():
 		alg = "copra_partition"
 	elif op1 == 5:
 		alg = "infomap"							
+	elif op1 == 6:
+		alg = "infomap_without_weight"	
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")

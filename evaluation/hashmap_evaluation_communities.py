@@ -58,84 +58,82 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	alg = 'infomap'
-	print
-	print"#################################################################################"
-
-######################################################################
-	print"#################################################################################"
-	print ("\nPreparando dados para o algoritmo: "+str(alg))
-	dataset = {}
-	data_comm = str(source_comm)+"graphs_with_ego/"+str(alg)+"/full/"
-	data_chen_mod_density = str(source_chen)+"modularity_density/graphs_with_ego/"+str(alg)+"/full/"
-	data_chen_modularity =  str(source_chen)+"modularity/graphs_with_ego/"+str(alg)+"/full/"
-	data_chen_intra_density =  str(source_chen)+"intra_density/graphs_with_ego/"+str(alg)+"/full/"
-	data_chen_conductance =  str(source_chen)+"conductance/graphs_with_ego/"+str(alg)+"/full/"
+	algs = ["infomap", "infomap_without_weight"]
+	for alg in algs:
 	
-	data_snap_coef_clust =  str(source_snap)+"coef_clust/graphs_with_ego/"+str(alg)+"/full/"
-	data_snap_conductance =  str(source_snap)+"conductance/graphs_with_ego/"+str(alg)+"/full/"
-	data_snap_density =  str(source_snap)+"density/graphs_with_ego/"+str(alg)+"/full/"
-	data_snap_modularity =  str(source_snap)+"modularity/graphs_with_ego/"+str(alg)+"/full/"
-		
-	comm = get_dataset(data_comm)
-	chen_mod_density = get_dataset(data_chen_mod_density)
-	chen_modularity = get_dataset(data_chen_modularity)
-	chen_intra_density = get_dataset(data_chen_intra_density)
-	chen_conductance = get_dataset(data_chen_conductance)
+		print"#################################################################################"
+		print ("\nPreparando dados para o algoritmo: "+str(alg))
+		dataset = {}
+		data_comm = str(source_comm)+"graphs_with_ego/"+str(alg)+"/full/"
+		data_chen_mod_density = str(source_chen)+"modularity_density/graphs_with_ego/"+str(alg)+"/full/"
+		data_chen_modularity =  str(source_chen)+"modularity/graphs_with_ego/"+str(alg)+"/full/"
+		data_chen_intra_density =  str(source_chen)+"intra_density/graphs_with_ego/"+str(alg)+"/full/"
+		data_chen_conductance =  str(source_chen)+"conductance/graphs_with_ego/"+str(alg)+"/full/"
 	
-	snap_coef_clust = get_dataset(data_snap_coef_clust)
-	snap_conductance = get_dataset(data_snap_conductance)
-	snap_density = get_dataset(data_snap_density)
-	snap_modularity = get_dataset(data_snap_modularity)
-
-#	for k,v in snap_modularity.iteritems():
-#		print k,v
-#		time.sleep(5)
+		data_snap_coef_clust =  str(source_snap)+"coef_clust/graphs_with_ego/"+str(alg)+"/full/"
+		data_snap_conductance =  str(source_snap)+"conductance/graphs_with_ego/"+str(alg)+"/full/"
+		data_snap_density =  str(source_snap)+"density/graphs_with_ego/"+str(alg)+"/full/"
+		data_snap_modularity =  str(source_snap)+"modularity/graphs_with_ego/"+str(alg)+"/full/"
 		
-	for net,net_data in comm.iteritems():
-		if net in ("n1","n2","n3","n4","n9"):
-			for threshold,threshold_data in net_data.iteritems():
-				dictionary = {}
-				output_dir = str(output)+str(alg)+"/"+str(net)+"/"
-				create_dirs(output_dir)
-				csv = open(output_dir+threshold+"_comm_statistics.csv", "w") #"w" indicates that you're writing strings to the file
-				columns = ["ego_id","n_nodes","n_edges","n_comm","max_comm_len","min_comm_len","comm_size_avg","comm_size_std","n_singletons","alters_ignored","chen_modularity_avg","chen_mod_density_avg","chen_conductance_avg","chen_intra_density_avg","snap_coef_clust_avg","snap_conductance_avg","snap_density_avg","snap_modularity_avg"]
-				columnTitleRow = ""
-				for column in columns:
-					columnTitleRow = columnTitleRow+str(column)+","
-				csv.write(columnTitleRow+"\n")
+		comm = get_dataset(data_comm)
+		chen_mod_density = get_dataset(data_chen_mod_density)
+		chen_modularity = get_dataset(data_chen_modularity)
+		chen_intra_density = get_dataset(data_chen_intra_density)
+		chen_conductance = get_dataset(data_chen_conductance)
+	
+		snap_coef_clust = get_dataset(data_snap_coef_clust)
+		snap_conductance = get_dataset(data_snap_conductance)
+		snap_density = get_dataset(data_snap_density)
+		snap_modularity = get_dataset(data_snap_modularity)
+
+	#	for k,v in snap_modularity.iteritems():
+	#		print k,v
+	#		time.sleep(5)
 		
-				i=0
-				for ego,ego_data in threshold_data.iteritems():
-					i+=1
-					print i,net,threshold,ego,ego_data
-					print
+		for net,net_data in comm.iteritems():
+			if net in ("n1","n2","n3","n4","n9"):
+				for threshold,threshold_data in net_data.iteritems():
+					dictionary = {}
+					output_dir = str(output)+str(alg)+"/"+str(net)+"/"
+					create_dirs(output_dir)
+					csv = open(output_dir+threshold+"_comm_statistics.csv", "w") #"w" indicates that you're writing strings to the file
+					columns = ["ego_id","n_nodes","n_edges","n_comm","max_comm_len","min_comm_len","comm_size_avg","comm_size_std","n_singletons","alters_ignored","chen_modularity_avg","chen_mod_density_avg","chen_conductance_avg","chen_intra_density_avg","snap_coef_clust_avg","snap_conductance_avg","snap_density_avg","snap_modularity_avg"]
+					columnTitleRow = ""
+					for column in columns:
+						columnTitleRow = columnTitleRow+str(column)+","
+					csv.write(columnTitleRow+"\n")
+		
+					i=0
+					for ego,ego_data in threshold_data.iteritems():
+						i+=1
+						print i,net,threshold,ego,ego_data
+						print
 
-					ego_id = ego
-					n_nodes = ego_data['n_nodes']
-					n_edges = ego_data['n_edges']
+						ego_id = ego
+						n_nodes = ego_data['n_nodes']
+						n_edges = ego_data['n_edges']
 
-					n_comm = ego_data['n_communities']
-					max_comm_len = ego_data['greater_comm']
-					min_comm_len = ego_data['smaller_comm']
-					comm_size_avg = ego_data['avg_size']
-					comm_size_std = ego_data['std_size']
-					n_singletons = ego_data['n_singletons']
-					alters_ignored = ego_data['alters_ignored']
+						n_comm = ego_data['n_communities']
+						max_comm_len = ego_data['greater_comm']
+						min_comm_len = ego_data['smaller_comm']
+						comm_size_avg = ego_data['avg_size']
+						comm_size_std = ego_data['std_size']
+						n_singletons = ego_data['n_singletons']
+						alters_ignored = ego_data['alters_ignored']
 
-					chen_mod_density_avg = chen_mod_density[net][threshold][ego]
-					chen_modularity_avg = chen_modularity[net][threshold][ego]
-					chen_conductance_avg = chen_conductance[net][threshold][ego]
-					chen_intra_density_avg = chen_intra_density[net][threshold][ego]
+						chen_mod_density_avg = chen_mod_density[net][threshold][ego]
+						chen_modularity_avg = chen_modularity[net][threshold][ego]
+						chen_conductance_avg = chen_conductance[net][threshold][ego]
+						chen_intra_density_avg = chen_intra_density[net][threshold][ego]
 					
-					snap_coef_clust_avg = snap_coef_clust[net][threshold]["coef_clust_data"][ego][0]
-					snap_conductance_avg = snap_conductance[net][threshold][ego]["media"]
-					snap_density_avg = snap_density[net][threshold][ego]["media"]
-					snap_modularity_avg = snap_modularity[net][threshold]["modularity_data"][ego][0]
+						snap_coef_clust_avg = snap_coef_clust[net][threshold]["coef_clust_data"][ego][0]
+						snap_conductance_avg = snap_conductance[net][threshold][ego]["media"]
+						snap_density_avg = snap_density[net][threshold][ego]["media"]
+						snap_modularity_avg = snap_modularity[net][threshold]["modularity_data"][ego][0]
 					
-					row = str(ego_id)+","+str(n_nodes)+","+str(n_edges,)+","+str(n_comm)+","+str(max_comm_len)+","+str(min_comm_len)+","+str(comm_size_avg)+","+str(comm_size_std)+","+str(n_singletons)+","+str(alters_ignored)+","+str(chen_modularity_avg)+","+str(chen_mod_density_avg)+","+str(chen_conductance_avg)+","+str(chen_intra_density_avg)+","+str(snap_coef_clust_avg)+","+str(snap_conductance_avg)+","+str(snap_density_avg)+","+str(snap_modularity_avg)
-					csv.write(row+"\n")				
-					print
+						row = str(ego_id)+","+str(n_nodes)+","+str(n_edges,)+","+str(n_comm)+","+str(max_comm_len)+","+str(min_comm_len)+","+str(comm_size_avg)+","+str(comm_size_std)+","+str(n_singletons)+","+str(alters_ignored)+","+str(chen_modularity_avg)+","+str(chen_mod_density_avg)+","+str(chen_conductance_avg)+","+str(chen_intra_density_avg)+","+str(snap_coef_clust_avg)+","+str(snap_conductance_avg)+","+str(snap_density_avg)+","+str(snap_modularity_avg)
+						csv.write(row+"\n")				
+						print
 	
 	print("\n######################################################################\n")
 	print("Script finalizado!")

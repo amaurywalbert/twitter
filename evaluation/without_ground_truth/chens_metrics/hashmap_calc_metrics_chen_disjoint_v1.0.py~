@@ -235,6 +235,7 @@ def main():
 	print
 	print"  4 - COPRA PARTITION"
 	print"  5 - INFOMAP"
+	print"  6 - INFOMAP - Without Weight"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -242,6 +243,8 @@ def main():
 		alg = "copra_partition"
 	elif op2 == 5:
 		alg = "infomap"			
+	elif op2 == 6:
+		alg = "infomap_without_weight"			
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")

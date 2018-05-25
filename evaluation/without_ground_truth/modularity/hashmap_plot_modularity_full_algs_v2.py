@@ -59,7 +59,7 @@ def main():
 
 ######################################################################
 
-	algs = ["copra","oslom","copra_partition","infomap"]	
+	algs = ["copra","oslom","copra_partition","infomap","infomap_without_weight"]	
 	metric = 'modularity'
 	algorithms_data = []
 

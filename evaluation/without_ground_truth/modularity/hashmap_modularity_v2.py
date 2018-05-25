@@ -21,12 +21,17 @@ sys.setdefaultencoding('utf-8')
 # Armazenar as propriedades do dataset
 #
 ######################################################################################################################################################################
-def net_structure(dataset_dir,output_dir,graph_type,metric,net):
+def net_structure(dataset_dir,output_dir,graph_type,metric,net,alg):
 	os.system('clear')	
 	print("\n######################################################################\n")
 	print("\nScript para cálculo da modularidade das comunidades detectadas\n")
 
-	graphs_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(graph_type)+"/"
+	if alg == "infomap":
+		graphs_dir = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(graph_type)+"/"
+	elif alg == "infomap_without_weight":
+		graphs_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(graph_type)+"/"	
+	else:
+		graphs_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(graph_type)+"/"
 		
 	if not os.path.exists(graphs_dir):
 		print ("Diretório não encontrado: "+str(graphs_dir))
@@ -170,6 +175,10 @@ def main():
 		alg = "gn"
 	elif op2 == 4:
 		alg = "copra_partition"
+	elif op2 == 5:
+		alg = "infomap"
+	elif op2 == 6:
+		alg = "infomap_without_weight"		
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()		
@@ -183,14 +192,14 @@ def main():
 	dataset_dir1 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/"	############### Arquivo contendo arquivos contendo as comunidades
 	
 	if not os.path.isdir(dataset_dir1):
-		print("Diretório dos grafos não encontrado: "+str(dataset_dir1))
+		print("Diretório das comunidades não encontrado: "+str(dataset_dir1))
 	else:
 		output_dir1 = str(output)+str(metric)+"/"+str(graph_type)+"/"+str(alg)+"/full/"+str(net)+"/"
 		if not os.path.exists(output_dir1):
 			os.makedirs(output_dir1)
 
 		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/")	
-		net_structure(dataset_dir1,output_dir1,graph_type,metric,net)														# Inicia os cálculos...
+		net_structure(dataset_dir1,output_dir1,graph_type,metric,net,alg)														# Inicia os cálculos...
 
 ######################################################################		
 ######################################################################
@@ -199,13 +208,13 @@ def main():
 	dataset_dir3 = "/home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/"	############### Arquivo contendo arquivos contendo as comunidades
 	
 	if not os.path.isdir(dataset_dir3):
-		print("Diretório dos grafos não encontrado: "+str(dataset_dir3))
+		print("Diretório das comunidades não encontrado: "+str(dataset_dir3))
 	else:
 		output_dir3 = str(output)+str(metric)+"/"+str(graph_type)+"/"+str(alg)+"/full/"+str(net)+"/"
 		if not os.path.exists(output_dir3):
 			os.makedirs(output_dir3)
 		print ("\nCalcular modularidade... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/")
-		net_structure(dataset_dir3,output_dir3,graph_type,metric,net)													# Inicia os cálculos...
+		net_structure(dataset_dir3,output_dir3,graph_type,metric,net,alg)													# Inicia os cálculos...
 
 ######################################################################
 ######################################################################	

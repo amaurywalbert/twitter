@@ -21,12 +21,17 @@ sys.setdefaultencoding('utf-8')
 # Armazenar as propriedades do dataset
 #
 ######################################################################################################################################################################
-def net_structure(dataset_dir,output_dir,graph_type,metric,net):
+def net_structure(dataset_dir,output_dir,graph_type,metric,net,alg):
 	os.system('clear')	
 	print("\n######################################################################\n")
 	print("\nScript para cálculo do coef_clust das comunidades detectadas\n")
 
-	graphs_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(graph_type)+"/"
+	if alg == "infomap":
+		graphs_dir = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(graph_type)+"/"
+	elif alg == "infomap_without_weight":
+		graphs_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(graph_type)+"/"	
+	else:
+		graphs_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(graph_type)+"/"
 		
 	if not os.path.exists(graphs_dir):
 		print ("Diretório não encontrado: "+str(graphs_dir))
@@ -162,7 +167,8 @@ def main():
 	print"  2 - OSLOM"
 	print"  3 - GN"		
 	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"												
+	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"																								
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -176,6 +182,8 @@ def main():
 		alg = "copra_partition"
 	elif op2 == 5:
 		alg = "infomap"	
+	elif op2 == 6:
+		alg = "infomap_without_weight"
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()		
@@ -196,7 +204,7 @@ def main():
 			os.makedirs(output_dir1)
 
 		print ("\nCalcular coef_clust... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/")
-		net_structure(dataset_dir1,output_dir1,graph_type,metric,net)														# Inicia os cálculos...
+		net_structure(dataset_dir1,output_dir1,graph_type,metric,net,alg)														# Inicia os cálculos...
 
 ######################################################################				
 ######################################################################
@@ -210,7 +218,7 @@ def main():
 		if not os.path.exists(output_dir3):
 			os.makedirs(output_dir3)
 		print ("\nCalcular coef_clust... /home/amaury/communities_hashmap/"+str(graph_type)+"/"+str(alg)+"/full/")
-		net_structure(dataset_dir3,output_dir3,graph_type,metric,net)													# Inicia os cálculos...
+		net_structure(dataset_dir3,output_dir3,graph_type,metric,net,alg)													# Inicia os cálculos...
 
 ######################################################################		
 ######################################################################

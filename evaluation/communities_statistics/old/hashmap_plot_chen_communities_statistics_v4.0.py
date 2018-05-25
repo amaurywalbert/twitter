@@ -128,7 +128,7 @@ def main():
 		
 	##################################################################
 	
-		algorithms = ['copra','oslom','gn','copra_partition','infomap']
+		algorithms = ['copra','oslom','gn','copra_partition','infomap','infomap_without_weight']
 		data_full = {}
 		for alg in algorithms:
 			print"#################################################################################"

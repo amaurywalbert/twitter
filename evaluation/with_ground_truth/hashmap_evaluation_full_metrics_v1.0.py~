@@ -148,8 +148,9 @@ def main():
 	print ("Algoritmo usado na detecção das comunidades:\n")
 	print("01 - COPRA ")
 	print("02 - OSLOM")
-	print("03 - COPRA - Partition")
-	print("04 - INFOMAP - Partition")	
+	print("03 - GN - Partition")
+	print("04 - COPRA - Partition")
+	print("05 - INFOMAP - Partition")	
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:
@@ -157,8 +158,10 @@ def main():
 	elif op2 == 02:
 		alg = "oslom"
 	elif op2 == 03:
-		alg = "copra_partition"
+		alg = "gn"		
 	elif op2 == 04:
+		alg = "copra_partition"
+	elif op2 == 05:
 		alg = "infomap"
 	else:
 		alg = ""

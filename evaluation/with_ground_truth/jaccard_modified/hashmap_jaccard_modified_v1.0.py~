@@ -204,7 +204,9 @@ def main():
 	elif op2 == 03:
 		alg = "gn"
 	elif op2 == 04:
-		alg = "copra_partition"		
+		alg = "copra_partition"
+	elif op2 == 05:
+		alg = "infomap"	
 	else:
 		alg = ""
 		print("Algoritmo - Opção inválida! Saindo...")

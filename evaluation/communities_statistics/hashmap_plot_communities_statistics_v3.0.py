@@ -131,7 +131,7 @@ def main():
 
 	for metric in metrics:
 	
-		alg = ['copra','oslom','gn','copra_partition','infomap']
+		alg = ['copra','oslom','gn','copra_partition','infomap','infomap_without_weight']
 		data_full = {}
 		for i in range(len(alg)):
 			print"#################################################################################"

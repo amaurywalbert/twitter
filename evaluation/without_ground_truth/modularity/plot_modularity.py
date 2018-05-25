@@ -1303,6 +1303,7 @@ def plot_full_algs_only_with_ego(output,algorithms_data,metric):
 	z = np.array(dataset[2][0])								# OSLOM
 	k = np.array(dataset[3][0])								# RAK
 	w = np.array(dataset[4][0])								# INFOMAP
+	q = np.array(dataset[5][0])								# INFOMAP - Without Weight
 
 
 	ind=np.arange(n)
@@ -1324,8 +1325,9 @@ def plot_full_algs_only_with_ego(output,algorithms_data,metric):
 	trace2 = go.Bar(x = dataset[1][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="OSLOM - Overlapping", marker=dict(color='royalblue'))
 	trace3 = go.Bar(x = dataset[1][1], y = dataset[3][0], error_y=dict(type='data',array=dataset[3][2], color='#E6842A', visible=True), name="RAK - Partition", marker=dict(color='blue'))
 	trace4 = go.Bar(x = dataset[1][1], y = dataset[4][0], error_y=dict(type='data',array=dataset[4][2], color='#E6842A', visible=True), name="INFOMAP - Partition", marker=dict(color='lightblue'))
+	trace5 = go.Bar(x = dataset[1][1], y = dataset[5][0], error_y=dict(type='data',array=dataset[5][2], color='#E6842A', visible=True), name="INFOMAP - Partition - Without Weight", marker=dict(color='yellow'))
 
-	data = [trace1,trace2,trace3,trace4]
+	data = [trace1,trace2,trace3,trace4,trace5]
 
 	title_plot = title
 	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
@@ -1340,6 +1342,7 @@ def plot_full_algs_only_with_ego(output,algorithms_data,metric):
 	p2=plt.bar(ind,z,width,color="blue", label='OSLOM - Overlapping')
 	p3=plt.bar(ind+0.2,k,width,color="royalblue", label='COPRA - Partition')
 	p4=plt.bar(ind+0.4,w,width,color="lightblue", label='INFOMAP - Partition')
+	p5=plt.bar(ind+0.6,q,width,color="yellow", label='INFOMAP - Partition - Without Weight')
 	
 
 	plt.ylabel(metric)

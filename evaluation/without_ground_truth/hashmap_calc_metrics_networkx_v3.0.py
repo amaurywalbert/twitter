@@ -72,7 +72,14 @@ def create_dirs(out_ad,out_c,out_cut_r,out_d,out_e,out_normal_cut,out_s):
 def calculate_alg(singletons,net,uw,ud,g_type,alg):
 	
 	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
-	graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"
+	
+	if alg == "infomap":
+		graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type)+"/"
+	elif alg == "infomap_without_weight":
+		graphs = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(g_type)+"/"	
+	else:
+		graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"	
+	
 	
 	out_ad = str(output_dir)+"average_degree/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"		
 	out_c = str(output_dir)+"conductance/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"	
@@ -246,7 +253,7 @@ def main():
 	print
 	print"  1 - COPRA"
 	print"  2 - OSLOM"
-	print"  3 - GN - Partition"		
+	print"  3 - GN"		
 	print"  4 - COPRA - Partition"
 	print"  5 - INFOMAP - Partition"						
 	print
@@ -261,7 +268,9 @@ def main():
 	elif op2 == 4:
 		alg = "copra_partition"
 	elif op2 == 5:
-		alg = "infomap"					
+		alg = "infomap"
+	elif op2 == 6:
+		alg = "infomap_without_wweight"					
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")

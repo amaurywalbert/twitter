@@ -64,29 +64,37 @@ def main():
 	print" Escolha o algoritmo usado na detecção das comunidades									"
 	print"																											"
 	print"#################################################################################"
+	print("######################################################################")	
+	print
+	print "Algoritmo utilizado na detecção das comunidades"
+	print 
 	print
 	print"  1 - COPRA"
 	print"  2 - OSLOM"
 	print"  3 - GN"		
 	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"												
+	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"						
 	print
-	op1 = int(raw_input("Escolha uma opção acima: "))
+	op2 = int(raw_input("Escolha uma opção acima: "))
 
-	if op1 == 1:
+	if op2 == 1:
 		alg = "copra"
-	elif op1 == 2:
+	elif op2 == 2:
 		alg = "oslom"
-	elif op1 == 3:
+	elif op2 == 3:
 		alg = "gn"
-	elif op1 == 4:
+	elif op2 == 4:
 		alg = "copra_partition"
-	elif op1 == 5:
-		alg = "infomap"							
+	elif op2 == 5:
+		alg = "infomap"
+	elif op2 == 6:
+		alg = "infomap_without_weight"					
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
-		sys.exit()	
+		sys.exit()		
+	print
 	print ("\n")
 	print"#################################################################################"
 

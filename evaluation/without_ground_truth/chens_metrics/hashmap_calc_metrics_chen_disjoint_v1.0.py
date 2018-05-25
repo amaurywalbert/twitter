@@ -37,6 +37,8 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 
 	if alg == "infomap":
 		graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type)+"/"
+	elif alg == "infomap_without_weight":
+		graphs = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(g_type)+"/"	
 	else:
 		graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"
 	
@@ -235,6 +237,7 @@ def main():
 	print
 	print"  4 - COPRA PARTITION"
 	print"  5 - INFOMAP"
+	print"  6 - INFOMAP - Without Weight"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -242,6 +245,8 @@ def main():
 		alg = "copra_partition"
 	elif op2 == 5:
 		alg = "infomap"			
+	elif op2 == 6:
+		alg = "infomap_without_weight"			
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")

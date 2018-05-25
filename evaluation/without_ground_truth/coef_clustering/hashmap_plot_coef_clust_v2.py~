@@ -102,7 +102,7 @@ def main():
 #	if data1 is not None and data3:
 #		plot_coef_clust.plot_bars_full_without_singletons(output,data1,data3,metric,alg)		
 	if data1 is not None:
-		plot_metrics.plot_full_only_with_ego(output,data1,metric,alg)
+		plot_coef_clust.plot_full_only_with_ego(output,data1,metric,alg)
 ######################################################################
 ######################################################################	
 	

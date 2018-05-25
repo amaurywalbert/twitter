@@ -16,7 +16,7 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 3 - Usa dados (threshold) gerados pelas métricas do CHEN - Apenas Modularidade estendida.
 ##					Versão 4 - Usa dados (threshold) gerados pelas métricas do CHEN - Escolhe a métrica do Chen e dá opção para calcular estatísticas das comunidades de acordo com a métrica.
 ##					
-##					Só odularity Density por enquanto.... mexer no arquivo que gera as estatísticas das métricas do Chen para salvar o arquivo que é necessário aqui.
+##					Só modularity Density por enquanto.... mexer no arquivo que gera as estatísticas das métricas do Chen para salvar o arquivo que é necessário aqui.
 ## 
 ######################################################################################################################################################################
 def prepare(dataset,metric,graph_type,alg,file):
