@@ -846,6 +846,7 @@ def plot_full_algs_only_with_ego(output,algorithms_data,metric):
 	#i = 2										#OSLOM
 	#i = 3										#RAK
 	#i = 4										#INFOMAP
+	#i = 5										#INFOMAP - Without Weight
 	
 	i=0
 

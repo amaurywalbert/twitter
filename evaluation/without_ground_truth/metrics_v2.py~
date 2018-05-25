@@ -25,7 +25,7 @@ def calc_metrics(communities,G,ud):
 		return result
 ######################################################################################################################################################################
 ######################################################################################################################################################################	
-#Ref:Community detection in networks: A user guide - Santo Fortunato∗ 
+#Ref:Community detection in networks: A user guide - Santo Fortunato∗ - 2016 
 
 	def calc_conductance(n_edges,internal_edges,external_edges,internal_nodes,external_nodes):		# Fração do volume total de arestas que fica fora do cluster.	
 		if internal_edges != 0 and external_edges != 0:																# Não tem necessidade de comparar entre direcionados e não-direcionados.				

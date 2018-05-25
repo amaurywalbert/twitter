@@ -78,7 +78,7 @@ def main():
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
-	if op == 1:
+	if op2 == 1:
 		alg = "copra"
 	elif op2 == 2:
 		alg = "oslom"

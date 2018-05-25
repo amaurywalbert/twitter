@@ -8,7 +8,9 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script com funções para cálculo de métricas de avaliação sem                                                truth com a biblioteca NETWORKx
+##		Status - Versão 1 - Script com funções para cálculo de métricas de avaliação sem truth com a biblioteca NETWORKx
+##					
+##					ATENÇÃO - SÓ FAZ CÁLCULOS PARA GRAFOS NÃO DIRECIONADOS!!!
 ## 
 ######################################################################################################################################################################
 def calc_metrics(communities,G,uw,ud):

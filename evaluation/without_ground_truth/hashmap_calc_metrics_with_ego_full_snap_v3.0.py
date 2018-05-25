@@ -246,7 +246,7 @@ def main():
 	print"  3 - GN"		
 	print"  4 - COPRA - Partition"
 	print"  5 - INFOMAP - Partition"
-	print"  6 - INFOMAP - Partition - Without Weight"						
+	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
