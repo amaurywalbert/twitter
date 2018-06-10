@@ -185,9 +185,7 @@ def main():
 						dataset[layer] = result
 						
 				dataset_json[ego] = dataset
-				print 
 				print i, ego, dataset_json[ego]
-				print 
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 				print
 			
