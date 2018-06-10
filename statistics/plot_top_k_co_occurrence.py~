@@ -77,7 +77,7 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
 	
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
-	plt.yticks(range(len(df.columns)-1), labels=['Retweets','Likes','Mentions'],rotation=30,size=9)
+	plt.yticks(range(len(df.columns)-1),['Retweets','Likes','Mentions'],rotation=30,size=9)
 
 #	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank',y=-0.08)
 #	plt.colorbar(orientation='horizontal')

@@ -15,7 +15,7 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 2 - não considera without singletons
 ## 
 ######################################################################################################################################################################
-def prepare(dataset,metric):
+def prepare_bars(dataset,metric):
 	if not os.path.isdir(dataset):
 		print ("Diretório não encontrado: "+str(dataset))
 	else:	
@@ -42,7 +42,7 @@ def prepare(dataset,metric):
 									metric_plot[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
 		return metric_plot
 
-######################################################################################################################################################################
+###########################################################################################################################################
 ######################################################################################################################################################################
 #
 # Método principal do programa. 
@@ -127,7 +127,6 @@ def main():
 		print("Opção inválida! Saindo...")
 		sys.exit()
 	print ("\n")
-######################################################################
 
 	for metric in metrics:
 	
@@ -143,23 +142,24 @@ def main():
 ######################################################################
 
 			dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
-			data1 = prepare(dataset1,metric)
+			data1 = prepare_bars(dataset1,metric)
 			title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
 
 ######################################################################				
 ######################################################################
 
 			dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
-			data2 = prepare(dataset2,metric)
+			data2 = prepare_bars(dataset2,metric)
 			title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
 
 ######################################################################		
 ######################################################################		
-
+			if data1 is not None and data2:
+				plot_metrics.plot_full_without_singletons(output,data1,data2,metric,str(alg[i]))
 			if data1 is not None and data2:
 				if len(data1) == len(data2):
 				
-#					data_full[alg] = {'data1':data1,'data2':data2}
+					data_full[alg] = {'data1':data1,'data2':data2}
 					plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg[i]))
 			else:
 				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
@@ -169,7 +169,8 @@ def main():
 ######################################################################
 # Plotar todos resultados com todos os algoritmos	
 #	plot_metrics.plot_full_without_singletons(output,data_full,metric)
-######################################################################	
+######################################################################
+	
 	
 	print("\n######################################################################\n")
 	print("Script finalizado!")

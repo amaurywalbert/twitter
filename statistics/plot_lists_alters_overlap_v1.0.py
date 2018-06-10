@@ -46,11 +46,11 @@ def box_plot(_a,_s,_r,_l,_m, metric,title):
 		data = [trace2, trace3, trace4]
 	else:
 		trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
-		trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
+#		trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
 		trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
 		trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
 		trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
-		data = [trace0, trace1, trace2, trace3, trace4]
+		data = [trace0, trace2, trace3, trace4]
 
 	title_plot = title
 	layout = go.Layout(title=title_plot)
@@ -107,7 +107,7 @@ def main():
 		if metric == "jaccard":
 			title = "Jaccard"
 		elif metric == "overlap_lists":
-			title = "ALters Intersection over Lists Set"
+			title = "Alters Intersection over Lists Set"
 		elif metric == "overlap_alters":
 			title = "Lists Intersection over Alters Set"
 		elif metric == "overlap_top_k":

@@ -1342,7 +1342,7 @@ def plot_full_algs_only_with_ego(output,algorithms_data,metric):
 	p2=plt.bar(ind,z,width,color="blue", label='OSLOM - Overlapping')
 	p3=plt.bar(ind+0.2,k,width,color="royalblue", label='COPRA - Partition')
 	p4=plt.bar(ind+0.4,w,width,color="lightblue", label='INFOMAP - Partition')
-	p5=plt.bar(ind+0.6,q,width,color="lightblue", label='INFOMAP - Partition - Without Weight')
+	p5=plt.bar(ind+0.6,q,width,color="yellow", label='INFOMAP - Partition - Without Weight')
 	
 
 	plt.ylabel(metric)

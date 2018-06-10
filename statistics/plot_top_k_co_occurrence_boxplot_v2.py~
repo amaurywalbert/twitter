@@ -26,7 +26,8 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Plotar os dados da co-ocorrência dos dados entre as camadas
+##		Status - Versão 1 - Plotar os dados da co-ocorrência dos dados entre as camadas usando grouped Boxplot
+##					Versão 2 - Plota as redes no eixo X e os top-K no eixo Y
 ##
 ##
 ## ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
@@ -45,49 +46,63 @@ def create_dirs(x):
 		os.makedirs(x)	
 
 #####################################################################################################################################################################
-# Color Bar - Correlation Matrix
+# Grouped Box Plot
 ######################################################################################################################################################################
-def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_sr_avg,_sl_avg,_sm_avg, _ra_avg,_rs_avg,_rr_avg,_rl_avg,_rm_avg, _la_avg,_ls_avg,_lr_avg,_ll_avg,_lm_avg, _ma_avg,_ms_avg,_mr_avg,_ml_avg,_mm_avg):
-	print ("\nCriando Matriz de Correlação...")
+def box_plot(metric,_aa,_as,_ar,_al,_am,_sa,_ss,_sr,_sl,_sm,_ra,_rs,_rr,_rl,_rm,_la,_ls,_lr,_ll,_lm,_ma,_ms,_mr,_ml,_mm):
+	print ("\nCriando Box Plot...")
 	print ("Salvando dados em: "+str(output_dir)+"\n")
-
-	raw_data = {'Follow': [_ar_avg['media'],_al_avg['media'],_am_avg['media']],
-			'Retweets': [_rr_avg['media'],_rl_avg['media'],_rm_avg['media']],
-			'Likes': [_lr_avg['media'],_ll_avg['media'],_lm_avg['media']],
-			'Mentions': [_mr_avg['media'],_ml_avg['media'],_mm_avg['media']]
-        }
-        
-	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'])
-	print ("Média:")	
-	print df
+	x = []
+	y1 = []						#Retweets
+	y2 = []						#Likes
+	y3 = []						#Mentions
 	
-	raw_data_dp = {'Follow': [_ar_avg['desvio_padrao'],_al_avg['desvio_padrao'],_am_avg['desvio_padrao']],
-			'Retweets': [_rr_avg['desvio_padrao'],_rl_avg['desvio_padrao'],_rm_avg['desvio_padrao']],
-			'Likes': [_lr_avg['desvio_padrao'],_ll_avg['desvio_padrao'],_lm_avg['desvio_padrao']],
-			'Mentions': [_mr_avg['desvio_padrao'],_ml_avg['desvio_padrao'],_mm_avg['desvio_padrao']]
-        }
-        
-	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweets','Likes','Mentions'])
-	print ("Desvio padrão:")
-	print df_dp	
-	
-#	plt.matshow(df)
-#	plt.matshow(df,cmap='gray')
-#	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
-	
-	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
-	plt.yticks(range(len(df.columns)-1),['Retweets','Likes','Mentions'],rotation=30,size=9)
+	for i in range(len(_aa)):
+		x.append("Follow")
+	for i in range(len(_ar)):
+		x.append("Retweets")
+	for i in range(len(_al)):
+		x.append("Likes")
+	for i in range(len(_am)):
+		x.append("Mentions")
 
-#	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank',y=-0.08)
-#	plt.colorbar(orientation='horizontal')
-	plt.colorbar()
-	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
-		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
+	for i in _ar:
+		y1.append(i)
+	for i in _rr:
+		y1.append(i)
+	for i in _lr:
+		y1.append(i)
+	for i in _mr:
+		y1.append(i)
+				
 
-	plt.savefig(output_dir+metric+".png",bbox_inches='tight',dpi=300)
-	plt.close()
-	print (" - OK! Color Bar salvo em: "+str(output_dir))
+	for i in _al:
+		y2.append(i)
+	for i in _rl:
+		y2.append(i)
+	for i in _ll:
+		y2.append(i)
+	for i in _ml:
+		y2.append(i)
+	
+	for i in _am:
+		y3.append(i)
+	for i in _rm:
+		y3.append(i)
+	for i in _lm:
+		y3.append(i)
+	for i in _mm:
+		y3.append(i)		
+							
+	trace1 = go.Box(y=y1,x=x,name='Retweets',boxmean='sd')
+	trace2 = go.Box(y=y2,x=x,name='Likes',boxmean='sd')
+	trace3 = go.Box(y=y3,x=x,name='Mentions',boxmean='sd')
+
+	data = [trace0, trace1, trace2,trace3]
+	layout = go.Layout(yaxis=dict(title='Top-K Alters',zeroline=False),boxmode='group')
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=output_dir+str(metric)+"_box_plot.html",auto_open=True)
+	print (" - OK! Imagem salva em: "+str(output_dir))
 	print
 
 ######################################################################################################################################################################
@@ -191,39 +206,9 @@ def prepare(metric,file):
 
 			else:
 				print ("Rede inválida")
-				sys.exit()	
-						
-	_aa_avg = calc.calcular_full(_aa)
-	_as_avg = calc.calcular_full(_as)	
-	_ar_avg = calc.calcular_full(_ar)
-	_al_avg = calc.calcular_full(_al)
-	_am_avg = calc.calcular_full(_am)
+				sys.exit()		
 
-	_sa_avg = calc.calcular_full(_sa)
-	_ss_avg = calc.calcular_full(_ss)	
-	_sr_avg = calc.calcular_full(_sr)
-	_sl_avg = calc.calcular_full(_sl)
-	_sm_avg = calc.calcular_full(_sm)
-
-	_ra_avg = calc.calcular_full(_ra)
-	_rs_avg = calc.calcular_full(_rs)	
-	_rr_avg = calc.calcular_full(_rr)
-	_rl_avg = calc.calcular_full(_rl)
-	_rm_avg = calc.calcular_full(_rm)
-
-	_la_avg = calc.calcular_full(_la)
-	_ls_avg = calc.calcular_full(_ls)	
-	_lr_avg = calc.calcular_full(_lr)
-	_ll_avg = calc.calcular_full(_ll)
-	_lm_avg = calc.calcular_full(_lm)
-
-	_ma_avg = calc.calcular_full(_ma)
-	_ms_avg = calc.calcular_full(_ms)	
-	_mr_avg = calc.calcular_full(_mr)
-	_ml_avg = calc.calcular_full(_ml)
-	_mm_avg = calc.calcular_full(_mm)		
-
-	color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_sr_avg,_sl_avg,_sm_avg, _ra_avg,_rs_avg,_rr_avg,_rl_avg,_rm_avg, _la_avg,_ls_avg,_lr_avg,_ll_avg,_lm_avg, _ma_avg,_ms_avg,_mr_avg,_ml_avg,_mm_avg)
+	box_plot(metric,_aa,_as,_ar,_al,_am,_sa,_ss,_sr,_sl,_sm,_ra,_rs,_rr,_rl,_rm,_la,_ls,_lr,_ll,_lm,_ma,_ms,_mr,_ml,_mm)	
 		
 	
 ######################################################################################################################################################################

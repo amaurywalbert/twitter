@@ -15,32 +15,6 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 2 - não considera without singletons
 ## 
 ######################################################################################################################################################################
-def prepare_bars(dataset,metric):
-	if not os.path.isdir(dataset):
-		print ("Diretório não encontrado: "+str(dataset))
-	else:	
-		metric_plot = {}																	# Armazenar o nome da rede e o maior valor do métrica
-
-		for directory in os.listdir(dataset):
-			if os.path.isdir(dataset+directory):
-				net = str(directory)
-				metric_plot[net] = {'threshold':' ',metric:float(0),'std':float(0)}
-				
-				for file in os.listdir(dataset+directory):
-					threshold = file.split(".json")
-					threshold = threshold[0]
-					
-					with open(dataset+directory+"/"+file, 'r') as f:
-						data = json.load(f)
-						if data is not None:
-							_metric = []
-							for k,v in data.iteritems():
-								_metric.append(v[metric])
-							M = calc.calcular_full(_metric)
-							if M is not None:						
-								if	float(M['media']) > metric_plot[net][metric]:
-									metric_plot[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
-		return metric_plot
 
 ######################################################################################################################################################################
 def prepare_box_plot(dataset,metric): #Só para Infomap
@@ -52,22 +26,15 @@ def prepare_box_plot(dataset,metric): #Só para Infomap
 		for directory in os.listdir(dataset):
 			if os.path.isdir(dataset+directory):
 				net = str(directory)
-				metric_plot[net] = {'threshold':' ',metric:float(0),'std':float(0)}
-				
-				for file in os.listdir(dataset+directory):
-					threshold = file.split(".json")
-					threshold = threshold[0]
-					
+				for file in os.listdir(dataset+directory):					# file = Threshold.txt ou json
 					with open(dataset+directory+"/"+file, 'r') as f:
 						data = json.load(f)
 						if data is not None:
 							_metric = []
 							for k,v in data.iteritems():
 								_metric.append(v[metric])
-							M = calc.calcular_full(_metric)
-							if M is not None:						
-								if	float(M['media']) > metric_plot[net][metric]:
-									metric_plot[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
+			
+							metric_plot[net] = _metric
 		return metric_plot
 
 ######################################################################################################################################################################
@@ -84,7 +51,7 @@ def main():
 	print"																											"
 	print" 					Impressão de Gráficos - Métricas de Avaliação Sem Ground - Truth	"
 	print"																											"
-#	print" Escolha o algoritmo usado na detecção das comunidades									"
+	print" Escolha o algoritmo usado na detecção das comunidades									"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -92,9 +59,10 @@ def main():
 #	print"  2 - OSLOM"
 #	print"  3 - GN"		
 #	print"  4 - COPRA - Partition"
-#	print"  5 - INFOMAP - Partition"												
-#	print
-#	op1 = int(raw_input("Escolha uma opção acima: "))
+	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
+	print
+	op1 = int(raw_input("Escolha uma opção acima: "))
 #
 #	if op1 == 1:
 #		alg = "copra"
@@ -104,13 +72,15 @@ def main():
 #		alg = "gn"
 #	elif op1 == 4:
 #		alg = "copra_partition"				
-#	elif op1 == 5:
-#		alg = "infomap"
-#	else:
-#		alg = ""
-#		print("Opção inválida! Saindo...")
-#		sys.exit()	
-#	print ("\n")
+	if op1 == 5:
+		alg = "infomap"
+	elif op1 == 6:
+		alg = "infomap_without_weight"		
+	else:
+		alg = ""
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+	print ("\n")
 	print"#################################################################################"
 	print
 	print"  0 - All Metrics"
@@ -158,47 +128,17 @@ def main():
 ######################################################################
 
 	for metric in metrics:
-	
-		alg = ['copra','oslom','gn','copra_partition','infomap','infomap_without_weight']
 		data_full = {}
 		for i in range(len(alg)):
 			print"#################################################################################"
-			print ("\nPreparando dados para o algoritmo: "+str(alg[i]))
+			print ("\nPreparando dados para o algoritmo: "+str(alg))
 			data1 = {}
-			data2 = {}
-	
-######################################################################		
-######################################################################
-
-			dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
-			data1 = prepare_bars(dataset1,metric)
-			title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
-
-######################################################################				
-######################################################################
-
-			dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
-			data2 = prepare_bars(dataset2,metric)
-			title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
-
-######################################################################		
-######################################################################		
-			if data1 is not None and data2:
-				plot_metrics.plot_full_without_singletons(output,data1,data2,metric,str(alg[i]))
-			if data1 is not None and data2:
-				if len(data1) == len(data2):
-				
-					data_full[alg] = {'data1':data1,'data2':data2}
-					plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg[i]))
-			else:
-				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
-				print data1
-				print data2
 			
-######################################################################
-# Plotar todos resultados com todos os algoritmos	
-#	plot_metrics.plot_full_without_singletons(output,data_full,metric)
-######################################################################
+			dataset1 = str(source)+"graphs_with_ego/"+str(alg)+"/full/"	
+			data1 = prepare_box_plot(dataset1,metric)
+			title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full_"	
+			if data1 is not None:
+				plot_metrics.box_plot_without_singletons(output,data1,metric,str(alg)) # Só para INFOMAP
 	
 	
 	print("\n######################################################################\n")

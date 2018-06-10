@@ -176,7 +176,7 @@ def plot_full(output,data1,data2,data3,data4,metric,alg):
 ######################################################################################################################################################################
 # Plota Gráficos dos dados... Desconsiderando se hṕa ou não singletons
 ######################################################################################################################################################################
-def plot_without_singletons(output,data1,data2,metric,alg):
+def plot_full_without_singletons(output,data1,data2,metric,alg):
 	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
 	print ("Gerando Gráfico para o algoritmo: "+str(alg))
 
@@ -199,32 +199,43 @@ def plot_without_singletons(output,data1,data2,metric,alg):
 		co_interaction = []
 		co_value = []
 		co_std = []
-		co_threshold = []	
+		co_threshold = []
+		
+		follow = {}
+		retweets = {}
+		likes = {}
+		mentions = {}
+		j = 0
 		for k, v in data_overview.iteritems():
+			j+=1
 			if k == 'n1':
 				key = 'follow'
 				interaction.append(key)
 				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
-				threshold.append(v['threshold'])						
+				threshold.append(v['threshold'])
+				follow[j] = {'value':round(v[metric], 3),'std':round(v['std'], 3), 'threshold':v['threshold']}						
 			elif k == 'n2':
 				key = 'retweets'			
 				interaction.append(key)
 				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
 				threshold.append(v['threshold'])
+				retweets[j] = {'value':round(v[metric], 3),'std':round(v['std'], 3), 'threshold':v['threshold']}
 			elif k == 'n3':
 				key = 'likes'
 				interaction.append(key)
 				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
-				threshold.append(v['threshold'])
+				threshold.append(v['threshold'])				
+				likes[j] = {'value':round(v[metric], 3),'std':round(v['std'], 3), 'threshold':v['threshold']}
 			elif k == 'n4':
 				key = 'mentions'
 				interaction.append(key)
 				value.append(round(v[metric], 3))
 				std.append(round(v['std'], 3))
 				threshold.append(v['threshold'])
+				mentions[j] = {'value':round(v[metric], 3),'std':round(v['std'], 3), 'threshold':v['threshold']}
 			elif k == 'n9':
 				key = 'followers'
 				interaction.append(key)
@@ -294,14 +305,13 @@ def plot_without_singletons(output,data1,data2,metric,alg):
 	
 	if not os.path.exists(output):
 		os.makedirs(output)
-################################################################################################  MANTER -- Dá pra exportar a tabela depois...
+###############################################################################################  MANTER -- Dá pra exportar a tabela depois...
 	trace1 = go.Bar(x = dataset[1][1], y = dataset[1][0], error_y=dict(type='data',array=dataset[1][2], color='#E6842A', visible=True), name="Grafo COM ego - Threshold - "+str(dataset[1][3]), marker=dict(color='blue'))
 	trace2 = go.Bar(x = dataset[2][1], y = dataset[2][0], error_y=dict(type='data',array=dataset[2][2], color='#E6842A', visible=True), name="Grafo SEM ego - Threshold - "+str(dataset[2][3]), marker=dict(color='green'))
-
 	data = [trace1,trace2]
-
+	
 	title_plot = title
-	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group',)
+	layout = go.Layout(title=title_plot,xaxis=dict(tickangle=-45),barmode='group')	
 	fig = go.Figure(data=data, layout=layout)
 
 	plotly.offline.plot(fig, filename=output+str(metric)+"_"+str(alg)+".html",auto_open=False)
@@ -320,3 +330,48 @@ def plot_without_singletons(output,data1,data2,metric,alg):
 
 ###	plt.savefig(output+str(alg)+"_"+str(metric)+".png")
 #	plt.close()
+
+
+
+
+
+######################################################################################################################################################################
+# Plota Gráficos dos dados... Desconsiderando se hṕa ou não singletons
+######################################################################################################################################################################
+def box_plot_without_singletons(output,data1,metric,alg):
+	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
+	print ("Gerando Gráfico para o algoritmo: "+str(alg))
+
+	follow = []
+	retweets = []
+	likes = []
+	mentions = []
+	i = 0
+	for k, v in data1.iteritems():
+		i+=1
+		if k == 'n1':
+			follow = v						
+		elif k == 'n2':
+			retweets = v
+		elif k == 'n3':
+			likes = v
+		elif k == 'n4':
+			mentions = v
+		else:
+			print ("Valor incorreto para nome da rede-ego")
+	
+	if not os.path.exists(output):
+		os.makedirs(output)
+################################################################################################  MANTER -- Dá pra exportar a tabela depois...
+	trace0 = go.Box(y=follow,name='Follow',boxmean='sd')
+	trace1 = go.Box(y=retweets,name='Retweets',boxmean='sd')
+	trace2 = go.Box(y=likes,name='Likes',boxmean='sd')
+	trace3 = go.Box(y=mentions,name='Mentions',boxmean='sd')
+	
+	data = [trace0,trace1,trace2,trace3]
+	
+	title_plot = title
+	layout = go.Layout(title=title_plot,yaxis=dict(title=metric,zeroline=False))
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=output+str(metric)+"_"+str(alg)+"_box_plot.html",auto_open=False)

@@ -51,7 +51,7 @@ def prepare_communities(community_file,n_nodes):
 
 		if len(comm) > 1:
 			n_non_singletons+=1
-		else:
+		elif len(comm) == 1:
 			n_singletons+=1
 		
 		if len(comm) > greater_comm:										# Tamanho da maior comunidade

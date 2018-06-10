@@ -975,4 +975,57 @@ def plot_full_algs_only_with_ego(output,algorithms_data,metric):
 	plt.tight_layout()
 #	plt.show()	
 #	plt.savefig(_filename+".png")
-	plt.close()			
+	plt.close()
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+######################################################################################################################################################################
+# Plota Gráficos dos dados... Desconsiderando se há ou não singletons - Usando BoxPlot
+######################################################################################################################################################################
+def box_plot_without_singletons(output,data1,metric,alg):
+	title = "Avaliação das redes usando a métrica "+str(metric)+" e algoritmo "+str(alg)
+	print ("Gerando Gráfico para o algoritmo: "+str(alg))
+
+	follow = []
+	retweets = []
+	likes = []
+	mentions = []
+	i = 0
+	for k, v in data1.iteritems():
+		i+=1
+		if k == 'n1':
+			follow = v						
+		elif k == 'n2':
+			retweets = v
+		elif k == 'n3':
+			likes = v
+		elif k == 'n4':
+			mentions = v
+		else:
+			print ("Valor incorreto para nome da rede-ego: "+str(k))
+	
+	if not os.path.exists(output):
+		os.makedirs(output)
+################################################################################################  MANTER -- Dá pra exportar a tabela depois...
+	trace0 = go.Box(y=follow,name='Follow',boxmean='sd')
+	trace1 = go.Box(y=retweets,name='Retweets',boxmean='sd')
+	trace2 = go.Box(y=likes,name='Likes',boxmean='sd')
+	trace3 = go.Box(y=mentions,name='Mentions',boxmean='sd')
+	
+	data = [trace0,trace1,trace2,trace3]
+	
+	title_plot = title
+	layout = go.Layout(title=title_plot,yaxis=dict(title=metric,zeroline=False))
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=output+str(metric)+"/"+str(alg)+"_box_plot.html",auto_open=False)
+	print ("Arquivo salvo: "+str(output)+str(metric)+"/"+str(alg)+"_box_plot.html")
+

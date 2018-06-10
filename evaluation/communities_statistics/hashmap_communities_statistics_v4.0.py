@@ -37,7 +37,7 @@ def prepare_communities(community_file,n_nodes):
 	n_singletons = 0														# Número de Singletons (comunidades formada por apenas um vértice) 
 	n_non_singletons = 0													# Número de Não Singletons
 	greater_comm = 0														# Tamanho da maior comunidade
-	smaller_comm = "inf"														# Tamanho da menor comunidade
+	smaller_comm = "inf"													# Tamanho da menor comunidade
 
 	for line in community_file:
 		i+=1
@@ -51,7 +51,7 @@ def prepare_communities(community_file,n_nodes):
 
 		if len(comm) > 1:
 			n_non_singletons+=1
-		else:
+		elif len(comm) == 1:
 			n_singletons+=1
 		
 		if len(comm) > greater_comm:										# Tamanho da maior comunidade
