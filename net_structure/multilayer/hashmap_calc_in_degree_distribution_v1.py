@@ -12,7 +12,7 @@ reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para calcular a a distribuição entre in-degree e out-degree e armazenar o resultado num arquivo texto.
+##		Status - Versão 1 - Script para calcular a a distribuição entre in-degree e armazenar o resultado num arquivo texto.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
 ######################################################################################################################################################################
@@ -33,10 +33,10 @@ def create_dir(x):
 		os.makedirs(x)		
 ######################################################################################################################################################################
 #
-# Cálculo Correlação In-Degree e Out-Degree
+# Cálculo Distribuição In-Degree
 #
 ######################################################################################################################################################################
-def in_out_degree_distribution(G):
+def in_degree_distribution(G):
 	result = None        #REMOVER
 	in_degree = {}
 	out_degree = {}
@@ -70,7 +70,7 @@ def in_out_degree_distribution(G):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"in_out_degree_distribution.json","w") as f:
+	with open(output_dir_json+"in_degree_distribution.json","w") as f:
 		f.write(json.dumps(dataset_json))
 ######################################################################################################################################################################
 #
@@ -95,17 +95,17 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo de in and out_degree distribution em cada Layer			"
+	print" Cálculo de in_degree distribution em cada Layer			"
 	print"																											"
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_json+"in_out_degree_distribution.json"):
-		print ("Arquivo de destino já existe!"+str(output_dir_json+"in_out_degree_distribution.json"))
+	if os.path.exists(output_dir_json+"in_degree_distribution.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"in_degree_distribution.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
-		with open(output_dir_txt+"in_out_degree_distribution.txt",'w') as out_file:
+		with open(output_dir_txt+"in_degree_distribution.txt",'w') as out_file:
 			for ego,v in dictionary.iteritems():
 				i+=1
 				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
@@ -134,7 +134,7 @@ def main():
 						create_dir(output)
 						source = str(edge_list)+str(ego)+".edge_list"
 						G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)					   							# Carrega o grafo da camada i - Direcionado e Não Ponderado
-						in_degree, out_degree = in_out_degree_distribution(G)
+						in_degree, out_degree = in_degree_distribution(G)
 
 						fit = powerlaw.Fit(in_degree)
 
