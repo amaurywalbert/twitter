@@ -3,31 +3,18 @@
 #	
 #
 import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
-import rbo, rbo_calc
-from operator import itemgetter
 import numpy as np
+from math import*    
+import powerlaw
 import matplotlib.pyplot as plt
-from math import*
-import networkx as nx
-import pandas as pd
-import pandas_datareader
-from pandas_datareader import data, wb
-from pandas import Series, DataFrame
-pd.__version__  
-
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para calcular a sobreposição de Rankings usando Rank-Biased Overlap - Extended, para o ranking de in-degree.
+##		Status - Versão 1 - Script para calcular a a distribuição entre in-degree e armazenar o resultado num arquivo texto.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
-##	INPUT: Redes-ego
-##
-## Output: arquivo texto. Formato:
-##
-##ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções 
 ######################################################################################################################################################################
 
 ######################################################################################################################################################################
@@ -41,27 +28,41 @@ def create_dirs(x,y):
 	if not os.path.exists(y):
 		os.makedirs(y)		
 
+def create_dir(x):
+	if not os.path.exists(x):
+		os.makedirs(x)		
 ######################################################################################################################################################################
 #
-# Cálculo Correlação de Ranking
+# Cálculo Distribuição In-Degree
 #
 ######################################################################################################################################################################
-def get_in_degree_rank(G):
+def in_degree_distribution(G):
 	result = None        #REMOVER
-	inlinkNumb = []
+	in_degree = {}
+	out_degree = {}
+	v_in_d = []
+	v_out_d = []
 	
 	InDegV = snap.TIntPrV()
-	snap.GetNodeInDegV(G,InDegV) 
+	snap.GetNodeInDegV(G,InDegV)					#Retorna o id do vertice e o grau de entrada- inclusive se o grau for 0 
 	for item in InDegV:
 		node = item.GetVal1()
 		degree = item.GetVal2()
-
-		_tuple=(node,degree)
-		inlinkNumb.append(_tuple)
-
-	in_degree_rank = sorted(inlinkNumb, key=lambda x: (x[1], -x[0]), reverse=True) 		#Ordena uma tupla decrescente (id,in_degree)). Em caso de empate ordena crecente pelo id os empatados
+		in_degree[node] = degree
 	
-	return in_degree_rank						#Retorna o id do vertice e o grau de entrada- inclusive se o grau for 0								
+	OutDegV = snap.TIntPrV()
+	snap.GetNodeOutDegV(G, OutDegV)
+	for item in OutDegV:
+		node = item.GetVal1()
+		degree = item.GetVal2()
+		out_degree[node] = degree
+
+	for k,v in in_degree.iteritems():
+		if k in out_degree:
+			v_in_d.append(v)
+			v_out_d.append(out_degree[k])
+					
+	return v_in_d,v_out_d						 	#Retorna uma lista com in_degree e outra lista com out_degree								
 
 ######################################################################################################################################################################
 #
@@ -69,9 +70,8 @@ def get_in_degree_rank(G):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+metric+".json","w") as f:
+	with open(output_dir_json+"in_degree_distribution.json","w") as f:
 		f.write(json.dumps(dataset_json))
-
 ######################################################################################################################################################################
 #
 # Salvar arquivo texto com padrão:  ego_id as:data ar:data al:data am:data ... rm:data  
@@ -82,33 +82,7 @@ def save_file(ego,dataset,f):
 	for k,v in dataset.iteritems():
 		f.write(" "+str(k)+":"+str(v))
 	f.write("\n")
-
-######################################################################################################################################################################
-#
-# Calcula Rank_based Overlap - Extended entre os rankings de pares de layers  
-#
-######################################################################################################################################################################
-def calc_rbo_extended(dataset):
-	pairs = {}
-	p = 0.98											#parametro do RBO_extend - alterar para profundidade do ranking
-														# com p = 0.98 - top 50k com peso de +/- 86% na avaliação do overlap entre os rankings			
-
-	for k,v in dataset.iteritems():
-		ranking1 = []
-		for item in v:
-			ranking1.append(item[0])				# Colocando ranking em lista para a camada 1 - Apenas o ID do vertice
-
-		for j, x in dataset.iteritems():
-			if j >= k and j != k:
-				ranking2 = []
-				for item in x:
-					ranking2.append(item[0])		# Colocando ranking em lista para a camada 2 - Apenas o ID do vertice
-				
-				name = str(k)+str(j)
-				pairs[name] = rbo_calc.calc_rbo(ranking1,ranking2,p)		# Comparando os rankings com RBO_CALC.py				 	
-	
-	return pairs
-						
+					
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -121,18 +95,17 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo da sobreposição de ranks entre Layers													"
+	print" Cálculo de in_degree distribution em cada Layer			"
 	print"																											"
 	print"#################################################################################"
 	print
-
 	i=0
-	if os.path.exists(output_dir_json+metric+".json"):
-		print ("Arquivo de destino já existe!"+str(output_dir_json+metric+".json"))
+	if os.path.exists(output_dir_json+"in_degree_distribution.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"in_degree_distribution.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
-		with open(output_dir_txt+metric+".txt",'w') as out_file:
+		with open(output_dir_txt+"in_degree_distribution.txt",'w') as out_file:
 			for ego,v in dictionary.iteritems():
 				i+=1
 				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
@@ -157,22 +130,68 @@ def main():
 					if not os.path.isdir(edge_list):																				# Verifica se diretório existe	
 						print ("Impossível localizar diretório com lista de arestas: "+str(edge_list))
 					else:
+						output = output_dir_eps+net+"/"
+						create_dir(output)
 						source = str(edge_list)+str(ego)+".edge_list"
 						G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)					   							# Carrega o grafo da camada i - Direcionado e Não Ponderado
-						in_degree_rank = get_in_degree_rank(G)																	# Retorna o ranking  - por enquanto desordenado - da camada x
-						dataset[layer] = in_degree_rank
-				
+						in_degree, out_degree = in_degree_distribution(G)
 
-				pairs = calc_rbo_extended(dataset) 
+						fit = powerlaw.Fit(in_degree)
 
+						try:
+							R,p = fit.distribution_compare('power_law', 'exponential', normalized_ratio=True)
+							exponential = {"R":R,"p":p}
+						except Exception:
+							exponential = {"R":"","p":""}
 
-				dataset_json[ego] = pairs
-				print i, dataset_json[ego]
-				save_file(ego,pairs,out_file)																						# Salvar arquivo texto
-				print
+						try:
+							R,p = fit.distribution_compare('power_law', 'truncated_power_law', normalized_ratio=True)
+							truncated_power_law = {"R":R,"p":p}
+						except Exception:
+							truncated_power_law = {"R":"","p":""}
+								
+						try:
+							R,p = fit.distribution_compare('power_law', 'log_normal', normalized_ratio=True)
+							log_normal = {"R":R,"p":p}
+						except Exception:
+							log_normal = {"R":"","p":""}
 						
+						try:
+							R,p = fit.distribution_compare('power_law', 'stretched_exponential', normalized_ratio=True)
+							stretched_exponential = {"R":R,"p":p}
+						except Exception:
+							stretched_exponential = {"R":"","p":""}
+						
+						try:
+							fig = fit.plot_ccdf(linewidth=3, color='r', linestyle='--', label='Empirical Data')
+							fit.power_law.plot_ccdf(ax=fig, color='b', label='Power Law fit')
+							fit.exponential.plot_ccdf(ax=fig, color='orange', label='Exponential fit')
+							fit.truncated_power_law.plot_ccdf(ax=fig, color='g', label='Truncated Power Law fit')
+							fit.lognormal.plot_ccdf(ax=fig, color='brown', label='Log-Normal fit')
+							fit.stretched_exponential.plot_ccdf(ax=fig, color='m', label='Stretched Exponential fit')
+							####
+							fig.set_ylabel(u"p(X>=x)")
+							fig.set_xlabel("Node Degree")
+							handles, labels = fig.get_legend_handles_labels()
+							fig.legend(handles, labels, loc=3)
+							figname = 'Node_Degree_Distribution'
+							plt.savefig(str(output)+str(ego)+"_"+str(figname)+'.eps', bbox_inches='tight')
+							plt.close()	
+						except Exception:
+							print ("Impossível gerar gráfico!")
+
+						result = {"alpha":fit.power_law.alpha,"sigma":fit.power_law.sigma,"xmin":fit.xmin,"D":fit.power_law.D,"exponential":exponential,"truncated_power_law":truncated_power_law,"log_normal":log_normal,"stretched_exponential":stretched_exponential}
+
+						dataset[layer] = result
+						
+				dataset_json[ego] = dataset
+				print 
+				print i, ego, dataset_json[ego]
+				print 
+				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
+				print
+			
 		save_json(dataset_json)																										# Salvar arquivo no formato JSON
-		
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -184,10 +203,10 @@ def main():
 ######################################################################################################################################################################
 
 data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"												# Pegar a lista com os ids dos egos
-output_dir_txt = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/txt/"	# 
-output_dir_json = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"	# 
+output_dir_txt = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/txt/"	
+output_dir_eps = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/eps/"	
+output_dir_json = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/"
 
-metric = "rbo_extended_in_degree_rank"
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.

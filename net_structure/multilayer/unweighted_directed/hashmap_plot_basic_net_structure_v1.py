@@ -99,13 +99,59 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Plot Reciprocity"
+	print" Plot Basic Net Structure																	"
 	print"																											"
 	print"#################################################################################"
 	print
+	print"  1 - Nodes"
+	print"  2 - Edges"
+	print"  3 - Size"
+	print"  4 - Average Degree"
+	print"  5 - Diameter"
+	print"  6 - Density"
+	print"  7 - Closeness Centrality"				
+	print"  8 - Betweenness Centrality Nodes"
+	print"  9 - Betweenness Centrality Edges"
+	print"  10 - Clustering Coefficient"
+			
+	print("\n")
+	op = int(raw_input("Escolha uma opção acima: "))
+
+	if op == 1:
+		metric = "nodes"
+		title = "Number of Nodes"
+	elif op == 2:
+		metric = "edges"
+		title = "Number of Edges"
+	elif op == 3:
+		metric = "size"
+		title = "Network Size"
+	elif op == 4:
+		metric = "avg_degree"
+		title = "Average Degree of Nodes"
+	elif op == 5:
+		metric = "diameter"
+		title = "Diamenter"
+	elif op == 6:
+		metric = "density"
+		title = "Density"
+	elif op == 7:
+		metric = "closeness_centr"
+		title = "Closeness Centrality"
+	elif op == 8:
+		metric = "betweenness_centr_nodes"
+		title = "Nodes Betweenness Centrality"
+	elif op == 9:
+		metric = "betweenness_centr_edges"
+		title = "Edges Betweenness Centrality"
+	elif op == 10:
+		metric = "clust_coef"
+		title = "Clustering Coefficient"
+	else:
+		metric = 0
+		print("Opção inválida! Saindo...")
+		sys.exit()													
 	
-	metric = "in_out_degree_correlation"
-	title = "In-degree/Out-degree Correlation"
 	if not os.path.exists(str(source_dir)+str(metric)+".json"):
 		print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")
 	else:
@@ -124,8 +170,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/"
+source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/basics/"
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/unweighted_directed/basics/"
 
 #Executa o método main
 if __name__ == "__main__": main()

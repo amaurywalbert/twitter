@@ -29,7 +29,6 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Plotar os dados de acordo com as métricas e propriedades calculadas nas redes Multilayer
 ##					Versão 2 - Imprime na tela o desvio padrão entre os pares de layers
 ##
-##				INCORRETO... aguardando orientador definir a melhor maneira de apresentar os dados.
 ##
 ## ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
 ##

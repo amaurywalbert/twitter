@@ -70,11 +70,11 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
         'Mentions': [_ma['media'],_ms['media'],_mr['media'],_ml['media'],_mm]
         }
 
-	raw_data_dp = {'Follow': [_aa,_as['desvio_padrao'],_ar['desvio_padrao'],_al['desvio_padrao'],_am['desvio_padrao']],
-        'Followee': [_sa['desvio_padrao'],_ss,_sr['desvio_padrao'],_sl['desvio_padrao'],_sm['desvio_padrao']],
-        'Retweets': [_ra['desvio_padrao'],_rs['desvio_padrao'],_rr,_rl['desvio_padrao'],_rm['desvio_padrao']],
-        'Likes': [_la['desvio_padrao'],_ls['desvio_padrao'],_lr['desvio_padrao'],_ll,_lm['desvio_padrao']],
-        'Mentions': [_ma['desvio_padrao'],_ms['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],_mm]
+	raw_data_dp = {'Follow': [0,_as['desvio_padrao'],_ar['desvio_padrao'],_al['desvio_padrao'],_am['desvio_padrao']],
+        'Followee': [_sa['desvio_padrao'],0,_sr['desvio_padrao'],_sl['desvio_padrao'],_sm['desvio_padrao']],
+        'Retweets': [_ra['desvio_padrao'],_rs['desvio_padrao'],0,_rl['desvio_padrao'],_rm['desvio_padrao']],
+        'Likes': [_la['desvio_padrao'],_ls['desvio_padrao'],_lr['desvio_padrao'],0,_lm['desvio_padrao']],
+        'Mentions': [_ma['desvio_padrao'],_ms['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],0]
         }
         
 	df = pd.DataFrame(raw_data, columns = ['Follow','Followee','Retweets','Likes','Mentions'])

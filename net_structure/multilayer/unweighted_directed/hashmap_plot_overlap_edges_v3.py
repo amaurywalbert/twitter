@@ -7,11 +7,9 @@ import sys, time, json, os, os.path
 import numpy as np
 from math import*
 import networkx as nx
-import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.mlab as mlab
 import matplotlib as mpl
-from matplotlib.ticker import FuncFormatter
 import pylab
 import numpy as np
 import plotly
@@ -29,7 +27,7 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Plotar os dados de acordo com as métricas e propriedades calculadas nas redes Multilayer
-##					Versão 2 - Histogram exibindo a porcentagem de egos em cada barra (faixa de frequencia) - Escala de cinza.
+##
 ##					Versão 3 - Imprime na tela o desvio padrão entre os pares de layers
 ##
 ## ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
@@ -47,26 +45,7 @@ def create_dirs(x):
 	if not os.path.exists(x):
 		os.makedirs(x)	
 
-######################################################################################################################################################################
-#
-# Cria símbolo de % no gráfico
-#
-######################################################################################################################################################################
-def to_percent(y, position):
-	# Ignore the passed in position. This has the effect of scaling the default
-	# tick locations.
-	s = str(100 * y)
-
-	# The percent symbol needs escaping in latex
-	if matplotlib.rcParams['text.usetex'] is True:
-#		return s + r'$\%$'
-		return s
-	else:
-#		return s + '%'
-		return s
-        
-        
-######################################################################################################################################################################
+#####################################################################################################################################################################
 # Color Bar - Correlation Matrix
 ######################################################################################################################################################################
 def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output):
@@ -84,75 +63,81 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_lr=_rl
 	_mr=_rm
 
-	raw_data = {'Follow': [_aa['media'],_as['media'],_ar['media'],_al['media'],_am['media']],
-        'Followee': [_sa['media'],_ss['media'],_sr['media'],_sl['media'],_sm['media']],
-        'Retweets': [_ra['media'],_rs['media'],_rr['media'],_rl['media'],_rm['media']],
-        'Likes': [_la['media'],_ls['media'],_lr['media'],_ll['media'],_lm['media']],
-        'Mentions': [_ma['media'],_ms['media'],_mr['media'],_ml['media'],_mm['media']]
+	raw_data = {'Follow': [_aa,_as['media'],_ar['media'],_al['media'],_am['media']],
+        'Followee': [_sa['media'],_ss,_sr['media'],_sl['media'],_sm['media']],
+        'Retweets': [_ra['media'],_rs['media'],_rr,_rl['media'],_rm['media']],
+        'Likes': [_la['media'],_ls['media'],_lr['media'],_ll,_lm['media']],
+        'Mentions': [_ma['media'],_ms['media'],_mr['media'],_ml['media'],_mm]
         }
 
-	raw_data_dp = {'Follow': [_aa['desvio_padrao'],_as['desvio_padrao'],_ar['desvio_padrao'],_al['desvio_padrao'],_am['desvio_padrao']],
-        'Followee': [_sa['desvio_padrao'],_ss['desvio_padrao'],_sr['desvio_padrao'],_sl['desvio_padrao'],_sm['desvio_padrao']],
-        'Retweets': [_ra['desvio_padrao'],_rs['desvio_padrao'],_rr['desvio_padrao'],_rl['desvio_padrao'],_rm['desvio_padrao']],
-        'Likes': [_la['desvio_padrao'],_ls['desvio_padrao'],_lr['desvio_padrao'],_ll['desvio_padrao'],_lm['desvio_padrao']],
-        'Mentions': [_ma['desvio_padrao'],_ms['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],_mm['desvio_padrao']]
+	raw_data_dp = {'Follow': [0,_as['desvio_padrao'],_ar['desvio_padrao'],_al['desvio_padrao'],_am['desvio_padrao']],
+        'Followee': [_sa['desvio_padrao'],0,_sr['desvio_padrao'],_sl['desvio_padrao'],_sm['desvio_padrao']],
+        'Retweets': [_ra['desvio_padrao'],_rs['desvio_padrao'],0,_rl['desvio_padrao'],_rm['desvio_padrao']],
+        'Likes': [_la['desvio_padrao'],_ls['desvio_padrao'],_lr['desvio_padrao'],0,_lm['desvio_padrao']],
+        'Mentions': [_ma['desvio_padrao'],_ms['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],0]
         }
         
 	df = pd.DataFrame(raw_data, columns = ['Follow','Followee','Retweets','Likes','Mentions'])
+	print ("\nMédia: ")	
 	print df
-	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Followee','Retweets','Likes','Mentions'])
+	
+	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Followee','Retweets','Likes','Mentions'])	
+	print ("\nDesvio padrão: ")
 	print df_dp
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
 #	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	
 	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)
-
-#	plt.title('Jaccard over Edges',y=-0.08)
+	
+#	plt.title('Overlap Edges',y=-0.08)
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
 
-	name = "Jaccard_over_Edges"
+	name = "Overlap_Edges"
 
 	plt.savefig(output+name+".png",bbox_inches='tight',dpi=300)
+
 	plt.close()
 	print (" - OK! Color Bar salvo em: "+str(output))
 	print
 
+######################################################################################################################################################################
+# Histograma - HTML
+######################################################################################################################################################################
+def plotly_hist(data,output,name,pairs):
+	print ("\nCriando histograma dinâmico...")
+	print ("Salvando dados em: "+str(output)+"\n")
+
+	trace = go.Histogram(x=data, name="edges", marker=dict(color='green'))
+	_data = [trace]
+	layout = go.Layout(title="Overlap Edges - "+str(pairs), xaxis=dict(title='Overlap Degree'),yaxis=dict(title="Egos"))    
+	fig = go.Figure(data=_data, layout=layout)
+
+	plotly.offline.plot(fig, filename=output+pairs+".html",auto_open=False)
+
+	print (" - OK! Histograma salvo em: "+str(output))
+	print
+	
 ######################################################################################################################################################################
 # Histograma
 ######################################################################################################################################################################
 def plot_hist(data,output,name,pairs):
 	print ("\nCriando histograma...")
 	print ("Salvando dados em: "+str(output)+"\n")
-	
-	weights = np.ones_like(data)/float(len(data))
-#	plt.hist(data, weights=weights,color='black',rwidth=0.5,bins=10,range=[0.0, 1])
-	plt.hist(data, weights=weights,color='black',rwidth=0.75,bins=10)
-
-	formatter = FuncFormatter(to_percent)						# Create the formatter using the function to_percent. This multiplies all the default labels by 100, making them all percentages
-	plt.gca().yaxis.set_major_formatter(formatter)
-
-	plt.xlabel ("Jaccard value intervals - "+str(pairs))
-	plt.ylabel ("% of egos")
-#	plt.xlim(xmin=0, xmax = 1.0)
-	plt.ylim(ymin=0, ymax = 0.90)
-
-#	plt.title ("Jaccard over Edges - "+str(pairs))
+	plt.hist(data,color='green')
+	plt.xlabel ("Overlap Degree")
+	plt.ylabel ("Egos")
+	plt.title ("Overlap Edges - "+str(pairs))
 	plt.legend(loc='best')
-#	plt.grid(zorder=10)
-	plt.grid()
 	plt.savefig(output+pairs+".png")
 	plt.close()
 
 	print (" - OK! Histograma salvo em: "+str(output))
 	print
-
-	
 
 ######################################################################################################################################################################
 #
@@ -160,7 +145,7 @@ def plot_hist(data,output,name,pairs):
 #
 ######################################################################################################################################################################
 def prepare(metric,file,output):
-	with open(file,'r') as f:	
+	with open(file,'r') as f:
 		data = json.load(f)
 	pairs = {}
 	_rs = []
@@ -196,14 +181,14 @@ def prepare(metric,file,output):
 				_rl.append(value)
 			elif key == "rm":
 				_rm.append(value)
-	plot_hist(_rs,output,metric,"Retweets X Followers")
+	plot_hist(_rs,output,metric,"Retweets X Followee")
 	plot_hist(_lm,output,metric,"Likes X Mentions")
-	plot_hist(_am,output,metric,"Following X Mentions")
-	plot_hist(_al,output,metric,"Following X Likes")
-	plot_hist(_as,output,metric,"Following X Followers")
-	plot_hist(_ar,output,metric,"Following X Retweets")
-	plot_hist(_ls,output,metric,"Likes X Followers")
-	plot_hist(_ms,output,metric,"Mentions X Followers")
+	plot_hist(_am,output,metric,"Follow X Mentions")
+	plot_hist(_al,output,metric,"Follow X Likes")
+	plot_hist(_as,output,metric,"Follow X Followee")
+	plot_hist(_ar,output,metric,"Follow X Retweets")
+	plot_hist(_ls,output,metric,"Likes X Followee")
+	plot_hist(_ms,output,metric,"Mentions X Followee")
 	plot_hist(_rl,output,metric,"Retweets X Likes")
 	plot_hist(_rm,output,metric,"Retweets X Mentions")
 		
@@ -217,17 +202,15 @@ def prepare(metric,file,output):
 	_ms_avg = calc.calcular_full(_ms)
 	_rl_avg = calc.calcular_full(_rl)
 	_rm_avg = calc.calcular_full(_rm)
-		
 	_aa_avg = 1.0
 	_ss_avg = 1.0
 	_rr_avg = 1.0
 	_ll_avg = 1.0
 	_mm_avg = 1.0
-
-	
+		
 	color_bar(_rs_avg,_lm_avg,_am_avg,_al_avg,_as_avg,_ar_avg,_ls_avg,_ms_avg,_rl_avg,_rm_avg,_aa_avg,_ss_avg,_rr_avg,_ll_avg,_mm_avg,output_dir)
 		
-					
+	
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -244,11 +227,11 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "jaccard_set_edges"
-	if not os.path.exists(str(data_dir)+str(metric)+".json"):													# Verifica se diretório existe
-		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
+	metric = "overlapping_edges"
+	if not os.path.exists(str(data_dir)+str(metric)+"_v2.json"):												# Verifica se diretório existe
+		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+"_v2.json")
 	else:
-		file = str(data_dir)+str(metric)+".json"
+		file = str(data_dir)+str(metric)+"_v2.json"
 		output =str(output_dir)+str(metric)+"/"
 		create_dirs(output)
 		prepare(metric,file,output)
@@ -263,8 +246,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-data_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/"	# Diretório para Salvar os gráficos...
+data_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/unweighted_directed/"	# Diretório para Salvar os gráficos...
 
 #Executa o método main
 if __name__ == "__main__": main()

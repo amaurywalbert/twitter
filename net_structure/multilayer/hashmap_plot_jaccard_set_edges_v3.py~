@@ -208,34 +208,15 @@ def prepare(metric,file,output):
 	plot_hist(_rm,output,metric,"Retweets X Mentions")
 		
 	_rs_avg = calc.calcular_full(_rs)
-	_rs_avg = _rs_avg['media'] 
-
 	_lm_avg = calc.calcular_full(_lm)
-	_lm_avg = _lm_avg['media']
-		
 	_am_avg = calc.calcular_full(_am)
-	_am_avg = _am_avg['media']
-
 	_al_avg = calc.calcular_full(_al)
-	_al_avg = _al_avg['media']
-		
 	_as_avg = calc.calcular_full(_as)
-	_as_avg = _as_avg['media']
-		
 	_ar_avg = calc.calcular_full(_ar)
-	_ar_avg = _ar_avg['media']
-		
 	_ls_avg = calc.calcular_full(_ls)
-	_ls_avg = _ls_avg['media']
-		
 	_ms_avg = calc.calcular_full(_ms)
-	_ms_avg = _ms_avg['media']
-
 	_rl_avg = calc.calcular_full(_rl)
-	_rl_avg = _rl_avg['media']
-		
 	_rm_avg = calc.calcular_full(_rm)
-	_rm_avg = _rm_avg['media']
 		
 	_aa_avg = 1.0
 	_ss_avg = 1.0

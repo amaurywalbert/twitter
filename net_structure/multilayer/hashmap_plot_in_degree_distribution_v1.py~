@@ -126,12 +126,12 @@ def prepare(dataset,metric):
 				_l.append(value['alpha'])
 			elif key == "m":
 				_m.append(value['alpha'])
-				if value['alpha'] > 50:
-					print ego,value
+#				if value['alpha'] > 50:
+#					print ego,value
 
-#	histogram_plot(_a,_s,_r,_l,_m, metric)		
-#	ccdf_plot(_a,_s,_r,_l,_m, metric)	
-#	box_plot(_a,_s,_r,_l,_m, metric)
+	histogram_plot(_a,_s,_r,_l,_m, metric)		
+	ccdf_plot(_a,_s,_r,_l,_m, metric)	
+	box_plot(_a,_s,_r,_l,_m, metric)
 	
 ######################################################################################################################################################################
 ######################################################################################################################################################################

@@ -4,17 +4,21 @@
 #
 import snap, datetime, sys, time, json, os, os.path, shutil, time, random, math
 import numpy as np
-from math import*    
-import powerlaw
-import matplotlib.pyplot as plt
+from math import*
+import networkx as nx
 
 reload(sys)
 sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
-##		Status - Versão 1 - Script para calcular a a distribuição entre in-degree e armazenar o resultado num arquivo texto.
+##		Status - Versão 1 - Script para calcular o jaccard entre os conjuntos de arestas das redes-ego, par-a-par e armazenar em um arquivo texto.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ## 
+##	INPUT: Redes-ego
+##
+## Output: arquivo texto. Formato:
+##
+##ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções 
 ######################################################################################################################################################################
 
 ######################################################################################################################################################################
@@ -28,41 +32,16 @@ def create_dirs(x,y):
 	if not os.path.exists(y):
 		os.makedirs(y)		
 
-def create_dir(x):
-	if not os.path.exists(x):
-		os.makedirs(x)		
 ######################################################################################################################################################################
 #
-# Cálculo Distribuição In-Degree
+# Cálculo do JACCARD entre os dois conjuntos de arestas
 #
 ######################################################################################################################################################################
-def in_degree_distribution(G):
-	result = None        #REMOVER
-	in_degree = {}
-	out_degree = {}
-	v_in_d = []
-	v_out_d = []
-	
-	InDegV = snap.TIntPrV()
-	snap.GetNodeInDegV(G,InDegV)					#Retorna o id do vertice e o grau de entrada- inclusive se o grau for 0 
-	for item in InDegV:
-		node = item.GetVal1()
-		degree = item.GetVal2()
-		in_degree[node] = degree
-	
-	OutDegV = snap.TIntPrV()
-	snap.GetNodeOutDegV(G, OutDegV)
-	for item in OutDegV:
-		node = item.GetVal1()
-		degree = item.GetVal2()
-		out_degree[node] = degree
+def jaccard_similarity(x,y):
 
-	for k,v in in_degree.iteritems():
-		if k in out_degree:
-			v_in_d.append(v)
-			v_out_d.append(out_degree[k])
-					
-	return v_in_d,v_out_d						 	#Retorna uma lista com in_degree e outra lista com out_degree								
+	intersection_cardinality = len(set.intersection(*[set(x), set(y)]))
+	union_cardinality = len(set.union(*[set(x), set(y)]))
+	return intersection_cardinality/float(union_cardinality)
 
 ######################################################################################################################################################################
 #
@@ -70,7 +49,7 @@ def in_degree_distribution(G):
 #
 ######################################################################################################################################################################
 def save_json(dataset_json):
-	with open(output_dir_json+"in_degree_distribution.json","w") as f:
+	with open(output_dir_json+"jaccard_set_edges.json","w") as f:
 		f.write(json.dumps(dataset_json))
 ######################################################################################################################################################################
 #
@@ -95,103 +74,83 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Cálculo de in_degree distribution em cada Layer			"
+	print" Cálculo da similaridade (JACCARD) para a par entre os arestas das camadas			"
 	print"																											"
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_json+"in_degree_distribution.json"):
-		print ("Arquivo de destino já existe!"+str(output_dir_json+"in_degree_distribution.json"))
+	if os.path.exists(output_dir_json+"jaccard_set_edges.json"):
+		print ("Arquivo de destino já existe!"+str(output_dir_json+"jaccard_set_edges.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
+
 		dataset_json = {}																													# Salvar Arquivos no Formato Json
-		with open(output_dir_txt+"in_degree_distribution.txt",'w') as out_file:
+
+		with open(output_dir_txt+"jaccard_set_edges.txt",'w') as out_file:
+			
 			for ego,v in dictionary.iteritems():
 				i+=1
 				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
 				dataset = {}
-				for net in nets:
-					if net == "n1":
-						layer = "a"
-					elif net == "n9":
-						layer = "s"
-					elif net == "n2":
-						layer = "r"
-					elif net == "n3":
-						layer = "l"
-					elif net == "n4":
-						layer = "m"
+				for net1 in nets:
+					if net1 == "n1":
+						layer1 = "a"
+					elif net1 == "n9":
+						layer1 = "s"
+					elif net1 == "n2":
+						layer1 = "r"
+					elif net1 == "n3":
+						layer1 = "l"
+					elif net1 == "n4":
+						layer1 = "m"
 					else:
-						print ("Rede inválida")
+						print ("Rede 1 inválida")
 						sys.exit()
 
-					edge_list = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"							# Diretório da camada i
+					edge_list1 = "/home/amaury/graphs_hashmap/"+str(net1)+"/graphs_with_ego/"							# Diretório da camada i
 
-					if not os.path.isdir(edge_list):																				# Verifica se diretório existe	
-						print ("Impossível localizar diretório com lista de arestas: "+str(edge_list))
+					if not os.path.isdir(edge_list1):																				# Verifica se diretório existe	
+						print ("Impossível localizar diretório com lista de arestas: "+str(edge_list1))
+
 					else:
-						output = output_dir_eps+net+"/"
-						create_dir(output)
-						source = str(edge_list)+str(ego)+".edge_list"
-						G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)					   							# Carrega o grafo da camada i - Direcionado e Não Ponderado
-						in_degree, out_degree = in_degree_distribution(G)
 
-						fit = powerlaw.Fit(in_degree)
+						source = str(edge_list1)+str(ego)+".edge_list"
+						G1 = nx.read_weighted_edgelist(source,create_using=nx.DiGraph())								# Carrega o grafo da camada i
+						edges1 = set(G1.edges)
+						for net2 in nets:																								# Busca pelo arquivo do mesmo ego nas outras camadas (redes) j
+							if net1 != net2:
+								if not net2 < net1:
+									if net2 == "n1":
+										layer2 = "a"
+									elif net2 == "n9":
+										layer2 = "s"
+									elif net2 == "n2":
+										layer2 = "r"
+									elif net2 == "n3":
+										layer2 = "l"
+									elif net2 == "n4":
+										layer2 = "m"
+									else:
+										print ("Rede 2 inválida")
+										sys.exit()	
+														
+									dest = "/home/amaury/graphs_hashmap/"+str(net2)+"/graphs_with_ego/"+str(ego)+".edge_list"	# Diretório do arquivo na camada j							
+									if not os.path.isfile(dest):																	# Testa se arquivo do mesmo ego existe na camada j	
+#										pass								
+										print ("Impossível localizar arquivo no destino: "+str(dest))
+									else:
+										G2 = nx.read_weighted_edgelist(dest,create_using=nx.DiGraph())					# Carrega o grafo da camada j
+										edges2 = set(G2.edges)																		
 
-						try:
-							R,p = fit.distribution_compare('power_law', 'exponential', normalized_ratio=True)
-							exponential = {"R":R,"p":p}
-						except Exception:
-							exponential = {"R":"","p":""}
-
-						try:
-							R,p = fit.distribution_compare('power_law', 'truncated_power_law', normalized_ratio=True)
-							truncated_power_law = {"R":R,"p":p}
-						except Exception:
-							truncated_power_law = {"R":"","p":""}
-								
-						try:
-							R,p = fit.distribution_compare('power_law', 'log_normal', normalized_ratio=True)
-							log_normal = {"R":R,"p":p}
-						except Exception:
-							log_normal = {"R":"","p":""}
-						
-						try:
-							R,p = fit.distribution_compare('power_law', 'stretched_exponential', normalized_ratio=True)
-							stretched_exponential = {"R":R,"p":p}
-						except Exception:
-							stretched_exponential = {"R":"","p":""}
-						
-						try:
-							fig = fit.plot_ccdf(linewidth=3, color='r', linestyle='--', label='Empirical Data')
-							fit.power_law.plot_ccdf(ax=fig, color='b', label='Power Law fit')
-							fit.exponential.plot_ccdf(ax=fig, color='orange', label='Exponential fit')
-							fit.truncated_power_law.plot_ccdf(ax=fig, color='g', label='Truncated Power Law fit')
-							fit.lognormal.plot_ccdf(ax=fig, color='brown', label='Log-Normal fit')
-							fit.stretched_exponential.plot_ccdf(ax=fig, color='m', label='Stretched Exponential fit')
-							####
-							fig.set_ylabel(u"p(X>=x)")
-							fig.set_xlabel("Node Degree")
-							handles, labels = fig.get_legend_handles_labels()
-							fig.legend(handles, labels, loc=3)
-							figname = 'Node_Degree_Distribution'
-							plt.savefig(str(output)+str(ego)+"_"+str(figname)+'.eps', bbox_inches='tight')
-							plt.close()	
-						except Exception:
-							print ("Impossível gerar gráfico!")
-
-						result = {"alpha":fit.power_law.alpha,"sigma":fit.power_law.sigma,"xmin":fit.xmin,"D":fit.power_law.D,"exponential":exponential,"truncated_power_law":truncated_power_law,"log_normal":log_normal,"stretched_exponential":stretched_exponential}
-
-						dataset[layer] = result
-						
+										result = jaccard_similarity(edges1,edges2)											# Calcula Jaccard dos dois grafos
+										pair=str(layer1)+str(layer2)
+										dataset[pair] = result
 				dataset_json[ego] = dataset
-				print 
-				print i, ego, dataset_json[ego]
-				print 
+				print i, dataset_json[ego]
 				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 				print
 			
-		save_json(dataset_json)																										# Salvar arquivo no formato JSON
+		save_json(dataset_json)																									# Salvar arquivo no formato JSON
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -203,9 +162,8 @@ def main():
 ######################################################################################################################################################################
 
 data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"												# Pegar a lista com os ids dos egos
-output_dir_txt = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/txt/"	
-output_dir_eps = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/eps/"	
-output_dir_json = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"
+output_dir_txt = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/txt/"	# Pegar a lista com os ids dos egos
+output_dir_json = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/"	# Pegar a lista com os ids dos egos
 
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos

@@ -29,7 +29,6 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Plotar os dados de acordo com as métricas e propriedades calculadas nas redes Multilayer
 ##					Versão 2 - Imprime na tela o desvio padrão entre os pares de layers
 ##
-##				INCORRETO... aguardando orientador definir a melhor maneira de apresentar os dados.
 ##
 ## ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
 ##
@@ -92,12 +91,13 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 
-#	plt.title('Rank-Biased Overlap (Extended) - In-Degree Rank',y=-0.08)
+#	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank',y=-0.08)
+#	plt.colorbar(orientation='horizontal')
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
 
-	name = "rbo_in_degree_rank"
+	name = "rbo_close_centr"
 
 	plt.savefig(output+name+".png",bbox_inches='tight',dpi=300)
 	plt.close()
@@ -182,7 +182,7 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "rbo_extended_in_degree_rank"
+	metric = "rbo_extended_closeness_centrality"
 	if not os.path.exists(str(data_dir)+str(metric)+".json"):												# Verifica se diretório existe
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
@@ -201,8 +201,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-data_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/"	# Diretório para Salvar os gráficos...
+data_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/unweighted_directed/"	# Diretório para Salvar os gráficos...
 
 #Executa o método main
 if __name__ == "__main__": main()

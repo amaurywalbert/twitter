@@ -29,7 +29,6 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Plotar os dados de acordo com as métricas e propriedades calculadas nas redes Multilayer
 ##					Versão 2 - Imprime na tela o desvio padrão entre os pares de layers
 ##
-##				INCORRETO... aguardando orientador definir a melhor maneira de apresentar os dados.
 ##
 ## ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
 ##
@@ -80,7 +79,7 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
         'Mentions': [_ma['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],_mm]
         }
         
-	df = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweets','Likes','Mentions'])
+	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweets','Likes','Mentions'])
 	print ("Desvio padrão:")
 	print df_dp	
 	

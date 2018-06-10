@@ -55,7 +55,7 @@ def box_plot(_a,_s,_r,_l,_m, metric,title):
 	layout = go.Layout(title=title_plot)
 	fig = go.Figure(data=data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output+str(metric)+"box_plot.html",auto_open=True)
+	plotly.offline.plot(fig, filename=output+str(metric)+"_box_plot.html",auto_open=True)
 	
 	
 	pass
@@ -170,8 +170,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/basics/"
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/basics/"
+source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/basics/"
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/unweighted_directed/basics/"
 
 #Executa o método main
 if __name__ == "__main__": main()

@@ -27,8 +27,8 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ##		Status - Versão 1 - Plotar os dados de acordo com as métricas e propriedades calculadas nas redes Multilayer
+##					Versão 2 - Imprime na tela o desvio padrão entre os pares de layers
 ##
-##					Versão 3 - Imprime na tela o desvio padrão entre os pares de layers
 ##
 ## ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções
 ##
@@ -63,80 +63,44 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_lr=_rl
 	_mr=_rm
 
-	raw_data = {'Follow': [_aa,_as['media'],_ar['media'],_al['media'],_am['media']],
-        'Followee': [_sa['media'],_ss,_sr['media'],_sl['media'],_sm['media']],
-        'Retweets': [_ra['media'],_rs['media'],_rr,_rl['media'],_rm['media']],
-        'Likes': [_la['media'],_ls['media'],_lr['media'],_ll,_lm['media']],
-        'Mentions': [_ma['media'],_ms['media'],_mr['media'],_ml['media'],_mm]
-        }
-
-	raw_data_dp = {'Follow': [0,_as['desvio_padrao'],_ar['desvio_padrao'],_al['desvio_padrao'],_am['desvio_padrao']],
-        'Followee': [_sa['desvio_padrao'],0,_sr['desvio_padrao'],_sl['desvio_padrao'],_sm['desvio_padrao']],
-        'Retweets': [_ra['desvio_padrao'],_rs['desvio_padrao'],0,_rl['desvio_padrao'],_rm['desvio_padrao']],
-        'Likes': [_la['desvio_padrao'],_ls['desvio_padrao'],_lr['desvio_padrao'],0,_lm['desvio_padrao']],
-        'Mentions': [_ma['desvio_padrao'],_ms['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],0]
+	raw_data = {'Follow': [_aa,_ar['media'],_al['media'],_am['media']],
+        'Retweets': [_ra['media'],_rr,_rl['media'],_rm['media']],
+        'Likes': [_la['media'],_lr['media'],_ll,_lm['media']],
+        'Mentions': [_ma['media'],_mr['media'],_ml['media'],_mm]
         }
         
-	df = pd.DataFrame(raw_data, columns = ['Follow','Followee','Retweets','Likes','Mentions'])
-	print ("\nMédia: ")	
+	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'])
+	print ("Média:")	
 	print df
 	
-	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Followee','Retweets','Likes','Mentions'])	
-	print ("\nDesvio padrão: ")
-	print df_dp
+	raw_data_dp = {'Follow': [_aa,_ar['desvio_padrao'],_al['desvio_padrao'],_am['desvio_padrao']],
+        'Retweets': [_ra['desvio_padrao'],_rr,_rl['desvio_padrao'],_rm['desvio_padrao']],
+        'Likes': [_la['desvio_padrao'],_lr['desvio_padrao'],_ll,_lm['desvio_padrao']],
+        'Mentions': [_ma['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],_mm]
+        }
+        
+	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweets','Likes','Mentions'])
+	print ("Desvio padrão:")
+	print df_dp	
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
 #	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
 	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
+	
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 
-#	plt.title('Overlap Vertices',y=-0.08)
+#	plt.title('Rank-Biased Overlap (Extended) - In-Degree Rank',y=-0.08)
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
 
-	name = "Overlap_Vertices"
+	name = "rbo_in_degree_rank"
 
 	plt.savefig(output+name+".png",bbox_inches='tight',dpi=300)
-
 	plt.close()
 	print (" - OK! Color Bar salvo em: "+str(output))
-	print
-
-######################################################################################################################################################################
-# Histograma - HTML
-######################################################################################################################################################################
-def plotly_hist(data,output,name,pairs):
-	print ("\nCriando histograma dinâmico...")
-	print ("Salvando dados em: "+str(output)+"\n")
-
-	trace = go.Histogram(x=data, name="vertices", marker=dict(color='green'))
-	_data = [trace]
-	layout = go.Layout(title="Overlap Vertices - "+str(pairs), xaxis=dict(title='Overlap Degree'),yaxis=dict(title="Egos"))    
-	fig = go.Figure(data=_data, layout=layout)
-
-	plotly.offline.plot(fig, filename=output+pairs+".html",auto_open=False)
-
-	print (" - OK! Histograma salvo em: "+str(output))
-	print
-	
-######################################################################################################################################################################
-# Histograma
-######################################################################################################################################################################
-def plot_hist(data,output,name,pairs):
-	print ("\nCriando histograma...")
-	print ("Salvando dados em: "+str(output)+"\n")
-	plt.hist(data,color='green')
-	plt.xlabel ("Overlap Degree")
-	plt.ylabel ("Egos")
-	plt.title ("Overlap Vertices - "+str(pairs))
-	plt.legend(loc='best')
-	plt.savefig(output+pairs+".png")
-	plt.close()
-
-	print (" - OK! Histograma salvo em: "+str(output))
 	print
 
 ######################################################################################################################################################################
@@ -161,39 +125,29 @@ def prepare(metric,file,output):
 
 	for k,v in data.iteritems():
 		for key,value in v.iteritems():
-			if key == "rs":
+			if key == "rs" or key == "sr":
 				_rs.append(value)
-			elif key == "lm":	
+			elif key == "lm" or key == "ml":	
 				_lm.append(value)
-			elif key == "am":
+			elif key == "am" or key == "ma":
 				_am.append(value)
-			elif key == "al":
+			elif key == "al" or key == "la":
 				_al.append(value)
-			elif key == "as":
+			elif key == "as" or key == "sa":
 				_as.append(value)
-			elif key == "ar":
+			elif key == "ar" or key == "ra":
 				_ar.append(value)
-			elif key == "ls":
+			elif key == "ls" or key == "sl":
 				_ls.append(value)
-			elif key == "ms":
+			elif key == "ms" or key == "sm":
 				_ms.append(value)
-			elif key == "rl":
+			elif key == "rl" or key == "lr":
 				_rl.append(value)
-			elif key == "rm":
+			elif key == "rm" or key == "mr":
 				_rm.append(value)
-	plot_hist(_rs,output,metric,"Retweets X Followee")
-	plot_hist(_lm,output,metric,"Likes X Mentions")
-	plot_hist(_am,output,metric,"Follow X Mentions")
-	plot_hist(_al,output,metric,"Follow X Likes")
-	plot_hist(_as,output,metric,"Follow X Followee")
-	plot_hist(_ar,output,metric,"Follow X Retweets")
-	plot_hist(_ls,output,metric,"Likes X Followee")
-	plot_hist(_ms,output,metric,"Mentions X Followee")
-	plot_hist(_rl,output,metric,"Retweets X Likes")
-	plot_hist(_rm,output,metric,"Retweets X Mentions")
 		
 	_rs_avg = calc.calcular_full(_rs)
-	_lm_avg = calc.calcular_full(_lm)
+	_lm_avg = calc.calcular_full(_lm)	
 	_am_avg = calc.calcular_full(_am)
 	_al_avg = calc.calcular_full(_al)
 	_as_avg = calc.calcular_full(_as)
@@ -227,11 +181,11 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "overlapping_vertices"
-	if not os.path.exists(str(data_dir)+str(metric)+"_v2.json"):												# Verifica se diretório existe
-		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+"_v2.json")
+	metric = "rbo_extended_in_degree_rank"
+	if not os.path.exists(str(data_dir)+str(metric)+".json"):												# Verifica se diretório existe
+		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
-		file = str(data_dir)+str(metric)+"_v2.json"
+		file = str(data_dir)+str(metric)+".json"
 		output =str(output_dir)+str(metric)+"/"
 		create_dirs(output)
 		prepare(metric,file,output)
@@ -246,8 +200,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-data_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/json/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/"	# Diretório para Salvar os gráficos...
+data_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/unweighted_directed/"	# Diretório para Salvar os gráficos...
 
 #Executa o método main
 if __name__ == "__main__": main()
