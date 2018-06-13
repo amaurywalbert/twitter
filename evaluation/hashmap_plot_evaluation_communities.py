@@ -39,8 +39,8 @@ def main():
 	print"#################################################################################"
 	print
 
-	algs = ['infomap']
-#	algs = ['infomap','infomap_without_weight']
+#	algs = ['infomap']
+	algs = ['infomap','infomap_without_weight']
 	nets = ['n1','n2','n3','n4']
 #	names = ['n_nodes','n_edges','n_comm','max_comm_len','min_comm_len','comm_size_avg','comm_size_std','n_singletons','alters_ignored','chen_modularity_avg','chen_mod_density_avg','chen_conductance_avg','chen_intra_density_avg','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg']
 
