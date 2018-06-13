@@ -85,8 +85,8 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
-#	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
+	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 10))
+#	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
 	
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)

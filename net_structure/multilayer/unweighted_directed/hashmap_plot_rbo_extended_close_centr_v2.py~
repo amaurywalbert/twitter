@@ -85,18 +85,19 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
-	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 10))
-#	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
+#	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
+	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
 	
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 
-#	plt.title('Rank-Biased Overlap (Extended) - In-Degree Rank',y=-0.08)
+#	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank',y=-0.08)
+#	plt.colorbar(orientation='horizontal')
 	plt.colorbar()
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
 
-	name = "rbo_in_degree_rank"
+	name = "rbo_close_centr"
 
 	plt.savefig(output+name+".png",bbox_inches='tight',dpi=300)
 	plt.close()
@@ -181,7 +182,7 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "rbo_extended_in_degree_rank"
+	metric = "rbo_extended_closeness_centrality"
 	if not os.path.exists(str(data_dir)+str(metric)+".json"):												# Verifica se diretório existe
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
