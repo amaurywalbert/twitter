@@ -183,7 +183,7 @@ def main():
 ######################################################################################################################################################################
 
 source = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/"
-output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/"
+output = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/histograms/"
 
 if not os.path.exists(output):
 	os.makedirs(output)

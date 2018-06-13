@@ -145,19 +145,20 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Plot In-Degree Distribution"
+	print" Plot Degree Distribution"
 	print"																											"
 	print"#################################################################################"
 	print
 	
-	metric = "in_degree_distribution"
-	if not os.path.exists(str(source_dir)+str(metric)+".json"):
-		print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")
-	else:
-		create_dir(output_dir)																				# Cria diretótio para salvar arquivos.
-		with open(str(source_dir)+str(metric)+".json",'r') as f:	
-			dataset = json.load(f)			
-		prepare(dataset,metric)
+	metrics = ["in_degree_distribution",out_degree_distribution",total_degree_distribution"]
+	for metric in metrics:
+		if not os.path.exists(str(source_dir)+str(metric)+".json"):
+			print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")
+		else:
+			create_dir(output_dir)																				# Cria diretótio para salvar arquivos.
+			with open(str(source_dir)+str(metric)+".json",'r') as f:	
+				dataset = json.load(f)			
+			prepare(dataset,metric)
 	
 	print("\n######################################################################\n")
 	print("Script finalizado!")

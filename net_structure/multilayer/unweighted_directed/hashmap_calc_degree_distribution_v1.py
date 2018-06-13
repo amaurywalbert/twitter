@@ -42,6 +42,7 @@ def in_degree_distribution(G):
 	out_degree = {}
 	v_in_d = []
 	v_out_d = []
+	v_degrees = []
 	
 	InDegV = snap.TIntPrV()
 	snap.GetNodeInDegV(G,InDegV)					#Retorna o id do vertice e o grau de entrada- inclusive se o grau for 0 
@@ -61,17 +62,27 @@ def in_degree_distribution(G):
 		if k in out_degree:
 			v_in_d.append(v)
 			v_out_d.append(out_degree[k])
+			soma = v+out_degree[k]			
+			v_degrees.append(soma)
 					
-	return v_in_d,v_out_d						 	#Retorna uma lista com in_degree e outra lista com out_degree								
+	return v_in_d,v_out_d,v_degrees						 	#Retorna uma lista com in_degree e outra lista com out_degree, e mais uma com a soma dos graus de entrada e saída.								
 
 ######################################################################################################################################################################
 #
 # Salvar arquivo no formato JSON: ego_id:{as:data,ar:data,al:data,am:data,...,rm:data}  
 #
 ######################################################################################################################################################################
-def save_json(dataset_json):
+#def save_json(dataset_json):
+def save_json(dataset_json,dataset_out_json,dataset_total_json):
+
 	with open(output_dir_json+"in_degree_distribution.json","w") as f:
 		f.write(json.dumps(dataset_json))
+
+	with open(output_dir_json+"out_degree_distribution.json","w") as f:
+		f.write(json.dumps(dataset_out_json))
+
+	with open(output_dir_json+"total_degree_distribution.json","w") as f:
+		f.write(json.dumps(dataset_total_json))
 ######################################################################################################################################################################
 #
 # Salvar arquivo texto com padrão:  ego_id as:data ar:data al:data am:data ... rm:data  
@@ -103,13 +114,17 @@ def main():
 	if os.path.exists(output_dir_json+"in_degree_distribution.json"):
 		print ("Arquivo de destino já existe!"+str(output_dir_json+"in_degree_distribution.json"))
 	else:
-		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
-		dataset_json = {}																													# Salvar Arquivos no Formato Json
+		create_dirs(output_dir_txt,output_dir_json)																	# Cria diretótio para salvar arquivos.
+		dataset_json = {}																										# Salvar Arquivos no Formato Json
+		dataset_out_json = {}																								# Salvar Arquivos no Formato Json
+		dataset_total_json = {}																								# Salvar Arquivos no Formato Json		
 		with open(output_dir_txt+"in_degree_distribution.txt",'w') as out_file:
 			for ego,v in dictionary.iteritems():
 				i+=1
-				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]							# Camadas de interações no Twitter
+				nets = ["n1","n2","n3","n4","n9"] #[amigos,seguidores,retweets,likes,menções]				# Camadas de interações no Twitter
 				dataset = {}
+				dataset_out = {}
+				dataset_total = {}
 				for net in nets:
 					if net == "n1":
 						layer = "a"
@@ -134,64 +149,79 @@ def main():
 						create_dir(output)
 						source = str(edge_list)+str(ego)+".edge_list"
 						G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)					   							# Carrega o grafo da camada i - Direcionado e Não Ponderado
-						in_degree, out_degree = in_degree_distribution(G)
+						in_degree, out_degree,total_degree = in_degree_distribution(G)
 
 						fit = powerlaw.Fit(in_degree)
-
-						try:
-							R,p = fit.distribution_compare('power_law', 'exponential', normalized_ratio=True)
-							exponential = {"R":R,"p":p}
-						except Exception:
-							exponential = {"R":"","p":""}
-
-						try:
-							R,p = fit.distribution_compare('power_law', 'truncated_power_law', normalized_ratio=True)
-							truncated_power_law = {"R":R,"p":p}
-						except Exception:
-							truncated_power_law = {"R":"","p":""}
-								
-						try:
-							R,p = fit.distribution_compare('power_law', 'log_normal', normalized_ratio=True)
-							log_normal = {"R":R,"p":p}
-						except Exception:
-							log_normal = {"R":"","p":""}
+						fit_out = powerlaw.Fit(out_degree)
+						fit_total = powerlaw.Fit(total_degree)
 						
-						try:
-							R,p = fit.distribution_compare('power_law', 'stretched_exponential', normalized_ratio=True)
-							stretched_exponential = {"R":R,"p":p}
-						except Exception:
-							stretched_exponential = {"R":"","p":""}
-						
-						try:
-							fig = fit.plot_ccdf(linewidth=3, color='r', linestyle='--', label='Empirical Data')
-							fit.power_law.plot_ccdf(ax=fig, color='b', label='Power Law fit')
-							fit.exponential.plot_ccdf(ax=fig, color='orange', label='Exponential fit')
-							fit.truncated_power_law.plot_ccdf(ax=fig, color='g', label='Truncated Power Law fit')
-							fit.lognormal.plot_ccdf(ax=fig, color='brown', label='Log-Normal fit')
-							fit.stretched_exponential.plot_ccdf(ax=fig, color='m', label='Stretched Exponential fit')
-							####
-							fig.set_ylabel(u"p(X>=x)")
-							fig.set_xlabel("Node Degree")
-							handles, labels = fig.get_legend_handles_labels()
-							fig.legend(handles, labels, loc=3)
-							figname = 'Node_Degree_Distribution'
-							plt.savefig(str(output)+str(ego)+"_"+str(figname)+'.eps', bbox_inches='tight')
-							plt.close()	
-						except Exception:
-							print ("Impossível gerar gráfico!")
+#						try:
+#							R,p = fit.distribution_compare('power_law', 'exponential', normalized_ratio=True)
+#							exponential = {"R":R,"p":p}
+#						except Exception:
+#							exponential = {"R":"","p":""}
+#
+#						try:
+#							R,p = fit.distribution_compare('power_law', 'truncated_power_law', normalized_ratio=True)
+#							truncated_power_law = {"R":R,"p":p}
+#						except Exception:
+#							truncated_power_law = {"R":"","p":""}
+#								
+#						try:
+#							R,p = fit.distribution_compare('power_law', 'log_normal', normalized_ratio=True)
+#							log_normal = {"R":R,"p":p}
+#						except Exception:
+#							log_normal = {"R":"","p":""}
+#						
+#						try:
+#							R,p = fit.distribution_compare('power_law', 'stretched_exponential', normalized_ratio=True)
+#							stretched_exponential = {"R":R,"p":p}
+#						except Exception:
+#							stretched_exponential = {"R":"","p":""}
+#						
+#						try:
+#							fig = fit.plot_ccdf(linewidth=3, color='r', linestyle='--', label='Empirical Data')
+#							fit.power_law.plot_ccdf(ax=fig, color='b', label='Power Law fit')
+#							fit.exponential.plot_ccdf(ax=fig, color='orange', label='Exponential fit')
+#							fit.truncated_power_law.plot_ccdf(ax=fig, color='g', label='Truncated Power Law fit')
+#							fit.lognormal.plot_ccdf(ax=fig, color='brown', label='Log-Normal fit')
+#							fit.stretched_exponential.plot_ccdf(ax=fig, color='m', label='Stretched Exponential fit')
+#							####
+#							fig.set_ylabel(u"p(X>=x)")
+#							fig.set_xlabel("Node Degree")
+#							handles, labels = fig.get_legend_handles_labels()
+#							fig.legend(handles, labels, loc=3)
+#							figname = 'Node_Degree_Distribution'
+#							plt.savefig(str(output)+str(ego)+"_"+str(figname)+'.eps', bbox_inches='tight')
+#							plt.close()	
+#						except Exception:
+#							print ("Impossível gerar gráfico!")
 
-						result = {"alpha":fit.power_law.alpha,"sigma":fit.power_law.sigma,"xmin":fit.xmin,"D":fit.power_law.D,"exponential":exponential,"truncated_power_law":truncated_power_law,"log_normal":log_normal,"stretched_exponential":stretched_exponential}
+
+
+						result = {"alpha":fit.power_law.alpha,"sigma":fit.power_law.sigma,"xmin":fit.xmin,"D":fit.power_law.D}
+						result_out = {"alpha":fit_out.power_law.alpha,"sigma":fit_out.power_law.sigma,"xmin":fit_out.xmin,"D":fit_out.power_law.D}
+						result_total = {"alpha":fit_total.power_law.alpha,"sigma":fit_total.power_law.sigma,"xmin":fit_total.xmin,"D":fit_total.power_law.D}
+
+#						result = {"alpha":fit.power_law.alpha,"sigma":fit.power_law.sigma,"xmin":fit.xmin,"D":fit.power_law.D,"exponential":exponential,"truncated_power_law":truncated_power_law,"log_normal":log_normal,"stretched_exponential":stretched_exponential}
+#						result_out = {"alpha":fit_out.power_law.alpha,"sigma":fit_out.power_law.sigma,"xmin":fit_out.xmin,"D":fit_out.power_law.D,"exponential":exponential,"truncated_power_law":truncated_power_law,"log_normal":log_normal,"stretched_exponential":stretched_exponential}
+#						result_total = {"alpha":fit_total.power_law.alpha,"sigma":fit_total.power_law.sigma,"xmin":fit_total.xmin,"D":fit_total.power_law.D,"exponential":exponential,"truncated_power_law":truncated_power_law,"log_normal":log_normal,"stretched_exponential":stretched_exponential}
 
 						dataset[layer] = result
+						dataset_out[layer] = result_out
+						dataset_total[layer] = result_total
 						
 				dataset_json[ego] = dataset
-				print 
-				print i, ego, dataset_json[ego]
-				print 
-				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
-				print
+				dataset_out_json[ego] = dataset_out
+				dataset_total_json[ego] = dataset_total
+#				print 
+#				print i, ego, dataset_json[ego]
+#				print 
+#				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
+#				print
 			
-		save_json(dataset_json)																										# Salvar arquivo no formato JSON
+#		save_json(dataset_json)		
+		save_json(dataset_json,dataset_out_json,dataset_total_json)																										# Salvar arquivo no formato JSON
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
