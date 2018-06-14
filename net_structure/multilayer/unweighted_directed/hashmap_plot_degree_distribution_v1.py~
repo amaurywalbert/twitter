@@ -39,12 +39,13 @@ def histogram_plot(_a,_s,_r,_l,_m, metric):
 	create_dir(output)	
 	
 	trace0 = go.Histogram(x=_a,name='Follow',opacity=0.75)
-	trace1 = go.Histogram(x=_s,name='Followee',opacity=0.75)
+#	trace1 = go.Histogram(x=_s,name='Followee',opacity=0.75)
 	trace2 = go.Histogram(x=_r,name='Retweets',opacity=0.75)
 	trace3 = go.Histogram(x=_l,name='Likes',opacity=0.75)
 	trace4 = go.Histogram(x=_m,name='Mentions',opacity=0.75)
 	
-	data = [trace0, trace1, trace2, trace3, trace4]
+#	data = [trace0, trace1, trace2, trace3, trace4]
+	data = [trace0, trace2, trace3, trace4]
 
 
 	layout = go.Layout(barmode='overlay')
@@ -91,12 +92,13 @@ def box_plot(_a,_s,_r,_l,_m, metric):
 	create_dir(output)	
 	
 	trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
-	trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
+#	trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
 	trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
 	trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
 	trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
 	
-	data = [trace0, trace1, trace2, trace3, trace4]
+#	data = [trace0, trace1, trace2, trace3, trace4]
+	data = [trace0, trace2, trace3, trace4]
 
 	fig = go.Figure(data=data)
 
@@ -116,6 +118,10 @@ def prepare(dataset,metric):
 
 	for ego,data in dataset.iteritems():				# Para cada ego...
 		for key,value in data.iteritems():				# Para cada layer em cada ego
+			if value['alpha'] > 50:
+				print
+				print ego,key,value['alpha']
+				print 
 			if key == "a":
 				_a.append(value['alpha'])
 			elif key == "s":	
@@ -126,8 +132,7 @@ def prepare(dataset,metric):
 				_l.append(value['alpha'])
 			elif key == "m":
 				_m.append(value['alpha'])
-#				if value['alpha'] > 50:
-#					print ego,value
+
 
 	histogram_plot(_a,_s,_r,_l,_m, metric)		
 	ccdf_plot(_a,_s,_r,_l,_m, metric)	
@@ -150,7 +155,7 @@ def main():
 	print"#################################################################################"
 	print
 	
-	metrics = ["in_degree_distribution",out_degree_distribution",total_degree_distribution"]
+	metrics = ["in_degree_distribution","out_degree_distribution","total_degree_distribution"]
 	for metric in metrics:
 		if not os.path.exists(str(source_dir)+str(metric)+".json"):
 			print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")

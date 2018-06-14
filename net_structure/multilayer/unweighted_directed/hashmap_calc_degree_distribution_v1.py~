@@ -111,7 +111,7 @@ def main():
 	print"#################################################################################"
 	print
 	i=0
-	if os.path.exists(output_dir_json+"in_degree_distribution.json"):
+	if os.path.exists(output_dir_json+"in_degree_distribution.json") and os.path.exists(output_dir_json+"out_degree_distribution.json") and os.path.exists(output_dir_json+"total_degree_distribution.json"):
 		print ("Arquivo de destino já existe!"+str(output_dir_json+"in_degree_distribution.json"))
 	else:
 		create_dirs(output_dir_txt,output_dir_json)																	# Cria diretótio para salvar arquivos.
@@ -214,9 +214,11 @@ def main():
 				dataset_json[ego] = dataset
 				dataset_out_json[ego] = dataset_out
 				dataset_total_json[ego] = dataset_total
-#				print 
-#				print i, ego, dataset_json[ego]
-#				print 
+				print 
+				print i, ego, dataset_json[ego]
+				print i, ego, dataset_out_json[ego]
+				print i, ego, dataset_total_json[ego]
+				print 
 #				save_file(ego,dataset,out_file)																					# Salvar arquivo texto
 #				print
 			
