@@ -66,31 +66,38 @@ def box_plot(_a,_s,_r,_l,_m, metric):
 	
 	trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
 #	trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
-	trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
-	trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
-	trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
+	trace2 = go.Box(y=_r,name='Retweet',boxmean='sd')
+	trace3 = go.Box(y=_l,name='Like',boxmean='sd')
+	trace4 = go.Box(y=_m,name='Mention',boxmean='sd')
 	
-#	data = [trace0, trace2, trace3, trace4]
+#	data = [trace0]
+#	layout = go.Layout()
+#	fig = go.Figure(data=data, layout=layout)
+#	plotly.offline.plot(fig, filename=output+str(metric)+"_follow_box_plot.html",auto_open=True)
+#	
+#	data = [trace2]
+#	layout = go.Layout()
+#	fig = go.Figure(data=data, layout=layout)
+#	plotly.offline.plot(fig, filename=output+str(metric)+"_retweets_box_plot.html",auto_open=True)
+#	
+#	data = [trace3]
+#	layout = go.Layout()
+#	fig = go.Figure(data=data, layout=layout)
+#	plotly.offline.plot(fig, filename=output+str(metric)+"_likes_box_plot.html",auto_open=True)
+#	
+#	data = [trace4]
+#	layout = go.Layout()
+#	fig = go.Figure(data=data, layout=layout)
+#	plotly.offline.plot(fig, filename=output+str(metric)+"_mentions_box_plot.html",auto_open=True)	
 
-	data = [trace0]
+	data = [trace0, trace2, trace3, trace4]
 	layout = go.Layout()
 	fig = go.Figure(data=data, layout=layout)
-	plotly.offline.plot(fig, filename=output+str(metric)+"_follow_box_plot.html",auto_open=True)
-	
-	data = [trace2]
-	layout = go.Layout()
-	fig = go.Figure(data=data, layout=layout)
-	plotly.offline.plot(fig, filename=output+str(metric)+"_retweets_box_plot.html",auto_open=True)
-	
-	data = [trace3]
-	layout = go.Layout()
-	fig = go.Figure(data=data, layout=layout)
-	plotly.offline.plot(fig, filename=output+str(metric)+"_likes_box_plot.html",auto_open=True)
-	
-	data = [trace4]
-	layout = go.Layout()
-	fig = go.Figure(data=data, layout=layout)
-	plotly.offline.plot(fig, filename=output+str(metric)+"_mentions_box_plot.html",auto_open=True)	
+	plotly.offline.plot(fig, filename=output+str(metric)+"_box_plot.html",auto_open=True)
+
+
+
+
 ######################################################################################################################################################################
 #
 # Prepara os dados

@@ -31,27 +31,138 @@ def create_dir(x):
 		os.makedirs(x)
 ######################################################################################################################################################################
 #
-# histogram
+#Grouped Box Plot
 #
 ######################################################################################################################################################################
-def histogram_plot(_a,_s,_r,_l,_m, metric):
+def grouped_box_plot(_a,_s,_r,_l,_m, metric):		#Separar por conjuntos alpha<2, 2<alpha<3, 3<alpha
 	output = str(output_dir)+"/"+str(metric)+"/"
 	create_dir(output)	
 	
-	trace0 = go.Histogram(x=_a,name='Follow',opacity=0.75)
-#	trace1 = go.Histogram(x=_s,name='Followee',opacity=0.75)
-	trace2 = go.Histogram(x=_r,name='Retweets',opacity=0.75)
-	trace3 = go.Histogram(x=_l,name='Likes',opacity=0.75)
-	trace4 = go.Histogram(x=_m,name='Mentions',opacity=0.75)
-	
-#	data = [trace0, trace1, trace2, trace3, trace4]
-	data = [trace0, trace2, trace3, trace4]
+	data = {"a":_a, "r":_r,"l":_l,"m":_m}
+	dataset = {}
+	for key,value in data.iteritems():
+		normal = []
+		heavy_tailed = []
+		scale_free = []
+		ultra_small_world = []
+			
+		for item in value:		
+			if item < 0:
+				normal.append(item)	
+			elif item < 2 and item >= 0:
+				heavy_tailed.append(item)
+			elif item >=2 and item <=3:
+				scale_free.append(item)
+			else:	
+				ultra_small_world.append(item)
+		dataset[key] = {"normal":normal, "heavy_tailed":heavy_tailed, "scale_free":scale_free,"ultra_small_world":ultra_small_world}
+	 
+	x1 = []
+	y1 = []
+	frequence = []
+	for key,values in dataset.iteritems():
+		if key == 'a':
+			layer = "Follow"
+		elif key == 'r':
+			layer = "Retweets"
+		elif key == 'l':
+			layer = "Likes"
+		elif key == 'm':
+			layer = "Mentions"
+		else:
+			layer = ""
+			print "Error"
+			sys.exit()											
+		for alpha in values['heavy_tailed']:
+			x1.append(layer)			
+			y1.append(alpha)
 
+	x2 = []
+	y2 = []
+	for key,values in dataset.iteritems():
+		if key == 'a':
+			layer = "Follow"
+		elif key == 'r':
+			layer = "Retweets"
+		elif key == 'l':
+			layer = "Likes"
+		elif key == 'm':
+			layer = "Mentions"
+		else:
+			layer = ""
+			print "Error"
+			sys.exit()											
+		for alpha in values['scale_free']:
+			x2.append(layer)			
+			y2.append(alpha)
 
-	layout = go.Layout(barmode='overlay')
+	x3 = []
+	y3 = []
+	for key,values in dataset.iteritems():
+		if key == 'a':
+			layer = "Follow"
+		elif key == 'r':
+			layer = "Retweets"
+		elif key == 'l':
+			layer = "Likes"
+		elif key == 'm':
+			layer = "Mentions"
+		else:
+			layer = ""
+			print "Error"
+			sys.exit()											
+		for alpha in values['ultra_small_world']:
+			x3.append(layer)			
+			y3.append(alpha)
+
+	trace1 = go.Box(x=x1,y=y1,name='$0<\gamma<2$',boxmean='sd')
+	trace2 = go.Box(x=x2,y=y2,name='$2\leq\gamma\leq3$',boxmean='sd')
+	trace3 = go.Box(x=x2,y=y3,name='$3<\gamma$',boxmean='sd')
+
+	data = [trace3, trace2, trace1]
+
+	layout = go.Layout(boxmode='group')
 	fig = go.Figure(data=data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output+str(metric)+"_histogram.html",auto_open=True)
+#	plotly.offline.plot(fig, filename=output+str(metric)+"_grouped_box_plot.html",auto_open=True)
+
+######################################################################################################################################################################
+######################################################################################################################################################################
+	x = ["Follow","Retweets","Likes","Mentions"]
+	f1 = []
+	f2 = []
+	f3 = []
+	
+	f1.append(len(dataset['a']["heavy_tailed"]))
+	f1.append(len(dataset['r']["heavy_tailed"]))
+	f1.append(len(dataset['l']["heavy_tailed"]))
+	f1.append(len(dataset['m']["heavy_tailed"]))
+	
+	f2.append(len(dataset['a']["scale_free"]))
+	f2.append(len(dataset['r']["scale_free"]))
+	f2.append(len(dataset['l']["scale_free"]))
+	f2.append(len(dataset['m']["scale_free"]))
+	
+	f3.append(len(dataset['a']["ultra_small_world"]))
+	f3.append(len(dataset['r']["ultra_small_world"]))
+	f3.append(len(dataset['l']["ultra_small_world"]))
+	f3.append(len(dataset['m']["ultra_small_world"]))
+	
+#	trace1 = go.Bar(x=x,y=f1,name='$0<\gamma<2$')
+#	trace2 = go.Bar(x=x,y=f2,name='$2\leq\gamma\leq3$')
+#	trace3 = go.Bar(x=x,y=f3,name='$3<\gamma$')
+
+	trace1 = go.Bar(x=x,y=f1,name='0 < '+u'\u03B3'+' < 2')
+	trace2 = go.Bar(x=x,y=f2,name='2 ≤ '+u'\u03B3'+' ≤ 3')
+	trace3 = go.Bar(x=x,y=f3,name='3 < '+u'\u03B3')
+
+	data = [trace1, trace2, trace3]
+
+	layout = go.Layout(barmode='group')
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=output+str(metric)+"_grouped_bar_plot.html",auto_open=True)
+
 	
 ######################################################################################################################################################################
 #
@@ -81,28 +192,6 @@ def ccdf_plot(_a,_s,_r,_l,_m, metric):
 	figname = 'CCDF_alpha_Distribution'
 	plt.savefig(str(output)+str(figname)+'.eps', bbox_inches='tight')
 	plt.close()	
-
-######################################################################################################################################################################
-#
-# Box Plot
-#
-######################################################################################################################################################################
-def box_plot(_a,_s,_r,_l,_m, metric):
-	output = str(output_dir)+"/"+str(metric)+"/"
-	create_dir(output)	
-	
-	trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
-#	trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
-	trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
-	trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
-	trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
-	
-#	data = [trace0, trace1, trace2, trace3, trace4]
-	data = [trace0, trace2, trace3, trace4]
-
-	fig = go.Figure(data=data)
-
-	plotly.offline.plot(fig, filename=output+str(metric)+"_box_plot.html",auto_open=True)
 	
 ######################################################################################################################################################################
 #
@@ -118,10 +207,6 @@ def prepare(dataset,metric):
 
 	for ego,data in dataset.iteritems():				# Para cada ego...
 		for key,value in data.iteritems():				# Para cada layer em cada ego
-			if value['alpha'] > 50:
-				print
-				print ego,key,value['alpha']
-				print 
 			if key == "a":
 				_a.append(value['alpha'])
 			elif key == "s":	
@@ -133,10 +218,10 @@ def prepare(dataset,metric):
 			elif key == "m":
 				_m.append(value['alpha'])
 
-
-#	histogram_plot(_a,_s,_r,_l,_m, metric)		
+		
 #	ccdf_plot(_a,_s,_r,_l,_m, metric)	
-	box_plot(_a,_s,_r,_l,_m, metric)
+	grouped_box_plot(_a,_s,_r,_l,_m, metric)
+	
 	
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -155,7 +240,8 @@ def main():
 	print"#################################################################################"
 	print
 	
-	metrics = ["in_degree_distribution","out_degree_distribution","total_degree_distribution"]
+	#metrics = ["in_degree_distribution","out_degree_distribution","total_degree_distribution"]
+	metrics = ["in_degree_distribution"]
 	for metric in metrics:
 		if not os.path.exists(str(source_dir)+str(metric)+".json"):
 			print ("Arquivo não encontrado! "+str(source_dir)+str(metric)+".json")

@@ -1011,7 +1011,7 @@ def box_plot_without_singletons(output,data1,metric,alg):
 			mentions = v
 		else:
 			print ("Valor incorreto para nome da rede-ego: "+str(k))
-	
+	output = output+str(metric)+"/"
 	if not os.path.exists(output):
 		os.makedirs(output)
 ################################################################################################  MANTER -- Dá pra exportar a tabela depois...
@@ -1026,6 +1026,6 @@ def box_plot_without_singletons(output,data1,metric,alg):
 	layout = go.Layout(title=title_plot,yaxis=dict(title=metric,zeroline=False))
 	fig = go.Figure(data=data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output+str(metric)+"/"+str(alg)+"_box_plot.html",auto_open=False)
+	plotly.offline.plot(fig, filename=output+str(alg)+"_box_plot.html",auto_open=False)
 	print ("Arquivo salvo: "+str(output)+str(metric)+"/"+str(alg)+"_box_plot.html")
 

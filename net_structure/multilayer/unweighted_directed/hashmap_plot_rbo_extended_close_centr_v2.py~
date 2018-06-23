@@ -64,12 +64,12 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_mr=_rm
 
 	raw_data = {'Follow': [_aa,_ar['media'],_al['media'],_am['media']],
-        'Retweets': [_ra['media'],_rr,_rl['media'],_rm['media']],
-        'Likes': [_la['media'],_lr['media'],_ll,_lm['media']],
-        'Mentions': [_ma['media'],_mr['media'],_ml['media'],_mm]
+        'Retweet': [_ra['media'],_rr,_rl['media'],_rm['media']],
+        'Like': [_la['media'],_lr['media'],_ll,_lm['media']],
+        'Mention': [_ma['media'],_mr['media'],_ml['media'],_mm]
         }
         
-	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'])
+	df = pd.DataFrame(raw_data, columns = ['Follow','Retweet','Like','Mention'])
 	print ("Média:")	
 	print df
 	
@@ -79,14 +79,14 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
         'Mentions': [_ma['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],_mm]
         }
         
-	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweets','Likes','Mentions'])
+	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweet','Like','Mention'])
 	print ("Desvio padrão:")
 	print df_dp	
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
-#	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
+	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 10))
+#	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
 	
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
 	plt.yticks(range(len(df.columns)), df.columns,rotation=30,size=9)

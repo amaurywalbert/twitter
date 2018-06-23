@@ -39,8 +39,8 @@ def main():
 	print"#################################################################################"
 	print
 
-#	algs = ['infomap']
-	algs = ['infomap','infomap_without_weight']
+	algs = ['infomap_without_weight']
+#	algs = ['infomap','infomap_without_weight']
 	nets = ['n1','n2','n3','n4']
 #	names = ['n_nodes','n_edges','n_comm','max_comm_len','min_comm_len','comm_size_avg','comm_size_std','n_singletons','alters_ignored','chen_modularity_avg','chen_mod_density_avg','chen_conductance_avg','chen_intra_density_avg','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg']
 
@@ -52,10 +52,13 @@ def main():
 			else:
 				for file in os.listdir(source_dir):
 					df = pd.read_csv(source_dir+file, encoding='ISO-8859-1')
-					df = df.drop(['ego_id','Unnamed: 18','min_comm_len','n_singletons','alters_ignored','comm_size_std','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg'], axis=1)
+					df = df.drop(['ego_id','min_comm_len','n_singletons','alters_ignored','comm_size_std','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg'], axis=1)
+					if 'Unnamed: 18' in df.columns:
+						df = df.drop(['Unnamed: 18'], axis=1)
 					df.columns = ['nodes','edges','comm','max_comm','comm_size','modularity','mod_density','conductance','intra_density']
 					description = df.describe()
-					print(net,description)
+					print ("---------------------------------------------------------------------------------------------------")
+					print(alg, net,description)
 					scatter_matrix(df)
 
 #					if net == "n1":

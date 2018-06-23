@@ -64,22 +64,22 @@ def color_bar(_rs,_lm,_am,_al,_as,_ar,_ls,_ms,_rl,_rm,_aa,_ss,_rr,_ll,_mm,output
 	_mr=_rm
 
 	raw_data = {'Follow': [_aa,_ar['media'],_al['media'],_am['media']],
-        'Retweets': [_ra['media'],_rr,_rl['media'],_rm['media']],
-        'Likes': [_la['media'],_lr['media'],_ll,_lm['media']],
-        'Mentions': [_ma['media'],_mr['media'],_ml['media'],_mm]
+        'Retweet': [_ra['media'],_rr,_rl['media'],_rm['media']],
+        'Like': [_la['media'],_lr['media'],_ll,_lm['media']],
+        'Mention': [_ma['media'],_mr['media'],_ml['media'],_mm]
         }
         
-	df = pd.DataFrame(raw_data, columns = ['Follow','Retweets','Likes','Mentions'])
+	df = pd.DataFrame(raw_data, columns = ['Follow','Retweet','Like','Mention'])
 	print ("Média:")	
 	print df
 	
 	raw_data_dp = {'Follow': [_aa,_ar['desvio_padrao'],_al['desvio_padrao'],_am['desvio_padrao']],
-        'Retweets': [_ra['desvio_padrao'],_rr,_rl['desvio_padrao'],_rm['desvio_padrao']],
-        'Likes': [_la['desvio_padrao'],_lr['desvio_padrao'],_ll,_lm['desvio_padrao']],
-        'Mentions': [_ma['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],_mm]
+        'Retweet': [_ra['desvio_padrao'],_rr,_rl['desvio_padrao'],_rm['desvio_padrao']],
+        'Like': [_la['desvio_padrao'],_lr['desvio_padrao'],_ll,_lm['desvio_padrao']],
+        'Mention': [_ma['desvio_padrao'],_mr['desvio_padrao'],_ml['desvio_padrao'],_mm]
         }
         
-	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweets','Likes','Mentions'])
+	df_dp = pd.DataFrame(raw_data_dp, columns = ['Follow','Retweet','Like','Mention'])
 	print ("Desvio padrão:")
 	print df_dp	
 	
