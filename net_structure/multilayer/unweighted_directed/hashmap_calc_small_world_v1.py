@@ -98,25 +98,23 @@ def main():
 					else:
 						print ("Rede inválida")
 						sys.exit()
+					
+					source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
 
-					edge_list1 = "/home/amaury/graphs_hashmap/"+str(net)+"/graphs_with_ego/"							# Diretório da camada i
-
-					if not os.path.isdir(edge_list1):																				# Verifica se diretório existe	
-						print ("Impossível localizar diretório com lista de arestas: "+str(edge_list1))
-
+					if not os.path.isfile(source):																				# Verifica se diretório existe	
+						print ("Impossível localizar arquivo com lista de arestas: "+str(source))
 					else:
-						source = str(edge_list1)+str(ego)+".edge_list"
-						G = nx.read_edgelist(source,create_using=nx.DiGraph(),nodetype=str)
-						cc_G = nx.transitivity(G)																			#Calcula o coeficiente de Clustering para o Grafo.
-						print ego,net,cc_G
-#						result = calc_metric(G,metric)																				# Calcula Métrica
+						G = nx.read_edgelist(source,create_using=nx.DiGraph())
+						transitivity = nx.transitivity(G)																	#Calcula o coeficiente de Clustering para o Grafo.
+						print ego,net,transitivity	
+#						result = calc_metric(G,metric)																		# Calcula Métrica
 #						dataset[layer] = result
 #							
 #				dataset_json[ego] = dataset
 #				print i, metric, dataset_json[ego]
-#				save_file(ego,dataset,out_file)																						# Salvar arquivo texto
+#				save_file(ego,dataset,out_file)																				# Salvar arquivo texto
 #				print
-#		save_json(dataset_json,metric)																								# Salvar arquivo no formato JSON
+#		save_json(dataset_json,metric)																						# Salvar arquivo no formato JSON
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -127,7 +125,8 @@ def main():
 #
 ######################################################################################################################################################################
 
-data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/n1/graphs_with_ego/"												# Pegar a lista com os ids dos egos
+egos_ids = "/home/amaury/graphs_hashmap_infomap_without_weight/n1/graphs_with_ego/"										# Pegar a lista com os ids dos egos
+data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																	# Diretório com as redes-ego
 output_dir_txt = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/txt/small_world/"	# Pegar a lista com os ids dos egos
 output_dir_json = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
 
@@ -137,17 +136,17 @@ dictionary = {}				#################################################### Tabela {
 print("######################################################################")
 print ("Criando tabela hash...")
 n = 0	#Conta quantos arquivos existem no diretório
-for file in os.listdir(data_dir):
+for file in os.listdir(egos_ids):
 	user_id = file.split(".edge_list")
 	user_id = long(user_id[0])
 	dictionary[user_id] = user_id
 	n+=1
 print ("Tabela hash criada com sucesso...") 
 print("######################################################################\n")
-if n <> 500:
-	print ("Diretório não contém lista com todos os egos...")
-	sys.exit()
-else:
-
+#if n <> 500:
+#	print ("Diretório não contém lista com todos os egos...")
+#	sys.exit()
+#else:
+#
 	#Executa o método main
-	if __name__ == "__main__": main()
+if __name__ == "__main__": main()
