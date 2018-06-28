@@ -34,87 +34,10 @@ def create_dirs(x,y):
 
 ######################################################################################################################################################################
 #
-# Cálculo do JACCARD entre os dois conjuntos de arestas
+# Cálcular Métricas
 #
 ######################################################################################################################################################################
-def calc_metric(G,metric):
-	IsDir = True														# Todas as redes são direcionadas
-	n_nodes = G.GetNodes()
-	n_edges = G.GetEdges()
 
-	if metric == "nodes":
-		result = n_nodes
-
-	elif metric == "edges":
-		result = n_edges
-
-	elif metric == "size":
-		result = n_nodes+n_edges
-
-	elif metric == "avg_degree":
-		result = float(2*n_edges)/float(n_nodes)
-
-	elif metric == "diameter":
-		result = snap.GetBfsFullDiam(G, 100, IsDir)
-		
-	elif metric == "density":
-		result = float(n_edges)/(float(n_nodes)*(float(n_nodes-1)))
-
-	elif metric == "closeness_centr":
-		Normalized = True
-		cc = []
-		for NI in G.Nodes():
-			cc.append(snap.GetClosenessCentr(G, NI.GetId(), Normalized, IsDir)) #get a closeness centrality
-		
-		_cc = calc.calcular(cc)
-		result = _cc['media']	
-
-	elif metric == "betweenness_centr_nodes":
-		bc_n = []		
-		if n_edges == 0 or n_nodes < 3:
-			bc_n.append(int(0))
-		else:
-			Nodes = snap.TIntFltH()
-			Edges = snap.TIntPrFltH()
-			snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Nodes
-			if IsDir is True:
-				max_betweenneess = (n_nodes-1)*(n_nodes-2)
-			else:
-				max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
-			for node in Nodes:
-				bc_n_normalized = float(Nodes[node]) / float(max_betweenneess)
-				bc_n.append(bc_n_normalized)
-		_bc_n = calc.calcular(bc_n)			
-		result = _bc_n['media']
-
-	elif metric == "betweenness_centr_edges":
-		bc_e = []
-		if n_edges == 0 or n_nodes < 3:
-			bc_e.append(int(0))
-		else:
-			Nodes = snap.TIntFltH()
-			Edges = snap.TIntPrFltH()
-			snap.GetBetweennessCentr(G, Nodes, Edges, 1.0, IsDir)								#Betweenness centrality Edges
-			if IsDir is True:
-				max_betweenneess = (n_nodes-1)*(n_nodes-2)
-			else:
-				max_betweenneess = ((n_nodes-1)*(n_nodes-2))/2
-			for edge in Edges:
-				bc_e_normalized = float(Edges[edge]) / float(max_betweenneess)
-				bc_e.append(bc_e_normalized)
-		_bc_e = calc.calcular(bc_e)
-		result = _bc_e['media']
-
-	elif metric == "clust_coef":
-		result = snap.GetClustCf(G, -1)
-
-	else:
-		result = None
-		print ("\nImpossível calcular "+str(metric))
-		print ("\n")
-		sys.exit()
-
-	return result
 ######################################################################################################################################################################
 #
 # Salvar arquivo no formato JSON: ego_id:{as:data,ar:data,al:data,am:data,...,rm:data}  
@@ -183,7 +106,7 @@ def main():
 
 					else:
 						source = str(edge_list1)+str(ego)+".edge_list"
-						G = nx.read_edgelist(source,create_using=nx.DiGraph())
+						G = nx.read_edgelist(source,create_using=nx.DiGraph(),nodetype=str)
 						cc_G = nx.transitivity(G)																			#Calcula o coeficiente de Clustering para o Grafo.
 						print ego,net,cc_G
 #						result = calc_metric(G,metric)																				# Calcula Métrica
