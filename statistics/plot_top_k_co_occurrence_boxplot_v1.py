@@ -59,53 +59,53 @@ def box_plot(metric,_aa,_as,_ar,_al,_am,_sa,_ss,_sr,_sl,_sm,_ra,_rs,_rr,_rl,_rm,
 #	for i in range(len(_aa)):
 #		x.append("Follow")
 	for i in range(len(_ar)):
-		x.append("Retweets")
+		x.append("Retweet")
 	for i in range(len(_al)):
-		x.append("Likes")
+		x.append("Like")
 	for i in range(len(_am)):
-		x.append("Mentions")
+		x.append("Mention")
 
 #	for i in _aa:
-#		y0.append(i)
+#		y0.append(float(i*100))
 	for i in _ar:
-		y0.append(i)
+		y0.append(float(i*100))
 	for i in _al:
-		y0.append(i)
+		y0.append(float(i*100))
 	for i in _am:
-		y0.append(i)
+		y0.append(float(i*100))
 
 #	for i in _ra:
-#		y1.append(i)
+#		y1.append(float(i*100))
 	for i in _rr:
-		y1.append(i)
+		y1.append(float(i*100))
 	for i in _rl:
-		y1.append(i)
+		y1.append(float(i*100))
 	for i in _rm:
-		y1.append(i)
+		y1.append(float(i*100))
 				
 
 #	for i in _la:
-#		y2.append(i)
+#		y2.append(float(i*100))
 	for i in _lr:
-		y2.append(i)
+		y2.append(float(i*100))
 	for i in _ll:
-		y2.append(i)
+		y2.append(float(i*100))
 	for i in _lm:
-		y2.append(i)
+		y2.append(float(i*100))
 	
 #	for i in _ma:
-#		y3.append(i)
+#		y3.append(float(i*100))
 	for i in _mr:
-		y3.append(i)
+		y3.append(float(i*100))
 	for i in _ml:
-		y3.append(i)
+		y3.append(float(i*100))
 	for i in _mm:
-		y3.append(i)		
+		y3.append(float(i*100))		
 							
 	trace0 = go.Box(y=y0,x=x,name='Follow',boxmean='sd')
-	trace1 = go.Box(y=y1,x=x,name='Retweets',boxmean='sd')
-	trace2 = go.Box(y=y2,x=x,name='Likes',boxmean='sd')
-	trace3 = go.Box(y=y3,x=x,name='Mentions',boxmean='sd')
+	trace1 = go.Box(y=y1,x=x,name='Retweet',boxmean='sd')
+	trace2 = go.Box(y=y2,x=x,name='Like',boxmean='sd')
+	trace3 = go.Box(y=y3,x=x,name='Mention',boxmean='sd')
 
 	title_plot = title
 	data = [trace0, trace1, trace2,trace3]
@@ -239,7 +239,7 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "top_k_co_occurrence"
+	metric = "topk_co_occurrence"
 	title = "Top-K Intersection over Alters Set"	
 	if not os.path.exists(str(data_dir)+str(metric)+".json"):												# Verifica se diretório existe
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
@@ -263,8 +263,8 @@ singletons1 = "full"
 singletons2 = "without_singletons"
 #######################################################################
 	
-data_dir = "/home/amaury/Dropbox/lists_properties/"+str(type_graphs1)+"_"+str(singletons1)+"/"
-output_dir = "/home/amaury/Dropbox/lists_properties_statistics/"+str(type_graphs1)+"_"+str(singletons1)+"/"
+data_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/"+str(type_graphs)"+/unweighted_directed/"
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/"+str(type_graphs)"+/unweighted_directed/"
 
 #Executa o método main
 if __name__ == "__main__": main()

@@ -73,15 +73,15 @@ def prepare(dataset,metric,title):
 	for k,v in dataset.iteritems():					# Para cada vértice...
 		for key,value in v.iteritems():				# Para cada layer em cada vértice
 			if key == "a":
-				_a.append(value)
+				_a.append(float(value*100))
 			elif key == "s":	
-				_s.append(value)
+				_s.append(float(value*100))
 			elif key == "r":
-				_r.append(value)
+				_r.append(float(value*100))
 			elif key == "l":
-				_l.append(value)
+				_l.append(float(value*100))
 			elif key == "m":
-				_m.append(value)
+				_m.append(float(value*100))
 	
 	box_plot(_a,_s,_r,_l,_m, metric,title)
 	

@@ -46,7 +46,7 @@ def calc_metrics(communities,G,uw,ud):
 			separability.append(_separability)															#Armazena os resultados para cada partição para depois fazer a média do ego.
 	
 	else:																			#Para grafos não direcionados...
-		clustering_of_G = nx.clustering(G,weight='weight')			#Calcula o coeficiente de Clustering para o Grafo.
+		clustering_of_G = nx.average_clustering(G,weight='weight')			#Calcula o coeficiente de Clustering para o Grafo.
 		
 		for k,community in communities.iteritems():
 			_average_degree = 0 

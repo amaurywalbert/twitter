@@ -73,11 +73,11 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	
 #	plt.matshow(df)
 #	plt.matshow(df,cmap='gray')
-#	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 20))
-	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
+	plt.matshow(df,cmap=plt.cm.get_cmap('Blues', 10))
+#	plt.matshow(df,cmap=plt.cm.get_cmap('gray_r', 10))		#10 tonalidades
 	
 	plt.xticks(range(len(df.columns)), df.columns,rotation=30,size=9)
-	plt.yticks(range(len(df.columns)-1),['Retweets','Likes','Mentions'],rotation=30,size=9)
+	plt.yticks(range(len(df.columns)-1),['Retweet','Like','Mention'],rotation=30,size=9)
 
 #	plt.title('Rank-Biased Overlap (Extended) - Closeness Centrality Rank',y=-0.08)
 #	plt.colorbar(orientation='horizontal')
@@ -85,7 +85,7 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 	for (i, j), z in np.ndenumerate(df):													#Show values in the grid
 		plt.text(j, i, '{:0.2f}'.format(z), ha='center', va='center',bbox=dict(boxstyle='round', facecolor='white', edgecolor='0.9'),size=8)	
 
-	plt.savefig(output_dir+metric+".png",bbox_inches='tight',dpi=300)
+	plt.savefig(output_dir+metric+"_heatmap.png",bbox_inches='tight',dpi=600)
 	plt.close()
 	print (" - OK! Color Bar salvo em: "+str(output_dir))
 	print
@@ -98,7 +98,6 @@ def color_bar(metric,_aa_avg,_as_avg,_ar_avg,_al_avg,_am_avg, _sa_avg,_ss_avg,_s
 def prepare(metric,file):
 	with open(file,'r') as f:
 		data = json.load(f)
-	pairs = {}
  
  	_aa = []
 	_as = []
@@ -243,7 +242,7 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	metric = "top_k_co_occurrence"
+	metric = "topk_co_occurrence"
 	if not os.path.exists(str(data_dir)+str(metric)+".json"):												# Verifica se diretório existe
 		print ("Impossível localizar arquivo: "+str(data_dir)+str(metric)+".json")
 	else:
@@ -266,8 +265,8 @@ singletons1 = "full"
 singletons2 = "without_singletons"
 #######################################################################
 	
-data_dir = "/home/amaury/Dropbox/lists_properties/"+str(type_graphs1)+"_"+str(singletons1)+"/"
-output_dir = "/home/amaury/Dropbox/lists_properties_statistics/"+str(type_graphs1)+"_"+str(singletons1)+"/"
+data_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/"+str(type_graphs)"+/unweighted_directed/"
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/"+str(type_graphs)"+/unweighted_directed/"
 
 #Executa o método main
 if __name__ == "__main__": main()
