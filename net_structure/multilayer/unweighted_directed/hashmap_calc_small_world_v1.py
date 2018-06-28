@@ -26,37 +26,29 @@ sys.setdefaultencoding('utf-8')
 # Cria diretórios
 #
 ######################################################################################################################################################################
-def create_dirs(x,y):
+def create_dir(x):
 	if not os.path.exists(x):
-		os.makedirs(x)
-	if not os.path.exists(y):
-		os.makedirs(y)		
+		os.makedirs(x)		
 
 ######################################################################################################################################################################
 #
-# Cálcular Métricas
+# Cálcular Métricas para verificar small world
 #
 ######################################################################################################################################################################
-
+def calc_metric(G,metric):
+	transitivity = nx.transitivity(G)																	#Calcula o coeficiente de Clustering para o Grafo.
+	print i, ego,net,transitivity
+	gnm_random_graph(n, m, seed=None, directed=False)
+	result = 0
+	return transitivity, result
 ######################################################################################################################################################################
 #
 # Salvar arquivo no formato JSON: ego_id:{as:data,ar:data,al:data,am:data,...,rm:data}  
 #
 ######################################################################################################################################################################
-def save_json(dataset_json,metric):
-	with open(str(output_dir_json)+str(metric)+".json","w") as f:
-		f.write(json.dumps(dataset_json))
-######################################################################################################################################################################
-#
-# Salvar arquivo texto com padrão:  ego_id as:data ar:data al:data am:data ... rm:data  
-#
-######################################################################################################################################################################
-def save_file(ego,dataset,f):
-	f.write(str(ego))
-	for k,v in dataset.iteritems():
-		f.write(" "+str(k)+":"+str(v))
-	f.write("\n")
-					
+def save_json(dataset,name):
+	with open(str(output_dir)+str(name)+".json","w") as f:
+		f.write(json.dumps(dataset))			
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -74,47 +66,48 @@ def main():
 	print"#################################################################################"
 	print			
 	print("\n")
-
-	if os.path.exists(str(output_dir_json)+"small_world.json"):
-		print ("Arquivo de destino já existe!"+(str(output_dir_json)+"small_world.json"))
+	metric = "small_world"
+	if os.path.exists(str(output_dir)+"small_world.json"):
+		print ("Arquivo de destino já existe!"+(str(output_dir)+"small_world.json"))
 	else:	
-		create_dirs(output_dir_txt,output_dir_json)																				# Cria diretótio para salvar arquivos.
-		dataset_json = {}																													# Salvar Arquivos no Formato Json
-		i=0																																	# Contador do ego
-		with open(str(output_dir_json)+"small_world.txt",'w') as out_file:
-			for ego,v in dictionary.iteritems():
-				i+=1
-				nets = ["n1","n2","n3","n4"] #[amigos,retweets,likes,menções]												# Camadas de interações no Twitter
-				dataset = {}
-				for net in nets:
-					if net == "n1":
-						layer = "a"
-					elif net == "n2":
-						layer = "r"
-					elif net == "n3":
-						layer = "l"
-					elif net == "n4":
-						layer = "m"
-					else:
-						print ("Rede inválida")
-						sys.exit()
+		create_dir(output_dir)																			# Cria diretótio para salvar arquivos.
+		dataset_trans = {}	
+		dataset = {}																						# Salvar Arquivos no Formato Json
+		i=0																									# Contador do ego
+		for ego,v in dictionary.iteritems():
+			i+=1
+			nets = ["n1","n2","n3","n4"] #[amigos,retweets,likes,menções]					# Camadas de interações no Twitter
+			dataset = {}
+			dataset_trans = {}
+			for net in nets:
+				if net == "n1":
+					layer = "a"
+				elif net == "n2":
+					layer = "r"
+				elif net == "n3":
+					layer = "l"
+				elif net == "n4":
+					layer = "m"
+				else:
+					print ("Rede inválida")
+					sys.exit()
 					
-					source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
+				source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
+				if not os.path.isfile(source):																				# Verifica se diretório existe	
+					print ("Impossível localizar arquivo com lista de arestas: "+str(source))
+				else:
+					G = nx.read_edgelist(source,create_using=nx.DiGraph())	
+					transitivity, result = calc_metric(G,metric)																			# Calcula Métrica
+#					dataset_trans[layer] = transitivity
+#					dataset[layer] = result
 
-					if not os.path.isfile(source):																				# Verifica se diretório existe	
-						print ("Impossível localizar arquivo com lista de arestas: "+str(source))
-					else:
-						G = nx.read_edgelist(source,create_using=nx.DiGraph())
-						transitivity = nx.transitivity(G)																	#Calcula o coeficiente de Clustering para o Grafo.
-						print ego,net,transitivity	
-#						result = calc_metric(G,metric)																		# Calcula Métrica
-#						dataset[layer] = result
 #							
-#				dataset_json[ego] = dataset
-#				print i, metric, dataset_json[ego]
-#				save_file(ego,dataset,out_file)																				# Salvar arquivo texto
-#				print
-#		save_json(dataset_json,metric)																						# Salvar arquivo no formato JSON
+#			dataset_trans[ego] = dataset_trans
+#			dataset[ego] = dataset
+#			print i, metric, dataset_trans[ego], dataset[ego]
+#			print
+#		save_json(dataset,name="transitivity")																		# Salvar arquivo no formato JSON
+#		save_json(dataset,metric)																						# Salvar arquivo no formato JSON
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -127,8 +120,7 @@ def main():
 
 egos_ids = "/home/amaury/graphs_hashmap_infomap_without_weight/n1/graphs_with_ego/"										# Pegar a lista com os ids dos egos
 data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																	# Diretório com as redes-ego
-output_dir_txt = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/txt/small_world/"	# Pegar a lista com os ids dos egos
-output_dir_json = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
 
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos
