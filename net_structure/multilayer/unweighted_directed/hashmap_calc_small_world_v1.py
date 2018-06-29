@@ -35,10 +35,12 @@ def create_dir(x):
 # Salvar arquivo no formato JSON: ego_id:{as:data,ar:data,al:data,am:data,...,rm:data}  
 #
 ######################################################################################################################################################################
-def save_json(dataset,net):
-	with open(str(output_dir)+str(net)+".json","w") as f:
-		f.write(json.dumps(dataset))			
-
+def save_json(ego,dataset,out_file):
+	out_file.write(json.dumps(dataset)+"\n")				# Salva linha com os dados calculados para o ego i
+	ego = long(ego)
+	egos_saved[ego] = ego										# Adiciona o id do ego na tabela hash dos já calculados
+	
+		
 ######################################################################################################################################################################
 #
 # Cálcular Métricas para verificar small world
@@ -53,26 +55,26 @@ def calc_metric(G):
 	connected = False
 	while not connected:
 		print ("Testando se grafo é conectado...")		
-		Gnm = nx.gnm_random_graph(len(nodes), len(edges), directed=True)
+		Gnm = nx.gnm_random_graph(len(nodes), len(edges), directed=True)	# Cria um grafo aleatório com as mesmas dimensões do original (nodes,edges)
 		connected = nx.is_weakly_connected(Gnm)
 	print ("Grafo conectado... OK")
 
 
 	print ("Calculando transitividade...")
-	transitivity_G = nx.transitivity(G)																	#Calcula o coeficiente de Clustering para o Grafo.
-	transitivity_Gnm = nx.transitivity(Gnm)															#Calcula o coeficiente de Clustering para o Grafo.
+	transitivity_G = nx.transitivity(G)												# Calcula a transitividade do grafo.
+	transitivity_Gnm = nx.transitivity(Gnm)										# Calcula a transitividade do grafo aleatório
 
 
-	print ("Calculando média dos menores caminhos mínimos...")
-	avg_spl_G = nx.average_shortest_path_length(G)
-	avg_spl_Gnm = nx.average_shortest_path_length(Gnm)
+	print ("Calculando média dos menores caminhos mínimos...")				
+	avg_spl_G = nx.average_shortest_path_length(G)								# Calcula a média dos caminhos mínimos para todo o grafo.
+	avg_spl_Gnm = nx.average_shortest_path_length(Gnm)							# Calcula a média dos caminhos mínimos para todo o grafo aleatório
 
 
-	GAMMA = float(transitivity_G)/float(transitivity_Gnm)
-	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)
+	GAMMA = float(transitivity_G)/float(transitivity_Gnm)						# Numerador da métrica S
+	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)									# Denominador da métrica S
 	
 
-	S = float(GAMMA)/float(LAMBDA)
+	S = float(GAMMA)/float(LAMBDA)													# Métrica S de acordo com o artigo que o Prof. Thierson enviou
 	return transitivity_G, transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S
 
 ######################################################################################################################################################################
@@ -80,24 +82,28 @@ def calc_metric(G):
 # Preparar os dados  
 #
 ######################################################################################################################################################################
-def prepare(net,layer):
-	create_dir(output_dir)																			# Cria diretótio para salvar arquivos.	
-	dataset = {}																						# Salvar Arquivos no Formato Json
-	i=0																									# Contador do ego
+def prepare(net,layer,out_file):
+	create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
+
+	i=0																											# Contador do ego
 	for ego,v in dictionary.iteritems():
 		i+=1
-		source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
-		if not os.path.isfile(source):																				# Verifica se diretório existe	
-			print ("Impossível localizar arquivo com lista de arestas: "+str(source))
-		else:
-			G = nx.read_edgelist(source,create_using=nx.DiGraph())	
-			transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(G)				# Calcula Métrica
-			dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
-			print i,dataset[ego]
-			print("\n###########################################################")
-			print
+		if ego in egos_saved:
+			print (str(i)+" - Métrica já calculada para o ego: "+str(ego))		
+		else:	
+			dataset = {}																						# Salvar Arquivos no Formato Json - linha por linha
+			source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
+			if not os.path.isfile(source):																# Verifica se diretório existe	
+				print ("Impossível localizar arquivo com lista de arestas: "+str(source))
+			else:
+				G = nx.read_edgelist(source,create_using=nx.DiGraph())	
+				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(G) # Calcula Métrica
+				dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
+				print i,dataset[ego]
+				print("\n###########################################################")
+				print
 
-	save_json(dataset,net)																		# Salvar arquivo no formato JSON
+			save_json(ego,dataset,out_file)										# Salvar arquivo no formato JSON com todos os dados calculados
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
@@ -147,9 +153,17 @@ def main():
 		sys.exit()
 
 	if os.path.exists(str(output_dir)+str(net)+".json"):
-		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+".json")
-	else:	
-		prepare(net,layer)
+		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+".json - Fazendo leitura do arquivo...\n")
+		out_file = open(str(output_dir)+str(net)+".json",'a+')
+		for line in out_file:
+			data_saved = json.loads(line)
+			for k,v in data_saved.iteritems():
+				k = long(k)
+				egos_saved[k] = k														#lê o arquivo e armazena uma tabela hash com o id dos egos já calculados
+	else:
+		out_file = open(str(output_dir)+str(net)+".json",'a+')			# Se arquivo não existe então apenas abre o arquivo
+
+	prepare(net,layer,out_file)													# Prepara os dados para cálculo e armazenamento dos dados
 	
 	print("\n######################################################################\n")
 	print("Script finalizado!")
@@ -166,6 +180,7 @@ data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																
 output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
 
 metric = "small_world"
+egos_saved = {}
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
