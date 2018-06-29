@@ -87,7 +87,7 @@ def calc_metric(net,i,ego,G):
 # Preparar os dados  
 #
 ######################################################################################################################################################################
-def prepare(net,out_file,egos_set):
+def prepare(net,out_file,egos_set,current_set):
 	create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
 
 	i=0																											# Contador do ego
@@ -104,7 +104,7 @@ def prepare(net,out_file,egos_set):
 				G = nx.read_edgelist(source,create_using=nx.DiGraph())	
 				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(net,i,ego,G) # Calcula Métrica
 				dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
-				print net,i,ego,dataset[ego]
+				print net,i,ego,current_set,dataset[ego]
 				print("\n###########################################################")
 				print
 
@@ -160,30 +160,46 @@ def main():
 		
 	if op2 == 1:
 		egos_set = egos_sets["set1"]
+		current_set = "set1"
 	if op2 == 2:
 		egos_set = egos_sets["set2"]
+		current_set = "set2"
 	if op2 == 3:
 		egos_set = egos_sets["set3"]
+		current_set = "set3"
 	if op2 == 4:
 		egos_set = egos_sets["set4"]
+		current_set = "set4"
 	if op2 == 5:
-		egos_set = egos_sets["set5"]						
+		egos_set = egos_sets["set5"]
+		current_set = "set5"
 	print("\n###########################################################")
 	
 	net = "n"+str(op)
 		
 	if os.path.exists(str(output_dir)+str(net)+".json"):
 		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+".json - Fazendo leitura do arquivo...\n")
-		out_file = open(str(output_dir)+str(net)+".json",'a+')
+		out_file_toal = open(str(output_dir)+str(net)+".json",'r')
+		for line in out_file_total:
+			data_saved = json.loads(line)
+			for k,v in data_saved.iteritems():
+				k = long(k)
+				if not k in egos_saved:
+					egos_saved[k] = k														#lê o arquivo e armazena uma tabela hash com o id dos egos já calculados
+
+	if os.path.exists(str(output_dir)+str(net)+"_"+str(current_set)+".json"):
+		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+"_"+str(current_set)+".json - Fazendo leitura do arquivo...\n")
+		out_file = open(str(output_dir)+str(net)+"_"+str(current_set)+".json",'a+')
 		for line in out_file:
 			data_saved = json.loads(line)
 			for k,v in data_saved.iteritems():
 				k = long(k)
-				egos_saved[k] = k														#lê o arquivo e armazena uma tabela hash com o id dos egos já calculados
+				if not k in egos_saved:
+					egos_saved[k] = k														#lê o arquivo e armazena uma tabela hash com o id dos egos já calculados
 	else:
-		out_file = open(str(output_dir)+str(net)+".json",'a+')			# Se arquivo não existe então apenas abre o arquivo
+		out_file = open(str(output_dir)+str(net)+"_"+str(current_set)+".json",'a+') # Se arquivo não existe então apenas abre o arquivo
 
-	prepare(net,out_file,egos_set)													# Prepara os dados para cálculo e armazenamento dos dados
+	prepare(net,out_file,egos_set,current_set)													# Prepara os dados para cálculo e armazenamento dos dados
 	
 	print("\n######################################################################\n")
 	print("Script finalizado!")
