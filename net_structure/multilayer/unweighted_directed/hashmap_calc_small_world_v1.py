@@ -70,7 +70,10 @@ def calc_metric(net,i,ego,G):
 	avg_spl_Gnm = nx.average_shortest_path_length(Gnm)							# Calcula a média dos caminhos mínimos para todo o grafo aleatório
 
 
-	GAMMA = float(transitivity_G)/float(transitivity_Gnm)						# Numerador da métrica S
+	if transitivity_Gnm == 0:
+		GAMMA = 0
+	else:		
+		GAMMA = float(transitivity_G)/float(transitivity_Gnm)					# Numerador da métrica S
 	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)									# Denominador da métrica S
 	
 

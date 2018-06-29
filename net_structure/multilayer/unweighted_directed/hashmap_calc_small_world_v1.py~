@@ -49,28 +49,31 @@ def save_json(ego,dataset,out_file):
 def calc_metric(net,i,ego,G):
 	nodes = G.nodes()
 	edges = G.edges()
-	print (str(net)+" - "+str(i)+" - Gerando grafo aleatório com "+str(len(nodes))+" vertices e "+str(len(edges))+" arestas...")
+	print (str(net)+" "+str(i)+" - Gerando grafo aleatório com "+str(len(nodes))+" vertices e "+str(len(edges))+" arestas...")
 
 
 	connected = False
 	while not connected:
-		print (str(net)+" - "+str(i)+" - Testando se grafo é conectado...")		
+		print (str(net)+" "+str(i)+" - Testando se grafo é conectado...")		
 		Gnm = nx.gnm_random_graph(len(nodes), len(edges), directed=True)	# Cria um grafo aleatório com as mesmas dimensões do original (nodes,edges)
 		connected = nx.is_weakly_connected(Gnm)
-	print (str(net)+" - "+str(i)+" - Grafo conectado... OK")
+	print (str(net)+" "+str(i)+" - Grafo conectado... OK")
 
 
-	print (str(net)+" - "+str(i)+" - Calculando transitividade...")
+	print (str(net)+" "+str(i)+" - Calculando transitividade...")
 	transitivity_G = nx.transitivity(G)												# Calcula a transitividade do grafo.
 	transitivity_Gnm = nx.transitivity(Gnm)										# Calcula a transitividade do grafo aleatório
 
 
-	print (str(net)+" - "+str(i)+" - Calculando média dos menores caminhos mínimos...")				
+	print (str(net)+" "+str(i)+" - Calculando média dos menores caminhos mínimos...")				
 	avg_spl_G = nx.average_shortest_path_length(G)								# Calcula a média dos caminhos mínimos para todo o grafo.
 	avg_spl_Gnm = nx.average_shortest_path_length(Gnm)							# Calcula a média dos caminhos mínimos para todo o grafo aleatório
 
 
-	GAMMA = float(transitivity_G)/float(transitivity_Gnm)						# Numerador da métrica S
+	if transitivity_Gnm == 0:
+		GAMMA = 0
+	else:		
+		GAMMA = float(transitivity_G)/float(transitivity_Gnm)					# Numerador da métrica S
 	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)									# Denominador da métrica S
 	
 
@@ -89,12 +92,12 @@ def prepare(net,out_file):
 	for ego,v in dictionary.iteritems():
 		i+=1
 		if ego in egos_saved:
-			print (str(net)+" - "+str(i)+" - Métrica já calculada para o ego: "+str(ego))		
+			print (str(net)+" "+str(i)+" - Métrica já calculada para o ego: "+str(ego))		
 		else:	
 			dataset = {}																						# Salvar Arquivos no Formato Json - linha por linha
 			source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
 			if not os.path.isfile(source):																# Verifica se diretório existe	
-				print (str(net)+" - "+str(i)+" - Impossível localizar arquivo com lista de arestas: "+str(source))
+				print (str(net)+" "+str(i)+" - Impossível localizar arquivo com lista de arestas: "+str(source))
 			else:
 				G = nx.read_edgelist(source,create_using=nx.DiGraph())	
 				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(net,i,ego,G) # Calcula Métrica
