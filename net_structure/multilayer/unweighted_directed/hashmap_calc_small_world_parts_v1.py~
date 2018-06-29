@@ -13,6 +13,8 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Script para calcular se as redes-ego são small-world.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ##								- Calcula-se as métricas a partir da lista de arestas...
+##
+##								- Os egos estão separados em cinco conjuntos para facilitar o paralelismo
 ## 
 ##	INPUT: Redes-ego
 ##
@@ -85,11 +87,11 @@ def calc_metric(net,i,ego,G):
 # Preparar os dados  
 #
 ######################################################################################################################################################################
-def prepare(net,out_file):
+def prepare(net,out_file,egos_set):
 	create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
 
 	i=0																											# Contador do ego
-	for ego,v in dictionary.iteritems():
+	for ego in egos_set:
 		i+=1
 		if ego in egos_saved:
 			print (str(net)+" "+str(i)+" - Métrica já calculada para o ego: "+str(ego))		
@@ -140,14 +142,36 @@ def main():
 			
 	print
 	op = int(raw_input("Escolha uma opção acima: "))
-	
-	print("\n###########################################################")
-	net = "n"+str(op)
 
-	if op not in (1,2,3,4):
+	print("\n###########################################################\n")
+	print"  1 - set 1 -->   1 - 100"
+	print"  2 - set 2 --> 101 - 200"
+	print"  3 - set 3 --> 201 - 300"
+	print"  4 - set 4 --> 301 - 400"
+	print"  5 - set 5 --> 401 - 500"
+			
+	print
+	op2 = int(raw_input("Escolha uma opção acima: "))
+
+
+	if op not in (1,2,3,4) or op2 not in (1,2,3,4,5):
 		print ("Opção inválida...")
 		sys.exit()
+		
+	if op2 == 1:
+		egos_set = egos_sets["set1"]
+	if op2 == 2:
+		egos_set = egos_sets["set2"]
+	if op2 == 3:
+		egos_set = egos_sets["set3"]
+	if op2 == 4:
+		egos_set = egos_sets["set4"]
+	if op2 == 5:
+		egos_set = egos_sets["set5"]						
+	print("\n###########################################################")
 	
+	net = "n"+str(op)
+		
 	if os.path.exists(str(output_dir)+str(net)+".json"):
 		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+".json - Fazendo leitura do arquivo...\n")
 		out_file = open(str(output_dir)+str(net)+".json",'a+')
@@ -159,7 +183,7 @@ def main():
 	else:
 		out_file = open(str(output_dir)+str(net)+".json",'a+')			# Se arquivo não existe então apenas abre o arquivo
 
-	prepare(net,out_file)													# Prepara os dados para cálculo e armazenamento dos dados
+	prepare(net,out_file,egos_set)													# Prepara os dados para cálculo e armazenamento dos dados
 	
 	print("\n######################################################################\n")
 	print("Script finalizado!")
@@ -172,28 +196,17 @@ def main():
 ######################################################################################################################################################################
 
 egos_ids = "/home/amaury/graphs_hashmap_infomap_without_weight/n1/graphs_with_ego/"										# Pegar a lista com os ids dos egos
+
 data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																# Diretório com as redes-ego
 output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
 
 metric = "small_world"
 egos_saved = {}
 
-dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos
-###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
-print("######################################################################")
-print ("Criando tabela hash...")
-n = 0	#Conta quantos arquivos existem no diretório
-for file in os.listdir(egos_ids):
-	user_id = file.split(".edge_list")
-	user_id = long(user_id[0])
-	dictionary[user_id] = user_id
-	n+=1
-print ("Tabela hash criada com sucesso...") 
-print("######################################################################\n")
-#if n <> 500:
-#	print ("Diretório não contém lista com todos os egos...")
-#	sys.exit()
-#else:
-#
+egos_set_file = "/home/amaury/Dropbox/egos_in_five_sets.json"
+
+f = open(egos_set_file, "r")
+egos_sets = json.load(f)
+
 	#Executa o método main
 if __name__ == "__main__": main()
