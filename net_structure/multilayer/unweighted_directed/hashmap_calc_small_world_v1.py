@@ -32,23 +32,73 @@ def create_dir(x):
 
 ######################################################################################################################################################################
 #
-# Cálcular Métricas para verificar small world
-#
-######################################################################################################################################################################
-def calc_metric(G,metric):
-	transitivity = nx.transitivity(G)																	#Calcula o coeficiente de Clustering para o Grafo.
-	print i, ego,net,transitivity
-	gnm_random_graph(n, m, seed=None, directed=False)
-	result = 0
-	return transitivity, result
-######################################################################################################################################################################
-#
 # Salvar arquivo no formato JSON: ego_id:{as:data,ar:data,al:data,am:data,...,rm:data}  
 #
 ######################################################################################################################################################################
-def save_json(dataset,name):
-	with open(str(output_dir)+str(name)+".json","w") as f:
+def save_json(dataset,net):
+	with open(str(output_dir)+str(net)+".json","w") as f:
 		f.write(json.dumps(dataset))			
+
+######################################################################################################################################################################
+#
+# Cálcular Métricas para verificar small world
+#
+######################################################################################################################################################################
+def calc_metric(G):
+	nodes = G.nodes()
+	edges = G.edges()
+	print ("Gerando grafo aleatório com "+str(len(nodes))+" vertices e "+str(len(edges))+" arestas...")
+
+
+	connected = False
+	while not connected:
+		print ("Testando se grafo é conectado...")		
+		Gnm = nx.gnm_random_graph(len(nodes), len(edges), directed=True)
+		connected = nx.is_weakly_connected(Gnm)
+	print ("Grafo conectado... OK")
+
+
+	print ("Calculando transitividade...")
+	transitivity_G = nx.transitivity(G)																	#Calcula o coeficiente de Clustering para o Grafo.
+	transitivity_Gnm = nx.transitivity(Gnm)															#Calcula o coeficiente de Clustering para o Grafo.
+
+
+	print ("Calculando média dos menores caminhos mínimos...")
+	avg_spl_G = nx.average_shortest_path_length(G)
+	avg_spl_Gnm = nx.average_shortest_path_length(Gnm)
+
+
+	GAMMA = float(transitivity_G)/float(transitivity_Gnm)
+	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)
+	
+
+	S = float(GAMMA)/float(LAMBDA)
+	return transitivity_G, transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S
+
+######################################################################################################################################################################
+#
+# Preparar os dados  
+#
+######################################################################################################################################################################
+def prepare(net,layer):
+	create_dir(output_dir)																			# Cria diretótio para salvar arquivos.	
+	dataset = {}																						# Salvar Arquivos no Formato Json
+	i=0																									# Contador do ego
+	for ego,v in dictionary.iteritems():
+		i+=1
+		source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
+		if not os.path.isfile(source):																				# Verifica se diretório existe	
+			print ("Impossível localizar arquivo com lista de arestas: "+str(source))
+		else:
+			G = nx.read_edgelist(source,create_using=nx.DiGraph())	
+			transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(G)				# Calcula Métrica
+			dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
+			print i,dataset[ego]
+			print("\n###########################################################")
+			print
+
+	save_json(dataset,net)																		# Salvar arquivo no formato JSON
+
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -64,50 +114,43 @@ def main():
 	print" Verificação de Small World"
 	print"																											"
 	print"#################################################################################"
-	print			
-	print("\n")
-	metric = "small_world"
-	if os.path.exists(str(output_dir)+"small_world.json"):
-		print ("Arquivo de destino já existe!"+(str(output_dir)+"small_world.json"))
-	else:	
-		create_dir(output_dir)																			# Cria diretótio para salvar arquivos.
-		dataset_trans = {}	
-		dataset = {}																						# Salvar Arquivos no Formato Json
-		i=0																									# Contador do ego
-		for ego,v in dictionary.iteritems():
-			i+=1
-			nets = ["n1","n2","n3","n4"] #[amigos,retweets,likes,menções]					# Camadas de interações no Twitter
-			dataset = {}
-			dataset_trans = {}
-			for net in nets:
-				if net == "n1":
-					layer = "a"
-				elif net == "n2":
-					layer = "r"
-				elif net == "n3":
-					layer = "l"
-				elif net == "n4":
-					layer = "m"
-				else:
-					print ("Rede inválida")
-					sys.exit()
-					
-				source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
-				if not os.path.isfile(source):																				# Verifica se diretório existe	
-					print ("Impossível localizar arquivo com lista de arestas: "+str(source))
-				else:
-					G = nx.read_edgelist(source,create_using=nx.DiGraph())	
-					transitivity, result = calc_metric(G,metric)																			# Calcula Métrica
-#					dataset_trans[layer] = transitivity
-#					dataset[layer] = result
+	print
+	print
+	print"  1 - Follow"
+#	print"  9 - Follwowers"
+	print"  2 - Retweets"
+	print"  3 - Likes"
+	print"  4 - Mentions"
+	
+#	print " "
+#	print"  5 - Co-Follow"
+#	print" 10 - Co-Followers"				
+#	print"  6 - Co-Retweets"
+#	print"  7 - Co-Likes"
+#	print"  8 - Co-Mentions"
+			
+	print
+	op = int(raw_input("Escolha uma opção acima: "))
+	
+	print("\n###########################################################")
+	net = "n"+str(op)
+	if net == "n1":
+		layer = "a"
+	elif net == "n2":
+		layer = "r"
+	elif net == "n3":
+		layer = "l"
+	elif net == "n4":
+		layer = "m"
+	else:
+		print ("Rede inválida")
+		sys.exit()
 
-#							
-#			dataset_trans[ego] = dataset_trans
-#			dataset[ego] = dataset
-#			print i, metric, dataset_trans[ego], dataset[ego]
-#			print
-#		save_json(dataset,name="transitivity")																		# Salvar arquivo no formato JSON
-#		save_json(dataset,metric)																						# Salvar arquivo no formato JSON
+	if os.path.exists(str(output_dir)+str(net)+".json"):
+		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+".json")
+	else:	
+		prepare(net,layer)
+	
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -119,9 +162,10 @@ def main():
 ######################################################################################################################################################################
 
 egos_ids = "/home/amaury/graphs_hashmap_infomap_without_weight/n1/graphs_with_ego/"										# Pegar a lista com os ids dos egos
-data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																	# Diretório com as redes-ego
+data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																# Diretório com as redes-ego
 output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
 
+metric = "small_world"
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos
 ###### Iniciando dicionário - tabela hash a partir dos arquivos já criados.
