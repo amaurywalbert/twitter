@@ -46,35 +46,35 @@ def save_json(ego,dataset,out_file):
 # Cálcular Métricas para verificar small world
 #
 ######################################################################################################################################################################
-def calc_metric(G):
+def calc_metric(net,i,ego,G):
 	nodes = G.nodes()
 	edges = G.edges()
-	print ("Gerando grafo aleatório com "+str(len(nodes))+" vertices e "+str(len(edges))+" arestas...")
+	print (str(net)+" - "+str(i)+" - Gerando grafo aleatório com "+str(len(nodes))+" vertices e "+str(len(edges))+" arestas...")
 
 
 	connected = False
 	while not connected:
-		print ("Testando se grafo é conectado...")		
+		print (str(net)+" - "+str(i)+" - Testando se grafo é conectado...")		
 		Gnm = nx.gnm_random_graph(len(nodes), len(edges), directed=True)	# Cria um grafo aleatório com as mesmas dimensões do original (nodes,edges)
 		connected = nx.is_weakly_connected(Gnm)
-	print ("Grafo conectado... OK")
+	print (str(net)+" - "+str(i)+" - Grafo conectado... OK")
 
 
-	print ("Calculando transitividade...")
-	transitivity_G = nx.transitivity(G)												#Calcula a transitividade do grafo.
-	transitivity_Gnm = nx.transitivity(Gnm)										#Calcula a transitividade do grafo aleatório
+	print (str(net)+" - "+str(i)+" - Calculando transitividade...")
+	transitivity_G = nx.transitivity(G)												# Calcula a transitividade do grafo.
+	transitivity_Gnm = nx.transitivity(Gnm)										# Calcula a transitividade do grafo aleatório
 
 
-	print ("Calculando média dos menores caminhos mínimos...")				
-	avg_spl_G = nx.average_shortest_path_length(G)								#Calcula a média dos caminhos mínimos para todo o grafo.
-	avg_spl_Gnm = nx.average_shortest_path_length(Gnm)							#Calcula a média dos caminhos mínimos para todo o grafo aleatório
+	print (str(net)+" - "+str(i)+" - Calculando média dos menores caminhos mínimos...")				
+	avg_spl_G = nx.average_shortest_path_length(G)								# Calcula a média dos caminhos mínimos para todo o grafo.
+	avg_spl_Gnm = nx.average_shortest_path_length(Gnm)							# Calcula a média dos caminhos mínimos para todo o grafo aleatório
 
 
-	GAMMA = float(transitivity_G)/float(transitivity_Gnm)						#Numerador da métrica S
-	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)									#Denominador da métrica S
+	GAMMA = float(transitivity_G)/float(transitivity_Gnm)						# Numerador da métrica S
+	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)									# Denominador da métrica S
 	
 
-	S = float(GAMMA)/float(LAMBDA)													#Métrica S de acordo com o artigo que o Prof. Thierson enviou
+	S = float(GAMMA)/float(LAMBDA)													# Métrica S de acordo com o artigo que o Prof. Thierson enviou
 	return transitivity_G, transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S
 
 ######################################################################################################################################################################
@@ -82,24 +82,24 @@ def calc_metric(G):
 # Preparar os dados  
 #
 ######################################################################################################################################################################
-def prepare(net,layer,out_file):
+def prepare(net,out_file):
 	create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
 
 	i=0																											# Contador do ego
 	for ego,v in dictionary.iteritems():
 		i+=1
 		if ego in egos_saved:
-			print (str(i)+" - Métrica já calculada para o ego: "+str(ego))		
+			print (str(net)+" - "+str(i)+" - Métrica já calculada para o ego: "+str(ego))		
 		else:	
 			dataset = {}																						# Salvar Arquivos no Formato Json - linha por linha
 			source = str(data_dir)+str(net)+"/graphs_with_ego/"+str(ego)+".edge_list"
 			if not os.path.isfile(source):																# Verifica se diretório existe	
-				print ("Impossível localizar arquivo com lista de arestas: "+str(source))
+				print (str(net)+" - "+str(i)+" - Impossível localizar arquivo com lista de arestas: "+str(source))
 			else:
 				G = nx.read_edgelist(source,create_using=nx.DiGraph())	
-				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(G) # Calcula Métrica
+				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(net,i,ego,G) # Calcula Métrica
 				dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
-				print i,dataset[ego]
+				print net,i,ego,dataset[ego]
 				print("\n###########################################################")
 				print
 
@@ -140,18 +140,11 @@ def main():
 	
 	print("\n###########################################################")
 	net = "n"+str(op)
-	if net == "n1":
-		layer = "a"
-	elif net == "n2":
-		layer = "r"
-	elif net == "n3":
-		layer = "l"
-	elif net == "n4":
-		layer = "m"
-	else:
-		print ("Rede inválida")
-		sys.exit()
 
+	if op not in (1,2,3,4):
+		print ("Opção inválida...")
+		sys.exit()
+	
 	if os.path.exists(str(output_dir)+str(net)+".json"):
 		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+".json - Fazendo leitura do arquivo...\n")
 		out_file = open(str(output_dir)+str(net)+".json",'a+')
@@ -163,7 +156,7 @@ def main():
 	else:
 		out_file = open(str(output_dir)+str(net)+".json",'a+')			# Se arquivo não existe então apenas abre o arquivo
 
-	prepare(net,layer,out_file)													# Prepara os dados para cálculo e armazenamento dos dados
+	prepare(net,out_file)													# Prepara os dados para cálculo e armazenamento dos dados
 	
 	print("\n######################################################################\n")
 	print("Script finalizado!")
