@@ -52,6 +52,80 @@ def box_plot(_a,_r,_l,_m, metric):
 	fig = go.Figure(data=data, layout=layout)
 	plotly.offline.plot(fig, filename=output_dir+str(metric)+"_box_plot.html",auto_open=True)
 
+######################################################################################################################################################################
+#
+#Grouped Bar Plot
+#
+######################################################################################################################################################################
+def grouped_bar_plot(_a,_r,_l,_m, metric):		#Separar por conjuntos S<1 1<=S
+
+	dataset = {}
+######################### Follow
+	smaller_a = []
+	bigger_a = []
+	for item in _a:		
+		if item < 1:
+			smaller_a.append(item)
+		else:	
+			bigger_a.append(item)
+	dataset["a"] = {"not_small_world":smaller_a, "small_world":bigger_a}
+	 
+######################### Retweet
+	smaller_r = []
+	bigger_r = []
+	for item in _r:		
+		if item < 1:
+			smaller_r.append(item)
+		else:	
+			bigger_r.append(item)
+	dataset["r"] = {"not_small_world":smaller_r, "small_world":bigger_r}
+	
+######################### Like
+	smaller_l = []
+	bigger_l = []
+	for item in _l:		
+		if item < 1:
+			smaller_l.append(item)
+		else:	
+			bigger_l.append(item)
+	dataset["l"] = {"not_small_world":smaller_l, "small_world":bigger_l}
+	
+######################### Mention
+	smaller_m = []
+	bigger_m = []
+	for item in _m:		
+		if item < 1:
+			smaller_m.append(item)
+		else:	
+			bigger_m.append(item)
+	dataset["m"] = {"not_small_world":smaller_m, "small_world":bigger_m}	
+
+#################################################################################
+	x = ["Follow","Retweet","Like","Mention"]
+	f1 = []
+	f2 = []
+	
+	f1.append(len(dataset['a']["not_small_world"]))
+	f1.append(len(dataset['r']["not_small_world"]))
+	f1.append(len(dataset['l']["not_small_world"]))
+	f1.append(len(dataset['m']["not_small_world"]))
+	
+	f2.append(len(dataset['a']["small_world"]))
+	f2.append(len(dataset['r']["small_world"]))
+	f2.append(len(dataset['l']["small_world"]))
+	f2.append(len(dataset['m']["small_world"]))
+
+
+	trace1 = go.Bar(x=x,y=f1,name='S < 1')
+	trace2 = go.Bar(x=x,y=f2,name='1 ≤ S')
+
+	data = [trace1, trace2]
+
+	layout = go.Layout(barmode='group')
+	fig = go.Figure(data=data, layout=layout)
+
+	plotly.offline.plot(fig, filename=output_dir+str(metric)+"_grouped_bar_plot.html",auto_open=True)
+
 
 ######################################################################################################################################################################
 #
@@ -93,6 +167,7 @@ def prepare(n1,n2,n3,n4):
 		print
 	
 		box_plot(_a,_r,_l,_m, metric)
+		grouped_bar_plot(_a,_r,_l,_m, metric)
 	
 ######################################################################################################################################################################
 ######################################################################################################################################################################
