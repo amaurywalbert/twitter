@@ -13,12 +13,9 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Script para calcular se as redes-ego são small-world.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ##								- Calcula-se as métricas a partir da lista de arestas...
-## 
-##	INPUT: Redes-ego
-##
-## Output: arquivo texto. Formato:
-##
-##ID_ego a:amigos s:seguidores r:retuítes l:likes m:menções 
+##					Versão 2 - Não considera direção das arestas
+##								- Usa Coef Clustering no lugar da transitividade...
+##  
 ######################################################################################################################################################################
 
 ######################################################################################################################################################################
@@ -55,30 +52,28 @@ def calc_metric(net,i,ego,G):
 	connected = False
 	while not connected:
 		print (str(net)+" "+str(i)+" - Testando se grafo é conectado...")		
-		Gnm = nx.gnm_random_graph(len(nodes), len(edges), directed=True)	# Cria um grafo aleatório com as mesmas dimensões do original (nodes,edges)
-		connected = nx.is_weakly_connected(Gnm)
+		Gnm = nx.gnm_random_graph(len(nodes), len(edges), directed=False)	# Cria um grafo aleatório com as mesmas dimensões do original (nodes,edges)
+		connected = nx.is_connected(Gnm)
 	print (str(net)+" "+str(i)+" - Grafo conectado... OK")
 
-
-	print (str(net)+" "+str(i)+" - Calculando transitividade...")
-	transitivity_G = nx.transitivity(G)												# Calcula a transitividade do grafo.
-	transitivity_Gnm = nx.transitivity(Gnm)										# Calcula a transitividade do grafo aleatório
-
+	print (str(net)+" "+str(i)+" - Calculando Coeficiente de Clustering...")
+	clust_coef_G = nx.average_clustering(G)												# Calcula o coeficiente de clustering do grafo.
+	clust_coef_Gnm = nx.average_clustering(Gnm)										# Calcula o coeficiente de clustering do grafo aleatório
 
 	print (str(net)+" "+str(i)+" - Calculando média dos menores caminhos mínimos...")				
 	avg_spl_G = nx.average_shortest_path_length(G)								# Calcula a média dos caminhos mínimos para todo o grafo.
 	avg_spl_Gnm = nx.average_shortest_path_length(Gnm)							# Calcula a média dos caminhos mínimos para todo o grafo aleatório
 
 
-	if transitivity_Gnm == 0:
+	if clust_coef_Gnm == 0:
 		GAMMA = 0
 	else:		
-		GAMMA = float(transitivity_G)/float(transitivity_Gnm)					# Numerador da métrica S
+		GAMMA = float(clust_coef_G)/float(clust_coef_Gnm)					# Numerador da métrica S
 	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)									# Denominador da métrica S
 	
 
 	S = float(GAMMA)/float(LAMBDA)													# Métrica S de acordo com o artigo que o Prof. Thierson enviou
-	return transitivity_G, transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S
+	return clust_coef_G, clust_coef_Gnm, avg_spl_G, avg_spl_Gnm, S
 
 ######################################################################################################################################################################
 #
@@ -86,8 +81,6 @@ def calc_metric(net,i,ego,G):
 #
 ######################################################################################################################################################################
 def prepare(net,out_file):
-	create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
-
 	i=0																											# Contador do ego
 	for ego,v in dictionary.iteritems():
 		i+=1
@@ -99,9 +92,9 @@ def prepare(net,out_file):
 			if not os.path.isfile(source):																# Verifica se diretório existe	
 				print (str(net)+" "+str(i)+" - Impossível localizar arquivo com lista de arestas: "+str(source))
 			else:
-				G = nx.read_edgelist(source,create_using=nx.DiGraph())	
-				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(net,i,ego,G) # Calcula Métrica
-				dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
+				G = nx.read_edgelist(source)	
+				clust_coef_G,clust_coef_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(net,i,ego,G) # Calcula Métrica
+				dataset[ego] = {"clust_coef_G":clust_coef_G,"clust_coef_Gnm":clust_coef_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
 				print net,i,ego,dataset[ego]
 				print("\n###########################################################")
 				print
@@ -120,7 +113,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Verificação de Small World"
+	print" Verificação de Small World - VERSÃO 2 - UNDIRECTED - UNWEIGHTED"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -173,7 +166,9 @@ def main():
 
 egos_ids = "/home/amaury/graphs_hashmap_infomap_without_weight/n1/graphs_with_ego/"										# Pegar a lista com os ids dos egos
 data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																# Diretório com as redes-ego
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_undirected/json/small_world/"	# Pegar a lista com os ids dos egos	
+
+create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
 
 metric = "small_world"
 egos_saved = {}
