@@ -88,13 +88,11 @@ def calc_metric(net,i,ego,G):
 
 
 ################################################################################## S METRIC
-
 	if transitivity_Gnm == 0:
 		GAMMA = 0
 	else:		
 		GAMMA = float(transitivity_G)/float(transitivity_Gnm)					# Numerador da métrica S
 	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)									# Denominador da métrica S
-	
 
 	S = float(GAMMA)/float(LAMBDA)													# Métrica S de acordo com o artigo que o Prof. Thierson enviou
 	return transitivity_G, transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S
@@ -105,8 +103,6 @@ def calc_metric(net,i,ego,G):
 #
 ######################################################################################################################################################################
 def prepare(net,out_file,egos_set,current_set):
-	create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
-
 	i=0																											# Contador do ego
 	for ego in egos_set:
 		i+=1
@@ -121,7 +117,7 @@ def prepare(net,out_file,egos_set,current_set):
 				G = nx.read_edgelist(source,create_using=nx.DiGraph())	
 				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(net,i,ego,G) # Calcula Métrica
 				dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
-				print net,i,current_set,ego,dataset[ego]
+				print net,current_set,i,ego,dataset[ego]
 				print("\n###########################################################")
 				print
 
@@ -232,6 +228,7 @@ egos_ids = "/home/amaury/graphs_hashmap_infomap_without_weight/n1/graphs_with_eg
 
 data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																# Diretório com as redes-ego
 output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
+create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
 
 metric = "small_world"
 egos_saved = {}
