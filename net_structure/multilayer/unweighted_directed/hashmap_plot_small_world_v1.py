@@ -181,9 +181,9 @@ def prepare(n1,n2,n3,n4):
 def main():
 	os.system('clear')
 	print "################################################################################"
-	print"																											"
+	print"																										"
 	print" Plot Values of Small World																	"
-	print"																											"
+	print"																										"
 	print"#################################################################################"
 	print
 	if not os.path.exists(str(source_dir)+"n1.json") or not os.path.exists(str(source_dir)+"n2.json") or not os.path.exists(str(source_dir)+"n3.json") or not os.path.exists(str(source_dir)+"n4.json"):

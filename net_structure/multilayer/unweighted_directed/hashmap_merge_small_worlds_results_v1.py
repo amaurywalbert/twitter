@@ -106,8 +106,9 @@ print"																											"
 print"#################################################################################"
 print
 print
-print"  1 - NetworkX"
-print"  2 - SNAP"
+print"  1 - NetworkX - Directed"
+print"  2 - SNAP - Directed"
+print"  3 - NetworkX - UNDirected"
 			
 print
 op = int(raw_input("Escolha a biblioteca utilizada para calcular a métrica S : "))
@@ -117,6 +118,9 @@ if op == 1:
 	output_dir = source_dir
 elif op == 2: 
 	source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world_snap/"
+	output_dir = source_dir
+if op == 3:
+	source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_undirected/json/small_world/"
 	output_dir = source_dir
 else:
 	print ("Opção inválida...")
