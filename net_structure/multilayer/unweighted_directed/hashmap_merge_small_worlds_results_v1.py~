@@ -35,9 +35,7 @@ def save_json(data,out_file):
 def prepare(set1,set2,set3,set4,set5):
 	print len(set1),len(set2),len(set3),len(set4),len(set5)
 	print
-	if os.path.exists(str(output_dir)+"n1_merged.json"):
-		
-	out_file = open(str(output_dir)+"n1_merged.json",'a+')	# Se arquivo não existe então apenas abre o arquivo
+	out_file = open(str(output_dir)+"n1_merged.json",'w')	# Se arquivo não existe então apenas abre o arquivo
 
 	for line in set1:
 		data = json.loads(line)
@@ -69,14 +67,6 @@ def prepare(set1,set2,set3,set4,set5):
 ######################################################################################################################################################################
 
 def main():
-	os.system('clear')
-	print "################################################################################"
-	print"																											"
-	print" Merge Results of S metric for five egos sets in one file								"
-	print" 			ONLY FOLLOW LAYER								"
-	print"																											"
-	print"#################################################################################"
-	print
 	if not os.path.exists(str(source_dir)+"n1_set1.json") or not os.path.exists(str(source_dir)+"n1_set2.json") or not os.path.exists(str(source_dir)+"n1_set3.json") or not os.path.exists(str(source_dir)+"n1_set4.json") or not os.path.exists(str(source_dir)+"n1_set5.json"):
 		print ("Arquivos dos cinco conjuntos de egos não encontrados em: ")
 		print source_dir
@@ -107,9 +97,33 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-
-source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
-
+os.system('clear')
+print "################################################################################"
+print"																											"
+print" Merge Results of S metric for five egos sets in one file								"
+print" 			ONLY FOLLOW LAYER								"
+print"																											"
+print"#################################################################################"
+print
+print
+print"  1 - NetworkX"
+print"  2 - SNAP"
+			
+print
+op = int(raw_input("Escolha a biblioteca utilizada para calcular a métrica S : "))
+	
+if op == 1:
+	source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"
+	output_dir = source_dir
+elif op == 2: 
+	source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world_snap/"
+	output_dir = source_dir
+else:
+	print ("Opção inválida...")
+	source_dir = " "
+	output_dir = source_dir
+	sys.exit()
+			
 #Executa o método main
 if __name__ == "__main__": main()
+

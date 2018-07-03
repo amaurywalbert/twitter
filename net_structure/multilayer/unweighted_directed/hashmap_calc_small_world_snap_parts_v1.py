@@ -2,7 +2,7 @@
 ################################################################################################
 #	
 #
-import datetime, sys, time, json, os, os.path, shutil
+import datetime, sys, time, json, os, os.path, shutil, snap
 import networkx as nx
 
 
@@ -13,9 +13,7 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Script para calcular se as redes-ego são small-world.
 ##								- Considerar apenas redes-ego com a presença do ego.
 ##								- Calcula-se as métricas a partir da lista de arestas...
-##
-##					Versão 2 - Corrige o Cálculo do Average Shortest Path Lenght em Grafos Direcionados com o artigo abaixo:
-##									Analysis of average shortest-path length of scale-free network - Mao, Guoyong - Zhang, Ning 2013
+##								- Usa biblioteca SNAP
 ######################################################################################################################################################################
 
 ######################################################################################################################################################################
@@ -44,58 +42,99 @@ def save_json(ego,dataset,out_file):
 #
 ######################################################################################################################################################################
 def calc_metric(net,i,ego,G):
-	nodes_G = G.nodes()
-	edges_G = G.edges()
-
-
+	IsDir = True
+	
+	n_nodes = G.GetNodes()
+	n_edges = G.GetEdges()
 ################################################################################## RANDOM GRAPH
-	print (str(net)+" "+str(i)+" - Gerando grafo aleatório com "+str(len(nodes_G))+" vertices e "+str(len(edges_G))+" arestas...")
+
+	print (str(net)+" "+str(i)+" - Gerando grafo aleatório com "+str(n_nodes)+" vertices e "+str(n_edges)+" arestas...")
 	connected = False
 	while not connected:
+		Rnd = snap.TRnd()
 		print (str(net)+" "+str(i)+" - Testando se grafo aleatório é conectado...")		
-		Gnm = nx.gnm_random_graph(len(nodes_G), len(edges_G), directed=True)	# Cria um grafo aleatório com as mesmas dimensões do original (nodes,edges)
-		connected = nx.is_weakly_connected(Gnm)
+		Gnm = snap.GenRndGnm(snap.PNGraph, n_nodes, n_edges, IsDir, Rnd) 			# Cria um grafo aleatório com as mesmas dimensões do original (nodes,edges)
+		connected = snap.IsConnected(Gnm)
 	print (str(net)+" "+str(i)+" - Grafo conectado... OK")
-	nodes_Gnm = Gnm.nodes()
-	edges_Gnm = Gnm.edges()
+	
+################################################################################### Coef Clust
 
-################################################################################## TRANSITIVIDADE
-	print (str(net)+" "+str(i)+" - Calculando a transitividade do grafo...")
-	transitivity_G = nx.transitivity(G)												# Calcula a transitividade do grafo.
-	print (str(net)+" "+str(i)+" - Calculando a transitividade do grafo aleatório...")
-	transitivity_Gnm = nx.transitivity(Gnm)										# Calcula a transitividade do grafo aleatório
-
+	print (str(net)+" "+str(i)+" - Calculando o coeficiente de clustering do grafo...")
+	coef_clust_G = snap.GetClustCf(G, -1)																				# Calcula o coeficiente de clustering
+	print (str(net)+" "+str(i)+" - Calculando a coeficiente de clustering do grafo aleatório...")
+	coef_clust_Gnm = snap.GetClustCf(Gnm, -1)																			# Calcula o coeficiente de clustering do grafo aleatório
 
 ################################################################################## AVERAGE SHORTEST PATH LENGHT
+
 	print (str(net)+" "+str(i)+" - Calculando média dos menores caminhos mínimos do grafo...")	
-	t_spl = 0.0																				# Somatório dos caminhos mínimos = total do somatório dos caminhos mínimos de cada vértice
-	n_paths = 0																				# Contador para quantidade de caminhos mínimos
-	for node in nodes_G:
-		node_spl = nx.shortest_path_length(G,source=node)
-		t_spl += sum(node_spl.values())
-		n_paths += (len(node_spl) - 1)
-	avg_spl_G = t_spl/n_paths															# Calcula a média dos caminhos mínimos para todo o grafo.
+	t_spl_G = 0.0																				# Somatório dos caminhos mínimos = total do somatório dos caminhos mínimos de cada vértice
+	n_paths_G = 0																				# Contador para quantidade de caminhos mínimos
+	for node in G.Nodes():
+		NIdToDistH = snap.TIntH()
+		node_spl = snap.GetShortPath(G, node.GetId(), NIdToDistH, IsDir)
+		path = 0
+		for item in NIdToDistH:
+#			print node.GetId(),item,NIdToDistH[item]
+			path +=1
+			t_spl_G += NIdToDistH[item]
+		n_paths_G += path-1
+#		print
+#		print ego,node.GetId(),t_spl_G,n_paths_G,path
+#	print
+	avg_spl_G = t_spl_G/float(n_paths_G)												# Calcula a média dos caminhos mínimos para todo o grafo considerando apenas caminhos existentes.
+	avg_spl_G_all = t_spl_G/float(n_nodes*(n_nodes-1))								# Calcula a média dos caminhos mínimos para todo o grafo.
 
+#	labels = snap.TIntStrH()
+#	for NI in G.Nodes():
+#		labels[NI.GetId()] = str(NI.GetId())
+#	snap.DrawGViz(G, snap.gvlDot, "/home/amaury/"+str(ego)+"_G.png", " ", labels)
+################################################################################## AVERAGE SHORTEST PATH LENGHT RANDOM GRAPH
 
-	print (str(net)+" "+str(i)+" - Calculando média dos menores caminhos mínimos do grafo aleatório...")
-	t_spl = 0.0																				# Somatório dos caminhos mínimos = total do somatório dos caminhos mínimos de cada vértice
-	n_paths = 0																				# Contador para quantidade de caminhos mínimos
-	for node in nodes_Gnm:
-		node_spl = nx.shortest_path_length(Gnm,source=node)
-		t_spl += sum(node_spl.values())
-		n_paths += (len(node_spl) - 1)
-	avg_spl_Gnm = t_spl/n_paths														# Calcula a média dos caminhos mínimos para todo o grafo.
+	print (str(net)+" "+str(i)+" - Calculando média dos menores caminhos mínimos do grafo aletório...")	
+	t_spl_Gnm = 0.0																			# Somatório dos caminhos mínimos = total do somatório dos caminhos mínimos de cada vértice
+	n_paths_Gnm = 0																			# Contador para quantidade de caminhos mínimos
+	for node in Gnm.Nodes():
+		NIdToDistH = snap.TIntH()
+		node_spl = snap.GetShortPath(Gnm, node.GetId(), NIdToDistH, IsDir)
+		path = 0
+		for item in NIdToDistH:
+#			print node.GetId(),item,NIdToDistH[item]
+			path +=1
+			t_spl_Gnm += NIdToDistH[item]
+		n_paths_Gnm += path-1
+#		print
+#		print ego, node.GetId(),t_spl_Gnm,n_paths_Gnm,path
+#	print
+	avg_spl_Gnm = t_spl_Gnm/float(n_paths_Gnm)										# Calcula a média dos caminhos mínimos para todo o grafo considerando apenas caminhos existentes.
+	avg_spl_Gnm_all = t_spl_Gnm/float(n_nodes*(n_nodes-1))						# Calcula a média dos caminhos mínimos para todo o grafo = (N*(N-1)) nodes.
 
-
-################################################################################## S METRIC
-	if transitivity_Gnm == 0:
+#	labels = snap.TIntStrH()
+#	for NI in Gnm.Nodes():
+#		labels[NI.GetId()] = str(NI.GetId())
+#	snap.DrawGViz(Gnm, snap.gvlDot, "/home/amaury/"+str(ego)+"_Gnm.png", " ", labels)
+	
+#	print ("Ego / Coef Clust: Graph / Random Graph")
+#	print ego,coef_clust_G,coef_clust_Gnm
+#	print ("ASPL Exists Path: Graph / Random Graph")
+#	print ego,avg_spl_G, avg_spl_Gnm
+#	print ("EGO / ASPL Total Paths: Graph / Random Graph")
+#	print avg_spl_G_all, avg_spl_Gnm_all
+#	print "##############################################"
+#	print
+################################################################################### S METRIC
+#
+	if coef_clust_Gnm == 0:
 		GAMMA = 0
 	else:		
-		GAMMA = float(transitivity_G)/float(transitivity_Gnm)					# Numerador da métrica S
-	LAMBDA = float(avg_spl_G)/float(avg_spl_Gnm)									# Denominador da métrica S
-
-	S = float(GAMMA)/float(LAMBDA)													# Métrica S de acordo com o artigo que o Prof. Thierson enviou
-	return transitivity_G, transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S
+		GAMMA = float(coef_clust_G)/float(coef_clust_Gnm)										# Numerador da métrica S
+	
+	LAMBDA_paths_exists = float(avg_spl_G)/float(avg_spl_Gnm)								# Denominador da métrica S com todos os caminhos existentes (só considera caminhos que existem)
+	LAMBDA_all_paths = float(avg_spl_G_all)/float(avg_spl_Gnm_all)							# Denominador da métrica S com todos os caminhos possiveis (N*(N-1)) nodes
+	
+#
+	S1 = float(GAMMA)/float(LAMBDA_paths_exists)												# Métrica S de acordo com o artigo que o Prof. Thierson enviou
+	S2 = float(GAMMA)/float(LAMBDA_all_paths)													# Métrica S de acordo com o artigo que o Prof. Thierson enviou
+	return coef_clust_G, coef_clust_Gnm, avg_spl_G, avg_spl_Gnm, avg_spl_G_all, avg_spl_Gnm_all, S1, S2
 
 ######################################################################################################################################################################
 #
@@ -114,11 +153,11 @@ def prepare(net,out_file,egos_set,current_set):
 			if not os.path.isfile(source):																# Verifica se diretório existe	
 				print (str(net)+" "+str(i)+" - Impossível localizar arquivo com lista de arestas: "+str(source))
 			else:
-				G = nx.read_edgelist(source,create_using=nx.DiGraph())	
-				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(net,i,ego,G) # Calcula Métrica
-				dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}
-				print			
-				print net,current_set,i,ego,dataset[ego]
+				G = snap.LoadEdgeList(snap.PNGraph, source, 0, 1)									# Carrega o grafo da camada i - Direcionado e Não Ponderado
+				coef_clust_G, coef_clust_Gnm, avg_spl_G, avg_spl_Gnm, avg_spl_G_all, avg_spl_Gnm_all, S1, S2 = calc_metric(net,i,ego,G) # Calcula Métrica
+				dataset[ego] = {"coef_clust_G":coef_clust_G,"coef_clust_Gnm":coef_clust_Gnm,"avg_spl_G_paths_exists":avg_spl_G,"avg_spl_Gnm_paths_exists":avg_spl_Gnm,"avg_spl_G_all_paths":avg_spl_G_all,"avg_spl_Gnm_all_paths":avg_spl_Gnm_all,"S_path_exists":S1,"S_all_paths":S2}			
+				print				
+				print net,i,ego,dataset[ego]
 				print("\n###########################################################")
 				print
 				save_json(ego,dataset,out_file)										# Salvar arquivo no formato JSON com todos os dados calculados
@@ -134,7 +173,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" Verificação de Small World"
+	print" Verificação de Small World Usando Biblioteca SNAP"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -154,7 +193,11 @@ def main():
 			
 	print
 	op = int(raw_input("Escolha uma opção acima: "))
-
+	
+	if op != 1:
+		print ("Opção inválida... Só considera rede Follow por enquanto.")
+		sys.exit()
+			
 	print("\n###########################################################\n")
 	print"  1 - set 1 -->   1 - 100"
 	print"  2 - set 2 --> 101 - 200"
@@ -165,9 +208,8 @@ def main():
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
-
-	if op != 1 or op2 not in (1,2,3,4,5): 
-		print ("Opção inválida... Só considera rede Follow por enquanto.")
+	if op2 not in (1,2,3,4,5):
+		print ("Opção inválida... Só existem 5 conjuntos possíveis.")
 		sys.exit()
 		
 	if op2 == 1:
@@ -189,7 +231,6 @@ def main():
 	
 	net = "n"+str(op)
 	
-		
 	if os.path.exists(str(output_dir)+str(net)+".json"):
 		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+".json - Fazendo leitura do arquivo...\n")
 		out_file_total = open(str(output_dir)+str(net)+".json",'r')
@@ -213,7 +254,7 @@ def main():
 		out_file = open(str(output_dir)+str(net)+"_"+str(current_set)+".json",'a+') # Se arquivo não existe então apenas abre o arquivo
 
 	prepare(net,out_file,egos_set,current_set)													# Prepara os dados para cálculo e armazenamento dos dados
-	
+		
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -226,7 +267,7 @@ def main():
 egos_ids = "/home/amaury/graphs_hashmap_infomap_without_weight/n1/graphs_with_ego/"										# Pegar a lista com os ids dos egos
 
 data_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"																# Diretório com as redes-ego
-output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"	# Pegar a lista com os ids dos egos
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world_snap/"	# Pegar a lista com os ids dos egos
 create_dir(output_dir)																					# Cria diretótio para salvar arquivos.	
 
 metric = "small_world"

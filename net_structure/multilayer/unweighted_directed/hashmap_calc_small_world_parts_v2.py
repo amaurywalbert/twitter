@@ -116,11 +116,11 @@ def prepare(net,out_file,egos_set,current_set):
 			else:
 				G = nx.read_edgelist(source,create_using=nx.DiGraph())	
 				transitivity_G,transitivity_Gnm, avg_spl_G, avg_spl_Gnm, S = calc_metric(net,i,ego,G) # Calcula Métrica
-				dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}			
+				dataset[ego] = {"transitivity_G":transitivity_G,"transitivity_Gnm":transitivity_Gnm,"avg_spl_G":avg_spl_G,"avg_spl_Gnm":avg_spl_Gnm,"S":S}
+				print			
 				print net,current_set,i,ego,dataset[ego]
 				print("\n###########################################################")
 				print
-
 				save_json(ego,dataset,out_file)										# Salvar arquivo no formato JSON com todos os dados calculados
 
 ######################################################################################################################################################################
@@ -141,9 +141,9 @@ def main():
 	print
 	print"  1 - Follow"
 #	print"  9 - Follwowers"
-	print"  2 - Retweets"
-	print"  3 - Likes"
-	print"  4 - Mentions"
+#	print"  2 - Retweets"
+#	print"  3 - Likes"
+#	print"  4 - Mentions"
 	
 #	print " "
 #	print"  5 - Co-Follow"
@@ -154,7 +154,11 @@ def main():
 			
 	print
 	op = int(raw_input("Escolha uma opção acima: "))
-
+	
+	if op != 1:
+		print ("Opção inválida... Só considera rede Follow por enquanto.")
+		sys.exit()
+			
 	print("\n###########################################################\n")
 	print"  1 - set 1 -->   1 - 100"
 	print"  2 - set 2 --> 101 - 200"
@@ -165,9 +169,8 @@ def main():
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
-
-	if op not in (1,2,3,4) or op2 not in (1,2,3,4,5):
-		print ("Opção inválida...")
+	if op2 not in (1,2,3,4,5):
+		print ("Opção inválida... Só existem 5 conjuntos possíveis.")
 		sys.exit()
 		
 	if op2 == 1:
@@ -188,6 +191,7 @@ def main():
 	print("\n###########################################################")
 	
 	net = "n"+str(op)
+	
 		
 	if os.path.exists(str(output_dir)+str(net)+".json"):
 		print ("Arquivo de destino já existe! "+str(output_dir)+str(net)+".json - Fazendo leitura do arquivo...\n")
@@ -216,7 +220,6 @@ def main():
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
-
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
