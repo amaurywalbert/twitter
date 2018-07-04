@@ -50,8 +50,8 @@ def calc_metric(net,i,ego,G):
 
 	print (str(net)+" "+str(i)+" - Gerando grafo aleatório com "+str(n_nodes)+" vertices e "+str(n_edges)+" arestas...")
 	connected = False
+	Rnd = snap.TRnd()
 	while not connected:
-		Rnd = snap.TRnd()
 		print (str(net)+" "+str(i)+" - Testando se grafo aleatório é conectado...")		
 		Gnm = snap.GenRndGnm(snap.PNGraph, n_nodes, n_edges, IsDir, Rnd) 			# Cria um grafo aleatório com as mesmas dimensões do original (nodes,edges)
 		connected = snap.IsConnected(Gnm)

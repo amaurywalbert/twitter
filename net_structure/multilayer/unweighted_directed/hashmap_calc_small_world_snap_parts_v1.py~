@@ -209,7 +209,7 @@ def main():
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
 	if op2 not in (1,2,3,4,5):
-		print ("Opção inválida... Só existem 5 conjuntos possíveis")
+		print ("Opção inválida... Só existem 5 conjuntos possíveis.")
 		sys.exit()
 		
 	if op2 == 1:
