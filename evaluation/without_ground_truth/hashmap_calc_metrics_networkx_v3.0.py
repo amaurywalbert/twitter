@@ -73,12 +73,7 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 	
 	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
 	
-	if alg == "infomap":
-		graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type)+"/"
-	elif alg == "infomap_without_weight":
-		graphs = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(g_type)+"/"	
-	else:
-		graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"	
+	graphs = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(g_type)+"/" # Todos os grafos serão considerados sem peso...	
 	
 	
 	out_ad = str(output_dir)+"average_degree/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"		
@@ -237,7 +232,7 @@ def main():
 	if op == 1 or op == 9:																						# Testar se é um grafo direcionado ou não
 		uw = True
 	else:
-		uw = False
+		uw = True						#Todos os grafos serão considerados sem peso...
 	print
 	print ("\n")
 ######################################################################
@@ -249,35 +244,34 @@ def main():
 	print("######################################################################")	
 	print
 	print "Algoritmo utilizado na detecção das comunidades"
-	print 
 	print
-	print"  1 - COPRA"
-	print"  2 - OSLOM"
-	print"  3 - GN"		
-	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"
+	print
+	print"  1 - COPRA - Without Weight"
+	print"  2 - OSLOM - Without Weight"
+	print"  3 - RAK - Without Weight"		
+#
+#	print"  5 - INFOMAP - Partition"
 	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
-
+#
 	if op2 == 1:
-		alg = "copra"
+		alg = "copra_without_weight"
 	elif op2 == 2:
-		alg = "oslom"
+		alg = "oslom_without_weight"
 	elif op2 == 3:
-		alg = "gn"
-	elif op2 == 4:
-		alg = "copra_partition"
-	elif op2 == 5:
-		alg = "infomap"
+		alg = "rak_without_weight"
+#	elif op2 == 4:
+#		alg = "infomap_without_weight"				
+#	if op2 == 5:
+#		alg = "infomap_without_weight"
 	elif op2 == 6:
-		alg = "infomap_without_weight"					
+		alg = "infomap_without_weight"		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
-		sys.exit()		
-	print
-	print ("\n")
+		sys.exit()	
+	print ("\n")	
 #######################################################################
 #######################################################################	
 

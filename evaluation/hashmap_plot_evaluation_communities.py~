@@ -53,7 +53,8 @@ def main():
 				for file in os.listdir(source_dir):
 					df = pd.read_csv(source_dir+file, encoding='ISO-8859-1')
 					df = df.drop(['ego_id','min_comm_len','n_singletons','alters_ignored','comm_size_std','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg'], axis=1)
-					df = df.drop(['Unnamed: 18'], axis=1)
+					if 'Unnamed: 18' in df.columns:
+						df = df.drop(['Unnamed: 18'], axis=1)
 					df.columns = ['nodes','edges','comm','max_comm','comm_size','modularity','mod_density','conductance','intra_density']
 					description = df.describe()
 					print ("---------------------------------------------------------------------------------------------------")

@@ -96,7 +96,7 @@ def prepare(metric,file,output):
 	with open(file,'r') as f:
 		data = json.load(f)
 		print data
-		color_bar(data['aa']['pearson'],data['as']['pearson'],data['ar']['pearson'],data['al']['pearson'],data['am']['pearson'],data['ss']['pearson'],data['sr']['pearson'],data['sl']['pearson'],data['sm']['pearson'],data['rr']['pearson'],data['rl']['pearson'],data['rm']['pearson'],data['ll']['pearson'],data['lm']['pearson'],data['mm']['pearson'],output_dir)
+		color_bar(data['aa']['pearson'],data['ar']['pearson'],data['al']['pearson'],data['am']['pearson'],data['rr']['pearson'],data['rl']['pearson'],data['rm']['pearson'],data['ll']['pearson'],data['lm']['pearson'],data['mm']['pearson'],output_dir)
 		
 	
 ######################################################################################################################################################################

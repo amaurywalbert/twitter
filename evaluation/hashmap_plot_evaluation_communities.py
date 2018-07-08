@@ -38,51 +38,68 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-
-	algs = ['infomap_without_weight']
-#	algs = ['infomap','infomap_without_weight']
+	print
+	print"  1 - COPRA - Without Weight"
+	print"  2 - OSLOM - Without Weight"
+	print"  3 - RAK - Without Weight"		
+#
+#	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
+	print
+	op1 = int(raw_input("Escolha uma opção acima: "))
+#
+	if op1 == 1:
+		alg = "copra_without_weight"
+	elif op1 == 2:
+		alg = "oslom_without_weight"
+	elif op1 == 3:
+		alg = "rak_without_weight"
+#	elif op1 == 4:
+#		alg = "infomap_without_weight"				
+#	if op1 == 5:
+#		alg = "infomap_without_weight"
+	elif op1 == 6:
+		alg = "infomap_without_weight"		
+	else:
+		alg = ""
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+	print ("\n")
+	print
+	
 	nets = ['n1','n2','n3','n4']
 #	names = ['n_nodes','n_edges','n_comm','max_comm_len','min_comm_len','comm_size_avg','comm_size_std','n_singletons','alters_ignored','chen_modularity_avg','chen_mod_density_avg','chen_conductance_avg','chen_intra_density_avg','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg']
 
-	for alg in algs:
-		for net in nets:
-			source_dir = str(source)+str(alg)+"/"+str(net)+"/"
-			if not os.path.isdir(source_dir):
-				print ("Impossível localizar diretório: "+str(source_dir))
-			else:
-				for file in os.listdir(source_dir):
-					df = pd.read_csv(source_dir+file, encoding='ISO-8859-1')
-					df = df.drop(['ego_id','min_comm_len','n_singletons','alters_ignored','comm_size_std','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg'], axis=1)
-					if 'Unnamed: 18' in df.columns:
-						df = df.drop(['Unnamed: 18'], axis=1)
-					df.columns = ['nodes','edges','comm','max_comm','comm_size','modularity','mod_density','conductance','intra_density']
-					description = df.describe()
-					print ("---------------------------------------------------------------------------------------------------")
-					print(alg, net,description)
-					scatter_matrix(df)
 
-#					if net == "n1":
-#						title = "Follow"
-#					elif net == "n2":
-#						title = "Retweets"
-#					elif net == "n3":
-#						title = "Likes"
-#					elif net == "n4":
-#						title = "Mentions"
-#					else:
-#						sys.exit()
-#					plt.title(str(title))
-					
-					plt.show()
-					 						
-				 
-		
+	for net in nets:
+		source_dir = str(source)+str(alg)+"/"+str(net)+"/"
+		if not os.path.isdir(source_dir):
+			print ("Impossível localizar diretório: "+str(source_dir))
+		else:
+			for file in os.listdir(source_dir):
+				df = pd.read_csv(source_dir+file, encoding='ISO-8859-1')
+				df = df.drop(['ego_id','min_comm_len','n_singletons','alters_ignored','comm_size_std','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg'], axis=1)
+				if 'Unnamed: 18' in df.columns:
+					df = df.drop(['Unnamed: 18'], axis=1)
+				df.columns = ['nodes','edges','comm','max_comm','comm_size','modularity','mod_density','conductance','intra_density']
+				description = df.describe()
+				print ("---------------------------------------------------------------------------------------------------")
+				print(alg, net,description)
+				scatter_matrix(df)
 
-	
-
-
-
-
+#				if net == "n1":
+#					title = "Follow"
+#				elif net == "n2":
+#					title = "Retweets"
+#				elif net == "n3":
+#					title = "Likes"
+#				elif net == "n4":
+#					title = "Mentions"
+#				else:
+#					sys.exit()
+#				plt.title(str(title))
+				
+				plt.show()
 
 ######################################################################################################################################################################
 #

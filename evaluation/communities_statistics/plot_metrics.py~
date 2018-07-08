@@ -359,8 +359,6 @@ def box_plot_without_singletons(output,data1,metric,alg):
 			mentions = v
 		else:
 			print ("Valor incorreto para nome da rede-ego")
-
-	output = str(output)+"/"+str(metric)+"/"
 	
 	if not os.path.exists(output):
 		os.makedirs(output)

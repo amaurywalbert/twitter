@@ -61,7 +61,8 @@ def main():
 	print"  2 - OSLOM"
 	print"  3 - GN"		
 	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"												
+	print"  5 - INFOMAP - Partition"	
+	print"  6 - INFOMAP - Partition - Without Weight"											
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 
@@ -75,6 +76,8 @@ def main():
 		alg = "copra_partition"
 	elif op2 == 5:
 		alg = "infomap"						
+	elif op2 == 6:
+		alg = "infomap_without_weight"
 	else:
 		print("Opção inválida! Saindo...")
 		sys.exit()		

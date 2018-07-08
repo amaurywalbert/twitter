@@ -24,7 +24,7 @@ sys.setdefaultencoding('utf-8')
 # Calcular e armazenar o MAIOR valor para cada métrica
 #
 ######################################################################################################################################################################
-def prepare_box_plot(dataset,metric): #Só para Infomap
+def prepare_box_plot(dataset,metric):
 	if not os.path.isdir(dataset):
 		print ("Diretório com "+str(metric)+" não encontrado: "+str(dataset))
 	else:	
@@ -60,33 +60,32 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-#	print"  1 - COPRA"
-#	print"  2 - OSLOM"
-#	print"  3 - GN"		
-#	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"
-	print"  6 - INFOMAP - Partition - Without Weight"																								
+	print"  1 - COPRA - Without Weight"
+	print"  2 - OSLOM - Without Weight"
+	print"  3 - RAK - Without Weight"		
+#
+#	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op1 = int(raw_input("Escolha uma opção acima: "))
-
-#	if op1 == 1:
-#		alg = "copra"
-#	elif op1 == 2:
-#		alg = "oslom"
-#	elif op1 == 3:
-#		alg = "gn"
+#
+	if op1 == 1:
+		alg = "copra_without_weight"
+	elif op1 == 2:
+		alg = "oslom_without_weight"
+	elif op1 == 3:
+		alg = "rak_without_weight"
 #	elif op1 == 4:
-#		alg = "copra_partition"
-	if op1 == 5:
-		alg = "infomap"							
+#		alg = "infomap_without_weight"				
+#	if op1 == 5:
+#		alg = "infomap_without_weight"
 	elif op1 == 6:
-		alg = "infomap_without_weight"	
+		alg = "infomap_without_weight"		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
 	print ("\n")
-	print"#################################################################################"
 	print
 
 ######################################################################		
@@ -99,9 +98,9 @@ def main():
 		data1 = {}
 			
 		dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
-		data1 = prepare_box_plot(dataset1,metric)											 	#Só para Infomap
+		data1 = prepare_box_plot(dataset1,metric)											 	
 		if data1 is not None:
-			plot_metrics.box_plot_without_singletons(output,data1,metric,alg)			# Só para INFOMAP
+			plot_metrics.box_plot_without_singletons(output,data1,metric,alg)
 		else:
 			print ("\nImpossível gerar gráfico para o cenário...\n")
 			print data1
@@ -114,9 +113,9 @@ def main():
 		data1 = {}
 			
 		dataset1 = str(source)+str(metric)+"/graphs_with_ego/"+str(alg)+"/full/"	
-		data1 = prepare_box_plot(dataset1,metric)												#Só para Infomap
+		data1 = prepare_box_plot(dataset1,metric)
 		if data1 is not None:
-			plot_metrics.box_plot_without_singletons(output,data1,metric,alg)			# Só para INFOMAP
+			plot_metrics.box_plot_without_singletons(output,data1,metric,alg)
 		else:
 			print ("\nImpossível gerar gráfico para o cenário...\n")
 			print data1

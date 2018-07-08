@@ -133,9 +133,42 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-
-data_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/infomap_without_weight/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
-output_dir = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/graphs_with_ego/infomap_without_weight/"	# Diretório para Salvar os gráficos...
+print "################################################################################"
+print"																											"
+print" Plotar N Comm Correlation	"
+print"																											"
+print" Escolha o algoritmo usado na detecção das comunidades									"
+print"																											"
+print"#################################################################################"
+print
+print"  1 - COPRA - Without Weight"
+print"  2 - OSLOM - Without Weight"
+print"  3 - RAK - Without Weight"		
+#
+#print"  5 - INFOMAP - Partition"
+print"  6 - INFOMAP - Partition - Without Weight"												
+print
+op1 = int(raw_input("Escolha uma opção acima: "))
+#
+if op1 == 1:
+	alg = "copra_without_weight"
+elif op1 == 2:
+	alg = "oslom_without_weight"
+elif op1 == 3:
+	alg = "rak_without_weight"
+#elif op1 == 4:
+#	alg = "infomap_without_weight"				
+#if op1 == 5:
+#	alg = "infomap_without_weight"
+elif op1 == 6:
+	alg = "infomap_without_weight"		
+else:
+	alg = ""
+	print("Opção inválida! Saindo...")
+	sys.exit()	
+print ("\n")
+data_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
+output_dir = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/"	# Diretório para Salvar os gráficos...
 
 #Executa o método main
 if __name__ == "__main__": main()

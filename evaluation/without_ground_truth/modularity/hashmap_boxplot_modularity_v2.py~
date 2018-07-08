@@ -26,7 +26,7 @@ def prepare_box_plot(dataset,metric): #Só para Infomap
 						data = json.load(f)
 						if data is not None:
 							_metric = []
-							for k,v in data['modulairty_data'].iteritems():
+							for k,v in data['modularity_data'].iteritems():
 								_metric.append(v[0])
 							metric_plot[net] = _metric
 		return metric_plot

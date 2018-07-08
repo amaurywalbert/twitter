@@ -1,7 +1,7 @@
 # -*- coding: latin1 -*-
 ################################################################################################
-import snap, datetime, sys, time, json, os, os.path, shutil, time, struct, random
-import metrics_v2,calc
+import datetime, sys, time, json, os, os.path, shutil, time, struct, random
+import calc, subprocess
 
 
 reload(sys)
@@ -9,85 +9,43 @@ sys.setdefaultencoding('utf-8')
 
 ######################################################################################################################################################################
 ######################################################################################################################################################################
-##		Status - Versão 1 - Calcular métrica definida abaixo para avaliação sem ground truth - Usando a Biblioteca SNAP
-##					Versão 2 - Calcular todas as métricas métrica definidas abaixo para avaliação sem ground truth
-##					Versaõ 3 - Usa calc metrics_v2 - com correções... e salvar os dados dos calculos em arquivo texto.
-## 
-##			SALVA ARQUIVOS NOS DIRETÒRIOS:
-##				RAW: conforme calculado - 
-##				SEPARATE BY METRICS
-## 							
-## # INPUT: Arquivos com as comunidades detectadas, rede e o ground truth
-## 
-## # OUTPUT:
-##			Resultados separados por métrica
+##		Status - Versão 1 - Calcular métrica definida abaixo para avaliação sem ground truth - Usando a Algoritmo em Java desenvolvido pelo Chen - 
+##									Modularity Density - https://github.com/chenmingming/ComQualityMetric - mais antigo - orientado pelo BoleslawS
+##
+##									ATENÇÃO - PARA O OSLOM, HÁ ELEMENTOS QUE NÃO FORAM ASSOCIADOS A NENHUMA COMUNIDADE, NEM MESMO SINGLETONS,
+##												ESTÃO SENDO IGNORADOS... VER O QUE FAZER.
 ######################################################################################################################################################################
-
-		
-######################################################################################################################################################################
-#
-# Recebe arquivo e devolve dicionário com as comunidades
-#
-######################################################################################################################################################################
-def prepare_communities(community_file):
-	i=0
-	communities = {}
-	for line in community_file:
-		i+=1
-		key="com"+str(i)																# Chave para o dicionário comm
-		comm = []																		# Lista para armazenar as comunidades			
-		a = line.split(' ')
-		for item in a:
-			if item != "\n":
-				comm.append(long(item))
-		communities[key] = comm														# dicionário communities recebe a lista de ids das comunidades tendo como chave o valor key
-	return communities
 
 ######################################################################################################################################################################
 #
 # Criar diretórios
 #
 ######################################################################################################################################################################
-def create_dirs(out_ad,out_c,out_cut_r,out_d,out_e,out_normal_cut,out_s):
-	
-	if not os.path.exists(out_ad):
-		os.makedirs(out_ad)	
-	if not os.path.exists(out_c):
-		os.makedirs(out_c)
-	if not os.path.exists(out_cut_r):
-		os.makedirs(out_cut_r)		
-	if not os.path.exists(out_d):
-		os.makedirs(out_d)
-	if not os.path.exists(out_e):
-		os.makedirs(out_e)
-	if not os.path.exists(out_normal_cut):
-		os.makedirs(out_normal_cut)		
-	if not os.path.exists(out_s):
-		os.makedirs(out_s)	
+def create_dirs(paths):
+	for item in paths:
+		if not os.path.exists(item):
+			os.makedirs(item)	
 
 ######################################################################################################################################################################
 #
 # Cálculos iniciais sobre o conjunto de dados lidos.
 #
 ######################################################################################################################################################################
-def calculate_alg(singletons,net,uw,ud,g_type,alg):
+def calculate_alg(singletons,net,ud,g_type,alg):
 	
 	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
-
-	if alg == "infomap":
-		graphs = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(g_type)+"/"
-	elif alg == "infomap_without_weight":
-		graphs = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(g_type)+"/"	
-	else:
-		graphs = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(g_type)+"/"	
+	graphs = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(g_type)+"/"	  #Pega só o grafo sem peso para realizar os cálculos
 	
-	out_ad = str(output_dir)+"average_degree/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"		
-	out_c = str(output_dir)+"conductance/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"	
-	out_cut_r = str(output_dir)+"cut_ratio/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
-	out_d = str(output_dir)+"density/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
-	out_e = str(output_dir)+"expansion/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
-	out_normal_cut = str(output_dir)+"normalized_cut/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
-	out_s = str(output_dir)+"separability/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
+	out_Q = str(output_dir)+"modularity/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"		
+	out_NQ = str(output_dir)+"N_modularity/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"	
+	out_Qds = str(output_dir)+"modularity_density/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
+	out_intra_edges = str(output_dir)+"intra_edges/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
+	out_intra_density = str(output_dir)+"intra_density/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
+	out_contraction = str(output_dir)+"contraction/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
+	out_inter_edges = str(output_dir)+"inter_edges/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
+	out_expansion = str(output_dir)+"expansion/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
+	out_conductance = str(output_dir)+"conductance/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
+	out_modularity_degree = str(output_dir)+"modularity_degree/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"
 	
 	_avg_time = []
 	
@@ -103,21 +61,25 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 
 			else:
 				partial_start = time.time()
-				create_dirs(out_ad,out_c,out_cut_r,out_d,out_e,out_normal_cut,out_s)
+				paths = [out_Q,out_NQ,out_Qds,out_intra_edges,out_intra_density,out_contraction,out_inter_edges,out_expansion,out_conductance,out_modularity_degree]
+				create_dirs(paths)
 
-				if os.path.exists(str(out_ad)+str(threshold)+".json") and os.path.exists(str(out_c)+str(threshold)+".json") and os.path.exists(str(out_cut_r)+str(threshold)+".json") and os.path.exists(str(out_d)+str(threshold)+".json") and os.path.exists(str(out_e)+str(threshold)+".json") and os.path.exists(str(out_normal_cut)+str(threshold)+".json") and os.path.exists(str(out_s)+str(threshold)+".json"):
+				if os.path.exists(str(out_Q)+str(threshold)+".json") and os.path.exists(str(out_NQ)+str(threshold)+".json") and os.path.exists(str(out_Qds)+str(threshold)+".json") and os.path.exists(str(out_intra_edges)+str(threshold)+".json") and os.path.exists(str(out_intra_density)+str(threshold)+".json") and os.path.exists(str(out_contraction)+str(threshold)+".json") and os.path.exists(str(out_inter_edges)+str(threshold)+".json")  and os.path.exists(str(out_expansion)+str(threshold)+".json") and os.path.exists(str(out_conductance)+str(threshold)+".json") and os.path.exists(str(out_modularity_degree)+str(threshold)+".json"):
 					print ("Arquivo de destino já existe: "+str(threshold)+".json")
 					
 				else:	
 					print("######################################################################")
 							
-					average_degree = {}
-					conductance = {}
-					cut_ratio = {}
-					density = {}
+					Q = {}		
+					NQ = {}	
+					Qds = {}
+					intra_edges = {}
+					intra_density = {}
+					contraction = {}
+					inter_edges = {}
 					expansion = {}
-					normalized_cut = {}
-					separability = {}
+					conductance = {}
+					modularity_degree = {}
 					
 					i=0 		#Ponteiro para o ego
 					for file in os.listdir(str(communities)+str(threshold)+"/"):
@@ -130,51 +92,76 @@ def calculate_alg(singletons,net,uw,ud,g_type,alg):
 								print ("ERROR - EGO: "+str(i)+" - Arquivo com lista de arestas não encontrado:" +str(graphs)+str(ego_id)+".edge_list")
 
 							else:
-								with open(str(communities)+str(threshold)+"/"+file, 'r') as community_file:
-									if ud is False:
-										G = snap.LoadEdgeList(snap.PNGraph, str(graphs)+str(ego_id)+".edge_list", 0, 1)					   # load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
-									else:
-										G = snap.LoadEdgeList(snap.PUNGraph, str(graphs)+str(ego_id)+".edge_list", 0, 1)						# load from a text file - pode exigir um separador.: snap.LoadEdgeList(snap.PNGraph, file, 0, 1, '\t')
+								community_file = str(communities)+str(threshold)+"/"+file
+								graph_file = str(graphs)+str(ego_id)+".edge_list"
 
-									print(str(g_type)+" - "+str(alg)+" - "+str(singletons)+" - Rede: "+str(net)+" - THRESHOLD: "+str(threshold)+" - ego("+str(i)+"): "+str(file))
+								print("Ego: "+str(i)+" - "+communities+threshold+"/"+file)
+
+								if ud is False:		# Para grafo NÂO Ponderado e Direcionado (n1,n9)
+									execute = subprocess.Popen(["java", "OverlappingCommunityQuality", str(graph_file),str(community_file),"isUnweighted"], stdout=subprocess.PIPE)
+
+								else:		# Para grafo NÃO Ponderado e NÃO Direcionado (não tem nenhum...)
+									execute = subprocess.Popen(["java", "OverlappingCommunityQuality", str(graph_file),str(community_file),"isUnweighted","isUndirected"], stdout=subprocess.PIPE)
+
+								resp = execute.communicate()[0]
+								print resp
+								value = resp.split(", ")
+								for item in value:
+									item = item.split(" = ")
 									
-									communities_dict = prepare_communities(community_file)							#Função para devolver um dicionário com as comunidades							
-									
-									avg_ad,avg_c,avg_cut_r,avg_d,avg_e,avg_normal_cut,avg_s = metrics_v2.calc_metrics(communities_dict,G,ud)		# Calcular as métricas
-									
-									average_degree[ego_id] = avg_ad
-									conductance[ego_id] = avg_c
-									cut_ratio[ego_id] = avg_cut_r
-									density[ego_id] = avg_d
-									expansion[ego_id] = avg_e
-									normalized_cut[ego_id] = avg_normal_cut
-									separability[ego_id] = avg_s	
-			
-									print ("Average Degree: "+str(avg_ad['media'])+" - Conductance: "+str(avg_c['media'])+" - Cut Ratio: "+str(avg_cut_r['media'])+" - Density: "+str(avg_d['media']))
-									print ("Expansion: "+str(avg_e['media'])+" - Normalized Cut: "+str(avg_normal_cut['media'])+" - Separability: "+str(avg_s['media']))
-									print 
+									if item[0] == "Q":
+										Q[ego_id] = float(item[1])
+									elif item[0] == "NQ":
+										NQ[ego_id] = float(item[1])
+									elif item[0] == "Qds":
+										Qds[ego_id] = float(item[1])
+									elif item[0] == "intraEdges":
+										intra_edges[ego_id] = float(item[1])
+									elif item[0] == "intraDensity":
+										intra_density[ego_id] = float(item[1])
+									elif item[0] == "contraction":
+										contraction[ego_id] = float(item[1])
+									elif item[0] == "interEdges":
+										inter_edges[ego_id] = float(item[1])
+									elif item[0] == "expansion":
+										expansion[ego_id] = float(item[1])
+									elif item[0] == "conductance":
+										conductance[ego_id] = float(item[1])
+									elif item[0] == "modularity degree":
+										modularity_degree[ego_id] = float(item[1])
+										
 					print("######################################################################")	
 
-					with open(str(out_ad)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(average_degree))
+	
+					with open(str(out_Q)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(Q))
 						
-					with open(str(out_c)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(conductance))
+					with open(str(out_NQ)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(NQ))
 
-					with open(str(out_cut_r)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(cut_ratio))
+					with open(str(out_Qds)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(Qds))
 											
-					with open(str(out_d)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(density))
+					with open(str(out_intra_edges)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(intra_edges))
 
-					with open(str(out_e)+str(threshold)+".json", "w") as f:
+					with open(str(out_intra_density)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(intra_density))
+
+					with open(str(out_contraction)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(contraction))
+
+					with open(str(out_inter_edges)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(inter_edges))						
+
+					with open(str(out_expansion)+str(threshold)+".json", "w") as f:
 						f.write(json.dumps(expansion))
 
-					with open(str(out_normal_cut)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(normalized_cut))
+					with open(str(out_conductance)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(conductance))
 
-					with open(str(out_s)+str(threshold)+".json", "w") as f:
-						f.write(json.dumps(separability))						
+					with open(str(out_modularity_degree)+str(threshold)+".json", "w") as f:
+						f.write(json.dumps(modularity_degree))
 				
 				partial_end = time.time()
 				partial_time_exec = partial_end - partial_start
@@ -195,7 +182,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 			Avaliação de Comunidades - Amaury's Software										"
+	print" 			Avaliação de Comunidades - Chen's Software - OVERLAPPING						"
 	print"																											"
 	print"#################################################################################"
 	print
@@ -224,11 +211,11 @@ def main():
 		print("Opção inválida! Saindo...")
 		sys.exit()
 
-	if op == 1 or op == 9:																						# Testar se é um grafo direcionado ou não
-		uw = True
-	else:
-		uw = True			#Todos serão considerados sem peso
-	print
+#	if op == 1 or op == 9:																						# Testar se é um grafo direcionado ou não
+#		uw = True
+#	else:
+#		uw = False
+#	print
 	print ("\n")
 ######################################################################
 	
@@ -239,14 +226,15 @@ def main():
 	print("######################################################################")	
 	print
 	print "Algoritmo utilizado na detecção das comunidades"
+	print 
 	print
 	print
 	print"  1 - COPRA - Without Weight"
 	print"  2 - OSLOM - Without Weight"
-	print"  3 - RAK - Without Weight"		
+#	print"  3 - RAK - Without Weight"		
 #
 #	print"  5 - INFOMAP - Partition"
-	print"  6 - INFOMAP - Partition - Without Weight"												
+#	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 #
@@ -254,26 +242,27 @@ def main():
 		alg = "copra_without_weight"
 	elif op2 == 2:
 		alg = "oslom_without_weight"
-	elif op2 == 3:
-		alg = "rak_without_weight"
+#	if op2 == 3:
+#		alg = "rak_without_weight"
 #	elif op2 == 4:
 #		alg = "infomap_without_weight"				
-#	if op2 == 5:
+#	elif op2 == 5:
 #		alg = "infomap_without_weight"
-	elif op2 == 6:
-		alg = "infomap_without_weight"		
+#	elif op2 == 6:
+#		alg = "infomap_without_weight"		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
-	print ("\n")	
+	print ("\n")
+	print
 #######################################################################
 #######################################################################	
 
 	print
 	print ("Opção escolhida: "+str(net)+" - "+str(alg))
 	print ("Aguarde...")
-	time.sleep(5)
+	time.sleep(3)
 	
 ######################################################################################################################
 	g_type1 = "graphs_with_ego"
@@ -289,11 +278,11 @@ def main():
 	start = time.time()
 	
 	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-	calculate_alg(singletons1,net,uw,ud,g_type1,alg)
+	calculate_alg(singletons1,net,ud,g_type1,alg)
 	
 
 	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-	calculate_alg(singletons1,net,uw,ud,g_type2,alg)
+	calculate_alg(singletons1,net,ud,g_type2,alg)
 
 	end = time.time()
 	time_exec = end - start
@@ -309,7 +298,7 @@ def main():
 #
 ######################################################################################################################################################################
 
-output_dir = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth/"
+output_dir = "/home/amaury/Dropbox/evaluation_hashmap/without_ground_truth_chen/"
 
 ######################################################################################################################
 if __name__ == "__main__": main()

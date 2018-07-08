@@ -113,10 +113,46 @@ def main():
 # INÍCIO DO PROGRAMA
 #
 ######################################################################################################################################################################
-
+os.system('clear')
+print "################################################################################"
+print"																											"
+print" Calcular N Comm Correlation	"
+print"																											"
+print" Escolha o algoritmo usado na detecção das comunidades									"
+print"																											"
+print"#################################################################################"
+print
+print"  1 - COPRA - Without Weight"
+print"  2 - OSLOM - Without Weight"
+print"  3 - RAK - Without Weight"		
+#
+#print"  5 - INFOMAP - Partition"
+print"  6 - INFOMAP - Partition - Without Weight"												
+print
+op1 = int(raw_input("Escolha uma opção acima: "))
+#
+if op1 == 1:
+	alg = "copra_without_weight"
+elif op1 == 2:
+	alg = "oslom_without_weight"
+elif op1 == 3:
+	alg = "rak_without_weight"
+#elif op1 == 4:
+#	alg = "infomap_without_weight"				
+#if op1 == 5:
+#	alg = "infomap_without_weight"
+elif op1 == 6:
+	alg = "infomap_without_weight"		
+else:
+	alg = ""
+	print("Opção inválida! Saindo...")
+	sys.exit()	
+print ("\n")
+	
+	
 data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"												# Pegar a lista com os ids dos egos
-source_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/infomap_without_weight/full/"
-output_dir_json = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/infomap_without_weight/"	# Pegar a lista com os ids dos egos
+source_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/full/"
+output_dir_json = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/"	# Pegar a lista com os ids dos egos
 
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos
