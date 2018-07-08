@@ -112,7 +112,7 @@ def main():
 	graphs2 = "graphs_without_ego"
 	alg = "copra_without_weight"
 	save_data(graphs1,alg)
-	save_data(graphs2,alg)
+#	save_data(graphs2,alg)
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA

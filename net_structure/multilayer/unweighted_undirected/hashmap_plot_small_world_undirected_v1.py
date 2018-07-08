@@ -31,71 +31,26 @@ def create_dir(x):
 # Box Plot
 #
 ######################################################################################################################################################################
-def box_plot(n1,n2,n3,n4):
-	metrics = ["coef_clust_G","avg_spl_G_paths_exists"]
-	for metric in metrics:
-		if metric == "coef_clust_G":
-			rnd_metric = "coef_clust_Gnm"
-		elif metric == "avg_spl_G_paths_exists":
-			rnd_metric = "avg_spl_Gnm_paths_exists"
-		x = []
-		y1 = []						# G
-		y2 = []						# Random G	
+def box_plot(_a,_r,_l,_m, metric):	
 
-		for i in range(len(n1)):
-			x.append("Follow")
-		for i in range(len(n2)):
-			x.append("Retweet")
-		for i in range(len(n3)):
-			x.append("Like")
-		for i in range(len(n4)):
-			x.append("Mention")
+	if metric == "avg_spl_G":
+		name_yaxis = "Average Shortest Path Length"
+	elif metric == "S":
+		name_yaxis = "S"
+	elif metric == "transitivity_G":
+		name_yaxis = "Transitivity"		
+	else:
+		name_yaxis = " "
+	trace1 = go.Box(y=_a,name='Follow',boxmean='sd')
+	trace2 = go.Box(y=_r,name='Retweet',boxmean='sd')
+	trace3 = go.Box(y=_l,name='Like',boxmean='sd')
+	trace4 = go.Box(y=_m,name='Mention',boxmean='sd')
 
-		for line in n1:
-			data = json.loads(line)
-			for k,v in data.iteritems():			
-				y1.append(v[metric])
-		for line in n2:
-			data = json.loads(line)
-			for k,v in data.iteritems():			
-				y1.append(v[metric])
-		for line in n3:
-			data = json.loads(line)
-			for k,v in data.iteritems():			
-				y1.append(v[metric])
-		for line in n4:
-			data = json.loads(line)
-			for k,v in data.iteritems():			
-				y1.append(v[metric])
+	data = [trace1, trace2, trace3, trace4]
 
-		for line in n1:
-			data = json.loads(line)
-			for k,v in data.iteritems():			
-				y2.append(v[rnd_metric])
-		for line in n2:
-			data = json.loads(line)
-			for k,v in data.iteritems():			
-				y2.append(v[rnd_metric])
-		for line in n3:
-			data = json.loads(line)
-			for k,v in data.iteritems():			
-				y2.append(v[rnd_metric])
-		for line in n4:
-			data = json.loads(line)
-			for k,v in data.iteritems():			
-				y2.append(v[rnd_metric])
-
-
-		trace1 = go.Box(y=y1,x=x,name='Graph G',boxmean='sd')
-		trace2 = go.Box(y=y2,x=x,name='Random Graph G',boxmean='sd')
-
-		data = [trace1, trace2]
-		layout = go.Layout(boxmode='group')
-
-		fig = go.Figure(data=data, layout=layout)
-
-		fig = go.Figure(data=data, layout=layout)
-		plotly.offline.plot(fig, filename=output_dir+str(metric)+"_box_plot.html",auto_open=True)
+	layout = go.Layout(showlegend=False)
+	fig = go.Figure(data=data, layout=layout)
+	plotly.offline.plot(fig, filename=output_dir+str(metric)+"_box_plot.html",auto_open=True)
 
 ######################################################################################################################################################################
 #
@@ -169,7 +124,7 @@ def grouped_bar_plot(_a,_r,_l,_m, metric):		#Separar por conjuntos S<1 1<=S
 	layout = go.Layout(barmode='group')
 	fig = go.Figure(data=data, layout=layout)
 
-	plotly.offline.plot(fig, filename=output_dir+"small_world.html",auto_open=True)
+	plotly.offline.plot(fig, filename=output_dir+str(metric)+"_grouped_bar_plot.html",auto_open=True)
 
 
 ######################################################################################################################################################################
@@ -178,11 +133,10 @@ def grouped_bar_plot(_a,_r,_l,_m, metric):		#Separar por conjuntos S<1 1<=S
 #
 ######################################################################################################################################################################
 def prepare(n1,n2,n3,n4):
-
-	if op == 1:
-		metrics = ["transitivity_G","transitivity_Gnm","avg_spl_Gnm","S","avg_spl_G"]
-	else:
-		metrics = ["coef_clust_G","coef_clust_Gnm","avg_spl_G_paths_exists","avg_spl_Gnm_paths_exists","avg_spl_G_all_paths","avg_spl_Gnm_all_paths","S_all_paths","S_path_exists"]
+	print ("Quantidade de redes-egos em cada camada: n1 / n2 / n3 / n4")
+	print len(n1),len(n2),len(n3),len(n4)
+	print
+	metrics = ["clust_coef_G","clust_coef_Gnm","avg_spl_G","avg_spl_Gnm", "S"]
 	for metric in metrics:
 		_a = []
 		_r = [] 
@@ -192,29 +146,31 @@ def prepare(n1,n2,n3,n4):
 			data = json.loads(line)
 			for k,v in data.iteritems():
 				_a.append(v[metric])					# Vetor da camada Mentions
-#		print metric, _a
+		print metric, _a
 
 		for line in n2:
 			data = json.loads(line)
 			for k,v in data.iteritems():
 				_r.append(v[metric])					# Vetor da camada Mentions
-#		print metric, _r
+		print metric, _r
 
 		for line in n3:
 			data = json.loads(line)
 			for k,v in data.iteritems():
 				_l.append(v[metric])					# Vetor da camada Mentions
-#		print metric, _l
+		print metric, _l
 
 		for line in n4:
 			data = json.loads(line)
 			for k,v in data.iteritems():
 				_m.append(v[metric])					# Vetor da camada Mentions
-#		print metric,_m
-#		print
-#		if metric == "S" or metric == "S_all_paths" or metric == "S_path_exists":
-		if metric == "S" or metric == "S_path_exists":
+		print metric,_m
+		print
+	
+		box_plot(_a,_r,_l,_m, metric)
+		if metric == "S":
 			grouped_bar_plot(_a,_r,_l,_m, metric)
+	
 ######################################################################################################################################################################
 ######################################################################################################################################################################
 #
@@ -227,7 +183,7 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																										"
-	print" Plot Values of Small World																	"
+	print" Plot Values of Small World	- NetworkX UNdirected				"
 	print"																										"
 	print"#################################################################################"
 	print
@@ -249,12 +205,7 @@ def main():
 			print ("Diferentes números de egos entre as camadas... Saindo")
 			sys.exit()
 		else:  	
-			print ("Quantidade de redes-egos em cada camada: n1 / n2 / n3 / n4")
-			print len(n1),len(n2),len(n3),len(n4)
-		
-			prepare(n1,n2,n3,n4)
-			box_plot(n1,n2,n3,n4)
-
+			prepare(n1,n2,n3,n4)	
 	print("\n######################################################################\n")
 	print("Script finalizado!")
 	print("\n######################################################################\n")
@@ -265,33 +216,9 @@ def main():
 #
 ######################################################################################################################################################################
 os.system('clear')
-print "################################################################################"
-print"																											"
-print" Merge Results of S metric for five egos sets in one file								"
-print" 			ONLY FOLLOW LAYER								"
-print"																											"
-print"#################################################################################"
-print
-print
-print"  1 - NetworkX - Directed"
-print"  2 - SNAP - Directed"
-print			
-print
-op = int(raw_input("Escolha a biblioteca utilizada para calcular a métrica S : "))
-	
-if op == 1:
-	print ("Não utilizado... usando apenas SNAP.")
-	sys.exit()	
-#	source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world/"
-#	output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/unweighted_directed/small_world/"
-elif op == 2: 
-	source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_directed/json/small_world_snap/"
-	output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/unweighted_directed/small_world_snap/"
-else:
-	print ("Opção inválida...")
-	source_dir = " "
-	output_dir = source_dir
-	sys.exit()
+
+source_dir = "/home/amaury/Dropbox/net_structure_hashmap/multilayer/graphs_with_ego/unweighted_undirected/json/small_world/"
+output_dir = "/home/amaury/Dropbox/net_structure_hashmap_statistics/multilayer/graphs_with_ego/unweighted_undirected/json/small_world/"
 			
 #Executa o método main
 if __name__ == "__main__": main()
