@@ -60,9 +60,10 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
+	print "Algoritmo utilizado na detecção das comunidades"
 	print
-	print"  1 - COPRA - Without Weight"
-	print"  2 - OSLOM - Without Weight"
+	print"  1 - COPRA - Without Weight - k = 10"
+	print"  2 - OSLOM - Without Weight - k = 50"
 	print"  3 - RAK - Without Weight"		
 #
 #	print"  5 - INFOMAP - Partition"
@@ -71,17 +72,21 @@ def main():
 	op1 = int(raw_input("Escolha uma opção acima: "))
 #
 	if op1 == 1:
-		alg = "copra_without_weight"
+		alg = "copra_without_weight_k10"
+		threshold = 10
 	elif op1 == 2:
-		alg = "oslom_without_weight"
+		alg = "oslom_without_weight_k50"
+		threshold = 50	
 	elif op1 == 3:
 		alg = "rak_without_weight"
+		threshold = 1
 #	elif op1 == 4:
 #		alg = "infomap_without_weight"				
 #	if op1 == 5:
 #		alg = "infomap_without_weight"
 	elif op1 == 6:
-		alg = "infomap_without_weight"		
+		alg = "infomap_without_weight"
+		threshold = 10		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")

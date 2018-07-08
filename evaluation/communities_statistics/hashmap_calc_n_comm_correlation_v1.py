@@ -154,8 +154,8 @@ else:
 print ("\n")	
 	
 data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"												# Pegar a lista com os ids dos egos
-source_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/full/"
-output_dir_json = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/"	# Pegar a lista com os ids dos egos
+source_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"/full/"
+output_dir_json = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"/"	# Pegar a lista com os ids dos egos
 
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos

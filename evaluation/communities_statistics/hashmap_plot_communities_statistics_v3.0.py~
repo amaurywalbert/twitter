@@ -60,29 +60,33 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-#	print"  1 - COPRA"
-#	print"  2 - OSLOM"
-#	print"  3 - GN"		
-#	print"  4 - COPRA - Partition"
-#	print"  5 - INFOMAP - Partition"												
-#	print
-#	op1 = int(raw_input("Escolha uma opção acima: "))
+	print
+	print"  1 - COPRA - Without Weight"
+	print"  2 - OSLOM - Without Weight"
+	print"  3 - RAK - Without Weight"		
 #
-#	if op1 == 1:
-#		alg = "copra"
-#	elif op1 == 2:
-#		alg = "oslom"
-#	elif op1 == 3:
-#		alg = "gn"
+#	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
+	print
+	op1 = int(raw_input("Escolha uma opção acima: "))
+#
+	if op1 == 1:
+		alg = "copra_without_weight"
+	elif op1 == 2:
+		alg = "oslom_without_weight"
+	elif op1 == 3:
+		alg = "rak_without_weight"
 #	elif op1 == 4:
-#		alg = "copra_partition"				
-#	elif op1 == 5:
-#		alg = "infomap"
-#	else:
-#		alg = ""
-#		print("Opção inválida! Saindo...")
-#		sys.exit()	
-#	print ("\n")
+#		alg = "infomap_without_weight"				
+#	if op1 == 5:
+#		alg = "infomap_without_weight"
+	elif op1 == 6:
+		alg = "infomap_without_weight"		
+	else:
+		alg = ""
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+	print ("\n")
 	print"#################################################################################"
 	print
 	print"  0 - All Metrics"
@@ -129,8 +133,6 @@ def main():
 	print ("\n")
 
 	for metric in metrics:
-	
-		alg = ['copra','oslom','gn','copra_partition','infomap','infomap_without_weight']
 		data_full = {}
 		for i in range(len(alg)):
 			print"#################################################################################"
