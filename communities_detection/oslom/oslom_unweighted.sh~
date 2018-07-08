@@ -52,7 +52,7 @@ instructions()
 			IFS="." read -a file_temp <<<"$file"					# Renomear (temp) o arquivo "97197087.edge_list" para 97197087
 			FILE=${file_temp[0]}	
 						
-			if [ -e $OUTPUT_DIR$FILE"/tp" ]; then
+			if [ -e $OUTPUT_DIR$FILE"/partitions_level_0" ]; then
 				echo "Arquivo $OUTPUT_DIR$FILE"/tp" já existe. Continuando..."
 			else	
 				echo "Detectando comunidades para o ego: $i"
