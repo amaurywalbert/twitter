@@ -60,9 +60,10 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
+	print "Algoritmo utilizado na detecção das comunidades"
 	print
-	print"  1 - COPRA - Without Weight"
-	print"  2 - OSLOM - Without Weight"
+	print"  1 - COPRA - Without Weight - k = 10"
+	print"  2 - OSLOM - Without Weight - k = 50"
 	print"  3 - RAK - Without Weight"		
 #
 #	print"  5 - INFOMAP - Partition"
@@ -71,17 +72,21 @@ def main():
 	op1 = int(raw_input("Escolha uma opção acima: "))
 #
 	if op1 == 1:
-		alg = "copra_without_weight"
+		alg = "copra_without_weight_k10"
+		threshold = 10
 	elif op1 == 2:
-		alg = "oslom_without_weight"
+		alg = "oslom_without_weight_k50"
+		threshold = 50	
 	elif op1 == 3:
 		alg = "rak_without_weight"
+		threshold = 1
 #	elif op1 == 4:
 #		alg = "infomap_without_weight"				
 #	if op1 == 5:
 #		alg = "infomap_without_weight"
 	elif op1 == 6:
-		alg = "infomap_without_weight"		
+		alg = "infomap_without_weight"
+		threshold = 10		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
@@ -136,33 +141,33 @@ def main():
 		data_full = {}
 		for i in range(len(alg)):
 			print"#################################################################################"
-			print ("\nPreparando dados para o algoritmo: "+str(alg[i]))
+			print ("\nPreparando dados para o algoritmo: "+str(alg))
 			data1 = {}
 			data2 = {}
 	
 ######################################################################		
 ######################################################################
 
-			dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
+			dataset1 = str(source)+"graphs_with_ego/"+str(alg)+"/full/"	
 			data1 = prepare_bars(dataset1,metric)
-			title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
+			title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
 
 ######################################################################				
 ######################################################################
 
-			dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
+			dataset2 = str(source)+"graphs_without_ego/"+str(alg)+"/full/"	
 			data2 = prepare_bars(dataset2,metric)
-			title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
+			title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
 
 ######################################################################		
 ######################################################################		
 			if data1 is not None and data2:
-				plot_metrics.plot_full_without_singletons(output,data1,data2,metric,str(alg[i]))
+				plot_metrics.plot_full_without_singletons(output,data1,data2,metric,str(alg))
 			if data1 is not None and data2:
 				if len(data1) == len(data2):
 				
 					data_full[alg] = {'data1':data1,'data2':data2}
-					plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg[i]))
+					plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg))
 			else:
 				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
 				print data1

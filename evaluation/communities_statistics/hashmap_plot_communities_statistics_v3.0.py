@@ -141,33 +141,33 @@ def main():
 		data_full = {}
 		for i in range(len(alg)):
 			print"#################################################################################"
-			print ("\nPreparando dados para o algoritmo: "+str(alg[i]))
+			print ("\nPreparando dados para o algoritmo: "+str(alg))
 			data1 = {}
 			data2 = {}
 	
 ######################################################################		
 ######################################################################
 
-			dataset1 = str(source)+"graphs_with_ego/"+str(alg[i])+"/full/"	
+			dataset1 = str(source)+"graphs_with_ego/"+str(alg)+"/full/"	
 			data1 = prepare_bars(dataset1,metric)
-			title = str(metric)+"_graphs_with_ego_"+str(alg[i])+"_full"	
+			title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
 
 ######################################################################				
 ######################################################################
 
-			dataset2 = str(source)+"graphs_without_ego/"+str(alg[i])+"/full/"	
+			dataset2 = str(source)+"graphs_without_ego/"+str(alg)+"/full/"	
 			data2 = prepare_bars(dataset2,metric)
-			title = str(metric)+"_graphs_without_ego_"+str(alg[i])+"_full"	
+			title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
 
 ######################################################################		
 ######################################################################		
 			if data1 is not None and data2:
-				plot_metrics.plot_full_without_singletons(output,data1,data2,metric,str(alg[i]))
+				plot_metrics.plot_full_without_singletons(output,data1,data2,metric,str(alg))
 			if data1 is not None and data2:
 				if len(data1) == len(data2):
 				
 					data_full[alg] = {'data1':data1,'data2':data2}
-					plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg[i]))
+					plot_metrics.plot_without_singletons(output,data1,data2,metric,str(alg))
 			else:
 				print ("\nImpossível gerar gráfico para os 02 cenários...\n")
 				print data1
