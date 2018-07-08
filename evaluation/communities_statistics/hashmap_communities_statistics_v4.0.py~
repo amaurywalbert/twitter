@@ -195,36 +195,40 @@ def main():
 	print("######################################################################")	
 	print
 	print "Algoritmo utilizado na detecção das comunidades"
-	print 
-	print" 01 - COPRA"
-	print" 02 - OSLOM"
-	print" 03 - GN"
-	print" 04 - COPRA - Partition"
-	print" 05 - Infomap - Partition"
-	print" 06 - Infomap - Partition - Without Weight"
 	print
-	op2 = int(raw_input("Escolha uma opção acima: "))
-	if op2 == 01:
-		alg = "copra"
-	elif op2 == 02:
-		alg = "oslom"	
-	elif op2 == 03:
-		alg = "gn"
-	elif op2 == 04:
-		alg = "copra_partition"
-	elif op2 == 05:
-		alg = "infomap"
-	elif op2 == 06:
-		alg = "infomap_without_weight"					
+	print"  1 - COPRA - Without Weight - k = 10"
+	print"  2 - OSLOM - Without Weight - k = 50"
+	print"  3 - RAK - Without Weight"		
+#
+#	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
+	print
+	op1 = int(raw_input("Escolha uma opção acima: "))
+#
+	if op1 == 1:
+		alg = "copra_without_weight_k10"
+		threshold = 10
+	elif op1 == 2:
+		alg = "oslom_without_weight_k50"
+		threshold = 50	
+	elif op1 == 3:
+		alg = "rak_without_weight"
+		threshold = 1
+#	elif op1 == 4:
+#		alg = "infomap_without_weight"				
+#	if op1 == 5:
+#		alg = "infomap_without_weight"
+	elif op1 == 6:
+		alg = "infomap_without_weight"
+		threshold = 10		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
-	print
-	print ("\n")
+print ("\n")
 
 ######################################################################################################################
-	networks = ["n1","n2","n3","n4","n9"]	
+	networks = ["n1","n2","n3","n4"]	
 	for net in networks:
 		g_type1 = "graphs_with_ego"
 		g_type2 = "graphs_without_ego"
@@ -233,7 +237,7 @@ def main():
 		singletons2 = "without_singletons"
 	
 		print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-		calculate_alg(singletons1,net,g_type1,alg)
+		calculate_alg(singletons1,net,g_type1,alg,threshold)
 	
 
 #		print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons2))

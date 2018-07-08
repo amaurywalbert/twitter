@@ -87,7 +87,7 @@ def main():
 		nets = ['n1','n2','n3','n4']
 		for ego,data in dictionary.iteritems():			
 			for net in nets:
-				with open(source_dir+net+"/"+"10.json",'r') as f:
+				with open(source_dir+net+"/"+str(threshold)+".json",'r') as f:
 					source = json.load(f)
 					if net == "n1":
 						_a.append(source[ego]['n_communities'])
@@ -122,8 +122,8 @@ print" Escolha o algoritmo usado na detecção das comunidades									"
 print"																											"
 print"#################################################################################"
 print
-print"  1 - COPRA - Without Weight"
-print"  2 - OSLOM - Without Weight"
+print"  1 - COPRA - Without Weight - k = 10"
+print"  2 - OSLOM - Without Weight - k = 50"
 print"  3 - RAK - Without Weight"		
 #
 #print"  5 - INFOMAP - Partition"
@@ -132,23 +132,26 @@ print
 op1 = int(raw_input("Escolha uma opção acima: "))
 #
 if op1 == 1:
-	alg = "copra_without_weight"
+	alg = "copra_without_weight_k10"
+	threshold = 10
 elif op1 == 2:
-	alg = "oslom_without_weight"
+	alg = "oslom_without_weight_k50"
+	threshold = 50	
 elif op1 == 3:
 	alg = "rak_without_weight"
+	threshold = 1
 #elif op1 == 4:
 #	alg = "infomap_without_weight"				
 #if op1 == 5:
 #	alg = "infomap_without_weight"
 elif op1 == 6:
-	alg = "infomap_without_weight"		
+	alg = "infomap_without_weight"
+	threshold = 10		
 else:
 	alg = ""
 	print("Opção inválida! Saindo...")
 	sys.exit()	
-print ("\n")
-	
+print ("\n")	
 	
 data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"												# Pegar a lista com os ids dos egos
 source_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/full/"
