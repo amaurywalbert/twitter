@@ -171,8 +171,8 @@ else:
 	print("Opção inválida! Saindo...")
 	sys.exit()	
 print ("\n")
-data_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
-output_dir = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/"	# Diretório para Salvar os gráficos...
+data_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
+output_dir = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/graphs_with_ego/"+str(alg)+"/"	# Diretório para Salvar os gráficos...
 
 #Executa o método main
 if __name__ == "__main__": main()
