@@ -26,12 +26,7 @@ def net_structure(dataset_dir,output_dir,graph_type,metric,net,alg):
 	print("\n######################################################################\n")
 	print("\nScript para cálculo da modularidade das comunidades detectadas\n")
 
-	if alg == "infomap":
-		graphs_dir = "/home/amaury/graphs_hashmap_infomap/"+str(net)+"/"+str(graph_type)+"/"
-	elif alg == "infomap_without_weight":
-		graphs_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(graph_type)+"/"	
-	else:
-		graphs_dir = "/home/amaury/graphs_hashmap/"+str(net)+"/"+str(graph_type)+"/"
+	graphs_dir = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(graph_type)+"/"	
 		
 	if not os.path.exists(graphs_dir):
 		print ("Diretório não encontrado: "+str(graphs_dir))

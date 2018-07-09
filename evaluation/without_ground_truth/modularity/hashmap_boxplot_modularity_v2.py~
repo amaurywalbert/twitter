@@ -40,34 +40,32 @@ def prepare_box_plot(dataset,metric): #Só para Infomap
 ######################################################################################################################################################################
 def main():
 	print
-#	print"  1 - COPRA"
-#	print"  2 - OSLOM"
-#	print"  3 - GN"		
-#	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"
-	print"  6 - INFOMAP - Partition - Without Weight"																								
+	print"  1 - COPRA - Without Weight"
+	print"  2 - OSLOM - Without Weight"
+	print"  3 - RAK - Without Weight"		
+#
+#	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
-	op1 = int(raw_input("Escolha uma opção acima: "))
-
-#	if op1 == 1:
-#		alg = "copra"
-#	elif op1 == 2:
-#		alg = "oslom"
-#	elif op1 == 3:
-#		alg = "gn"
-#	elif op1 == 4:
-#		alg = "copra_partition"
-	if op1 == 5:
-		alg = "infomap"							
-	elif op1 == 6:
-		alg = "infomap_without_weight"	
+	op2 = int(raw_input("Escolha uma opção acima: "))
+#
+	if op2 == 1:
+		alg = "copra_without_weight"
+	elif op2 == 2:
+		alg = "oslom_without_weight"
+	elif op2 == 3:
+		alg = "rak_without_weight"
+#	elif op2 == 4:
+#		alg = "infomap_without_weight"				
+#	if op2 == 5:
+#		alg = "infomap_without_weight"
+	elif op2 == 6:
+		alg = "infomap_without_weight"		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
-	print ("\n")
-	print"#################################################################################"
-	print
+	print ("\n")	
 
 ######################################################################
 	

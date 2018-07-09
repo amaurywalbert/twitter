@@ -220,33 +220,38 @@ def main():
 #######################################################################
 #######################################################################
 	print("######################################################################")	
-	print
 	print "Algoritmo utilizado na detecção das comunidades"
-	print 
-	print" 01 - COPRA"
-	print" 02 - OSLOM"
-	print" 03 - GN - Partition"
-	print" 04 - COPRA - Partition"
-	print" 05 - Infomap - Partition"
-	print" 06 - Infomap - Partition - Without Weight"
+	print
+	print"  1 - COPRA - Without Weight - K=10"
+	print"  2 - COPRA - Without Weight - K=2-20"
+	print"  3 - OSLOM - Without Weight - K=5,10,50"
+	print"  4 - OSLOM - Without Weight - K=50"
+	print"  5 - RAK - Without Weight"		
+#
+#	print"  6 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
-	if op2 == 01:
-		alg = "copra"
-	elif op2 == 02:
-		alg = "oslom"
-	elif op2 == 03:
-		alg = "gn"
-	elif op2 == 04:
-		alg = "copra_partition"
-	elif op2 == 05:
-		alg = "infomap"
-	elif op2 == 06:
-		alg = "infomap_without_weight"						
+#
+	if op2 == 1:
+		alg = "copra_without_weight_k10"
+	elif op2 == 2:
+		alg = "copra_without_weight"
+	elif op2 == 3:
+		alg = "oslom_without_weight_k50"
+	elif op2 == 4:
+		alg = "oslom_without_weight"
+	elif op2 == 5:
+		alg = "rak_without_weight"
+	elif op2 == 6:
+		alg = "infomap_without_weight"		
 	else:
 		alg = ""
-		print("Algoritmo - Opção inválida! Saindo...")
-		sys.exit()
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+	print ("\n")
+	print
+	print"#################################################################################"
 	print
 
 	######################################################################################################################

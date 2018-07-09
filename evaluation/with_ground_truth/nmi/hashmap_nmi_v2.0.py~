@@ -93,6 +93,7 @@ def main():
 	print" 03 - GN - Partition"
 	print" 04 - COPRA - Partition"
 	print" 05 - Infomap - Partition"
+	print" 06 - Infomap - Partition - Without Weight"
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 	if op2 == 01:
@@ -102,18 +103,16 @@ def main():
 	elif op2 == 03:
 		alg = "gn"
 	elif op2 == 04:
-		alg = "copra_partition"	
+		alg = "copra_partition"
 	elif op2 == 05:
 		alg = "infomap"
+	elif op2 == 06:
+		alg = "infomap_without_weight"						
 	else:
 		alg = ""
-		print("Opção inválida! Saindo...")
-		sys.exit()	
+		print("Algoritmo - Opção inválida! Saindo...")
+		sys.exit()
 	print
-	print
-	print ("Opção escolhida: "+str(singletons)+" - "+str(alg))
-	print ("Aguarde...")
-	time.sleep(5)
 	######################################################################################################################
 	#####Alterar as linhas para Dropbox quando executado em ambiente de produção
 	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT_hashmap/"

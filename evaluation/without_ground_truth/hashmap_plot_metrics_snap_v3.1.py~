@@ -62,33 +62,33 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	print"  1 - COPRA"
-	print"  2 - OSLOM"
-	print"  3 - GN"		
-	print"  4 - COPRA - Partition"
-	print"  5 - INFOMAP - Partition"
-	print"  6 - INFOMAP - Partition - Without Weight"						
+	print
+	print"  1 - COPRA - Without Weight"
+	print"  2 - OSLOM - Without Weight"
+	print"  3 - RAK - Without Weight"		
+#
+#	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
-
+#
 	if op2 == 1:
-		alg = "copra"
+		alg = "copra_without_weight"
 	elif op2 == 2:
-		alg = "oslom"
+		alg = "oslom_without_weight"
 	elif op2 == 3:
-		alg = "gn"
-	elif op2 == 4:
-		alg = "copra_partition"
-	elif op2 == 5:
-		alg = "infomap"
+		alg = "rak_without_weight"
+#	elif op2 == 4:
+#		alg = "infomap_without_weight"				
+#	if op2 == 5:
+#		alg = "infomap_without_weight"
 	elif op2 == 6:
-		alg = "infomap_without_weight"					
+		alg = "infomap_without_weight"		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
-		sys.exit()		
-	print
-	print ("\n")
+		sys.exit()	
+	print ("\n")	
 	print"#################################################################################"
 
 	metrics = ["average_degree","conductance","cut_ratio","density","expansion","normalized_cut","separability"]

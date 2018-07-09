@@ -188,29 +188,34 @@ def main():
 #######################################################################
 	print("######################################################################")	
 	print
-	print "Algoritmo utilizado na detecção das comunidades" 
-	print 
-	print" 01 - COPRA"
-	print" 02 - OSLOM"
-	print" 03 - GN - Partition"
-	print" 04 - COPRA - Partition"
-	print" 05 - Infomap - Partition"
+	print "Algoritmo utilizado na detecção das comunidades"
 	print
-	op2 = int(raw_input("Escolha uma opção acima: "))
-	if op2 == 01:
-		alg = "copra"
-	elif op2 == 02:
-		alg = "oslom"
-	elif op2 == 03:
-		alg = "gn"
-	elif op2 == 04:
-		alg = "copra_partition"
-	elif op2 == 05:
-		alg = "infomap"	
+	print"  1 - COPRA - Without Weight"
+	print"  2 - OSLOM - Without Weight"
+	print"  3 - RAK - Without Weight"		
+#
+#	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
+	print
+	op1 = int(raw_input("Escolha uma opção acima: "))
+#
+	if op1 == 1:
+		alg = "copra_without_weight"
+	elif op1 == 2:
+		alg = "oslom_without_weight"
+	elif op1 == 3:
+		alg = "rak_without_weight"
+#	elif op1 == 4:
+#		alg = "infomap_without_weight"				
+#	if op1 == 5:
+#		alg = "infomap_without_weight"
+	elif op1 == 6:
+		alg = "infomap_without_weight"		
 	else:
 		alg = ""
-		print("Algoritmo - Opção inválida! Saindo...")
-		sys.exit()
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+	print ("\n")
 	print
 
 	######################################################################################################################

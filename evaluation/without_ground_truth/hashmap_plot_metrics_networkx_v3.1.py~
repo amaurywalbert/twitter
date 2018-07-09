@@ -67,7 +67,34 @@ def main():
 	print("######################################################################")	
 	print
 	print "Algoritmo utilizado na detecção das comunidades"
-#Todos os grafos sem peso...
+	print
+	print
+	print"  1 - COPRA - Without Weight"
+	print"  2 - OSLOM - Without Weight"
+	print"  3 - RAK - Without Weight"		
+#
+#	print"  5 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
+	print
+	op2 = int(raw_input("Escolha uma opção acima: "))
+#
+	if op2 == 1:
+		alg = "copra_without_weight"
+	elif op2 == 2:
+		alg = "oslom_without_weight"
+	elif op2 == 3:
+		alg = "rak_without_weight"
+#	elif op2 == 4:
+#		alg = "infomap_without_weight"				
+#	if op2 == 5:
+#		alg = "infomap_without_weight"
+	elif op2 == 6:
+		alg = "infomap_without_weight"		
+	else:
+		alg = ""
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+	print ("\n")	
 	print"#################################################################################"
 
 	metrics = ["average_degree","conductance","cut_ratio","density","expansion","normalized_cut","separability","clustering"]
