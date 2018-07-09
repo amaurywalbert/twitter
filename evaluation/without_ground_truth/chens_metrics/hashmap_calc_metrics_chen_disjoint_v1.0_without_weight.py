@@ -251,8 +251,6 @@ def main():
 
 	print
 	print ("Opção escolhida: "+str(net)+" - "+str(alg))
-	print ("Aguarde...")
-	time.sleep(3)
 	
 ######################################################################################################################
 	g_type1 = "graphs_with_ego"
