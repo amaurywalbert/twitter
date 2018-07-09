@@ -229,8 +229,8 @@ def main():
 	print 
 	print
 	print
-	print"  1 - COPRA - Without Weight"
-	print"  2 - OSLOM - Without Weight"
+	print"  1 - COPRA - Without Weight - K=10"
+	print"  2 - OSLOM - Without Weight - K=50"
 #	print"  3 - RAK - Without Weight"		
 #
 #	print"  5 - INFOMAP - Partition"
@@ -239,9 +239,9 @@ def main():
 	op2 = int(raw_input("Escolha uma opção acima: "))
 #
 	if op2 == 1:
-		alg = "copra_without_weight"
+		alg = "copra_without_weight_k10"
 	elif op2 == 2:
-		alg = "oslom_without_weight"
+		alg = "oslom_without_weight_k50"
 #	if op2 == 3:
 #		alg = "rak_without_weight"
 #	elif op2 == 4:

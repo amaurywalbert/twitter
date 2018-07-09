@@ -96,7 +96,6 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 
 								print("Ego: "+str(i)+" - "+communities+threshold+"/"+file)
 									
-							
 
 								if ud is False:		# Para grafo NÂO Ponderado e Direcionado
 									execute = subprocess.Popen(["java", "CommunityQuality", str(graph_file),str(community_file),"isUnweighted"], stdout=subprocess.PIPE)
