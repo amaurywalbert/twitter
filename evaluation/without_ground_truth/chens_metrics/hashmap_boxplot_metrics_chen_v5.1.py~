@@ -24,7 +24,7 @@ sys.setdefaultencoding('utf-8')
 # Calcular e armazenar o MAIOR valor para cada métrica
 #
 ######################################################################################################################################################################
-def prepare_box_plot(dataset,metric): #Só para Infomap
+def prepare_box_plot(dataset,metric):
 	if not os.path.isdir(dataset):
 		print ("Diretório com "+str(metric)+" não encontrado: "+str(dataset))
 	else:	

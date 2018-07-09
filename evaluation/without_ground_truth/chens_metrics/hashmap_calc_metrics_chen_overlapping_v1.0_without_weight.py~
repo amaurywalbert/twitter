@@ -261,8 +261,6 @@ def main():
 
 	print
 	print ("Opção escolhida: "+str(net)+" - "+str(alg))
-	print ("Aguarde...")
-	time.sleep(3)
 	
 ######################################################################################################################
 	g_type1 = "graphs_with_ego"
@@ -281,8 +279,8 @@ def main():
 	calculate_alg(singletons1,net,ud,g_type1,alg)
 	
 
-	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-	calculate_alg(singletons1,net,ud,g_type2,alg)
+#	print ("Calculando métricas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
+#	calculate_alg(singletons1,net,ud,g_type2,alg)
 
 	end = time.time()
 	time_exec = end - start
