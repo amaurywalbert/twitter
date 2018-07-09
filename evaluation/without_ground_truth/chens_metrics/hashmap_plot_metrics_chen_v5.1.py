@@ -130,7 +130,7 @@ def main():
 #
 	if op2 == 1:
 		alg = "copra_without_weight_k10"
-	if op2 == 2:
+	elif op2 == 2:
 		alg = "copra_without_weight"
 	elif op2 == 3:
 		alg = "oslom_without_weight_k50"
