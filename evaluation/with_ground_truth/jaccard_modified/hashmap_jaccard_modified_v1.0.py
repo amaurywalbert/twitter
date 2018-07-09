@@ -225,19 +225,18 @@ def main():
 	#####Alterar as linhas para Dropbox quando executado em ambiente de produção
 	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT_hashmap/"
 	communities1 = "/home/amaury/communities_hashmap/graphs_with_ego/"+str(alg)+"/"
-	communities2 = "/home/amaury/communities_hashmap/graphs_without_ego/"+str(alg)+"/" 
+#	communities2 = "/home/amaury/communities_hashmap/graphs_without_ego/"+str(alg)+"/" 
 	output1 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/jaccard_modified/graphs_with_ego/"+str(alg)+"/"
-	output2 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/jaccard_modified/graphs_without_ego/"+str(alg)+"/"
+#	output2 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/jaccard_modified/graphs_without_ego/"+str(alg)+"/"
+	nets = ["n1","n2","n3","n4"]
 
-	for i in range(10):								# Para cada rede-ego gerada
-		i+=1
-		net = "n"+str(i)
-		print
-		print ("Calculando Jaccard Modified nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-		jaccard_alg(communities1,output1,singletons,net,ground_truth)
+	for net in nets:								# Para cada rede-ego gerada
 		print
 		print ("Calculando Jaccard Modified nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
-		jaccard_alg(communities2,output2,singletons,net,ground_truth)
+		jaccard_alg(communities1,output1,singletons,net,ground_truth)
+		print
+#		print ("Calculando Jaccard Modified nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+#		jaccard_alg(communities2,output2,singletons,net,ground_truth)
 	print("######################################################################")
 	print
 	print("######################################################################")

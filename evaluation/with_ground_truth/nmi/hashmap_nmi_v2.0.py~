@@ -87,49 +87,54 @@ def main():
 	print("######################################################################")	
 	print
 	print "Algoritmo utilizado na detecção das comunidades"
-	print 
-	print" 01 - COPRA"
-	print" 02 - OSLOM"
-	print" 03 - GN - Partition"
-	print" 04 - COPRA - Partition"
-	print" 05 - Infomap - Partition"
-	print" 06 - Infomap - Partition - Without Weight"
+	print
+	print"  1 - COPRA - Without Weight - K=10"
+	print"  2 - COPRA - Without Weight - K=2-20"
+	print"  3 - OSLOM - Without Weight - K=5,10,50"
+	print"  4 - OSLOM - Without Weight - K=50"
+	print"  5 - RAK - Without Weight"		
+#
+#	print"  6 - INFOMAP - Partition"
+	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
-	if op2 == 01:
-		alg = "copra"
-	elif op2 == 02:
-		alg = "oslom"
-	elif op2 == 03:
-		alg = "gn"
-	elif op2 == 04:
-		alg = "copra_partition"
-	elif op2 == 05:
-		alg = "infomap"
-	elif op2 == 06:
-		alg = "infomap_without_weight"						
+#
+	if op2 == 1:
+		alg = "copra_without_weight_k10"
+	elif op2 == 2:
+		alg = "copra_without_weight"
+	elif op2 == 3:
+		alg = "oslom_without_weight_k50"
+	elif op2 == 4:
+		alg = "oslom_without_weight"
+	elif op2 == 5:
+		alg = "rak_without_weight"
+	elif op2 == 6:
+		alg = "infomap_without_weight"		
 	else:
 		alg = ""
-		print("Algoritmo - Opção inválida! Saindo...")
-		sys.exit()
+		print("Opção inválida! Saindo...")
+		sys.exit()	
+	print ("\n")
+	print
+	print"#################################################################################"
 	print
 	######################################################################################################################
 	#####Alterar as linhas para Dropbox quando executado em ambiente de produção
 	ground_truth = "/home/amaury/dataset/ground_truth/lists_users_TXT_hashmap/"
 	communities1 = "/home/amaury/communities_hashmap/graphs_with_ego/"+str(alg)+"/"
-	communities2 = "/home/amaury/communities_hashmap/graphs_without_ego/"+str(alg)+"/" 
+#	communities2 = "/home/amaury/communities_hashmap/graphs_without_ego/"+str(alg)+"/" 
 	output1 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/nmi/graphs_with_ego/"+str(alg)+"/"
-	output2 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/nmi/graphs_without_ego/"+str(alg)+"/"
+#	output2 = "/home/amaury/Dropbox/evaluation_hashmap/with_ground_truth/nmi/graphs_without_ego/"+str(alg)+"/"
+	nets = ["n1","n2","n3","n4"]
 
-	for i in range(10):								# Para cada rede-ego gerada
-		i+=1
-		net = "n"+str(i)
-		print
-		print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-		nmi_alg(communities1,output1,singletons,net,ground_truth)
+	for net in nets:								# Para cada rede-ego gerada
 		print
 		print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
-		nmi_alg(communities2,output2,singletons,net,ground_truth)
+		nmi_alg(communities1,output1,singletons,net,ground_truth)
+		print
+#		print ("Calculando NMI nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+#		nmi_alg(communities2,output2,singletons,net,ground_truth)
 	print("######################################################################")
 	print
 	print("######################################################################")
