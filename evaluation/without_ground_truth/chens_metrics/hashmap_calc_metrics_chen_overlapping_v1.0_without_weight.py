@@ -12,8 +12,6 @@ sys.setdefaultencoding('utf-8')
 ##		Status - Versão 1 - Calcular métrica definida abaixo para avaliação sem ground truth - Usando a Algoritmo em Java desenvolvido pelo Chen - 
 ##									Modularity Density - https://github.com/chenmingming/ComQualityMetric - mais antigo - orientado pelo BoleslawS
 ##
-##									ATENÇÃO - PARA O OSLOM, HÁ ELEMENTOS QUE NÃO FORAM ASSOCIADOS A NENHUMA COMUNIDADE, NEM MESMO SINGLETONS,
-##												ESTÃO SENDO IGNORADOS... VER O QUE FAZER.
 ######################################################################################################################################################################
 
 ######################################################################################################################################################################
@@ -33,7 +31,7 @@ def create_dirs(paths):
 ######################################################################################################################################################################
 def calculate_alg(singletons,net,ud,g_type,alg):
 	
-	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
+	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(full)+"/"+str(net)+"/" 
 	graphs = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(g_type)+"/"	  #Pega só o grafo sem peso para realizar os cálculos
 	
 	out_Q = str(output_dir)+"modularity/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"		
@@ -95,13 +93,15 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 								community_file = str(communities)+str(threshold)+"/"+file
 								graph_file = str(graphs)+str(ego_id)+".edge_list"
 
-								print("Ego: "+str(i)+" - "+communities+threshold+"/"+file)
+								print("Ego: "+str(i)+" - "+str(community_file))
 
-								if ud is False:		# Para grafo NÂO Ponderado e Direcionado (n1,n9)
+								if ud is False:		# Para grafo NÂO Ponderado e Direcionado (n1,n2,n3,n4)
 									execute = subprocess.Popen(["java", "OverlappingCommunityQuality", str(graph_file),str(community_file),"isUnweighted"], stdout=subprocess.PIPE)
 
 								else:		# Para grafo NÃO Ponderado e NÃO Direcionado (não tem nenhum...)
-									execute = subprocess.Popen(["java", "OverlappingCommunityQuality", str(graph_file),str(community_file),"isUnweighted","isUndirected"], stdout=subprocess.PIPE)
+									print ("Erro...")
+									sys.exit()
+#									execute = subprocess.Popen(["java", "OverlappingCommunityQuality", str(graph_file),str(community_file),"isUnweighted","isUndirected"], stdout=subprocess.PIPE)
 
 								resp = execute.communicate()[0]
 								print resp
