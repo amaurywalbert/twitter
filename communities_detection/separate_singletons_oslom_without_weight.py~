@@ -58,19 +58,18 @@ def save_data(graphs,alg):
 
 
 				i=0
-				
-				for file in os.listdir(source_dir):					
-					if not os.path.exists(source_dir+str(file)+"/tp"):
-						print ("Diretório não encontrado: "+str(source_dir)+str(file)+"/tp")
+				 
+				for ego_dir in os.listdir(source_dir):					
+					if not os.path.exists(source_dir+str(ego_dir)+"/partitions_level_0"):
+						print ("Diretório não encontrado: "+str(source_dir)+str(ego_dir)+"/partitions_level_0")
 					else:	
 						i+=1
 						alters_detected = set() 												# Armazena o conjunto de alters detectados pela ferramenta.... 						
-						
-						
+												
 						
 						print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i))
 
-						with open(source_dir+str(file)+"/tp", 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "file"
+						with open(source_dir+str(ego_dir)+"/partitions_level_0", 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "file"
 							for line in f:
 								if not "#" in line:
 									a = line.split(' ')

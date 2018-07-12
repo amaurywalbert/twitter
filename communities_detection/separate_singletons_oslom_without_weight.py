@@ -69,13 +69,13 @@ def save_data(graphs,alg):
 						
 						print (str(graphs)+" - Verificando singletons para a - rede: "+str(net)+" - threshold: "+str(threshold)+" - ego: "+str(i))
 
-						with open(source_dir+str(ego_dir)+"/partitions_level_0", 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "file"
+						with open(source_dir+str(ego_dir)+"/partitions_level_0", 'r') as f:							# Abre o arquivo gerado pelo algoritmo para o usuário "ego_dir"
 							for line in f:
 								if not "#" in line:
 									a = line.split(' ')
 									if a is not None and a[0] != "\n":
 
-										with open(output_full+file+".txt", 'a+') as g:
+										with open(output_full+str(ego_dir)+".txt", 'a+') as g:
 											x = False
 											for item in a:
 												if item != "\n":
@@ -85,7 +85,7 @@ def save_data(graphs,alg):
 											if x is True:
 												g.write("\n")															# Passa para a próxima linha de g
 										if len(a) > 2:
-											with open(output_without_singletons+file+".txt", 'a+') as g:
+											with open(output_without_singletons+str(ego_dir)+".txt", 'a+') as g:
 												x = False
 												for item in a:
 													if item != "\n":
@@ -96,7 +96,7 @@ def save_data(graphs,alg):
 													g.write("\n")															# Passa para a próxima linha de g
 
 										else:
-											with open(output_singletons+file+".txt", 'a+') as g:
+											with open(output_singletons+str(ego_dir)+".txt", 'a+') as g:
 												x = False
 												for item in a:
 													if item != "\n":
