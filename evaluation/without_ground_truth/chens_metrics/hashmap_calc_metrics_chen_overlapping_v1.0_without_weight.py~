@@ -31,7 +31,7 @@ def create_dirs(paths):
 ######################################################################################################################################################################
 def calculate_alg(singletons,net,ud,g_type,alg):
 	
-	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(full)+"/"+str(net)+"/" 
+	communities = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
 	graphs = "/home/amaury/graphs_hashmap_infomap_without_weight/"+str(net)+"/"+str(g_type)+"/"	  #Pega só o grafo sem peso para realizar os cálculos
 	
 	out_Q = str(output_dir)+"modularity/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/"		
@@ -243,9 +243,9 @@ def main():
 	elif op2 == 2:
 		alg = "copra_without_weight"
 	elif op2 == 3:
-		alg = "oslom_without_weight_k50"
-	elif op2 == 4:
 		alg = "oslom_without_weight"
+	elif op2 == 4:
+		alg = "oslom_without_weight_k50"
 #	if op2 == 5:
 #		alg = "rak_without_weight"
 #	elif op2 == 6:

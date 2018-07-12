@@ -25,7 +25,7 @@ def save_data(graphs,alg):
 			threshold+=1
 			
 			source_dir="/home/amaury/communities_hashmap/"+str(graphs)+"/"+str(alg)+"/full/n"+str(net)+"/"+str(threshold)+"/"			
-			graphs_dir="/home/amaury/graphs_hashmap/n"+str(net)+"/"+str(graphs)+"/"	
+			graphs_dir="/home/amaury/graphs_hashmap_infomap_without_weight/n"+str(net)+"/"+str(graphs)+"/"	
 			
 			if not os.path.isdir(source_dir):
 				print ("\nDiretório não encontrado para o threshold "+str(threshold)+"\n"+str(source_dir))

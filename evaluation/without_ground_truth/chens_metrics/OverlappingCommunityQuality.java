@@ -131,10 +131,10 @@ public class OverlappingCommunityQuality {
 		double[] weights = CommunityQuality.getNetwork(networkFile,
 				isUnweighted, isUndirected, outNet);
 		double totalWeight = weights[0];
-		// double maxWeight = weights[1];
-		// long numNodes = outNet.size();
+		double maxWeight = weights[1];
+		long numNodes = outNet.size();
 
-		// System.out.println("#node = " + numNodes);
+//		System.out.println("#node = " + numNodes);
 
 		// If network is directed, get incoming network
 		HashMap<Integer, HashMap<Integer, Double>> inNet = null;
@@ -148,7 +148,7 @@ public class OverlappingCommunityQuality {
 		Map<Integer, Set<Integer>> mapCommunities = CommunityQuality
 				.getMapCommunities(communityFile);
 		int numComs = mapCommunities.size();
-		// System.out.println("#com = " + numComs);
+//		System.out.println("#com = " + numComs);
 
 		HashMap<Integer, HashMap<Integer, Double>> ovNodeCommunities = OverlappingCommunityQuality
 				.getCrispOverlappingNodeCommunities(communityFile);

@@ -63,7 +63,7 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 				create_dirs(paths)
 
 				if os.path.exists(str(out_Q)+str(threshold)+".json") and os.path.exists(str(out_NQ)+str(threshold)+".json") and os.path.exists(str(out_Qds)+str(threshold)+".json") and os.path.exists(str(out_intra_edges)+str(threshold)+".json") and os.path.exists(str(out_intra_density)+str(threshold)+".json") and os.path.exists(str(out_contraction)+str(threshold)+".json") and os.path.exists(str(out_inter_edges)+str(threshold)+".json")  and os.path.exists(str(out_expansion)+str(threshold)+".json") and os.path.exists(str(out_conductance)+str(threshold)+".json") and os.path.exists(str(out_modularity_degree)+str(threshold)+".json"):
-					print ("Arquivo de destino já existe: "+str(threshold)+".json")
+					print ("Arquivo de destino já existe: "+str(out_Q)+str(threshold)+".json")
 					
 				else:	
 					print("######################################################################")
@@ -243,9 +243,9 @@ def main():
 	elif op2 == 2:
 		alg = "copra_without_weight"
 	elif op2 == 3:
-		alg = "oslom_without_weight_k50"
-	elif op2 == 4:
 		alg = "oslom_without_weight"
+	elif op2 == 4:
+		alg = "oslom_without_weight_k50"
 #	if op2 == 5:
 #		alg = "rak_without_weight"
 #	elif op2 == 6:
