@@ -80,7 +80,7 @@ def main():
 	graphs2 = "graphs_without_ego"
 	alg = "oslom"
 	save_data(graphs1,alg)
-	save_data(graphs2,alg)
+#	save_data(graphs2,alg)
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA

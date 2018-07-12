@@ -78,9 +78,9 @@ def main():
 	os.system('clear')	
 	graphs1 = "graphs_with_ego"
 	graphs2 = "graphs_without_ego"
-	alg = "oslom"
+	alg = "oslom_without_weight"
 	save_data(graphs1,alg)
-	save_data(graphs2,alg)
+#	save_data(graphs2,alg)
 ######################################################################################################################################################################
 #
 # INÍCIO DO PROGRAMA
