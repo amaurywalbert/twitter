@@ -44,7 +44,7 @@ def box_plot(_a,_s,_r,_l,_m, metric,title):
 	create_dir(output)	
 	
 	trace0 = go.Box(y=_a,name='Follow',boxmean='sd')
-	trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
+#	trace1 = go.Box(y=_s,name='Followee',boxmean='sd')
 	trace2 = go.Box(y=_r,name='Retweets',boxmean='sd')
 	trace3 = go.Box(y=_l,name='Likes',boxmean='sd')
 	trace4 = go.Box(y=_m,name='Mentions',boxmean='sd')
