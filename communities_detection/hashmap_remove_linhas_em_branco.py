@@ -98,11 +98,11 @@ def main():
 
 	remove_lines(singletons1,g_type1,alg)
 	
-	remove_lines(singletons1,g_type2,alg)
+#	remove_lines(singletons1,g_type2,alg)
 
-	remove_lines(singletons2,g_type1,alg)
+#	remove_lines(singletons2,g_type1,alg)
 	
-	remove_lines(singletons2,g_type2,alg)
+#	remove_lines(singletons2,g_type2,alg)
 
 ######################################################################################################################		
 
