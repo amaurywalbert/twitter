@@ -111,7 +111,7 @@ def main():
 	print" Impressão de Gráficos - Métricas de Avaliação Sem Ground - Truth						"
 	print"																											"
 	
-	algs = ["copra","oslom","copra_partition","infomap","infomap_without_weight"]
+	algs = ["copra_without_weight","oslom_without_weight","rak_without_weight","infomap_without_weight"]
 	
 	m_greater = ["modularity_density","modularity","intra_edges","intra_density","contraction"]
 	for metric in m_greater:

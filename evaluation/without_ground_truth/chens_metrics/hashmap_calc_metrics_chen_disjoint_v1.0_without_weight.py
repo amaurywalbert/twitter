@@ -218,26 +218,12 @@ def main():
 	print "Algoritmo utilizado na detecção das comunidades"
 	print 
 	print
-	print
-#	print"  1 - COPRA - Without Weight"
-#	print"  2 - OSLOM - Without Weight"
 	print"  3 - RAK - Without Weight"		
-#
-#	print"  5 - INFOMAP - Partition"
 	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
-#
-#	if op2 == 1:
-#		alg = "copra_without_weight"
-#	elif op2 == 2:
-#		alg = "oslom_without_weight"
 	if op2 == 3:
 		alg = "rak_without_weight"
-#	elif op2 == 4:
-#		alg = "infomap_without_weight"				
-#	elif op2 == 5:
-#		alg = "infomap_without_weight"
 	elif op2 == 6:
 		alg = "infomap_without_weight"		
 	else:

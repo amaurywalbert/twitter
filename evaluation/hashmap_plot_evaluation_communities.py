@@ -41,19 +41,17 @@ def main():
 	print "Algoritmo utilizado na detecção das comunidades"
 	print
 	print"  1 - COPRA - Without Weight - K=10"
-#	print"  2 - COPRA - Without Weight - K=2-20"
+	print"  2 - COPRA - Without Weight - K=2"
 	print"  4 - OSLOM - Without Weight - K=50"
 	print"  5 - RAK - Without Weight"		
-#
-#	print"  6 - INFOMAP - Partition"
 	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 #
 	if op2 == 1:
 		alg = "copra_without_weight_k10"
-#	elif op2 == 2:
-#		alg = "copra_without_weight"
+	elif op2 == 2:
+		alg = "copra_without_weight_k2"
 	elif op2 == 4:
 		alg = "oslom_without_weight_k50"
 	elif op2 == 5:
@@ -79,9 +77,12 @@ def main():
 		else:
 			for file in os.listdir(source_dir):
 				df = pd.read_csv(source_dir+file, encoding='ISO-8859-1')
-				df = df.drop(['ego_id','min_comm_len','n_singletons','alters_ignored','comm_size_std','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg'], axis=1)
+#				df = df.drop(['ego_id','min_comm_len','n_singletons','alters_ignored','comm_size_std','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg'], axis=1)
+				df = df.drop(['ego_id','min_comm_len','n_singletons','alters_ignored','comm_size_std'], axis=1)
 				if 'Unnamed: 18' in df.columns:
 					df = df.drop(['Unnamed: 18'], axis=1)
+				if 'Unnamed: 14' in df.columns:
+					df = df.drop(['Unnamed: 14'], axis=1)					
 				df.columns = ['nodes','edges','comm','max_comm','comm_size','modularity','mod_density','conductance','intra_density']
 				description = df.describe()
 				print ("---------------------------------------------------------------------------------------------------")

@@ -145,7 +145,7 @@ print
 print "Algoritmo utilizado na detecção das comunidades"
 print
 print"  1 - COPRA - Without Weight - K=10"
-print"  2 - COPRA - Without Weight - K=2-20"
+print"  2 - COPRA - Without Weight - K=2"
 print"  4 - OSLOM - Without Weight - K=50"
 print"  5 - RAK - Without Weight"		
 print"  6 - INFOMAP - Partition - Without Weight"												
@@ -156,8 +156,8 @@ if op2 == 1:
 	alg = "copra_without_weight_k10"
 	thresholds = [10]
 elif op2 == 2:
-	alg = "copra_without_weight"
-	thresholds = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+	alg = "copra_without_weight_k2"
+	thresholds = [2]
 elif op2 == 4:
 	alg = "oslom_without_weight_k50"
 	thresholds = [50]

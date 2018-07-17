@@ -228,7 +228,7 @@ def main():
 	print "Algoritmo utilizado na detecção das comunidades"
 	print
 	print"  1 - COPRA - Without Weight - K=10"
-	print"  2 - COPRA - Without Weight - K=2-20"
+	print"  2 - COPRA - Without Weight - K=2"
 	print"  4 - OSLOM - Without Weight - K=50"
 #	print"  5 - RAK - Without Weight"		
 #
@@ -240,7 +240,7 @@ def main():
 	if op2 == 1:
 		alg = "copra_without_weight_k10"
 	elif op2 == 2:
-		alg = "copra_without_weight"
+		alg = "copra_without_weight_k2"
 	elif op2 == 4:
 		alg = "oslom_without_weight_k50"
 #	if op2 == 5:

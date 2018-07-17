@@ -37,11 +37,11 @@ def get_dataset(dataset, metric=None):
 		for directory in os.listdir(dataset):
 			if os.path.isdir(dataset+directory):
 				net = str(directory)
+				data_t = {}									#Armazena os dados lidos por threshold
 				for file in os.listdir(dataset+directory):
 					with open(dataset+directory+"/"+file, 'r') as f:
 						threshold = file.split(".json")
 						threshold = threshold[0]
-						data_t = {}									#Armazena os dados lidos por threshold
 						data = json.load(f)
 						if data is not None:
 							data_t[threshold] = data
@@ -66,19 +66,17 @@ def main():
 	print "Algoritmo utilizado na detecção das comunidades"
 	print
 	print"  1 - COPRA - Without Weight - K=10"
-#	print"  2 - COPRA - Without Weight - K=2-20"
+	print"  2 - COPRA - Without Weight - K=2"
 	print"  4 - OSLOM - Without Weight - K=50"
 	print"  5 - RAK - Without Weight"		
-#
-#	print"  6 - INFOMAP - Partition"
 	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
 	op2 = int(raw_input("Escolha uma opção acima: "))
 #
 	if op2 == 1:
 		alg = "copra_without_weight_k10"
-#	elif op2 == 2:
-#		alg = "copra_without_weight"
+	elif op2 == 2:
+		alg = "copra_without_weight_k2"
 	elif op2 == 4:
 		alg = "oslom_without_weight_k50"
 	elif op2 == 5:
@@ -93,7 +91,7 @@ def main():
 	print	
 
 	print"#################################################################################"
-	print ("\nPreparando dados para o algoritmo: "+str(alg))
+
 	dataset = {}
 	data_comm = str(source_comm)+"graphs_with_ego/"+str(alg)+"/full/"
 	data_chen_mod_density = str(source_chen)+"modularity_density/graphs_with_ego/"+str(alg)+"/full/"
@@ -101,12 +99,16 @@ def main():
 	data_chen_intra_density =  str(source_chen)+"intra_density/graphs_with_ego/"+str(alg)+"/full/"
 	data_chen_conductance =  str(source_chen)+"conductance/graphs_with_ego/"+str(alg)+"/full/"
 
-	data_snap_coef_clust =  str(source_snap)+"coef_clust/graphs_with_ego/"+str(alg)+"/full/"
-	data_snap_conductance =  str(source_snap)+"conductance/graphs_with_ego/"+str(alg)+"/full/"
-	data_snap_density =  str(source_snap)+"density/graphs_with_ego/"+str(alg)+"/full/"
-	data_snap_modularity =  str(source_snap)+"modularity/graphs_with_ego/"+str(alg)+"/full/"
-		
+#	data_snap_coef_clust =  str(source_snap)+"coef_clust/graphs_with_ego/"+str(alg)+"/full/"
+#	data_snap_conductance =  str(source_snap)+"conductance/graphs_with_ego/"+str(alg)+"/full/"
+#	data_snap_density =  str(source_snap)+"density/graphs_with_ego/"+str(alg)+"/full/"
+#	data_snap_modularity =  str(source_snap)+"modularity/graphs_with_ego/"+str(alg)+"/full/"
+
+	print ("\nPreparando dados para o algoritmo: "+str(alg))
+	print data_comm
+			
 	comm = get_dataset(data_comm)
+
 	chen_mod_density = get_dataset(data_chen_mod_density)
 	chen_modularity = get_dataset(data_chen_modularity)
 	chen_intra_density = get_dataset(data_chen_intra_density)
@@ -120,10 +122,11 @@ def main():
 	#for k,v in snap_modularity.iteritems():
 	#	print k,v
 	#	time.sleep(5)
-		
+		<em></em>
 	for net,net_data in comm.iteritems():
-		if net in ("n1","n2","n3","n4","n9"):
+		if net in ("n1","n2","n3","n4"):
 			for threshold,threshold_data in net_data.iteritems():
+				print net,threshold
 				dictionary = {}
 				output_dir = str(output)+str(alg)+"/"+str(net)+"/"
 				create_dirs(output_dir)
