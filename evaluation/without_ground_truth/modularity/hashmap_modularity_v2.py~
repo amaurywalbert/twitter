@@ -171,9 +171,9 @@ def main():
 	elif op2 == 2:
 		alg = "copra_without_weight"
 	elif op2 == 3:
-		alg = "oslom_without_weight_k50"
-	elif op2 == 4:
 		alg = "oslom_without_weight"
+	elif op2 == 4:
+		alg = "oslom_without_weight_k50"
 	elif op2 == 5:
 		alg = "rak_without_weight"
 	elif op2 == 6:

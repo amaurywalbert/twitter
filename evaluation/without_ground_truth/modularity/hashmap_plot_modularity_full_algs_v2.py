@@ -59,7 +59,7 @@ def main():
 
 ######################################################################
 
-	algs = ["copra_without_weight","copra_without_weight_k10","oslom_without_weight","oslom_without_weight_k50","rak_without_weight","infomap_without_weight"]	
+	algs = ["copra_without_weight","copra_without_weight_k10","oslom_without_weight_k50","rak_without_weight","infomap_without_weight"]	
 	metric = 'modularity'
 	algorithms_data = []
 
