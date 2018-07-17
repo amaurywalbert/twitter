@@ -49,12 +49,13 @@ def calc_correlation(dataset):
 	pairs = {}
 	for k,v in dataset.iteritems():
 		for j, x in dataset.iteritems():
+			print ("Calculando correlação entre camadas: "+str(k,j))
 #			if j >= k and j != k:
-				ego1 = v
-				ego2 = x					
-				name = str(k)+str(j)
-				result,p = pearsonr(ego1,ego2)		# Comparando o conjunto de vértices entre as camadas
-				pairs[name]={"pearson":result,"p-value":p} 
+			ego1 = v
+			ego2 = x					
+			name = str(k)+str(j)
+			result,p = pearsonr(ego1,ego2)		# Comparando o conjunto de vértices entre as camadas
+			pairs[name]={"pearson":result,"p-value":p} 
 	print pairs
 	return pairs
 
@@ -85,8 +86,8 @@ def main():
 		_m = []
 		nets = ['n1','n2','n3','n4']
 		i=0
+		print ("Preparando dados...")
 		for ego,data in dictionary.iteritems():
-			print ("Preparando dados...")
 			i+=1		
 			for net in nets:
 				with open(source_dir+net+"/"+str(threshold)+".json",'r') as f:
