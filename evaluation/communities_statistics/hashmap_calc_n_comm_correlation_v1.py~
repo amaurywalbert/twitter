@@ -49,7 +49,7 @@ def calc_correlation(dataset):
 	pairs = {}
 	for k,v in dataset.iteritems():
 		for j, x in dataset.iteritems():
-			print ("Calculando correlação entre camadas: "+str(k,j))
+			print ("Calculando correlação entre camadas: "+str(k)+" e "+str(j))
 #			if j >= k and j != k:
 			ego1 = v
 			ego2 = x					

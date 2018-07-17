@@ -15,7 +15,7 @@ sys.setdefaultencoding('utf-8')
 ##					Versão 2 - não considera without singletons
 ## 
 ######################################################################################################################################################################
-def prepare_bars(dataset,metric):
+def prepare_bars(dataset,metric,thresholds):
 	if not os.path.isdir(dataset):
 		print ("Diretório não encontrado: "+str(dataset))
 	else:	
@@ -24,22 +24,23 @@ def prepare_bars(dataset,metric):
 		for directory in os.listdir(dataset):
 			if os.path.isdir(dataset+directory):
 				net = str(directory)
-				metric_plot[net] = {'threshold':' ',metric:float(0),'std':float(0)}
+				for threshold in thresholds:
+					metric_plot[net] = {'threshold':' ',metric:float(0),'std':float(0)}
 				
-				for file in os.listdir(dataset+directory):
-					threshold = file.split(".json")
-					threshold = threshold[0]
+					for file in os.listdir(dataset+directory):
+						threshold = file.split(".json")
+						threshold = threshold[0]
 					
-					with open(dataset+directory+"/"+file, 'r') as f:
-						data = json.load(f)
-						if data is not None:
-							_metric = []
-							for k,v in data.iteritems():
-								_metric.append(v[metric])
-							M = calc.calcular_full(_metric)
-							if M is not None:						
-								if	float(M['media']) > metric_plot[net][metric]:
-									metric_plot[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
+						with open(dataset+directory+"/"+file, 'r') as f:
+							data = json.load(f)
+							if data is not None:
+								_metric = []
+								for k,v in data.iteritems():
+									_metric.append(v[metric])
+								M = calc.calcular_full(_metric)
+								if M is not None:						
+									if	float(M['media']) > metric_plot[net][metric]:
+										metric_plot[net] = {'threshold': threshold, metric:float(M['media']),'std':float(M['desvio_padrao'])}
 		return metric_plot
 
 ###########################################################################################################################################
@@ -60,38 +61,44 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
+	print
 	print "Algoritmo utilizado na detecção das comunidades"
 	print
-	print"  1 - COPRA - Without Weight - k = 10"
-	print"  2 - OSLOM - Without Weight - k = 50"
-	print"  3 - RAK - Without Weight"		
+	print"  1 - COPRA - Without Weight - K=10"
+	print"  2 - COPRA - Without Weight - K=2-20"
+	print"  3 - OSLOM - Without Weight - K=5,10,50"
+	print"  4 - OSLOM - Without Weight - K=50"
+	print"  5 - RAK - Without Weight"		
 #
-#	print"  5 - INFOMAP - Partition"
+#	print"  6 - INFOMAP - Partition"
 	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
-	op1 = int(raw_input("Escolha uma opção acima: "))
+	op2 = int(raw_input("Escolha uma opção acima: "))
 #
-	if op1 == 1:
+	if op2 == 1:
 		alg = "copra_without_weight_k10"
-		threshold = 10
-	elif op1 == 2:
+		thresholds = [10]
+	elif op2 == 2:
+		alg = "copra_without_weight"
+		thresholds = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+	elif op2 == 3:
+		alg = "oslom_without_weight"
+		thresholds = [10,50]
+	elif op2 == 4:
 		alg = "oslom_without_weight_k50"
-		threshold = 50	
-	elif op1 == 3:
+		thresholds = [50]
+	elif op2 == 5:
 		alg = "rak_without_weight"
-		threshold = 1
-#	elif op1 == 4:
-#		alg = "infomap_without_weight"				
-#	if op1 == 5:
-#		alg = "infomap_without_weight"
-	elif op1 == 6:
+		thresholds = [1]
+	elif op2 == 6:
 		alg = "infomap_without_weight"
-		threshold = 10		
+		thresholds = [10]		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
 	print ("\n")
+	print	
 	print"#################################################################################"
 	print
 	print"  0 - All Metrics"
@@ -149,14 +156,14 @@ def main():
 ######################################################################
 
 			dataset1 = str(source)+"graphs_with_ego/"+str(alg)+"/full/"	
-			data1 = prepare_bars(dataset1,metric)
+			data1 = prepare_bars(dataset1,metric,thresholds)
 			title = str(metric)+"_graphs_with_ego_"+str(alg)+"_full"	
 
 ######################################################################				
 ######################################################################
 
 			dataset2 = str(source)+"graphs_without_ego/"+str(alg)+"/full/"	
-			data2 = prepare_bars(dataset2,metric)
+			data2 = prepare_bars(dataset2,metric,thresholds)
 			title = str(metric)+"_graphs_without_ego_"+str(alg)+"_full"	
 
 ######################################################################		
