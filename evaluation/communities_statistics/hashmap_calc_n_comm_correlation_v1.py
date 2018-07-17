@@ -149,14 +149,19 @@ op2 = int(raw_input("Escolha uma opção acima: "))
 #
 if op2 == 1:
 	alg = "copra_without_weight_k10"
+	threshold = 10
 elif op2 == 2:
 	alg = "copra_without_weight_k2"
+	threshold = 2
 elif op2 == 4:
 	alg = "oslom_without_weight_k50"
+	threshold = 50
 elif op2 == 5:
 	alg = "rak_without_weight"
+	threshold = 1
 elif op2 == 6:
-	alg = "infomap_without_weight"		
+	alg = "infomap_without_weight"
+	threshold = 10		
 else:
 	alg = ""
 	print("Opção inválida! Saindo...")
