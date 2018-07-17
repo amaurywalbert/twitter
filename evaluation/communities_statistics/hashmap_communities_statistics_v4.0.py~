@@ -98,7 +98,7 @@ def create_dirs(out_dir):
 # Cálculos iniciais sobre o conjunto de dados lidos.
 #
 ######################################################################################################################################################################
-def calculate_alg(singletons,net,g_type,alg,threshold):
+def calculate_alg(singletons,net,g_type,alg,thresholds):
 	
 	communities_dir = "/home/amaury/communities_hashmap/"+str(g_type)+"/"+str(alg)+"/"+str(singletons)+"/"+str(net)+"/" 
 
@@ -206,16 +206,22 @@ def main():
 #
 	if op2 == 1:
 		alg = "copra_without_weight_k10"
+		thresholds = [10]
 	elif op2 == 2:
 		alg = "copra_without_weight"
+		thresholds = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
 	elif op2 == 3:
 		alg = "oslom_without_weight"
+		thresholds = [10,50]
 	elif op2 == 4:
 		alg = "oslom_without_weight_k50"
+		thresholds = [50]
 	elif op2 == 5:
 		alg = "rak_without_weight"
+		thresholds = [1]
 	elif op2 == 6:
-		alg = "infomap_without_weight"		
+		alg = "infomap_without_weight"
+		thresholds = [10]		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
@@ -233,7 +239,7 @@ def main():
 		singletons2 = "without_singletons"
 	
 		print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type1)+" - Algoritmo: "+str(alg)+" - "+str(singletons1))
-		calculate_alg(singletons1,net,g_type1,alg,threshold)
+		calculate_alg(singletons1,net,g_type1,alg,thresholds)
 	
 
 #		print ("\nCalculando statisticas nas comunidades detectadas na rede: "+str(net)+" - "+str(g_type2)+" - Algoritmo: "+str(alg)+" - "+str(singletons2))
