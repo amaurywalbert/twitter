@@ -120,7 +120,7 @@ def main():
 	print"  1 - COPRA - Without Weight - K=10"
 	print"  2 - COPRA - Without Weight - K=2-20"
 	print"  3 - OSLOM - Without Weight - K=5,10,50"
-	print"  4 - OSLOM - Without Weight - K=5,10,50"
+	print"  4 - OSLOM - Without Weight - K=50"
 	print"  5 - RAK - Without Weight"		
 #
 #	print"  6 - INFOMAP - Partition"

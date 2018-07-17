@@ -59,39 +59,41 @@ def main():
 	os.system('clear')
 	print "################################################################################"
 	print"																											"
-	print" 	Verficando estatísticas sobre as comunidades detectadas com o INFOMAP			"
+	print" 	Verficando estatísticas sobre as comunidades detectadas			"
 	print"																											"
 	print"																											"
 	print"#################################################################################"
+	print "Algoritmo utilizado na detecção das comunidades"
 	print
-	print
-	print"  1 - COPRA - Without Weight"
-	print"  2 - OSLOM - Without Weight"
-	print"  3 - RAK - Without Weight"		
+	print"  1 - COPRA - Without Weight - K=10"
+#	print"  2 - COPRA - Without Weight - K=2-20"
+#	print"  3 - OSLOM - Without Weight - K=5,10,50"
+	print"  4 - OSLOM - Without Weight - K=50"
+	print"  5 - RAK - Without Weight"		
 #
-#	print"  5 - INFOMAP - Partition"
+#	print"  6 - INFOMAP - Partition"
 	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
-	op1 = int(raw_input("Escolha uma opção acima: "))
+	op2 = int(raw_input("Escolha uma opção acima: "))
 #
-	if op1 == 1:
-		alg = "copra_without_weight"
-	elif op1 == 2:
-		alg = "oslom_without_weight"
-	elif op1 == 3:
+	if op2 == 1:
+		alg = "copra_without_weight_k10"
+#	elif op2 == 2:
+#		alg = "copra_without_weight"
+#	elif op2 == 3:
+#		alg = "oslom_without_weight"
+	elif op2 == 4:
+		alg = "oslom_without_weight_k50"
+	elif op2 == 5:
 		alg = "rak_without_weight"
-#	elif op1 == 4:
-#		alg = "infomap_without_weight"				
-#	if op1 == 5:
-#		alg = "infomap_without_weight"
-	elif op1 == 6:
+	elif op2 == 6:
 		alg = "infomap_without_weight"		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
 	print ("\n")
-	print
+	print	
 
 	print"#################################################################################"
 	print ("\nPreparando dados para o algoritmo: "+str(alg))
@@ -152,16 +154,39 @@ def main():
 					comm_size_std = ego_data['std_size']
 					n_singletons = ego_data['n_singletons']
 					alters_ignored = ego_data['alters_ignored']
-
-					chen_mod_density_avg = chen_mod_density[net][threshold][ego]
-					chen_modularity_avg = chen_modularity[net][threshold][ego]
-					chen_conductance_avg = chen_conductance[net][threshold][ego]
-					chen_intra_density_avg = chen_intra_density[net][threshold][ego]
 					
-					snap_coef_clust_avg = snap_coef_clust[net][threshold]["coef_clust_data"][ego][0]
-					snap_conductance_avg = snap_conductance[net][threshold][ego]["media"]
-					snap_density_avg = snap_density[net][threshold][ego]["media"]
-					snap_modularity_avg = snap_modularity[net][threshold]["modularity_data"][ego][0]
+					try:
+						chen_mod_density_avg = chen_mod_density[net][threshold][ego]
+					except Exception as e:
+						chen_mod_density_avg = 0
+					try:
+						chen_modularity_avg = chen_modularity[net][threshold][ego]
+					except Exception as e:
+						chen_modularity_avg = 0
+					try:
+						chen_conductance_avg = chen_conductance[net][threshold][ego]
+					except Exception as e:
+						chen_conductance_avg = 0
+					try:
+						chen_intra_density_avg = chen_intra_density[net][threshold][ego]
+					except Exception as e:
+						chen_intra_density_avg = 0
+
+					try:
+						snap_coef_clust_avg = snap_coef_clust[net][threshold]["coef_clust_data"][ego][0]
+					except Exception as e:
+						snap_coef_clust_avg = 0
+					try:
+						snap_conductance_avg = snap_conductance[net][threshold][ego]["media"]
+					except Exception as e:
+						snap_conductance_avg = 0
+					try:
+						snap_density_avg = snap_density[net][threshold][ego]["media"]
+					except Exception as e:
+						snap_density_avg = 0
+					try:
+						snap_modularity_avg = snap_modularity[net][threshold]["modularity_data"][ego][0]
+					except Exception as e:
 					
 					row = str(ego_id)+","+str(n_nodes)+","+str(n_edges,)+","+str(n_comm)+","+str(max_comm_len)+","+str(min_comm_len)+","+str(comm_size_avg)+","+str(comm_size_std)+","+str(n_singletons)+","+str(alters_ignored)+","+str(chen_modularity_avg)+","+str(chen_mod_density_avg)+","+str(chen_conductance_avg)+","+str(chen_intra_density_avg)+","+str(snap_coef_clust_avg)+","+str(snap_conductance_avg)+","+str(snap_density_avg)+","+str(snap_modularity_avg)
 					csv.write(row+"\n")				

@@ -235,8 +235,8 @@ def main():
 		print ("Calculando Jaccard Modified nas comunidades detectadas na rede: "+str(net)+" - COM o ego - Algoritmo: "+str(alg))
 		jaccard_alg(communities1,output1,singletons,net,ground_truth)
 		print
-		print ("Calculando Jaccard Modified nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
-		jaccard_alg(communities2,output2,singletons,net,ground_truth)
+#		print ("Calculando Jaccard Modified nas comunidades detectadas na rede: "+str(net)+" - SEM o ego - Algoritmo: "+str(alg))
+#		jaccard_alg(communities2,output2,singletons,net,ground_truth)
 	print("######################################################################")
 	print
 	print("######################################################################")

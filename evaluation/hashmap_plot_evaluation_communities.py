@@ -37,35 +37,39 @@ def main():
 	print"																											"
 	print"																											"
 	print"#################################################################################"
+	print"#################################################################################"
+	print "Algoritmo utilizado na detecção das comunidades"
 	print
-	print
-	print"  1 - COPRA - Without Weight"
-	print"  2 - OSLOM - Without Weight"
-	print"  3 - RAK - Without Weight"		
+	print"  1 - COPRA - Without Weight - K=10"
+#	print"  2 - COPRA - Without Weight - K=2-20"
+#	print"  3 - OSLOM - Without Weight - K=5,10,50"
+	print"  4 - OSLOM - Without Weight - K=50"
+	print"  5 - RAK - Without Weight"		
 #
-#	print"  5 - INFOMAP - Partition"
+#	print"  6 - INFOMAP - Partition"
 	print"  6 - INFOMAP - Partition - Without Weight"												
 	print
-	op1 = int(raw_input("Escolha uma opção acima: "))
+	op2 = int(raw_input("Escolha uma opção acima: "))
 #
-	if op1 == 1:
-		alg = "copra_without_weight"
-	elif op1 == 2:
-		alg = "oslom_without_weight"
-	elif op1 == 3:
+	if op2 == 1:
+		alg = "copra_without_weight_k10"
+#	elif op2 == 2:
+#		alg = "copra_without_weight"
+#	elif op2 == 3:
+#		alg = "oslom_without_weight"
+	elif op2 == 4:
+		alg = "oslom_without_weight_k50"
+	elif op2 == 5:
 		alg = "rak_without_weight"
-#	elif op1 == 4:
-#		alg = "infomap_without_weight"				
-#	if op1 == 5:
-#		alg = "infomap_without_weight"
-	elif op1 == 6:
+	elif op2 == 6:
 		alg = "infomap_without_weight"		
 	else:
 		alg = ""
 		print("Opção inválida! Saindo...")
 		sys.exit()	
 	print ("\n")
-	print
+	print	
+
 	
 	nets = ['n1','n2','n3','n4']
 #	names = ['n_nodes','n_edges','n_comm','max_comm_len','min_comm_len','comm_size_avg','comm_size_std','n_singletons','alters_ignored','chen_modularity_avg','chen_mod_density_avg','chen_conductance_avg','chen_intra_density_avg','snap_coef_clust_avg','snap_conductance_avg','snap_density_avg','snap_modularity_avg']

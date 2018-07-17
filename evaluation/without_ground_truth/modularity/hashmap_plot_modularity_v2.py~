@@ -57,7 +57,6 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	print "Algoritmo utilizado na detecção das comunidades"
 	print
 	print"  1 - COPRA - Without Weight - K=10"
 	print"  2 - COPRA - Without Weight - K=2-20"
