@@ -85,21 +85,24 @@ def main():
 		_l = []
 		_m = []
 		nets = ['n1','n2','n3','n4']
-		for ego,data in dictionary.iteritems():			
-			for net in nets:
-				with open(source_dir+net+"/"+str(threshold)+".json",'r') as f:
-					source = json.load(f)
-					if net == "n1":
-						_a.append(source[ego]['n_communities'])
-					elif net == "n2":
-						_r.append(source[ego]['n_communities'])
-					elif net == "n3":
-						_l.append(source[ego]['n_communities'])
-					elif net == "n4":
-						_m.append(source[ego]['n_communities'])
-					else:
-						print ("\nErro!!\n")
-						sys.exit()				
+		for ego,data in dictionary.iteritems():
+			try:		
+				for net in nets:
+					with open(source_dir+net+"/"+str(threshold)+".json",'r') as f:
+						source = json.load(f)
+						if net == "n1":
+							_a.append(source[ego]['n_communities'])
+						elif net == "n2":
+							_r.append(source[ego]['n_communities'])
+						elif net == "n3":
+							_l.append(source[ego]['n_communities'])
+						elif net == "n4":
+							_m.append(source[ego]['n_communities'])
+						else:
+							print ("\nErro!!\n")
+							sys.exit()
+			except Exception as e:
+				print ego, e								
 		n_comm = {"a":_a,"r":_r,"l":_l,"m":_m}
 		print n_comm
 		pairs = calc_correlation(n_comm) 
@@ -154,8 +157,8 @@ else:
 print ("\n")	
 	
 data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"												# Pegar a lista com os ids dos egos
-source_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/full/"
-output_dir_json = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"_without_weight/"	# Pegar a lista com os ids dos egos
+source_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"/full/"
+output_dir_json = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"/"	# Pegar a lista com os ids dos egos
 
 
 dictionary = {}				#################################################### Tabela {chave:valor} para armazenar lista de egos

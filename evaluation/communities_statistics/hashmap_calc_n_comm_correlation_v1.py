@@ -85,21 +85,24 @@ def main():
 		_l = []
 		_m = []
 		nets = ['n1','n2','n3','n4']
-		for ego,data in dictionary.iteritems():			
+		for ego,data in dictionary.iteritems():		
 			for net in nets:
-				with open(source_dir+net+"/"+str(threshold)+".json",'r') as f:
-					source = json.load(f)
-					if net == "n1":
-						_a.append(source[ego]['n_communities'])
-					elif net == "n2":
-						_r.append(source[ego]['n_communities'])
-					elif net == "n3":
-						_l.append(source[ego]['n_communities'])
-					elif net == "n4":
-						_m.append(source[ego]['n_communities'])
-					else:
-						print ("\nErro!!\n")
-						sys.exit()				
+				try:
+					with open(source_dir+net+"/"+str(threshold)+".json",'r') as f:
+						source = json.load(f)
+						if net == "n1":
+							_a.append(source[ego]['n_communities'])
+						elif net == "n2":
+							_r.append(source[ego]['n_communities'])
+						elif net == "n3":
+							_l.append(source[ego]['n_communities'])
+						elif net == "n4":
+							_m.append(source[ego]['n_communities'])
+						else:
+							print ("\nErro!!\n")
+							sys.exit()
+				except Exception as e:
+					print ego, net, e								
 		n_comm = {"a":_a,"r":_r,"l":_l,"m":_m}
 		print n_comm
 		pairs = calc_correlation(n_comm) 
