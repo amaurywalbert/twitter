@@ -49,12 +49,13 @@ def calc_correlation(dataset):
 	pairs = {}
 	for k,v in dataset.iteritems():
 		for j, x in dataset.iteritems():
+			print ("Calculando correlação entre camadas: "+str(k,j))
 #			if j >= k and j != k:
-				ego1 = v
-				ego2 = x					
-				name = str(k)+str(j)
-				result,p = pearsonr(ego1,ego2)		# Comparando o conjunto de vértices entre as camadas
-				pairs[name]={"pearson":result,"p-value":p} 
+			ego1 = v
+			ego2 = x					
+			name = str(k)+str(j)
+			result,p = pearsonr(ego1,ego2)		# Comparando o conjunto de vértices entre as camadas
+			pairs[name]={"pearson":result,"p-value":p} 
 	print pairs
 	return pairs
 
@@ -75,7 +76,6 @@ def main():
 	print"																											"
 	print"#################################################################################"
 	print
-	i=0
 	if os.path.exists(output_dir_json+"n_comm_correlation.json"):
 		print ("Arquivo de destino já existe!"+str(output_dir_json+"n_comm_correlation.json"))
 	else:
@@ -85,26 +85,38 @@ def main():
 		_l = []
 		_m = []
 		nets = ['n1','n2','n3','n4']
-		for ego,data in dictionary.iteritems():		
+		i=0
+		for ego,data in dictionary.iteritems():
+			print ("Preparando dados...")
+			i+=1		
 			for net in nets:
-				try:
-					with open(source_dir+net+"/"+str(threshold)+".json",'r') as f:
-						source = json.load(f)
-						if net == "n1":
+				with open(source_dir+net+"/"+str(threshold)+".json",'r') as f:
+					source = json.load(f)
+					if net == "n1":
+						try:
 							_a.append(source[ego]['n_communities'])
-						elif net == "n2":
+						except Exception:
+							_a.append(0)
+					elif net == "n2":
+						try:
 							_r.append(source[ego]['n_communities'])
-						elif net == "n3":
+						except Exception:
+							_r.append(0)
+					elif net == "n3":
+						try:
 							_l.append(source[ego]['n_communities'])
-						elif net == "n4":
+						except Exception:
+							_l.append(0)
+					elif net == "n4":
+						try:
 							_m.append(source[ego]['n_communities'])
-						else:
-							print ("\nErro!!\n")
-							sys.exit()
-				except Exception as e:
-					print ego, net, e								
+						except Exception:
+							_m.append(0)
+					else:
+						print ("\nErro!!\n")
+						sys.exit()
+			print ("Ego: "+str(i))						
 		n_comm = {"a":_a,"r":_r,"l":_l,"m":_m}
-		print n_comm
 		pairs = calc_correlation(n_comm) 
 		save_json(pairs)																										# Salvar arquivo no formato JSON
 	print("\n######################################################################\n")
