@@ -208,7 +208,7 @@ def main():
 		alg = "copra_without_weight_k10"
 		thresholds = [10]
 	elif op2 == 2:
-		alg = "copra_without_weight"
+		alg = "copra_without_weight_k2"
 		thresholds = [2]
 	elif op2 == 4:
 		alg = "oslom_without_weight_k50"

@@ -122,7 +122,6 @@ def main():
 	#for k,v in snap_modularity.iteritems():
 	#	print k,v
 	#	time.sleep(5)
-		<em></em>
 	for net,net_data in comm.iteritems():
 		if net in ("n1","n2","n3","n4"):
 			for threshold,threshold_data in net_data.iteritems():
