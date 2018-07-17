@@ -115,10 +115,10 @@ def main():
 	chen_intra_density = get_dataset(data_chen_intra_density)
 	chen_conductance = get_dataset(data_chen_conductance)
 	
-	snap_coef_clust = get_dataset(data_snap_coef_clust)
-	snap_conductance = get_dataset(data_snap_conductance)
-	snap_density = get_dataset(data_snap_density)
-	snap_modularity = get_dataset(data_snap_modularity)
+#	snap_coef_clust = get_dataset(data_snap_coef_clust)
+#	snap_conductance = get_dataset(data_snap_conductance)
+#	snap_density = get_dataset(data_snap_density)
+#	snap_modularity = get_dataset(data_snap_modularity)
 
 	#for k,v in snap_modularity.iteritems():
 	#	print k,v
@@ -131,7 +131,8 @@ def main():
 				output_dir = str(output)+str(alg)+"/"+str(net)+"/"
 				create_dirs(output_dir)
 				csv = open(output_dir+threshold+"_comm_statistics.csv", "w") #"w" indicates that you're writing strings to the file
-				columns = ["ego_id","n_nodes","n_edges","n_comm","max_comm_len","min_comm_len","comm_size_avg","comm_size_std","n_singletons","alters_ignored","chen_modularity_avg","chen_mod_density_avg","chen_conductance_avg","chen_intra_density_avg","snap_coef_clust_avg","snap_conductance_avg","snap_density_avg","snap_modularity_avg"]
+#				columns = ["ego_id","n_nodes","n_edges","n_comm","max_comm_len","min_comm_len","comm_size_avg","comm_size_std","n_singletons","alters_ignored","chen_modularity_avg","chen_mod_density_avg","chen_conductance_avg","chen_intra_density_avg","snap_coef_clust_avg","snap_conductance_avg","snap_density_avg","snap_modularity_avg"]
+				columns = ["ego_id","n_nodes","n_edges","n_comm","max_comm_len","min_comm_len","comm_size_avg","comm_size_std","n_singletons","alters_ignored","chen_modularity_avg","chen_mod_density_avg","chen_conductance_avg","chen_intra_density_avg"]
 				columnTitleRow = ""
 				for column in columns:
 					columnTitleRow = columnTitleRow+str(column)+","
@@ -172,24 +173,25 @@ def main():
 					except Exception as e:
 						chen_intra_density_avg = 0
 
-					try:
-						snap_coef_clust_avg = snap_coef_clust[net][threshold]["coef_clust_data"][ego][0]
-					except Exception as e:
-						snap_coef_clust_avg = 0
-					try:
-						snap_conductance_avg = snap_conductance[net][threshold][ego]["media"]
-					except Exception as e:
-						snap_conductance_avg = 0
-					try:
-						snap_density_avg = snap_density[net][threshold][ego]["media"]
-					except Exception as e:
-						snap_density_avg = 0
-					try:
-						snap_modularity_avg = snap_modularity[net][threshold]["modularity_data"][ego][0]
-					except Exception as e:
-						snap_modularity_avg = 0
+#					try:
+#						snap_coef_clust_avg = snap_coef_clust[net][threshold]["coef_clust_data"][ego][0]
+#					except Exception as e:
+#						snap_coef_clust_avg = 0
+#					try:
+#						snap_conductance_avg = snap_conductance[net][threshold][ego]["media"]
+#					except Exception as e:
+#						snap_conductance_avg = 0
+#					try:
+#						snap_density_avg = snap_density[net][threshold][ego]["media"]
+#					except Exception as e:
+#						snap_density_avg = 0
+#					try:
+#						snap_modularity_avg = snap_modularity[net][threshold]["modularity_data"][ego][0]
+#					except Exception as e:
+#						snap_modularity_avg = 0
 					
-					row = str(ego_id)+","+str(n_nodes)+","+str(n_edges,)+","+str(n_comm)+","+str(max_comm_len)+","+str(min_comm_len)+","+str(comm_size_avg)+","+str(comm_size_std)+","+str(n_singletons)+","+str(alters_ignored)+","+str(chen_modularity_avg)+","+str(chen_mod_density_avg)+","+str(chen_conductance_avg)+","+str(chen_intra_density_avg)+","+str(snap_coef_clust_avg)+","+str(snap_conductance_avg)+","+str(snap_density_avg)+","+str(snap_modularity_avg)
+#					row = str(ego_id)+","+str(n_nodes)+","+str(n_edges,)+","+str(n_comm)+","+str(max_comm_len)+","+str(min_comm_len)+","+str(comm_size_avg)+","+str(comm_size_std)+","+str(n_singletons)+","+str(alters_ignored)+","+str(chen_modularity_avg)+","+str(chen_mod_density_avg)+","+str(chen_conductance_avg)+","+str(chen_intra_density_avg)+","+str(snap_coef_clust_avg)+","+str(snap_conductance_avg)+","+str(snap_density_avg)+","+str(snap_modularity_avg)
+					row = str(ego_id)+","+str(n_nodes)+","+str(n_edges,)+","+str(n_comm)+","+str(max_comm_len)+","+str(min_comm_len)+","+str(comm_size_avg)+","+str(comm_size_std)+","+str(n_singletons)+","+str(alters_ignored)+","+str(chen_modularity_avg)+","+str(chen_mod_density_avg)+","+str(chen_conductance_avg)+","+str(chen_intra_density_avg))
 					csv.write(row+"\n")				
 					print
 	print("\n######################################################################\n")
