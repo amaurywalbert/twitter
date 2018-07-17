@@ -141,36 +141,39 @@ print" Escolha o algoritmo usado na detecção das comunidades									"
 print"																											"
 print"#################################################################################"
 print
-print"  1 - COPRA - Without Weight - k = 10"
-print"  2 - OSLOM - Without Weight - k = 50"
-print"  3 - RAK - Without Weight"		
-#
-#print"  5 - INFOMAP - Partition"
+print
+print "Algoritmo utilizado na detecção das comunidades"
+print
+print"  1 - COPRA - Without Weight - K=10"
+print"  2 - COPRA - Without Weight - K=2-20"
+print"  4 - OSLOM - Without Weight - K=50"
+print"  5 - RAK - Without Weight"		
 print"  6 - INFOMAP - Partition - Without Weight"												
 print
-op1 = int(raw_input("Escolha uma opção acima: "))
-#
-if op1 == 1:
+op2 = int(raw_input("Escolha uma opção acima: "))
+
+if op2 == 1:
 	alg = "copra_without_weight_k10"
-	threshold = 10
-elif op1 == 2:
+	thresholds = [10]
+elif op2 == 2:
+	alg = "copra_without_weight"
+	thresholds = [2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20]
+elif op2 == 4:
 	alg = "oslom_without_weight_k50"
-	threshold = 50	
-elif op1 == 3:
+	thresholds = [50]
+elif op2 == 5:
 	alg = "rak_without_weight"
-	threshold = 1
-#elif op1 == 4:
-#	alg = "infomap_without_weight"				
-#if op1 == 5:
-#	alg = "infomap_without_weight"
-elif op1 == 6:
+	thresholds = [1]
+elif op2 == 6:
 	alg = "infomap_without_weight"
-	threshold = 10		
+	thresholds = [10]		
 else:
 	alg = ""
 	print("Opção inválida! Saindo...")
 	sys.exit()	
 print ("\n")
+print	
+
 data_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"/"	# Diretório com arquivos JSON com métricas e propriedades Calculadas
 output_dir = "/home/amaury/Dropbox/evaluation_hashmap_statistics/communities_statistics/graphs_with_ego/"+str(alg)+"/"	# Diretório para Salvar os gráficos...
 

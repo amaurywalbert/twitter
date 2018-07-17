@@ -133,40 +133,39 @@ print "#########################################################################
 print"																											"
 print" Calcular N Comm Correlation	"
 print"																											"
-print" Escolha o algoritmo usado na detecção das comunidades									"
 print"																											"
 print"#################################################################################"
 print
-print"  1 - COPRA - Without Weight - k = 10"
-print"  2 - OSLOM - Without Weight - k = 50"
-print"  3 - RAK - Without Weight"		
-#
-#print"  5 - INFOMAP - Partition"
+
+print "Algoritmo utilizado na detecção das comunidades"
+print
+print"  1 - COPRA - Without Weight - K=10"
+print"  2 - COPRA - Without Weight - K=2-20"
+print"  3 - OSLOM - Without Weight - K=5,10,50"
+print"  4 - OSLOM - Without Weight - K=50"
+print"  5 - RAK - Without Weight"		
 print"  6 - INFOMAP - Partition - Without Weight"												
 print
-op1 = int(raw_input("Escolha uma opção acima: "))
+op2 = int(raw_input("Escolha uma opção acima: "))
 #
-if op1 == 1:
+if op2 == 1:
 	alg = "copra_without_weight_k10"
-	threshold = 10
-elif op1 == 2:
+elif op2 == 2:
+	alg = "copra_without_weight"
+elif op2 == 3:
+	alg = "oslom_without_weight"
+elif op2 == 4:
 	alg = "oslom_without_weight_k50"
-	threshold = 50	
-elif op1 == 3:
+elif op2 == 5:
 	alg = "rak_without_weight"
-	threshold = 1
-#elif op1 == 4:
-#	alg = "infomap_without_weight"				
-#if op1 == 5:
-#	alg = "infomap_without_weight"
-elif op1 == 6:
-	alg = "infomap_without_weight"
-	threshold = 10		
+elif op2 == 6:
+	alg = "infomap_without_weight"		
 else:
 	alg = ""
 	print("Opção inválida! Saindo...")
 	sys.exit()	
-print ("\n")	
+print ("\n")
+print	
 	
 data_dir = "/home/amaury/graphs_hashmap/n1/graphs_with_ego/"												# Pegar a lista com os ids dos egos
 source_dir = "/home/amaury/Dropbox/evaluation_hashmap/communities_statistics/graphs_with_ego/"+str(alg)+"/full/"
