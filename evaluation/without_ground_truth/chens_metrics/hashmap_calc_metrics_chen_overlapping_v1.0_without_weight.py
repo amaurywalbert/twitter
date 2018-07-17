@@ -108,7 +108,7 @@ def calculate_alg(singletons,net,ud,g_type,alg):
 								value = resp.split(", ")
 								for item in value:
 									item = item.split(" = ")
-									
+									print item
 									if item[0] == "Q":
 										Q[ego_id] = float(item[1])
 									elif item[0] == "NQ":
